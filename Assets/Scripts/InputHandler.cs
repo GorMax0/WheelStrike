@@ -1,17 +1,28 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using Zenject;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public event UnityAction MouseButtonUp;
-    public event UnityAction MouseButtonDown;
+    private GameStateService _gameStateService;
 
-    private void Update()
+    public event UnityAction PointerDown;
+    public event UnityAction PointerUp;
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        if(Input.GetMouseButtonDown(0))
-            MouseButtonDown?.Invoke();
+        PointerDown?.Invoke();
+    }
 
-        if(Input.GetMouseButtonUp(0))
-            MouseButtonUp?.Invoke();
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        PointerUp?.Invoke();
+    }
+
+    [Inject]
+    private void Construct(GameStateService gameStateService)
+    {
+        _gameStateService = gameStateService;
     }
 }

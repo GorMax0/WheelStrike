@@ -3,7 +3,7 @@
     Initializing,
     Pause,
     Waiting,
-    Runing,
+    Running,
     Failed,
     Restart,
     Winning

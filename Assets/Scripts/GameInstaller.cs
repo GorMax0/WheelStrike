@@ -3,14 +3,26 @@ using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
-    [SerializeField] private GameStateService _gameStateService;
     [SerializeField] private InputHandler _inputHandler;
-    [SerializeField] private LevelService _levelService;
+    [SerializeField] private ParametrCreater[] _parametrCreaters;
+    [SerializeField] private ForceScale _forceScale;
 
     public override void InstallBindings()
     {
         Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
-        Container.Bind<LevelService>().AsSingle();
-        Container.Bind<InputHandler>().AsSingle();
+        Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
+        Container.BindInterfacesTo<GamePlayService>().AsSingle();
+        Container.BindInstance(_inputHandler).AsSingle();
+        Container.BindInstance(_forceScale).AsSingle();
+        Container.Bind<Wallet>().AsSingle();
+        BindParameters();
+    }
+
+    private void BindParameters()
+    {
+        foreach (ParametrCreater creater in _parametrCreaters)
+        {
+            Container.BindInstance(new Parametr(creater));
+        }
     }
 }

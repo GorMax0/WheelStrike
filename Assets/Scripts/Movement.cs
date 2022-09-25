@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using UnityEngine;
+using Zenject;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
@@ -6,9 +9,10 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _turnSpeed;
 
-    private const float SpeedMultiplier = 2f;
-
+    private Parametr _power;
     private Rigidbody _rigidbody;
+    private GameStateService _gameStateService;
+    private ForceScale _forceScale;
     private bool _isMoving;
 
     private void Awake()
@@ -16,14 +20,9 @@ public class Movement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-   private void Update()
+    private void OnDisable()
     {
-        if (Input.GetMouseButtonDown(0) && _isMoving == false)
-        {
-            _isMoving = true;
-            _rigidbody.isKinematic = false;
-            _rigidbody.AddForce(Vector3.forward * _speed, ForceMode.Acceleration);
-        }
+        _gameStateService.GameStateChanged -= OnGameStateService;
     }
 
     private void FixedUpdate()
@@ -34,9 +33,46 @@ public class Movement : MonoBehaviour
         }
     }
 
+    [Inject]
+    private void Construct(GameStateService gameStateService, ForceScale forceScale, Parametr[] parametrs)
+    {
+        _gameStateService = gameStateService;
+        _gameStateService.GameStateChanged += OnGameStateService;
+        _forceScale = forceScale;
+
+        Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
+            ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
+
+        _power = result;
+    }
+
+    private void Move()
+    {
+        float force = _speed * _power.Value * _forceScale.Value;
+
+        _isMoving = true;
+        _rigidbody.isKinematic = false;
+        _rigidbody.AddForce(Vector3.forward * force, ForceMode.Acceleration);
+    }
+
+    private void OnGameStateService(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Running:
+                OnGameRunning();
+                break;
+        }
+    }
+
+    private void OnGameRunning()
+    {
+        Move();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.TryGetComponent(out Ground ground))
+        if (collision.collider.TryGetComponent(out Ground ground))
         {
 
         }
