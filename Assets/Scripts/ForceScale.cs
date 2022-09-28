@@ -1,21 +1,26 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using Zenject;
 
 public class ForceScale : MonoBehaviour
 {
-    [SerializeField] private Slider _slider;
-    [SerializeField, Range(0.1f, 0.7f)] private float _sliderRange;
+    [SerializeField, Range(0.1f, 0.7f)] private float _valueRange = 0.1f;
     [SerializeField] private float _valueChangeStep;
 
     private readonly float GreenZoneRaito = 12f;
 
-    private float _value = 1f;
-    private Coroutine _changeMultiplier;
+    private float _maxValue;
+    private float _minValue;
+    private float _currentValue;
+    private float _finalValue = 1f;
+    private Coroutine _changeValue;
     private GameStateService _gameStateService;
 
-    public float Value => _value;
+    public event UnityAction<float> ValueChanged;
+    public event UnityAction<float,float> RangeChanged;
+
+    public float FinalValue => _finalValue;
 
     private void OnDisable()
     {
@@ -24,8 +29,7 @@ public class ForceScale : MonoBehaviour
 
     private void Start()
     {
-        _slider.maxValue = Mathf.Max(_sliderRange, -_sliderRange);
-        _slider.minValue = Mathf.Min(-_sliderRange, _sliderRange);
+        SetRange();
     }
 
     [Inject]
@@ -35,37 +39,44 @@ public class ForceScale : MonoBehaviour
         _gameStateService.GameStateChanged += OnGameStateChanged;
     }
 
+    private void SetRange()
+    {
+        _minValue = -_valueRange;
+        _maxValue = _valueRange;
+        RangeChanged?.Invoke(_minValue, _maxValue);
+    }
+
     private void StartCoroutine()
     {
-        _changeMultiplier = StartCoroutine(ChangeMultiplier());
+        _changeValue = StartCoroutine(ChangeMultiplier());
     }
 
     private void StopCoroutine()
     {
-        if (_changeMultiplier != null)
-            StopCoroutine(_changeMultiplier);
+        if (_changeValue != null)
+            StopCoroutine(_changeValue);
     }
 
     private void RandomizeSliderValue()
     {
-        float randomValue = Random.Range(_slider.minValue, _slider.maxValue);
-        _slider.value = randomValue;
+        float randomValue = Random.Range(_minValue, _maxValue);
+        _currentValue = randomValue;
     }
 
-    //Отделить логику от Слайдера (UI вынести в одтельный скрипт)
     private IEnumerator ChangeMultiplier()
     {
-        float endValue = _slider.maxValue;
+        float endValue = _maxValue;
 
         while (_gameStateService.State == GameState.Waiting)
         {
-            if (_slider.value == endValue && endValue == _slider.maxValue)
-                endValue = _slider.minValue;
-            else if (_slider.value == endValue && endValue == _slider.minValue)
-                endValue = _slider.maxValue;
+            if (_currentValue == endValue && endValue == _maxValue)
+                endValue = _minValue;
+            else if (_currentValue == endValue && endValue == _minValue)
+                endValue = _maxValue;
 
-            _slider.value = Mathf.MoveTowards(_slider.value, endValue, _valueChangeStep);
-
+            _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep);
+            ValueChanged?.Invoke(_currentValue);
+            
             yield return null;
         }
     }
@@ -92,11 +103,11 @@ public class ForceScale : MonoBehaviour
 
     private void OnGameRunning()
     {
-        float GreenZoneValue = (Mathf.Abs(_slider.minValue) + _slider.maxValue) / GreenZoneRaito;
+        float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
 
-        if (_slider.value >= -GreenZoneValue && _slider.value <= GreenZoneValue)
+        if (_currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue)
             return;
 
-        _value -= Mathf.Abs(_slider.value);
+        _finalValue -= Mathf.Abs(_currentValue);        
     }
 }

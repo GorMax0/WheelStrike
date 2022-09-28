@@ -6,18 +6,18 @@ public class GamePlayService : IInitializable, IDisposable
     private GameStateService _gameStateService;
     private InputHandler _inputHandler;
 
-    public void Dispose()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-        _inputHandler.PointerDown -= OnPointerDown;
-        _inputHandler.PointerUp -= OnPointerUp;
-    }
-
     public void Initialize()
     {
         _gameStateService.GameStateChanged += OnGameStateChanged;
         _inputHandler.PointerDown += OnPointerDown;
         _inputHandler.PointerUp += OnPointerUp;
+    }
+
+    public void Dispose()
+    {
+        _gameStateService.GameStateChanged -= OnGameStateChanged;
+        _inputHandler.PointerDown -= OnPointerDown;
+        _inputHandler.PointerUp -= OnPointerUp;
     }
 
     [Inject]

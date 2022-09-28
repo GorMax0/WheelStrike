@@ -12,6 +12,7 @@ public class GameInstaller : MonoInstaller
         Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
         Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
         Container.BindInterfacesTo<GamePlayService>().AsSingle();
+        Container.BindInterfacesAndSelfTo<AimDirection>().AsSingle();
         Container.BindInstance(_inputHandler).AsSingle();
         Container.BindInstance(_forceScale).AsSingle();
         Container.Bind<Wallet>().AsSingle();

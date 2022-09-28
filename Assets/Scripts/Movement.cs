@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour
 
     private void Move()
     {
-        float force = _speed * _power.Value * _forceScale.Value;
+        float force = _speed * _power.Value * _forceScale.FinalValue;
 
         _isMoving = true;
         _rigidbody.isKinematic = false;

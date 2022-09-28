@@ -18,6 +18,7 @@ public class InputHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public void OnPointerUp(PointerEventData eventData)
     {
         PointerUp?.Invoke();
+        gameObject.SetActive(false);
     }
 
     [Inject]

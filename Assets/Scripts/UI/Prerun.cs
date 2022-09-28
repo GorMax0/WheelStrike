@@ -1,13 +1,10 @@
 using UnityEngine;
 using Zenject;
-using DG.Tweening;
-using System;
 
 public class Prerun : MonoBehaviour
 {
     [SerializeField] private ForceScaleView _forceScaleView;
-    [SerializeField] private AimDirectionView _aimDirectionView;
-
+    
     private GameStateService _gameStateService;
 
     private void OnDisable()
@@ -41,19 +38,15 @@ public class Prerun : MonoBehaviour
     private void OnGamePause()
     {
         _forceScaleView.gameObject.SetActive(false);
-        _aimDirectionView.gameObject.SetActive(false);
     }
 
     private void OnGameWaiting()
     {
         _forceScaleView.gameObject.SetActive(true);
-        _aimDirectionView.gameObject.SetActive(true);
-        _aimDirectionView.StartTween();
     }
 
     private void OnGameRunning()
-    {
-        _aimDirectionView.Fade();
+    {        
         _forceScaleView.Fade();
     }
 }
