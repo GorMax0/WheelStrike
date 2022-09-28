@@ -38,9 +38,21 @@ public class AimDirection : IInitializable, IDisposable
         }
     }
 
+    private Vector3 GetStartPoint()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Vector3 direction = ray.direction;
+        Debug.Log(direction.normalized);
+
+        return direction.normalized;
+    }
+
+    private void Stop
+
     private void OnGameWaiting()
     {
-      var direction =  CalculateOffsetDirection();
+      var direction = GetStartPoint();
         _directionOffsetX = direction.x;
         Debug.Log(_directionOffsetX);
     }
@@ -50,13 +62,5 @@ public class AimDirection : IInitializable, IDisposable
         throw new NotImplementedException();
     }
 
-    private Vector3 CalculateOffsetDirection()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        Vector3 direction = ray.direction;
-        Debug.Log(direction.normalized);
-
-        return direction.normalized;
-    }
 }

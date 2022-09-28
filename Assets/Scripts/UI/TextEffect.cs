@@ -13,6 +13,7 @@ public class TextEffect : MonoBehaviour
     private float _duration = 1f;
     private int _countLoops = 0;
     private TMP_Text _text;
+    private Tween _fade;
 
     private void Awake()
     {
@@ -26,7 +27,7 @@ public class TextEffect : MonoBehaviour
 
     private void OnDisable()
     {
-        DOTween.Kill(this); //Как отключить ТВИН при выключиении объекта???
+       DOTween.Kill(_fade); //Как отключить ТВИН при выключиении объекта???
     }
 
     protected virtual void PlayEffect()
@@ -34,6 +35,6 @@ public class TextEffect : MonoBehaviour
         if (_isLooping == true)
             _countLoops = InfinityLoops;
 
-        _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
+        _fade = _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
     }
 }
