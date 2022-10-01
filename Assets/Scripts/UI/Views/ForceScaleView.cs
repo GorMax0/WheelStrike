@@ -22,8 +22,8 @@ public class ForceScaleView : MonoBehaviour
     [Inject]
     private void Construct(ForceScale forceScale)
     {
-        _slider = GetComponent<Slider>();        
-        _forceScale = forceScale;        
+        _slider = GetComponent<Slider>();
+        _forceScale = forceScale;
         _forceScale.RangeChanged += OnRangeChanged;
         _forceScale.ValueChanged += OnValueChanged;
     }

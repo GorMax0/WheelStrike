@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class MoneyPanel : MonoBehaviour
+public class MoneyView : MonoBehaviour
 {
     [SerializeField] private TMP_Text _money;
 

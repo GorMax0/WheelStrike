@@ -14,8 +14,8 @@ public class Movement : MonoBehaviour
     private GameStateService _gameStateService;
     private ForceScale _forceScale;
     private AimDirection _aimDirection;
+    private Vector3 _offsetAngles;
     private bool _isMoving;
-    private Vector3 _test;
 
     private void Awake()
     {
@@ -25,15 +25,15 @@ public class Movement : MonoBehaviour
     private void OnDisable()
     {
         _gameStateService.GameStateChanged -= OnGameStateService;
-        _aimDirection.DirectionChanged -= RotationInDirection;
+        _aimDirection.DirectionChanged -= RotateInDirection;
     }
 
     private void FixedUpdate()
     {
-        if (_isMoving == true)
-        {
-            transform.Rotate(-Vector3.left * Time.deltaTime * _turnSpeed);
-        }
+        //if (_isMoving == true)
+        //{
+        //    transform.Rotate(-Vector3.left * Time.deltaTime * _turnSpeed);
+        //}
     }
 
     [Inject]
@@ -44,7 +44,7 @@ public class Movement : MonoBehaviour
         _aimDirection = aimDirection;
 
         _gameStateService.GameStateChanged += OnGameStateService;
-        _aimDirection.DirectionChanged += RotationInDirection;
+        _aimDirection.DirectionChanged += RotateInDirection;
         Debug.Log(_aimDirection);
 
         Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
@@ -59,13 +59,13 @@ public class Movement : MonoBehaviour
 
         _isMoving = true;
         _rigidbody.isKinematic = false;
-        _rigidbody.AddForce(Vector3.forward * force, ForceMode.Acceleration);
+        _rigidbody.AddForce(transform.forward * force + _offsetAngles, ForceMode.Acceleration);
     }
 
-    private void RotationInDirection(float offsetY)
+    private void RotateInDirection(float directionOffsetX)
     {
-        _test = new Vector3(0, offsetY, 0)*15;
-        transform.eulerAngles = _test;
+        _offsetAngles = new Vector3(0, directionOffsetX, 0);
+        transform.eulerAngles = _offsetAngles;
     }
 
     private void OnGameStateService(GameState state)

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class Prerun : MonoBehaviour
+public class PrerunView : MonoBehaviour
 {
     [SerializeField] private ForceScaleView _forceScaleView;
     

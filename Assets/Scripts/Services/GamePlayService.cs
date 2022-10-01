@@ -29,7 +29,7 @@ public class GamePlayService : IInitializable, IDisposable
 
     private void OnGameStateChanged(GameState state)
     {
-        
+
     }
 
     private void OnPointerDown()

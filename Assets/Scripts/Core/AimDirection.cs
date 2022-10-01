@@ -3,8 +3,11 @@ using System.Collections;
 using UnityEngine;
 using Zenject;
 
-public class AimDirection :  IDisposable
+public class AimDirection : IDisposable
 {
+    private readonly float SwipeSensitivity = 10f;
+    private readonly float ClampValue = 3f;
+
     private GameStateService _gameStateService;
     private CoroutineRunning _aimRunning;
     private bool _isAiming;
@@ -39,20 +42,20 @@ public class AimDirection :  IDisposable
 
     private IEnumerator SelectDirection()
     {
-        Ray ray = default;
+        Ray startTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray currentTouchPosition;
+        float swipeValue;
         float directionOffsetX;
 
         while (_isAiming == true)
         {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            directionOffsetX = ray.direction.x;
+            currentTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+            swipeValue = (currentTouchPosition.direction.x - startTouchPosition.direction.x) * SwipeSensitivity;
+            directionOffsetX = Mathf.Clamp(swipeValue, -ClampValue, ClampValue);
             DirectionChanged?.Invoke(directionOffsetX);
 
             yield return null;
         }
-
-        if (ray.origin == Vector3.zero && ray.direction == Vector3.zero)
-            throw new ArgumentException($"{typeof(AimDirection)}: SelectDirection():  Ray invalid - ray origin and ray direction equals Vector3.zero.");
     }
 
     private void OnGameWaiting()
