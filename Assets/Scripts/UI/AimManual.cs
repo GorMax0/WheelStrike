@@ -13,17 +13,23 @@ public class AimManual : MonoBehaviour
     [SerializeField] private float _duration;
 
     private Slider _slider;
-    private Coroutine _coroutine;
+    private CoroutineRunning _replayRunning;
+
 
     private void Awake()
     {
         _slider = GetComponent<Slider>();
     }
 
+    [Inject]
+    private void Construct(CoroutineService coroutineService)
+    {
+        _replayRunning = new CoroutineRunning(coroutineService);
+    }
+
     public void StartTween()
     {
-        StopCoroutine();
-        StartCoroutine();
+        _replayRunning.Run(Replay());
     }
 
     public void Fade()
@@ -31,17 +37,6 @@ public class AimManual : MonoBehaviour
         _sliderBackground.DOFade(0,_fadeTime);
         _sliderHandler.DOFade(0, _fadeTime);
         Invoke(nameof(Disable), _fadeTime);
-    }
-
-    private void StartCoroutine()
-    {
-        _coroutine = StartCoroutine(Replay());
-    }
-
-    private void StopCoroutine()
-    {
-        if (_coroutine != null)
-            StopCoroutine(_coroutine);
     }
 
     private IEnumerator Replay()

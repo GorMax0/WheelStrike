@@ -13,7 +13,9 @@ public class Movement : MonoBehaviour
     private Rigidbody _rigidbody;
     private GameStateService _gameStateService;
     private ForceScale _forceScale;
+    private AimDirection _aimDirection;
     private bool _isMoving;
+    private Vector3 _test;
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class Movement : MonoBehaviour
     private void OnDisable()
     {
         _gameStateService.GameStateChanged -= OnGameStateService;
+        _aimDirection.DirectionChanged -= RotationInDirection;
     }
 
     private void FixedUpdate()
@@ -34,11 +37,15 @@ public class Movement : MonoBehaviour
     }
 
     [Inject]
-    private void Construct(GameStateService gameStateService, ForceScale forceScale, Parametr[] parametrs)
+    private void Construct(GameStateService gameStateService, ForceScale forceScale, AimDirection aimDirection, Parametr[] parametrs)
     {
         _gameStateService = gameStateService;
-        _gameStateService.GameStateChanged += OnGameStateService;
         _forceScale = forceScale;
+        _aimDirection = aimDirection;
+
+        _gameStateService.GameStateChanged += OnGameStateService;
+        _aimDirection.DirectionChanged += RotationInDirection;
+        Debug.Log(_aimDirection);
 
         Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
             ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
@@ -53,6 +60,12 @@ public class Movement : MonoBehaviour
         _isMoving = true;
         _rigidbody.isKinematic = false;
         _rigidbody.AddForce(Vector3.forward * force, ForceMode.Acceleration);
+    }
+
+    private void RotationInDirection(float offsetY)
+    {
+        _test = new Vector3(0, offsetY, 0)*15;
+        transform.eulerAngles = _test;
     }
 
     private void OnGameStateService(GameState state)

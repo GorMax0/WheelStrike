@@ -14,11 +14,11 @@ public class ForceScale : MonoBehaviour
     private float _minValue;
     private float _currentValue;
     private float _finalValue = 1f;
-    private Coroutine _changeValue;
+    private CoroutineRunning _changeMultiplier;
     private GameStateService _gameStateService;
 
     public event UnityAction<float> ValueChanged;
-    public event UnityAction<float,float> RangeChanged;
+    public event UnityAction<float, float> RangeChanged;
 
     public float FinalValue => _finalValue;
 
@@ -33,10 +33,12 @@ public class ForceScale : MonoBehaviour
     }
 
     [Inject]
-    private void Construct(GameStateService gameStateService)
+    private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
     {
         _gameStateService = gameStateService;
         _gameStateService.GameStateChanged += OnGameStateChanged;
+
+        _changeMultiplier = new CoroutineRunning(coroutineService);
     }
 
     private void SetRange()
@@ -44,17 +46,6 @@ public class ForceScale : MonoBehaviour
         _minValue = -_valueRange;
         _maxValue = _valueRange;
         RangeChanged?.Invoke(_minValue, _maxValue);
-    }
-
-    private void StartCoroutine()
-    {
-        _changeValue = StartCoroutine(ChangeMultiplier());
-    }
-
-    private void StopCoroutine()
-    {
-        if (_changeValue != null)
-            StopCoroutine(_changeValue);
     }
 
     private void RandomizeSliderValue()
@@ -76,7 +67,7 @@ public class ForceScale : MonoBehaviour
 
             _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep);
             ValueChanged?.Invoke(_currentValue);
-            
+
             yield return null;
         }
     }
@@ -97,8 +88,7 @@ public class ForceScale : MonoBehaviour
     private void OnGameWaiting()
     {
         RandomizeSliderValue();
-        StopCoroutine();
-        StartCoroutine();
+        _changeMultiplier.Run(ChangeMultiplier());
     }
 
     private void OnGameRunning()
@@ -108,6 +98,6 @@ public class ForceScale : MonoBehaviour
         if (_currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue)
             return;
 
-        _finalValue -= Mathf.Abs(_currentValue);        
+        _finalValue -= Mathf.Abs(_currentValue);
     }
 }

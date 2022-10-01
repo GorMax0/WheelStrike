@@ -1,18 +1,15 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class AimDirection : IInitializable, IDisposable
+public class AimDirection :  IDisposable
 {
     private GameStateService _gameStateService;
-    private float _directionOffsetX;
+    private CoroutineRunning _aimRunning;
+    private bool _isAiming;
 
-    public void Initialize()
-    {
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-    }
+    public event Action<float> DirectionChanged;
 
     public void Dispose()
     {
@@ -20,9 +17,11 @@ public class AimDirection : IInitializable, IDisposable
     }
 
     [Inject]
-    private void Construct(GameStateService gameStateService)
+    private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
     {
         _gameStateService = gameStateService;
+        _gameStateService.GameStateChanged += OnGameStateChanged;
+        _aimRunning = new CoroutineRunning(coroutineService);
     }
 
     private void OnGameStateChanged(GameState state)
@@ -38,29 +37,32 @@ public class AimDirection : IInitializable, IDisposable
         }
     }
 
-    private Vector3 GetStartPoint()
+    private IEnumerator SelectDirection()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = default;
+        float directionOffsetX;
 
-        Vector3 direction = ray.direction;
-        Debug.Log(direction.normalized);
+        while (_isAiming == true)
+        {
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            directionOffsetX = ray.direction.x;
+            DirectionChanged?.Invoke(directionOffsetX);
 
-        return direction.normalized;
+            yield return null;
+        }
+
+        if (ray.origin == Vector3.zero && ray.direction == Vector3.zero)
+            throw new ArgumentException($"{typeof(AimDirection)}: SelectDirection():  Ray invalid - ray origin and ray direction equals Vector3.zero.");
     }
-
-    private void Stop
 
     private void OnGameWaiting()
     {
-      var direction = GetStartPoint();
-        _directionOffsetX = direction.x;
-        Debug.Log(_directionOffsetX);
+        _isAiming = true;
+        _aimRunning.Run(SelectDirection());
     }
 
     private void OnGameRunning()
     {
-        throw new NotImplementedException();
+        _isAiming = false;
     }
-
-
 }
