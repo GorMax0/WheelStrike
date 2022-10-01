@@ -2,70 +2,75 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Zenject;
+using Services.Coroutines;
+using Services.GameStates;
 
-public class AimDirection : IDisposable
+namespace Core
 {
-    private readonly float SwipeSensitivity = 10f;
-    private readonly float ClampValue = 3f;
-
-    private GameStateService _gameStateService;
-    private CoroutineRunning _aimRunning;
-    private bool _isAiming;
-
-    public event Action<float> DirectionChanged;
-
-    public void Dispose()
+    public class AimDirection : IDisposable
     {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-    }
+        private readonly float SwipeSensitivity = 10f;
+        private readonly float ClampValue = 3f;
 
-    [Inject]
-    private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
-    {
-        _gameStateService = gameStateService;
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-        _aimRunning = new CoroutineRunning(coroutineService);
-    }
+        private GameStateService _gameStateService;
+        private CoroutineRunning _aimRunning;
+        private bool _isAiming;
 
-    private void OnGameStateChanged(GameState state)
-    {
-        switch (state)
+        public event Action<float> DirectionChanged;
+
+        public void Dispose()
         {
-            case GameState.Waiting:
-                OnGameWaiting();
-                break;
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
-    }
 
-    private IEnumerator SelectDirection()
-    {
-        Ray startTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Ray currentTouchPosition;
-        float swipeValue;
-        float directionOffsetX;
-
-        while (_isAiming == true)
+        [Inject]
+        private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
         {
-            currentTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
-            swipeValue = (currentTouchPosition.direction.x - startTouchPosition.direction.x) * SwipeSensitivity;
-            directionOffsetX = Mathf.Clamp(swipeValue, -ClampValue, ClampValue);
-            DirectionChanged?.Invoke(directionOffsetX);
-
-            yield return null;
+            _gameStateService = gameStateService;
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+            _aimRunning = new CoroutineRunning(coroutineService);
         }
-    }
 
-    private void OnGameWaiting()
-    {
-        _isAiming = true;
-        _aimRunning.Run(SelectDirection());
-    }
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
 
-    private void OnGameRunning()
-    {
-        _isAiming = false;
+        private IEnumerator SelectDirection()
+        {
+            Ray startTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray currentTouchPosition;
+            float swipeValue;
+            float directionOffsetX;
+
+            while (_isAiming == true)
+            {
+                currentTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+                swipeValue = (currentTouchPosition.direction.x - startTouchPosition.direction.x) * SwipeSensitivity;
+                directionOffsetX = Mathf.Clamp(swipeValue, -ClampValue, ClampValue);
+                DirectionChanged?.Invoke(directionOffsetX);
+
+                yield return null;
+            }
+        }
+
+        private void OnGameWaiting()
+        {
+            _isAiming = true;
+            _aimRunning.Run(SelectDirection());
+        }
+
+        private void OnGameRunning()
+        {
+            _isAiming = false;
+        }
     }
 }

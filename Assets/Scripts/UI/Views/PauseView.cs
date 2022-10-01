@@ -1,60 +1,64 @@
 using TMPro;
 using UnityEngine;
 using Zenject;
+using Services.GameStates;
 
-public class PauseView : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private Wrap _worldButton;
-    [SerializeField] private Wrap _shopButton;
-    [SerializeField] private Wrap _upgradePanel;
-    [SerializeField] private TMP_Text _levelLable;
-
-    private GameStateService _gameStateService;
-
-    private void OnEnable()
+    public class PauseView : MonoBehaviour
     {
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-    }
+        [SerializeField] private Wrap _worldButton;
+        [SerializeField] private Wrap _shopButton;
+        [SerializeField] private Wrap _upgradePanel;
+        [SerializeField] private TMP_Text _levelLable;
 
-    private void OnDisable()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-    }
+        private GameStateService _gameStateService;
 
-    [Inject]
-    private void Construct(GameStateService gameStateService)
-    {
-        _gameStateService = gameStateService;
-    }
-
-    private void OnGameStateChanged(GameState state)
-    {
-        switch (state)
+        private void OnEnable()
         {
-            case GameState.Pause:
-                OnGamePause();
-                break;
-            case GameState.Waiting:
-                OnGameWaiting();
-                break;
+            _gameStateService.GameStateChanged += OnGameStateChanged;
         }
 
-        Debug.Log(state);
-    }
+        private void OnDisable()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+        }
 
-    private void OnGamePause()
-    {
-        _worldButton.Unroll();
-        _shopButton.Unroll();
-        _upgradePanel.Unroll();
-        _levelLable.gameObject.SetActive(true);
-    }
+        [Inject]
+        private void Construct(GameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
+        }
 
-    private void OnGameWaiting()
-    {
-        _worldButton.Roll();
-        _shopButton.Roll();
-        _upgradePanel.Roll();
-        _levelLable.gameObject.SetActive(false);
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Pause:
+                    OnGamePause();
+                    break;
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+            }
+
+            Debug.Log(state);
+        }
+
+        private void OnGamePause()
+        {
+            _worldButton.Unroll();
+            _shopButton.Unroll();
+            _upgradePanel.Unroll();
+            _levelLable.gameObject.SetActive(true);
+        }
+
+        private void OnGameWaiting()
+        {
+            _worldButton.Roll();
+            _shopButton.Roll();
+            _upgradePanel.Roll();
+            _levelLable.gameObject.SetActive(false);
+        }
     }
 }

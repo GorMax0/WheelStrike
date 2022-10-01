@@ -1,17 +1,20 @@
 using UnityEngine.SceneManagement;
 using Zenject;
 
-public class LevelService : IInitializable
+namespace Services
 {
-    private int _currentSceneIndex;
-
-    public void Initialize()
+    public class LevelService : IInitializable
     {
-        _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-    }
+        private int _currentSceneIndex;
 
-    public void RestartLevel()
-    {
-        SceneManager.LoadScene(_currentSceneIndex);
+        public void Initialize()
+        {
+            _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        }
+
+        public void RestartLevel()
+        {
+            SceneManager.LoadScene(_currentSceneIndex);
+        }
     }
 }

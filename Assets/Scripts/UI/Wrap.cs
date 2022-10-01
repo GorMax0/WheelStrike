@@ -1,28 +1,31 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class Wrap : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private Vector2 _wrapOffset;
-    [SerializeField] private float _duration;
-
-    private Vector2 _startPositoin;
-    private RectTransform _transform;
-
-    private void Awake()
+    public class Wrap : MonoBehaviour
     {
-        _transform = GetComponent<RectTransform>();
-        _startPositoin = _transform.position;
-    }
+        [SerializeField] private Vector2 _wrapOffset;
+        [SerializeField] private float _duration;
 
-    public void Roll()
-    {
-        _transform.DOMove(_startPositoin + _wrapOffset, _duration);
-    }
+        private Vector2 _startPositoin;
+        private RectTransform _transform;
 
-    public void Unroll()
-    {
-        if (_transform.position != (Vector3)_startPositoin)
-            _transform.DOMove(_startPositoin, _duration);
+        private void Awake()
+        {
+            _transform = GetComponent<RectTransform>();
+            _startPositoin = _transform.position;
+        }
+
+        public void Roll()
+        {
+            _transform.DOMove(_startPositoin + _wrapOffset, _duration);
+        }
+
+        public void Unroll()
+        {
+            if (_transform.position != (Vector3)_startPositoin)
+                _transform.DOMove(_startPositoin, _duration);
+        }
     }
 }

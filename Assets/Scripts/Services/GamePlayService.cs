@@ -1,44 +1,49 @@
 using System;
 using Zenject;
+using Core;
+using Services.GameStates;
 
-public class GamePlayService : IInitializable, IDisposable
+namespace Services
 {
-    private GameStateService _gameStateService;
-    private InputHandler _inputHandler;
-
-    public void Initialize()
+    public class GamePlayService : IInitializable, IDisposable
     {
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-        _inputHandler.PointerDown += OnPointerDown;
-        _inputHandler.PointerUp += OnPointerUp;
-    }
+        private GameStateService _gameStateService;
+        private InputHandler _inputHandler;
 
-    public void Dispose()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-        _inputHandler.PointerDown -= OnPointerDown;
-        _inputHandler.PointerUp -= OnPointerUp;
-    }
+        public void Initialize()
+        {
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+            _inputHandler.PointerDown += OnPointerDown;
+            _inputHandler.PointerUp += OnPointerUp;
+        }
 
-    [Inject]
-    private void Construct(GameStateService gameStateService, InputHandler inputHandler)
-    {
-        _gameStateService = gameStateService;
-        _inputHandler = inputHandler;
-    }
+        public void Dispose()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _inputHandler.PointerDown -= OnPointerDown;
+            _inputHandler.PointerUp -= OnPointerUp;
+        }
 
-    private void OnGameStateChanged(GameState state)
-    {
+        [Inject]
+        private void Construct(GameStateService gameStateService, InputHandler inputHandler)
+        {
+            _gameStateService = gameStateService;
+            _inputHandler = inputHandler;
+        }
 
-    }
+        private void OnGameStateChanged(GameState state)
+        {
 
-    private void OnPointerDown()
-    {
-        _gameStateService.ChangeState(GameState.Waiting);
-    }
+        }
 
-    private void OnPointerUp()
-    {
-        _gameStateService.ChangeState(GameState.Running);
+        private void OnPointerDown()
+        {
+            _gameStateService.ChangeState(GameState.Waiting);
+        }
+
+        private void OnPointerUp()
+        {
+            _gameStateService.ChangeState(GameState.Running);
+        }
     }
 }

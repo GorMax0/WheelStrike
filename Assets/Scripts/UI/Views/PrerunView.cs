@@ -1,52 +1,56 @@
 using UnityEngine;
 using Zenject;
+using Services.GameStates;
 
-public class PrerunView : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private ForceScaleView _forceScaleView;
-    
-    private GameStateService _gameStateService;
-
-    private void OnDisable()
+    public class PrerunView : MonoBehaviour
     {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-    }
+        [SerializeField] private ForceScaleView _forceScaleView;
 
-    [Inject]
-    private void Construct(GameStateService gameStateService)
-    {
-        _gameStateService = gameStateService;
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-    }
+        private GameStateService _gameStateService;
 
-    private void OnGameStateChanged(GameState state)
-    {
-        switch (state)
+        private void OnDisable()
         {
-            case GameState.Pause:
-                OnGamePause();
-                break;
-            case GameState.Waiting:
-                OnGameWaiting();
-                break;
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
-    }
 
-    private void OnGamePause()
-    {
-        _forceScaleView.gameObject.SetActive(false);
-    }
+        [Inject]
+        private void Construct(GameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+        }
 
-    private void OnGameWaiting()
-    {
-        _forceScaleView.gameObject.SetActive(true);
-    }
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Pause:
+                    OnGamePause();
+                    break;
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
 
-    private void OnGameRunning()
-    {        
-        _forceScaleView.Fade();
+        private void OnGamePause()
+        {
+            _forceScaleView.gameObject.SetActive(false);
+        }
+
+        private void OnGameWaiting()
+        {
+            _forceScaleView.gameObject.SetActive(true);
+        }
+
+        private void OnGameRunning()
+        {
+            _forceScaleView.Fade();
+        }
     }
 }

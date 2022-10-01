@@ -2,39 +2,42 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-[RequireComponent(typeof(TMP_Text))]
-public class TextEffect : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private bool _isLooping;
-
-    private const int InfinityLoops = -1;
-
-    private float _endTransparency = 0f;
-    private float _duration = 1f;
-    private int _countLoops = 0;
-    private TMP_Text _text;
-    private Tween _fade;
-
-    private void Awake()
+    [RequireComponent(typeof(TMP_Text))]
+    public class TextEffect : MonoBehaviour
     {
-        _text = GetComponent<TMP_Text>();
-    }
+        [SerializeField] private bool _isLooping;
 
-    private void OnEnable()
-    {
-        PlayEffect();
-    }
+        private const int InfinityLoops = -1;
 
-    private void OnDisable()
-    {
-       DOTween.Kill(_fade); //Как отключить ТВИН при выключиении объекта???
-    }
+        private float _endTransparency = 0f;
+        private float _duration = 1f;
+        private int _countLoops = 0;
+        private TMP_Text _text;
+        private Tween _fade;
 
-    protected virtual void PlayEffect()
-    {
-        if (_isLooping == true)
-            _countLoops = InfinityLoops;
+        private void Awake()
+        {
+            _text = GetComponent<TMP_Text>();
+        }
 
-        _fade = _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
+        private void OnEnable()
+        {
+            PlayEffect();
+        }
+
+        private void OnDisable()
+        {
+            DOTween.Kill(_fade); //Как отключить ТВИН при выключиении объекта???
+        }
+
+        protected virtual void PlayEffect()
+        {
+            if (_isLooping == true)
+                _countLoops = InfinityLoops;
+
+            _fade = _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
+        }
     }
 }

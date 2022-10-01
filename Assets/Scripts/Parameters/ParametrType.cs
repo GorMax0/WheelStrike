@@ -1,6 +1,9 @@
-﻿public enum ParametrType
+﻿namespace Parameters
 {
-    Power,
-    Size,
-    Income
+    public enum ParametrType
+    {
+        Power,
+        Size,
+        Income
+    }
 }

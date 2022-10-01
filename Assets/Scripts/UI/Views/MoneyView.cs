@@ -1,31 +1,35 @@
 using TMPro;
 using UnityEngine;
 using Zenject;
+using Core;
 
-public class MoneyView : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private TMP_Text _money;
-
-    private Wallet _wallet;
-
-    private void OnEnable()
+    public class MoneyView : MonoBehaviour
     {
-        _wallet.MoneyChanged += DisplayAmountOfMoney;
-    }
+        [SerializeField] private TMP_Text _money;
 
-    private void OnDisable()
-    {
-        _wallet.MoneyChanged -= DisplayAmountOfMoney;
-    }
+        private Wallet _wallet;
 
-    [Inject]
-    private void Construct(Wallet wallet)
-    {
-        _wallet = wallet;
-    }
+        private void OnEnable()
+        {
+            _wallet.MoneyChanged += DisplayAmountOfMoney;
+        }
 
-    private void DisplayAmountOfMoney(int money)
-    {
-        _money.text = money.ToString();
+        private void OnDisable()
+        {
+            _wallet.MoneyChanged -= DisplayAmountOfMoney;
+        }
+
+        [Inject]
+        private void Construct(Wallet wallet)
+        {
+            _wallet = wallet;
+        }
+
+        private void DisplayAmountOfMoney(int money)
+        {
+            _money.text = money.ToString();
+        }
     }
 }

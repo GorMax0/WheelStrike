@@ -2,92 +2,97 @@ using System;
 using System.Linq;
 using UnityEngine;
 using Zenject;
+using Parameters;
+using Services.GameStates;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Movement : MonoBehaviour
+namespace Core
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private float _turnSpeed;
-
-    private Parametr _power;
-    private Rigidbody _rigidbody;
-    private GameStateService _gameStateService;
-    private ForceScale _forceScale;
-    private AimDirection _aimDirection;
-    private Vector3 _offsetAngles;
-    private bool _isMoving;
-
-    private void Awake()
+    [RequireComponent(typeof(Rigidbody))]
+    public class Movement : MonoBehaviour
     {
-        _rigidbody = GetComponent<Rigidbody>();
-    }
+        [SerializeField] private float _speed;
+        [SerializeField] private float _turnSpeed;
 
-    private void OnDisable()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateService;
-        _aimDirection.DirectionChanged -= RotateInDirection;
-    }
+        private Parametr _power;
+        private Rigidbody _rigidbody;
+        private GameStateService _gameStateService;
+        private ForceScale _forceScale;
+        private AimDirection _aimDirection;
+        private Vector3 _offsetAngles;
+        private bool _isMoving;
 
-    private void FixedUpdate()
-    {
-        //if (_isMoving == true)
-        //{
-        //    transform.Rotate(-Vector3.left * Time.deltaTime * _turnSpeed);
-        //}
-    }
-
-    [Inject]
-    private void Construct(GameStateService gameStateService, ForceScale forceScale, AimDirection aimDirection, Parametr[] parametrs)
-    {
-        _gameStateService = gameStateService;
-        _forceScale = forceScale;
-        _aimDirection = aimDirection;
-
-        _gameStateService.GameStateChanged += OnGameStateService;
-        _aimDirection.DirectionChanged += RotateInDirection;
-        Debug.Log(_aimDirection);
-
-        Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
-            ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
-
-        _power = result;
-    }
-
-    private void Move()
-    {
-        float force = _speed * _power.Value * _forceScale.FinalValue;
-
-        _isMoving = true;
-        _rigidbody.isKinematic = false;
-        _rigidbody.AddForce(transform.forward * force + _offsetAngles, ForceMode.Acceleration);
-    }
-
-    private void RotateInDirection(float directionOffsetX)
-    {
-        _offsetAngles = new Vector3(0, directionOffsetX, 0);
-        transform.eulerAngles = _offsetAngles;
-    }
-
-    private void OnGameStateService(GameState state)
-    {
-        switch (state)
+        private void Awake()
         {
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            _rigidbody = GetComponent<Rigidbody>();
         }
-    }
 
-    private void OnGameRunning()
-    {
-        Move();
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.TryGetComponent(out Ground ground))
+        private void OnDisable()
         {
+            _gameStateService.GameStateChanged -= OnGameStateService;
+            _aimDirection.DirectionChanged -= RotateInDirection;
+        }
 
+        private void FixedUpdate()
+        {
+            //if (_isMoving == true)
+            //{
+            //    transform.Rotate(-Vector3.left * Time.deltaTime * _turnSpeed);
+            //}
+        }
+
+        [Inject]
+        private void Construct(GameStateService gameStateService, ForceScale forceScale, AimDirection aimDirection, Parametr[] parametrs)
+        {
+            _gameStateService = gameStateService;
+            _forceScale = forceScale;
+            _aimDirection = aimDirection;
+
+            _gameStateService.GameStateChanged += OnGameStateService;
+            _aimDirection.DirectionChanged += RotateInDirection;
+            Debug.Log(_aimDirection);
+
+            Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
+                ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
+
+            _power = result;
+        }
+
+        private void Move()
+        {
+            float force = _speed * _power.Value * _forceScale.FinalValue;
+
+            _isMoving = true;
+            _rigidbody.isKinematic = false;
+            _rigidbody.AddForce(transform.forward * force + _offsetAngles, ForceMode.Acceleration);
+        }
+
+        private void RotateInDirection(float directionOffsetX)
+        {
+            _offsetAngles = new Vector3(0, directionOffsetX, 0);
+            transform.eulerAngles = _offsetAngles;
+        }
+
+        private void OnGameStateService(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
+
+        private void OnGameRunning()
+        {
+            Move();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.TryGetComponent(out Ground ground))
+            {
+
+            }
         }
     }
 }

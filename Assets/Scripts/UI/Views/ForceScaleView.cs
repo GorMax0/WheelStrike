@@ -2,52 +2,56 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Zenject;
+using Core;
 
-[RequireComponent(typeof(Slider))]
-public class ForceScaleView : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private Image _sliderBackground;
-    [SerializeField] private Image _sliderHandler;
-    [SerializeField] private float _fadeTime;
-
-    private Slider _slider;
-    private ForceScale _forceScale;
-
-    private void OnDisable()
+    [RequireComponent(typeof(Slider))]
+    public class ForceScaleView : MonoBehaviour
     {
-        _forceScale.RangeChanged -= OnRangeChanged;
-        _forceScale.ValueChanged -= OnValueChanged;
-    }
+        [SerializeField] private Image _sliderBackground;
+        [SerializeField] private Image _sliderHandler;
+        [SerializeField] private float _fadeTime;
 
-    [Inject]
-    private void Construct(ForceScale forceScale)
-    {
-        _slider = GetComponent<Slider>();
-        _forceScale = forceScale;
-        _forceScale.RangeChanged += OnRangeChanged;
-        _forceScale.ValueChanged += OnValueChanged;
-    }
+        private Slider _slider;
+        private ForceScale _forceScale;
 
-    public void Fade()
-    {
-        _sliderBackground.DOFade(0, _fadeTime);
-        _sliderHandler.DOFade(0, _fadeTime);
-        Invoke(nameof(Disable), _fadeTime);
-    }
+        private void OnDisable()
+        {
+            _forceScale.RangeChanged -= OnRangeChanged;
+            _forceScale.ValueChanged -= OnValueChanged;
+        }
 
-    private void Disable()
-    {
-        gameObject.SetActive(false);
-    }
+        [Inject]
+        private void Construct(ForceScale forceScale)
+        {
+            _slider = GetComponent<Slider>();
+            _forceScale = forceScale;
+            _forceScale.RangeChanged += OnRangeChanged;
+            _forceScale.ValueChanged += OnValueChanged;
+        }
 
-    private void OnRangeChanged(float minValue, float maxValue)
-    {
-        _slider.minValue = minValue;
-        _slider.maxValue = maxValue;
-    }
+        public void Fade()
+        {
+            _sliderBackground.DOFade(0, _fadeTime);
+            _sliderHandler.DOFade(0, _fadeTime);
+            Invoke(nameof(Disable), _fadeTime);
+        }
 
-    private void OnValueChanged(float value)
-    {
-        _slider.value = value;
+        private void Disable()
+        {
+            gameObject.SetActive(false);
+        }
+
+        private void OnRangeChanged(float minValue, float maxValue)
+        {
+            _slider.minValue = minValue;
+            _slider.maxValue = maxValue;
+        }
+
+        private void OnValueChanged(float value)
+        {
+            _slider.value = value;
+        }
     }
 }

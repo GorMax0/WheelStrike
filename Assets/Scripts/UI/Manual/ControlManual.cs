@@ -1,61 +1,65 @@
 using TMPro;
 using UnityEngine;
 using Zenject;
+using Services.GameStates;
 
-public class ControlManual : MonoBehaviour
+namespace UI.Manual
 {
-    [SerializeField] private AimManual _aimManual;
-    [SerializeField] private TMP_Text _holdToPlay;
-
-    private GameStateService _gameStateService;
-
-    private void OnEnable()
+    public class ControlManual : MonoBehaviour
     {
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-    }
+        [SerializeField] private AimManual _aimManual;
+        [SerializeField] private TMP_Text _holdToPlay;
 
-    private void OnDisable()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-    }
+        private GameStateService _gameStateService;
 
-    [Inject]
-    private void Construct(GameStateService gameStateService)
-    {
-        _gameStateService = gameStateService;
-    }
-
-    private void OnGameStateChanged(GameState state)
-    {
-        switch (state)
+        private void OnEnable()
         {
-            case GameState.Pause:
-                OnGamePause();
-                break;
-            case GameState.Waiting:
-                OnGameWaiting();
-                break;
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            _gameStateService.GameStateChanged += OnGameStateChanged;
         }
-    }
 
-    private void OnGamePause()
-    {
-        _aimManual.gameObject.SetActive(false);
-        _holdToPlay.gameObject.SetActive(true);
-    }
+        private void OnDisable()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+        }
 
-    private void OnGameWaiting()
-    {
-        _holdToPlay.gameObject.SetActive(false);
-        _aimManual.gameObject.SetActive(true);
-        _aimManual.StartTween();        
-    }
+        [Inject]
+        private void Construct(GameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
+        }
 
-    private void OnGameRunning()
-    {
-        _aimManual.Fade();
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Pause:
+                    OnGamePause();
+                    break;
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
+
+        private void OnGamePause()
+        {
+            _aimManual.gameObject.SetActive(false);
+            _holdToPlay.gameObject.SetActive(true);
+        }
+
+        private void OnGameWaiting()
+        {
+            _holdToPlay.gameObject.SetActive(false);
+            _aimManual.gameObject.SetActive(true);
+            _aimManual.StartTween();
+        }
+
+        private void OnGameRunning()
+        {
+            _aimManual.Fade();
+        }
     }
 }

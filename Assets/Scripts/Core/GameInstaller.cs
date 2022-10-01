@@ -1,30 +1,37 @@
 using UnityEngine;
 using Zenject;
+using Parameters;
+using Services;
+using Services.Coroutines;
+using Services.GameStates;
 
-public class GameInstaller : MonoInstaller
+namespace Core
 {
-    [SerializeField] private InputHandler _inputHandler;
-    [SerializeField] private ParametrCreater[] _parametrCreaters;
-    [SerializeField] private ForceScale _forceScale;
-
-    public override void InstallBindings()
+    public class GameInstaller : MonoInstaller
     {
-        Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
-        Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
-        Container.BindInterfacesTo<GamePlayService>().AsSingle();
-        Container.Bind<CoroutineService>().FromNewComponentOnNewGameObject().AsSingle();
-        Container.BindInterfacesAndSelfTo<AimDirection>().AsSingle();
-        Container.BindInstance(_inputHandler).AsSingle();
-        Container.BindInstance(_forceScale).AsSingle();
-        Container.Bind<Wallet>().AsSingle();
-        BindParameters();
-    }
+        [SerializeField] private InputHandler _inputHandler;
+        [SerializeField] private ParametrCreater[] _parametrCreaters;
+        [SerializeField] private ForceScale _forceScale;
 
-    private void BindParameters()
-    {
-        foreach (ParametrCreater creater in _parametrCreaters)
+        public override void InstallBindings()
         {
-            Container.BindInstance(new Parametr(creater));
+            Container.BindInterfacesAndSelfTo<GameStateService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
+            Container.BindInterfacesTo<GamePlayService>().AsSingle();
+            Container.Bind<CoroutineService>().FromNewComponentOnNewGameObject().AsSingle();
+            Container.BindInterfacesAndSelfTo<AimDirection>().AsSingle();
+            Container.BindInstance(_inputHandler).AsSingle();
+            Container.BindInstance(_forceScale).AsSingle();
+            Container.Bind<Wallet>().AsSingle();
+            BindParameters();
+        }
+
+        private void BindParameters()
+        {
+            foreach (ParametrCreater creater in _parametrCreaters)
+            {
+                Container.BindInstance(new Parametr(creater));
+            }
         }
     }
 }

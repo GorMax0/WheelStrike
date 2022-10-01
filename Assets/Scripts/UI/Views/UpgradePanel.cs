@@ -1,17 +1,21 @@
 using UnityEngine;
 using Zenject;
+using Parameters;
 
-public class UpgradePanel : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private ParametrView _template;
-
-    [Inject]
-    private void Construct(Parametr[] parametrs)
+    public class UpgradePanel : MonoBehaviour
     {
-        foreach (Parametr parametr in parametrs)
+        [SerializeField] private ParametrView _template;
+
+        [Inject]
+        private void Construct(Parametr[] parametrs)
         {
-            ParametrView view = Instantiate(_template, transform);
-            view.Renger(parametr);
+            foreach (Parametr parametr in parametrs)
+            {
+                ParametrView view = Instantiate(_template, transform);
+                view.Renger(parametr);
+            }
         }
     }
 }

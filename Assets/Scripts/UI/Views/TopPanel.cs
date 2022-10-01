@@ -1,65 +1,70 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Services;
+using Services.GameStates;
 
-public class TopPanel : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] private Button _settingButton;
-    [SerializeField] private Wrap _restartButton;
-    [SerializeField] private Wrap _moneyPanel;
-
-    private GameStateService _gameStateService;
-    private LevelService _levelService;
-
-    private void OnEnable()
+    public class TopPanel : MonoBehaviour
     {
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-        _restartButton.GetComponent<Button>().onClick.AddListener(_levelService.RestartLevel);
-    }
+        [SerializeField] private Button _settingButton;
+        [SerializeField] private Wrap _restartButton;
+        [SerializeField] private Wrap _moneyPanel;
 
-    private void OnDisable()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-        _restartButton.GetComponent<Button>().onClick.RemoveListener(_levelService.RestartLevel);
-    }
+        private GameStateService _gameStateService;
+        private LevelService _levelService;
 
-    [Inject]
-    private void Construct(GameStateService gameStateService, LevelService levelService)
-    {
-        _gameStateService = gameStateService;
-        _levelService = levelService;
-    }
-
-    private void OnGameStateChanged(GameState state)
-    {
-        switch (state)
+        private void OnEnable()
         {
-            case GameState.Pause:
-                OnGamePause();
-                break;
-            case GameState.Waiting:
-                OnGameWaiting();
-                break;
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+            _restartButton.GetComponent<Button>().onClick.AddListener(_levelService.RestartLevel);
         }
-    }
 
-    private void OnGamePause()
-    {
-        _restartButton.Unroll();
-        _moneyPanel.Unroll();
-    }
+        private void OnDisable()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _restartButton.GetComponent<Button>().onClick.RemoveListener(_levelService.RestartLevel);
+        }
 
-    private void OnGameWaiting()
-    {
-        _restartButton.Roll();
-        _moneyPanel.Roll();
-    }
-    private void OnGameRunning()
-    {
-        _restartButton.Unroll();
-    }
+        [Inject]
+        private void Construct(GameStateService gameStateService, LevelService levelService)
+        {
+            _gameStateService = gameStateService;
+            _levelService = levelService;
+        }
 
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Pause:
+                    OnGamePause();
+                    break;
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
+
+        private void OnGamePause()
+        {
+            _restartButton.Unroll();
+            _moneyPanel.Unroll();
+        }
+
+        private void OnGameWaiting()
+        {
+            _restartButton.Roll();
+            _moneyPanel.Roll();
+        }
+        private void OnGameRunning()
+        {
+            _restartButton.Unroll();
+        }
+
+    }
 }
