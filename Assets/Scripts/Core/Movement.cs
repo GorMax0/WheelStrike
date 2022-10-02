@@ -49,7 +49,6 @@ namespace Core
 
             _gameStateService.GameStateChanged += OnGameStateService;
             _aimDirection.DirectionChanged += RotateInDirection;
-            Debug.Log(_aimDirection);
 
             Parametr result = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Power)).First()
                 ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
