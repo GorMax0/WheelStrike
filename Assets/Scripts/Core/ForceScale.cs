@@ -69,7 +69,7 @@ namespace Core
                 else if (_currentValue == endValue && endValue == _minValue)
                     endValue = _maxValue;
 
-                _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep);
+                _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep * Time.deltaTime);
                 ValueChanged?.Invoke(_currentValue);
 
                 yield return null;
