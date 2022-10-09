@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Cinemachine;
 using Zenject;
 using Services.Coroutines;
 using Services.GameStates;
@@ -12,6 +13,7 @@ namespace Core
         private readonly float SwipeSensitivity = 10f;
         private readonly float ClampValue = 3f;
 
+        private CinemachineBrain _cinemachine;
         private GameStateService _gameStateService;
         private CoroutineRunning _aimRunning;
         private bool _isAiming;
@@ -24,15 +26,17 @@ namespace Core
         }
 
         [Inject]
-        private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
+        private void Construct(GameStateService gameStateService, CoroutineService coroutineService, CinemachineBrain cinemachine)
         {
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
+            _cinemachine = cinemachine;
             _aimRunning = new CoroutineRunning(coroutineService);
         }
 
         private void OnGameStateChanged(GameState state)
         {
+           float time = _cinemachine.m_DefaultBlend.BlendTime;
             switch (state)
             {
                 case GameState.Waiting:
@@ -46,6 +50,10 @@ namespace Core
 
         private IEnumerator SelectDirection()
         {
+            float timeCameraBlend = _cinemachine.m_DefaultBlend.BlendTime;
+
+            yield return new WaitForSeconds(timeCameraBlend);
+
             Ray startTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
             Ray currentTouchPosition;
             float swipeValue;

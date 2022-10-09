@@ -7,16 +7,26 @@ namespace Core
 {
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private CinemachineVirtualCamera _gameCamera;
+        [SerializeField] private CinemachineVirtualCamera _menuCamera;
         [SerializeField] private CinemachineVirtualCamera _launchCamera;
+        [SerializeField] private CinemachineVirtualCamera _gameCamera;
 
         private GameStateService _gameStateService;
+
+        private void OnEnable()
+        {
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+        }
 
         [Inject]
         private void Construct(GameStateService gameStateService)
         {
             _gameStateService = gameStateService;
-            _gameStateService.GameStateChanged += OnGameStateChanged;
         }
 
         private void OnGameStateChanged(GameState gameState)
@@ -28,6 +38,7 @@ namespace Core
                 case GameState.Pause:
                     break;
                 case GameState.Waiting:
+                    OnGameWaiting();
                     break;
                 case GameState.Running:
                     OnGameRunning();
@@ -39,6 +50,12 @@ namespace Core
                 case GameState.Winning:
                     break;
             }
+        }
+
+        private void OnGameWaiting()
+        {
+            _menuCamera.gameObject.SetActive(false);
+            _launchCamera.gameObject.SetActive(true);
         }
 
         private void OnGameRunning()

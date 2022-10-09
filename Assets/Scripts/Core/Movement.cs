@@ -10,6 +10,7 @@ namespace Core
     [RequireComponent(typeof(Rigidbody))]
     public class Movement : MonoBehaviour
     {
+      //  [SerializeField] private HingeJoint[] _ropeJoints;
         [SerializeField] private float _speed;
         [SerializeField] private float _turnSpeed;
 
@@ -71,6 +72,14 @@ namespace Core
             transform.eulerAngles = _offsetAngles;
         }
 
+        //private void Untie()
+        //{
+        //    foreach (HingeJoint joint in _ropeJoints)
+        //    {
+        //        joint.bra;
+        //    }
+        //}
+
         private void OnGameStateService(GameState state)
         {
             switch (state)
@@ -83,6 +92,7 @@ namespace Core
 
         private void OnGameRunning()
         {
+         //   Untie();
             Move();
         }
 

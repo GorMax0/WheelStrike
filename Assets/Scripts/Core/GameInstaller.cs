@@ -12,6 +12,7 @@ namespace Core
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ParametrCreater[] _parametrCreaters;
         [SerializeField] private ForceScale _forceScale;
+        [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
         public override void InstallBindings()
         {
@@ -19,6 +20,7 @@ namespace Core
             Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
             Container.BindInterfacesTo<GamePlayService>().AsSingle();
             Container.Bind<CoroutineService>().FromNewComponentOnNewGameObject().AsSingle();
+            Container.BindInstance(_cinemachine).AsSingle();
             Container.BindInterfacesAndSelfTo<AimDirection>().AsSingle();
             Container.BindInstance(_inputHandler).AsSingle();
             Container.BindInstance(_forceScale).AsSingle();
