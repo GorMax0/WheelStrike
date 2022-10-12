@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
+using DG.Tweening;
 using Services.Coroutines;
 using Services.GameStates;
 
@@ -21,8 +22,8 @@ namespace Core
         private CoroutineRunning _changeMultiplier;
         private GameStateService _gameStateService;
 
-        public event UnityAction<float> ValueChanged;
         public event UnityAction<float, float> RangeChanged;
+        public event UnityAction<float> MultiplierChanged;
 
         public float FinalValue => _finalValue;
 
@@ -52,7 +53,7 @@ namespace Core
             RangeChanged?.Invoke(_minValue, _maxValue);
         }
 
-        private void RandomizeSliderValue()
+        private void RandomizeStartValue()
         {
             float randomValue = Random.Range(_minValue, _maxValue);
             _currentValue = randomValue;
@@ -62,18 +63,29 @@ namespace Core
         {
             float endValue = _maxValue;
 
-            while (_gameStateService.State == GameState.Waiting)
+            while (true)
             {
-                if (_currentValue == endValue && endValue == _maxValue)
-                    endValue = _minValue;
-                else if (_currentValue == endValue && endValue == _minValue)
-                    endValue = _maxValue;
-
                 _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep * Time.deltaTime);
-                ValueChanged?.Invoke(_currentValue);
+            // _currentValue = Mathf.Lerp(_currentValue, endValue, _valueChangeStep * Time.deltaTime);
+                MultiplierChanged?.Invoke(_currentValue);
+
+                if (_currentValue == _maxValue)
+                    endValue = _minValue;
+                else if (_currentValue == _minValue)
+                    endValue = _maxValue;
 
                 yield return null;
             }
+        }
+
+        private void CalculateFinalMultiplier()
+        {
+            float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
+
+            if (_currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue)
+                return;
+
+            _finalValue -= Mathf.Abs(_currentValue);
         }
 
         private void OnGameStateChanged(GameState state)
@@ -91,18 +103,14 @@ namespace Core
 
         private void OnGameWaiting()
         {
-            RandomizeSliderValue();
+            RandomizeStartValue();
             _changeMultiplier.Run(ChangeMultiplier());
         }
 
         private void OnGameRunning()
         {
-            float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
-
-            if (_currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue)
-                return;
-
-            _finalValue -= Mathf.Abs(_currentValue);
+            _changeMultiplier.Stop();
+            CalculateFinalMultiplier();
         }
     }
 }

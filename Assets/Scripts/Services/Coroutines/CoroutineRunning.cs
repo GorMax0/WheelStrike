@@ -17,5 +17,10 @@ namespace Services.Coroutines
         {
             _coroutineService.RunSingleCoroutine(_id, coroutine);
         }
+
+        public void Stop()
+        {
+            _coroutineService.Stop(_id);
+        }
     }
 }

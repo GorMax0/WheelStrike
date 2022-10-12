@@ -36,7 +36,6 @@ namespace Core
 
         private void OnGameStateChanged(GameState state)
         {
-           float time = _cinemachine.m_DefaultBlend.BlendTime;
             switch (state)
             {
                 case GameState.Waiting:

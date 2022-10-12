@@ -21,7 +21,7 @@ namespace Services.Coroutines
             _coroutines[id] = StartCoroutine(coroutine);
         }
 
-        private void Stop(int id)
+        public void Stop(int id)
         {
             if (_coroutines.ContainsKey(id) == false)
                 return;

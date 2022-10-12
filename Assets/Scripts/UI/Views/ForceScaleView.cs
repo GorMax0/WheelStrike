@@ -19,7 +19,7 @@ namespace UI.Views
         private void OnDisable()
         {
             _forceScale.RangeChanged -= OnRangeChanged;
-            _forceScale.ValueChanged -= OnValueChanged;
+            _forceScale.MultiplierChanged -= OnMultiplierChanged;
         }
 
         [Inject]
@@ -28,7 +28,7 @@ namespace UI.Views
             _slider = GetComponent<Slider>();
             _forceScale = forceScale;
             _forceScale.RangeChanged += OnRangeChanged;
-            _forceScale.ValueChanged += OnValueChanged;
+            _forceScale.MultiplierChanged += OnMultiplierChanged;
         }
 
         public void Fade()
@@ -49,7 +49,7 @@ namespace UI.Views
             _slider.maxValue = maxValue;
         }
 
-        private void OnValueChanged(float value)
+        private void OnMultiplierChanged(float value)
         {
             _slider.value = value;
         }
