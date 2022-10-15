@@ -16,7 +16,6 @@ namespace Core
         private CinemachineBrain _cinemachine;
         private GameStateService _gameStateService;
         private CoroutineRunning _aimRunning;
-        private bool _isAiming;
 
         public event Action<float> DirectionChanged;
 
@@ -58,7 +57,7 @@ namespace Core
             float swipeValue;
             float directionOffsetX;
 
-            while (_isAiming == true)
+            while (true)
             {
                 currentTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
                 swipeValue = (currentTouchPosition.direction.x - startTouchPosition.direction.x) * SwipeSensitivity;
@@ -71,13 +70,12 @@ namespace Core
 
         private void OnGameWaiting()
         {
-            _isAiming = true;
             _aimRunning.Run(SelectDirection());
         }
 
         private void OnGameRunning()
         {
-            _isAiming = false;
+            _aimRunning.Stop();
         }
     }
 }

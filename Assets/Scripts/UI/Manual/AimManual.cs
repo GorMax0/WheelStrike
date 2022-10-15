@@ -1,4 +1,4 @@
-using System.Collections;
+  using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -58,6 +58,7 @@ namespace UI.Manual
 
         private void Disable()
         {
+            _replayRunning.Stop();
             gameObject.SetActive(false);
         }
     }

@@ -5,16 +5,16 @@ namespace Services
 {
     public class LevelService : IInitializable
     {
-        private int _currentSceneIndex;
+        private string _currentSceneName;
 
         public void Initialize()
         {
-            _currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            _currentSceneName = SceneManager.GetActiveScene().name;
         }
 
         public void RestartLevel()
         {
-            SceneManager.LoadScene(_currentSceneIndex);
+            SceneManager.LoadScene(_currentSceneName);
         }
     }
 }

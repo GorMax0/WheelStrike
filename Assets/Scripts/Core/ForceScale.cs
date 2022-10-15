@@ -66,7 +66,6 @@ namespace Core
             while (true)
             {
                 _currentValue = Mathf.MoveTowards(_currentValue, endValue, _valueChangeStep * Time.deltaTime);
-            // _currentValue = Mathf.Lerp(_currentValue, endValue, _valueChangeStep * Time.deltaTime);
                 MultiplierChanged?.Invoke(_currentValue);
 
                 if (_currentValue == _maxValue)

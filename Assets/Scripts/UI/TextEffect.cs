@@ -15,7 +15,6 @@ namespace UI
         private float _duration = 1f;
         private int _countLoops = 0;
         private TMP_Text _text;
-        private Tween _fade;
 
         private void Awake()
         {
@@ -29,7 +28,7 @@ namespace UI
 
         private void OnDisable()
         {
-            DOTween.Kill(_fade); //Как отключить ТВИН при выключиении объекта???
+            DOTween.Kill(_text);
         }
 
         protected virtual void PlayEffect()
@@ -37,7 +36,7 @@ namespace UI
             if (_isLooping == true)
                 _countLoops = InfinityLoops;
 
-            _fade = _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
+            _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
         }
     }
 }
