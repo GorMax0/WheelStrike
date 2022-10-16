@@ -27,8 +27,8 @@ MonoBehaviour:
   - m_From: CM Launch
     m_To: CM Tset
     m_Blend:
-      m_Style: 0
-      m_Time: 0.5
+      m_Style: 4
+      m_Time: 0.3
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

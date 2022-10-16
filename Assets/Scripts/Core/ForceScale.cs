@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
-using DG.Tweening;
 using Services.Coroutines;
 using Services.GameStates;
 

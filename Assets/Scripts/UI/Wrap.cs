@@ -17,6 +17,11 @@ namespace UI
             _startPositoin = _transform.position;
         }
 
+        private void OnDisable()
+        {
+            DOTween.Kill(_transform);
+        }
+
         public void Roll()
         {
             _transform.DOMove(_startPositoin + _wrapOffset, _duration);

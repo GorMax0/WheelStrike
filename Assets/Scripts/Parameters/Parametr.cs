@@ -8,8 +8,8 @@ namespace Parameters
         private float _baseValue;
         private int _baseCost;
 
-        public event Action<int> LevelChanged;
-        public event Action<int> CostChanged;
+      //  public event Action<int> LevelChanged;
+      //  public event Action<int> CostChanged;
 
         public string Name { get; }
         public Sprite Icon { get; }

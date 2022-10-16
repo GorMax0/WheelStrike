@@ -11,9 +11,10 @@ namespace Core
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float _speed;
+        [SerializeField] private float _bounceForce;
         [SerializeField] private float _turnSpeed;
         [SerializeField] private AnimationCurve _deviationWhenSwining;
-
+        
         private Parametr _power;
         private Rigidbody _rigidbody;
         private GameStateService _gameStateService;
@@ -93,7 +94,8 @@ namespace Core
         {
             if (collision.collider.TryGetComponent(out Ground ground))
             {
-
+                if(_rigidbody.velocity.z != 0)
+                _rigidbody.AddForce(Vector3.up * _bounceForce, ForceMode.Acceleration);
             }
         }
     }
