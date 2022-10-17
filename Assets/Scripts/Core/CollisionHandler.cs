@@ -1,16 +1,15 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CollisionHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public event UnityAction CollidedWithGround;
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.collider.TryGetComponent(out Ground ground))
+        {
+            CollidedWithGround?.Invoke();
+        }
     }
 }

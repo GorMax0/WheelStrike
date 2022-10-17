@@ -11,7 +11,7 @@ namespace Core
     public class AimDirection : IDisposable
     {
         private readonly float SwipeSensitivity = 10f;
-        private readonly float ClampValue = 3f;
+        private readonly float ClampValue = 1.5f;
 
         private CinemachineBrain _cinemachine;
         private GameStateService _gameStateService;
