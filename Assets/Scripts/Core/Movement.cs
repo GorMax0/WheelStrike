@@ -15,7 +15,7 @@ namespace Core
         [SerializeField] private float _speed;
         [SerializeField] private float _bounceForce;
         [SerializeField] private float _turnSpeed;
-            
+        
         private Parametr _power;
         private Rigidbody _rigidbody;
         private GameStateService _gameStateService;
