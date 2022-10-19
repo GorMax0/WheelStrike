@@ -57,6 +57,11 @@ namespace Core
             _power = result;
         }
 
+        private void Rotation()
+        {
+           // _rigidbody.MoveRotation(_turnSpeed);
+        }    
+
         private void Move()
         {
             float force = _speed * _power.Value * _forceScale.FinalValue;
