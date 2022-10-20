@@ -14,8 +14,7 @@ namespace Core
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _bounceForce;
-        [SerializeField] private float _turnSpeed;
-        
+
         private Parametr _power;
         private Rigidbody _rigidbody;
         private GameStateService _gameStateService;
@@ -57,10 +56,6 @@ namespace Core
             _power = result;
         }
 
-        private void Rotation()
-        {
-           // _rigidbody.MoveRotation(_turnSpeed);
-        }    
 
         private void Move()
         {

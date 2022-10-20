@@ -1,15 +1,18 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CollisionHandler : MonoBehaviour
+namespace Core
 {
-    public event UnityAction CollidedWithGround;
-
-    private void OnCollisionEnter(Collision collision)
+    public class CollisionHandler : MonoBehaviour
     {
-        if (collision.collider.TryGetComponent(out Ground ground))
+        public event UnityAction CollidedWithGround;
+
+        private void OnCollisionEnter(Collision collision)
         {
-            CollidedWithGround?.Invoke();
+            if (collision.collider.TryGetComponent(out Ground ground))
+            {
+                CollidedWithGround?.Invoke();
+            }
         }
     }
 }
