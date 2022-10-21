@@ -34,14 +34,14 @@ namespace Core
         {
             _gameStateService.GameStateChanged += OnGameStateService;
             _aimDirection.DirectionChanged += RotateInDirection;
-            _collisionHandler.CollidedWithGround += Bounce;
+            _collisionHandler.CollidedWithGround += OnCollidedWithGround;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateService;
             _aimDirection.DirectionChanged -= RotateInDirection;
-            _collisionHandler.CollidedWithGround -= Bounce;
+            _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
         [Inject]
@@ -90,6 +90,11 @@ namespace Core
         private void OnGameRunning()
         {
             Move();
+        }
+
+        private void OnCollidedWithGround()
+        {
+            Bounce();
         }
     }
 }

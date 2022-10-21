@@ -9,6 +9,7 @@ namespace Core
     public class Rope : MonoBehaviour
     {
         [SerializeField] private Movement _jointObject;
+        [SerializeField] private ObiLateUpdater _lateUpdater;
 
         private ObiParticleAttachment[] _joints;
         private GameStateService _gameStateService;
@@ -34,6 +35,12 @@ namespace Core
             _gameStateService = gameStateService;
         }
 
+        private void Destroy()
+        {
+            _lateUpdater.enabled = false;
+            Destroy(gameObject);
+        }
+
         private void OnGameStateChanged(GameState gameState)
         {
             switch (gameState)
@@ -46,11 +53,15 @@ namespace Core
 
         private void OnGameRunning()
         {
+            float deleyDestroy = 0.8f;
+
             foreach (ObiParticleAttachment joint in _joints)
             {
                 if (joint.target == _jointObject.transform)
                     joint.enabled = false;
             }
+
+            Invoke(nameof(Destroy), deleyDestroy);
         }
     }
 }
