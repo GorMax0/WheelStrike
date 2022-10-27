@@ -1,39 +1,27 @@
 using System;
-using Zenject;
 using Core;
 using Services.GameStates;
 
 namespace Services
 {
-    public class GamePlayService : IInitializable, IDisposable
+    public class GamePlayService : IDisposable
     {
         private GameStateService _gameStateService;
         private InputHandler _inputHandler;
 
-        public void Initialize()
-        {
-            _gameStateService.GameStateChanged += OnGameStateChanged;
-            _inputHandler.PointerDown += OnPointerDown;
-            _inputHandler.PointerUp += OnPointerUp;
-        }
-
         public void Dispose()
         {
-            _gameStateService.GameStateChanged -= OnGameStateChanged;
             _inputHandler.PointerDown -= OnPointerDown;
             _inputHandler.PointerUp -= OnPointerUp;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService, InputHandler inputHandler)
+        public GamePlayService(GameStateService gameStateService, InputHandler inputHandler)
         {
             _gameStateService = gameStateService;
             _inputHandler = inputHandler;
-        }
 
-        private void OnGameStateChanged(GameState state)
-        {
-
+            _inputHandler.PointerDown += OnPointerDown;
+            _inputHandler.PointerUp += OnPointerUp;
         }
 
         private void OnPointerDown()

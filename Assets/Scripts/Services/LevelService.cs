@@ -1,13 +1,12 @@
 using UnityEngine.SceneManagement;
-using Zenject;
 
 namespace Services
 {
-    public class LevelService : IInitializable
+    public class LevelService
     {
         private string _currentSceneName;
 
-        public void Initialize()
+        public LevelService()
         {
             _currentSceneName = SceneManager.GetActiveScene().name;
         }
