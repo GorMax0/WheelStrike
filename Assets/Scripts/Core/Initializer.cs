@@ -22,6 +22,7 @@ namespace Core
         [SerializeField] private Rope _rope;
         [SerializeField] private Movement _movementWheel;
         [SerializeField] private AnimationWheel _animationWheel;
+        [SerializeField] private CollisionHandler _collisionHandler;
 
         [Header("Manual")]
         [SerializeField] private ControlManual _controlManual;
@@ -53,7 +54,7 @@ namespace Core
         private void InitializeCore()
         {
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler);
+            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler,_wallet, _collisionHandler);
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, _cinemachine);
 

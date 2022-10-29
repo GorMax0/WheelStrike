@@ -9,6 +9,7 @@ namespace Core
         [SerializeField] private CinemachineVirtualCamera _menuCamera;
         [SerializeField] private CinemachineVirtualCamera _launchCamera;
         [SerializeField] private CinemachineVirtualCamera _gameCamera;
+        [SerializeField] private CollisionHandler _collisionHandler;
 
         private GameStateService _gameStateService;
 
@@ -18,11 +19,13 @@ namespace Core
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
+            _collisionHandler.CollidedWithGround += ChangeFOV;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _collisionHandler.CollidedWithGround -= ChangeFOV;
         }
 
         public void Initialize(GameStateService gameStateService)
@@ -57,6 +60,13 @@ namespace Core
         {
             _launchCamera.gameObject.SetActive(false);
             _gameCamera.gameObject.SetActive(true);
+            
+        }
+
+        private void ChangeFOV()
+        {
+            const float NarrowingOfFOV = 4f;
+            _gameCamera.m_Lens.FieldOfView = _gameCamera.m_Lens.FieldOfView - NarrowingOfFOV;
         }
     }
 }
