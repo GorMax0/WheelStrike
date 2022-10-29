@@ -1,7 +1,6 @@
 using UnityEngine;
 using Services.GameStates;
 using Cinemachine;
-using Zenject;
 
 namespace Core
 {
@@ -15,6 +14,9 @@ namespace Core
 
         private void OnEnable()
         {
+            if (_gameStateService == null)
+                return;
+
             _gameStateService.GameStateChanged += OnGameStateChanged;
         }
 
@@ -23,31 +25,24 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService)
+        public void Initialize(GameStateService gameStateService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
+            OnEnable();
         }
 
         private void OnGameStateChanged(GameState gameState)
         {
             switch (gameState)
             {
-                case GameState.Initializing:
-                    break;
-                case GameState.Pause:
-                    break;
                 case GameState.Waiting:
                     OnGameWaiting();
                     break;
                 case GameState.Running:
                     OnGameRunning();
-                    break;
-                case GameState.Failed:
-                    break;
-                case GameState.Restart:
-                    break;
-                case GameState.Winning:
                     break;
             }
         }

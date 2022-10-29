@@ -1,5 +1,4 @@
 using UnityEngine;
-using Zenject;
 using Services.Coroutines;
 using Services.GameStates;
 using System.Collections;
@@ -28,6 +27,9 @@ namespace Core
 
         private void OnEnable()
         {
+            if (_gameStateService == null)
+                return;
+
             _gameStateService.GameStateChanged += OnGameStateService;
             _forceScale.MultiplierChanged += Swing;
             _collisionHandler.CollidedWithGround += OnCollidedWithGround;
@@ -39,12 +41,16 @@ namespace Core
             _forceScale.MultiplierChanged -= Swing;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
             _rotating = new CoroutineRunning(coroutineService);
             _figureOfEightRotation = new CoroutineRunning(coroutineService);
+
+            OnEnable();
         }
 
         private void Swing(float currentForceValue)

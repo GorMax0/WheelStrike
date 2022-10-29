@@ -1,5 +1,4 @@
 using UnityEngine;
-using Zenject;
 using Parameters;
 
 namespace UI.Views
@@ -8,8 +7,7 @@ namespace UI.Views
     {
         [SerializeField] private ParametrView _template;
 
-        [Inject]
-        private void Construct(Parametr[] parametrs)
+        public void Initialize(Parametr[] parametrs)
         {
             foreach (Parametr parametr in parametrs)
             {

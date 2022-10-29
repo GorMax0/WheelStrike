@@ -1,5 +1,4 @@
 using UnityEngine;
-using Zenject;
 using Services.GameStates;
 
 namespace UI.Views
@@ -10,16 +9,26 @@ namespace UI.Views
 
         private GameStateService _gameStateService;
 
+        private void OnEnable()
+        {
+            if (_gameStateService == null)
+                return;
+
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+        }
+
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService)
+        public void Initialize(GameStateService gameStateService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
-            _gameStateService.GameStateChanged += OnGameStateChanged;
+            OnEnable();
         }
 
         private void OnGameStateChanged(GameState state)

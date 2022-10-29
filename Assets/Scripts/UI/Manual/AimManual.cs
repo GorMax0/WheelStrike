@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Zenject;
 using Services.Coroutines;
 
 namespace UI.Manual
@@ -24,8 +23,7 @@ namespace UI.Manual
             _slider = GetComponent<Slider>();
         }
 
-        [Inject]
-        private void Construct(CoroutineService coroutineService)
+        public void Initialize(CoroutineService coroutineService)
         {
             _replayRunning = new CoroutineRunning(coroutineService);
         }

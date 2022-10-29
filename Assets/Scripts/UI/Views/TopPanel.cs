@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 using Services;
 using Services.GameStates;
 
@@ -17,6 +16,9 @@ namespace UI.Views
 
         private void OnEnable()
         {
+            if (_gameStateService == null)
+                return;
+
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _restartButton.GetComponent<Button>().onClick.AddListener(_levelService.RestartLevel);
         }
@@ -27,11 +29,15 @@ namespace UI.Views
             _restartButton.GetComponent<Button>().onClick.RemoveListener(_levelService.RestartLevel);
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService, LevelService levelService)
+        public void Initialize(GameStateService gameStateService, LevelService levelService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
             _levelService = levelService;
+
+            OnEnable();
         }
 
         private void OnGameStateChanged(GameState state)

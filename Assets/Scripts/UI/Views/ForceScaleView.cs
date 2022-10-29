@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Zenject;
 using Core;
 
 namespace UI.Views
@@ -12,9 +11,20 @@ namespace UI.Views
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderHandler;
         [SerializeField] private float _fadeTime;
+        [SerializeField] private ForceScale _forceScale;
 
         private Slider _slider;
-        private ForceScale _forceScale;
+
+        private void Awake()
+        {
+            _slider = GetComponent<Slider>();
+        }
+
+        private void OnEnable()
+        {
+            _forceScale.RangeChanged += OnRangeChanged;
+            _forceScale.MultiplierChanged += OnMultiplierChanged;
+        }
 
         private void OnDisable()
         {
@@ -22,13 +32,13 @@ namespace UI.Views
             _forceScale.MultiplierChanged -= OnMultiplierChanged;
         }
 
-        [Inject]
-        private void Construct(ForceScale forceScale)
+        public void Initialize(ForceScale forceScale)
         {
-            _slider = GetComponent<Slider>();
+            if (_forceScale != null)
+                return;
+
             _forceScale = forceScale;
-            _forceScale.RangeChanged += OnRangeChanged;
-            _forceScale.MultiplierChanged += OnMultiplierChanged;
+            OnEnable();
         }
 
         public void Fade()

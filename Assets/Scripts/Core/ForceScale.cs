@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using Zenject;
 using Services.Coroutines;
 using Services.GameStates;
 
@@ -26,6 +25,14 @@ namespace Core
 
         public float FinalValue => _finalValue;
 
+        private void OnEnable()
+        {
+            if (_gameStateService == null)
+                return;
+
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+        }
+
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
@@ -33,16 +40,19 @@ namespace Core
 
         private void Start()
         {
-            SetRange();
+            
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService, CoroutineService coroutineService)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
-            _gameStateService = gameStateService;
-            _gameStateService.GameStateChanged += OnGameStateChanged;
+            if (_gameStateService != null)
+                return;
 
+            _gameStateService = gameStateService;
             _changeMultiplier = new CoroutineRunning(coroutineService);
+
+            SetRange();
+            OnEnable();
         }
 
         private void SetRange()

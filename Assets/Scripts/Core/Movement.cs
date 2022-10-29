@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 using Parameters;
 using Services.GameStates;
 
@@ -32,6 +31,9 @@ namespace Core
 
         private void OnEnable()
         {
+            if (_gameStateService == null || _aimDirection == null)
+                return;
+                
             _gameStateService.GameStateChanged += OnGameStateService;
             _aimDirection.DirectionChanged += RotateInDirection;
             _collisionHandler.CollidedWithGround += OnCollidedWithGround;
@@ -44,9 +46,11 @@ namespace Core
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs)
+        public void Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs)
         {
+            if (_gameStateService != null || _aimDirection != null)
+                return;
+
             _gameStateService = gameStateService;
             _aimDirection = aimDirection;
 
@@ -54,8 +58,8 @@ namespace Core
                 ?? throw new NullReferenceException($"{typeof(Movement)}: Construct(Parametr[] parametrs): ParametrType.Power is null.");
 
             _power = result;
+            OnEnable();
         }
-
 
         private void Move()
         {

@@ -13,6 +13,7 @@ namespace Core
 
         private ObiParticleAttachment[] _joints;
         private GameStateService _gameStateService;
+        private bool _isInitialized;
 
         private void Awake()
         {
@@ -21,6 +22,9 @@ namespace Core
 
         private void OnEnable()
         {
+            if (_gameStateService == null)
+                return;
+
             _gameStateService.GameStateChanged += OnGameStateChanged;
         }
 
@@ -29,10 +33,13 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService)
+        public void Initialize(GameStateService gameStateService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
+            OnEnable();
         }
 
         private void Destroy()

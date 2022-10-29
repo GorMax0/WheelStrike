@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using Zenject;
 using Core;
 
 namespace UI.Views
@@ -13,6 +12,9 @@ namespace UI.Views
 
         private void OnEnable()
         {
+            if (_wallet == null)
+                return;
+
             _wallet.MoneyChanged += DisplayAmountOfMoney;
         }
 
@@ -21,10 +23,13 @@ namespace UI.Views
             _wallet.MoneyChanged -= DisplayAmountOfMoney;
         }
 
-        [Inject]
-        private void Construct(Wallet wallet)
+        public void Initialize(Wallet wallet)
         {
+            if (_wallet != null)
+                return;
+
             _wallet = wallet;
+            OnEnable();
         }
 
         private void DisplayAmountOfMoney(int money)

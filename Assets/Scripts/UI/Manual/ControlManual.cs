@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using Zenject;
 using Services.GameStates;
 
 namespace UI.Manual
@@ -14,6 +13,9 @@ namespace UI.Manual
 
         private void OnEnable()
         {
+            if (_gameStateService == null)
+                return;
+
             _gameStateService.GameStateChanged += OnGameStateChanged;
         }
 
@@ -22,10 +24,13 @@ namespace UI.Manual
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        [Inject]
-        private void Construct(GameStateService gameStateService)
+        public void Initialize(GameStateService gameStateService)
         {
+            if (_gameStateService != null)
+                return;
+
             _gameStateService = gameStateService;
+            OnEnable();
         }
 
         private void OnGameStateChanged(GameState state)

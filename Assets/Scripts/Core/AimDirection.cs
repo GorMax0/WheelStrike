@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Cinemachine;
-using Zenject;
 using Services.Coroutines;
 using Services.GameStates;
 
@@ -23,27 +22,12 @@ namespace Core
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
-
-        [Inject]
-        private void Construct(GameStateService gameStateService, CoroutineService coroutineService, CinemachineBrain cinemachine)
+        public AimDirection(GameStateService gameStateService, CoroutineService coroutineService, CinemachineBrain cinemachine)
         {
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _cinemachine = cinemachine;
             _aimRunning = new CoroutineRunning(coroutineService);
-        }
-
-        private void OnGameStateChanged(GameState state)
-        {
-            switch (state)
-            {
-                case GameState.Waiting:
-                    OnGameWaiting();
-                    break;
-                case GameState.Running:
-                    OnGameRunning();
-                    break;
-            }
         }
 
         private IEnumerator SelectDirection()
@@ -65,6 +49,19 @@ namespace Core
                 DirectionChanged?.Invoke(directionOffsetX);
 
                 yield return null;
+            }
+        }
+
+        private void OnGameStateChanged(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Waiting:
+                    OnGameWaiting();
+                    break;
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
             }
         }
 
