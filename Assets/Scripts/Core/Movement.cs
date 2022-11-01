@@ -77,7 +77,7 @@ namespace Core
 
         private void Bounce()
         {
-            if (_rigidbody.velocity.z > 0.5f)
+            if (_rigidbody.velocity.z > 0.5f)  //Сделать константой 0.5f 
                 _rigidbody.AddForce(Vector3.up * _bounceForce, ForceMode.Acceleration);
         }
 
