@@ -1,4 +1,5 @@
 using UnityEngine;
+using Core.Wheel;
 using Parameters;
 using Services;
 using Services.Coroutines;
@@ -20,10 +21,8 @@ namespace Core
         [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private ParametrCreater[] _parametrCreaters;
         [SerializeField] private Rope _rope;
-        [SerializeField] private Movement _movementWheel;
-        [SerializeField] private AnimationWheel _animationWheel;
-        [SerializeField] private CollisionHandler _collisionHandler;
-
+        [SerializeField] private Player _wheel;
+        
         [Header("Manual")]
         [SerializeField] private ControlManual _controlManual;
         [SerializeField] private AimManual _aimManual;
@@ -54,15 +53,14 @@ namespace Core
         private void InitializeCore()
         {
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler,_wallet, _collisionHandler);
+            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _wallet);
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, _cinemachine);
 
             _cameraController.Initialize(_gameStateService);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);
-            _animationWheel.Initialize(_gameStateService, _coroutineService);
-            _movementWheel.Initialize(_gameStateService, _aimDirection, _parametrs);
+            _wheel.Initialize(_gameStateService, _coroutineService, _wallet, _aimDirection, _parametrs);
         }
 
         private void InitializeManual()

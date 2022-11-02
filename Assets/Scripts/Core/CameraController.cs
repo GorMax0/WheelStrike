@@ -1,4 +1,5 @@
 using UnityEngine;
+using Core.Wheel;
 using Services.GameStates;
 using Cinemachine;
 
@@ -66,7 +67,10 @@ namespace Core
         private void ChangeFOV()
         {
             const float NarrowingOfFOV = 4f;
-            _gameCamera.m_Lens.FieldOfView = _gameCamera.m_Lens.FieldOfView - NarrowingOfFOV;
+            const float MinFOV = 84;
+            float newFOV = Mathf.Clamp(_gameCamera.m_Lens.FieldOfView - NarrowingOfFOV, MinFOV, _gameCamera.m_Lens.FieldOfView);
+
+            _gameCamera.m_Lens.FieldOfView = newFOV;
         }
     }
 }

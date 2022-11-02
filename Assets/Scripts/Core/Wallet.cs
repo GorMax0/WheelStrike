@@ -8,21 +8,21 @@ namespace Core
 
         public event Action<int> MoneyChanged;
 
-        public void AddMoney(int money)
+        public void AddMoney(int reward)
         {
-            if (money < 0)
-                throw new ArgumentOutOfRangeException($"{typeof(Wallet)}: AddMoney(int money): Amount money {money} is invalid.");
+            if (reward <= 0)
+                throw new InvalidOperationException($"{typeof(Wallet)}: AddMoney(int money): Amount money {reward} is invalid.");
 
-            _money += money;
+            _money += reward;
             MoneyChanged?.Invoke(_money);
         }
 
-        public void SpendMoney(int money)
+        public void SpendMoney(int price)
         {
-            if (money < 0)
-                throw new ArgumentOutOfRangeException($"{typeof(Wallet)}: SpendMoney(int money): Amount money {money} is invalid.");
+            if (price < 0)
+                throw new InvalidOperationException($"{typeof(Wallet)}: SpendMoney(int money): Amount money {price} is invalid.");
 
-            _money -= money;
+            _money -= price;
             MoneyChanged?.Invoke(_money);
         }
     }

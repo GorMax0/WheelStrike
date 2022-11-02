@@ -6,7 +6,7 @@ namespace Parameters
     public static class ParameretName
     {
         private static Dictionary<ParametrType, string> _parameterName = new Dictionary<ParametrType, string>() {
-        { ParametrType.Power, "Сила" },
+        { ParametrType.Speed, "Скорость" },
         { ParametrType.Size, "Размер" },
         { ParametrType.Income, "Доход"}
     };
@@ -15,8 +15,8 @@ namespace Parameters
         {
             switch (type)
             {
-                case ParametrType.Power:
-                    return _parameterName[ParametrType.Power];
+                case ParametrType.Speed:
+                    return _parameterName[ParametrType.Speed];
                 case ParametrType.Size:
                     return _parameterName[ParametrType.Size];
                 case ParametrType.Income:

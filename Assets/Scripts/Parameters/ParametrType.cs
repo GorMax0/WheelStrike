@@ -2,7 +2,7 @@
 {
     public enum ParametrType
     {
-        Power,
+        Speed,
         Size,
         Income
     }
