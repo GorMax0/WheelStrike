@@ -6,6 +6,7 @@ namespace UI.Views
     public class PrerunView : MonoBehaviour
     {
         [SerializeField] private ForceScaleView _forceScaleView;
+        [SerializeField] private AimDirectionView _aimDirectionLine;
 
         private GameStateService _gameStateService;
 
@@ -50,16 +51,19 @@ namespace UI.Views
         private void OnGamePause()
         {
             _forceScaleView.gameObject.SetActive(false);
+            _aimDirectionLine.gameObject.SetActive(false);
         }
 
         private void OnGameWaiting()
         {
             _forceScaleView.gameObject.SetActive(true);
+            _aimDirectionLine.gameObject.SetActive(true);
         }
 
         private void OnGameRunning()
         {
             _forceScaleView.Fade();
+            _aimDirectionLine.gameObject.SetActive(false);
         }
     }
 }

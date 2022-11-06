@@ -1,0 +1,3 @@
+Warning: None triangle mesh: Llanta (file: 'E:\_Vampiruga_\Unity\Torture\WheelStrike\Assets\Models\F1.fbx') []
+Warning: Mesh Llanta without valid vertices (file: 'E:\_Vampiruga_\Unity\Torture\WheelStrike\Assets\Models\F1.fbx') []
+Warning: None triangle mesh: Rin (file: 'E:\_Vampiruga_\Unity\Torture\WheelStrike\Assets\Models\F1.fbx') []

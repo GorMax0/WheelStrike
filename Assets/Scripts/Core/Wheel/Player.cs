@@ -44,6 +44,7 @@ namespace Core.Wheel
             _collisionHandler.Initialize(gameStateService);
             _wallet = wallet;
         }
+
         private void AddMoney(int reward)
         {
             _wallet.AddMoney(reward);

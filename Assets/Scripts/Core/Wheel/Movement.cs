@@ -3,6 +3,7 @@ using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
+using DG.Tweening;
 
 namespace Core.Wheel
 {
@@ -111,6 +112,12 @@ namespace Core.Wheel
             _rigidbody.velocity = speedAfterCollided;
         }
 
+        private void UnfreezeRotation()
+        {            
+            _rigidbody.freezeRotation = false;
+           // _rigidbody.rotation = Quaternion.AngleAxis(90f, Vector3.forward);
+        }
+
         private void OnGameStateService(GameState state)
         {
             switch (state)
@@ -135,13 +142,14 @@ namespace Core.Wheel
             _moveForward.Stop();
             if (_rigidbody.velocity.y != 0)
                 BounceBack();
+
+            UnfreezeRotation();
         }
 
         private void OnCollidedWithGround()
         {
             Bounce();
             CalculateSpeedAfterCollidedWithGround();
-            Debug.Log($"Collided: {_rigidbody.velocity}");
         }
     }
 }

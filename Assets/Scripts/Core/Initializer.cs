@@ -29,6 +29,7 @@ namespace Core
 
         [Header("View")]
         [SerializeField] private PrerunView _prerunView;
+        [SerializeField] private AimDirectionView _aimDirectionLine;
         [SerializeField] private PauseView _pauseView;
         [SerializeField] private MoneyView _moneyView;
         [SerializeField] private TopPanel _topPanel;
@@ -72,6 +73,7 @@ namespace Core
         private void InitializeView()
         {
             _prerunView.Initialize(_gameStateService);
+            _aimDirectionLine.Initialize(_aimDirection);
             _pauseView.Initialize(_gameStateService);
             _moneyView.Initialize(_wallet);
             _topPanel.Initialize(_gameStateService, _levelService);
