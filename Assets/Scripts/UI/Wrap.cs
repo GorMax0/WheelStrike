@@ -24,6 +24,7 @@ namespace UI
 
         public void Roll()
         {
+            _startPositoin = _transform.position;
             _transform.DOMove(_startPositoin + _wrapOffset, _duration);
         }
 
