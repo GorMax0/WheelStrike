@@ -3,7 +3,6 @@ using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
-using DG.Tweening;
 
 namespace Core.Wheel
 {
@@ -114,8 +113,7 @@ namespace Core.Wheel
 
         private void UnfreezeRotation()
         {            
-            _rigidbody.freezeRotation = false;
-           // _rigidbody.rotation = Quaternion.AngleAxis(90f, Vector3.forward);
+            _rigidbody.freezeRotation = false;          
         }
 
         private void OnGameStateService(GameState state)

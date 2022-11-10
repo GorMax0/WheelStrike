@@ -16,6 +16,7 @@ namespace Core
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
         [Header("Core")]
+        [SerializeField] private CarFactory _carFactory;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private CoroutineService _coroutineService;
@@ -58,6 +59,7 @@ namespace Core
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, _cinemachine);
 
+            _carFactory.CreateCars(_gameStateService);
             _cameraController.Initialize(_gameStateService);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);

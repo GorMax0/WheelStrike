@@ -8,7 +8,7 @@ namespace Core.Wheel
     public class CollisionHandler : MonoBehaviour
     {
         private GameStateService _gameStateService;
-        private bool _hasInitialized = false;
+        private bool _isInitialized = false;
 
         public event UnityAction CollidedWithGround;
         public event UnityAction<int> CollidedWithObstacle;
@@ -29,13 +29,13 @@ namespace Core.Wheel
 
         public void Initialize(GameStateService gameStateService)
         {
-            if (_hasInitialized == true)
+            if (_isInitialized == true)
                 throw new InvalidOperationException($"{typeof(CollisionHandler)}: Initialize(GameStateService gameStateService) : Already initialized.");
 
             _gameStateService = gameStateService;
             OnEnable();
 
-            _hasInitialized = true;
+            _isInitialized = true;
         }
 
         private void OnGameStateService(GameState state)
