@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Empty;
 using Services.GameStates;
 
 namespace Core
 {
     public class CarFactory : MonoBehaviour
     {
-        [SerializeField] private List<CarSpawnPoint> _spawnPoints;
+        [SerializeField] private List<SpawnPoint> _spawnPoints;
         [SerializeField] private List<Car> _prefabs;
         [SerializeField] private List<CarColor> _colors;
 
