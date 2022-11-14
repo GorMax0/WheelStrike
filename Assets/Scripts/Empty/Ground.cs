@@ -1,2 +1,5 @@
 using UnityEngine;
-public class Ground : MonoBehaviour{}
+namespace Empty
+{
+    public class Ground : MonoBehaviour { }
+}

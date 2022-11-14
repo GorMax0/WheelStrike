@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Services.GameStates;
+using Core.Wheel;
 
 namespace Core
 {
@@ -11,8 +12,14 @@ namespace Core
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
+        private Explosion _explosion;
+        private CarWheel[] _carWheels;
         private GameStateService _gameStateService;
         private bool _isInitialized;
+
+        public event Action<bool> IsMovable;
+
+        [field: SerializeField] public int Reward { get; private set; }
 
         public bool IsPurchased { get; private set; }
 
@@ -37,11 +44,29 @@ namespace Core
             _gameStateService = gameStateService;
             _rigidbody = GetComponent<Rigidbody>();
             _meshRenders = GetComponentsInChildren<MeshRenderer>();
+            _explosion = GetComponent<Explosion>();
+            _carWheels = GetComponentsInChildren<CarWheel>();
+
+            InitializeWheels();
 
             SetColorMaterial(colorMaterial);
+            RandomizeRewardIncrease();
             OnEnable();
 
             _isInitialized = true;
+        }
+
+        public void Explode()
+        { 
+            _explosion.Explode();
+        }
+
+        private void InitializeWheels()
+        {
+            foreach (CarWheel wheel in _carWheels)
+            {
+                wheel.Initialize(this);
+            }
         }
 
         private void SetColorMaterial(Material colorMaterial)
@@ -55,9 +80,21 @@ namespace Core
             }
         }
 
+        private void RandomizeRewardIncrease()
+        {
+            Reward += (int)(Reward * UnityEngine.Random.value);
+        }
+
         private void Move()
         {
             _rigidbody.velocity = transform.forward * Speed;
+            IsMovable?.Invoke(true);
+        }
+
+        private void StopMove()
+        {
+            _rigidbody.velocity = Vector3.zero;
+            IsMovable?.Invoke(false);
         }
 
         private void OnGameStateChanged(GameState state)
@@ -77,7 +114,7 @@ namespace Core
 
         private void OnTriggerEnter(Collider other)
         {
-            _rigidbody.velocity = Vector3.zero;
+            StopMove();
         }
     }
 }

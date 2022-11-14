@@ -86,7 +86,7 @@ namespace Core.Wheel
                 yield return new WaitForFixedUpdate();
 
                 if (_rigidbody.velocity.z < MinForwardVelocity)
-                    _gameStateService.ChangeState(GameState.Failed);
+                    _gameStateService.ChangeState(GameState.Finished);
             }
         }
 
@@ -123,8 +123,8 @@ namespace Core.Wheel
                 case GameState.Running:
                     OnGameRunning();
                     break;
-                case GameState.Failed:
-                    OnGameFailed();
+                case GameState.Finished:
+                    OnGameFinished();
                     break;
             }
         }
@@ -135,7 +135,7 @@ namespace Core.Wheel
             _moveForward.Run(HasMoveForward());
         }
 
-        private void OnGameFailed()
+        private void OnGameFinished()
         {
             _moveForward.Stop();
             if (_rigidbody.velocity.y != 0)

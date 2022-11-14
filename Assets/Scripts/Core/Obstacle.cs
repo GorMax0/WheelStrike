@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Obstacle : MonoBehaviour
 {
+    private Rigidbody _rigidbody;
+    private float _halfMass;
+
     [field: SerializeField]  public int Reward { get; private set; }
 
-    protected virtual void Encounter()
-    {
+    public float HalfMass => _halfMass;
 
-    }
-
-    private void OnCollisionEnter(Collision collision)
+    private void Awake()
     {
-        Encounter();
+        _rigidbody = GetComponent<Rigidbody>();
+        _halfMass = _rigidbody.mass / 2f;
     }
 }

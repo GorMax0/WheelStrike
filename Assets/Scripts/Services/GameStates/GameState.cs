@@ -6,8 +6,6 @@
         Pause,
         Waiting,
         Running,
-        Failed,
-        Restart,
-        Winning
+        Finished
     }
 }

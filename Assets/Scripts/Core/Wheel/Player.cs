@@ -7,11 +7,13 @@ using Services.GameStates;
 
 namespace Core.Wheel
 {
+    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(AnimationWheel))]
     [RequireComponent(typeof(CollisionHandler))]
     public class Player : MonoBehaviour
     {
+        private Rigidbody _rigidbody;
         private Movement _movement;
         private AnimationWheel _animation;
         private CollisionHandler _collisionHandler;
@@ -19,6 +21,7 @@ namespace Core.Wheel
 
         private void Awake()
         {
+            _rigidbody = GetComponent<Rigidbody>();
             _movement = GetComponent<Movement>();
             _animation = GetComponent<AnimationWheel>();
             _collisionHandler = GetComponent<CollisionHandler>();
@@ -26,12 +29,14 @@ namespace Core.Wheel
 
         private void OnEnable()
         {
-            _collisionHandler.CollidedWithObstacle += AddMoney;
+            _collisionHandler.CollidedWithObstacle += TryAddCredit;
+            _collisionHandler.CollidedWithCar += AddCredit;
         }
 
         private void OnDisable()
         {
-            _collisionHandler.CollidedWithObstacle -= AddMoney;
+            _collisionHandler.CollidedWithObstacle -= TryAddCredit;
+            _collisionHandler.CollidedWithCar -= AddCredit;
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, Wallet wallet, AimDirection aimDirection, Parametr[] parametrs)
@@ -45,10 +50,17 @@ namespace Core.Wheel
             _wallet = wallet;
         }
 
-        private void AddMoney(int reward)
+        private void TryAddCredit(int reward, float halfMassObstacle)
         {
-            _wallet.AddMoney(reward);
+            if (_rigidbody.mass >= halfMassObstacle)
+                return;
+
+            AddCredit(reward);
         }
 
+        private void AddCredit(int reward)
+        {
+            _wallet.AddCredit(reward);
+        }
     }
 }

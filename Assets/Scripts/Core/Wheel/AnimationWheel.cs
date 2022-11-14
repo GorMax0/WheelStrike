@@ -105,8 +105,8 @@ namespace Core.Wheel
                 case GameState.Running:
                     OnGameRunning();
                     break;
-                case GameState.Failed:
-                    OnGameFailed();
+                case GameState.Finished:
+                    OnGameFinished();
                     break;
             }
         }
@@ -116,7 +116,7 @@ namespace Core.Wheel
             _rotating.Run(Rotation());
         }
 
-        private void OnGameFailed()
+        private void OnGameFinished()
         {
             _rotating.Stop();
             _figureOfEightRotation.Stop();

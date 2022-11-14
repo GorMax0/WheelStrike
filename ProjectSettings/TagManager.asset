@@ -11,11 +11,11 @@ TagManager:
   - Wheel
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Obstacle
+  - Brick
+  - Car
+  - Limiter
+  - Wall
   - 
   - 
   - 
