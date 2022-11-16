@@ -8,7 +8,6 @@ namespace Core.Wheel
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(ForceScale))]
-    [RequireComponent(typeof(CollisionHandler))]
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float _baseSpeed = 1800;
@@ -138,6 +137,7 @@ namespace Core.Wheel
         private void OnGameFinished()
         {
             _moveForward.Stop();
+
             if (_rigidbody.velocity.y != 0)
                 BounceBack();
 

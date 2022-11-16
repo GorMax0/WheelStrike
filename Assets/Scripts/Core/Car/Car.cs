@@ -8,7 +8,7 @@ namespace Core
     [RequireComponent(typeof(Rigidbody))]
     public class Car : MonoBehaviour
     {
-        private const float Speed = 1f;
+        private const float Speed = 3.5f;
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
@@ -57,8 +57,14 @@ namespace Core
         }
 
         public void Explode()
-        { 
+        {
             _explosion.Explode();
+        }
+
+        public void StopMove()
+        {
+            _rigidbody.velocity = Vector3.zero;
+            IsMovable?.Invoke(false);
         }
 
         private void InitializeWheels()
@@ -91,11 +97,7 @@ namespace Core
             IsMovable?.Invoke(true);
         }
 
-        private void StopMove()
-        {
-            _rigidbody.velocity = Vector3.zero;
-            IsMovable?.Invoke(false);
-        }
+
 
         private void OnGameStateChanged(GameState state)
         {
@@ -114,7 +116,8 @@ namespace Core
 
         private void OnTriggerEnter(Collider other)
         {
-            StopMove();
+            if (other.TryGetComponent(out Obstacle obstacle))
+                StopMove();
         }
     }
 }

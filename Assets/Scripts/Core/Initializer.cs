@@ -17,6 +17,7 @@ namespace Core
 
         [Header("Core")]
         [SerializeField] private CarFactory _carFactory;
+        [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private CoroutineService _coroutineService;
@@ -54,11 +55,14 @@ namespace Core
 
         private void InitializeCore()
         {
+            float timeCameraBlend = _cinemachine.m_DefaultBlend.BlendTime;
+
             _gameStateService = new GameStateService();
             _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _wallet);
             _levelService = new LevelService();
-            _aimDirection = new AimDirection(_gameStateService, _coroutineService, _cinemachine);
+            _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
 
+            _wall.Create();
             _carFactory.CreateCars(_gameStateService);
             _cameraController.Initialize(_gameStateService);
             _forceScale.Initialize(_gameStateService, _coroutineService);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Wall
+namespace Core
 {
     [RequireComponent(typeof(Rigidbody))]
     public class Brick : MonoBehaviour 

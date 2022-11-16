@@ -10,6 +10,9 @@ namespace Services.GameStates
 
         public void ChangeState(GameState gameState)
         {
+            if (_state == gameState)
+                return;
+
             _state = gameState;
             GameStateChanged?.Invoke(_state);
         }

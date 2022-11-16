@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
-using Core.Wall;
 using Empty;
 using Services.GameStates;
 
@@ -13,7 +12,7 @@ namespace Core.Wheel
         private bool _isInitialized = false;
 
         public event UnityAction CollidedWithGround;
-        public event UnityAction<int,float> CollidedWithObstacle;
+        public event UnityAction<int, float> CollidedWithObstacle;
         public event UnityAction<int> CollidedWithCar;
 
         private void OnEnable()
@@ -43,7 +42,7 @@ namespace Core.Wheel
 
         private void OnGameStateService(GameState state)
         {
-            switch(state)
+            switch (state)
             {
                 case GameState.Finished:
                     OnGameFinished();
@@ -83,14 +82,22 @@ namespace Core.Wheel
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.TryGetComponent(out Car car))
+            if (other.TryGetComponent(out Car car))
             {
                 car.Explode();
+                car.StopMove();
                 CollidedWithCar?.Invoke(car.Reward);
-            }    
+            }
 
-            if(other.TryGetComponent(out WallCreater wall))
+            if (other.TryGetComponent(out Wall wall))
+            {
                 wall.EnableGravityBricks();
+            }
+
+            if (other.TryGetComponent(out CameraTrigger cameraTrigger))
+            {
+                cameraTrigger.OnTriggerEnterWheel();
+            }
         }
     }
 }

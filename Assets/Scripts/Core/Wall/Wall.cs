@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Wall
+namespace Core
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class WallCreater : MonoBehaviour
+    public class Wall : MonoBehaviour
     {
         [SerializeField] private Brick _brickTemplate;
         [SerializeField] private int _width = 8;
@@ -14,36 +14,24 @@ namespace Core.Wall
         private BoxCollider _boxCollider;
         private List<Brick> _bricks = new List<Brick>();
 
-        private void Update()
+        public void Create()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-                Create();
-        }
-
-        public void EnableGravityBricks()
-        {
-            foreach (Brick brick in _bricks)
-            {
-                Debug.Log("is work!");
-                brick.EnableGravity();
-            }
-        }
-
-        private void Create()
-        {
-
-
             GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick);
 
             float halfWidthBrick = widthBrick / 2;
             float halfHeightBrick = heightBrick / 2;
+            float nextBrickPositionX;
+            float nextBrickPositionY;
+            bool isEvenRow;
 
             for (int i = 0; i < _height; i++)
             {
+                nextBrickPositionY = transform.position.y + halfHeightBrick + heightBrick * i;
+                isEvenRow = i % 2 == 0;
+
                 for (int j = 0; j < _width; j++)
                 {
-                    float nextBrickPositionX = j == 0 ? transform.position.x + halfWidthBrick : transform.position.x + halfWidthBrick + widthBrick * j;
-                    float nextBrickPositionY = i == 0 ? transform.position.y + halfHeightBrick : transform.position.y + halfHeightBrick + heightBrick * i;
+                    nextBrickPositionX = isEvenRow ? transform.position.x + halfWidthBrick + widthBrick * j : transform.position.x + widthBrick * j;
                     Vector3 nextPosition = new Vector3(nextBrickPositionX, nextBrickPositionY, transform.position.z);
 
                     Brick brick = Instantiate(_brickTemplate, nextPosition, _brickTemplate.transform.rotation, transform);
@@ -54,10 +42,18 @@ namespace Core.Wall
             SetColliderParameters(widthBrick, heightBrick, lengthBrick);
         }
 
+        public void EnableGravityBricks()
+        {
+            foreach (Brick brick in _bricks)
+            {
+                brick.EnableGravity();
+            }
+        }
+
         private void GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick)
         {
             if (_brickTemplate.TryGetComponent(out MeshFilter meshFilterBrick) == false)
-                throw new NullReferenceException($"{typeof(WallCreater)}: GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick): " +
+                throw new NullReferenceException($"{typeof(Wall)}: GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick): " +
                     $"Brick Template named {_brickTemplate.name} does not have component MeshFilter.");
 
             widthBrick = meshFilterBrick.sharedMesh.bounds.size.x;
