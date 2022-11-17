@@ -10,57 +10,51 @@ namespace Core.Wheel
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(AnimationWheel))]
-    [RequireComponent(typeof(CollisionHandler))]
+    [RequireComponent(typeof(InteractionHandler))]
     public class Player : MonoBehaviour
     {
         private Rigidbody _rigidbody;
         private Movement _movement;
         private AnimationWheel _animation;
-        private CollisionHandler _collisionHandler;
-        private Wallet _wallet;
+        private InteractionHandler _collisionHandler;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _movement = GetComponent<Movement>();
             _animation = GetComponent<AnimationWheel>();
-            _collisionHandler = GetComponent<CollisionHandler>();
+            _collisionHandler = GetComponent<InteractionHandler>();
         }
 
         private void OnEnable()
         {
-            _collisionHandler.CollidedWithObstacle += TryAddCredit;
-            _collisionHandler.CollidedWithCar += AddCredit;
+           // _collisionHandler.CollidedWithObstacle += TryAddCredit;
+          //  _collisionHandler.CollidedWithCar += AddCredit;
         }
 
         private void OnDisable()
         {
-            _collisionHandler.CollidedWithObstacle -= TryAddCredit;
-            _collisionHandler.CollidedWithCar -= AddCredit;
+         //   _collisionHandler.CollidedWithObstacle -= TryAddCredit;
+          //  _collisionHandler.CollidedWithCar -= AddCredit;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, Wallet wallet, AimDirection aimDirection, Parametr[] parametrs)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, Wallet wallet, AimDirection aimDirection, Parameter[] parameters)
         {
-            Parametr speedIncrease = parametrs.Where(parameter => parameter.Name == ParameretName.GetName(ParametrType.Speed)).First()
-                ?? throw new NullReferenceException($"{typeof(Player)}: Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs): {nameof(ParametrType.Speed)} is null.");
+            Parameter speedIncrease = parameters.Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Speed)).First()
+                ?? throw new NullReferenceException($"{typeof(Player)}: Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs): {nameof(ParameterType.Speed)} is null.");
 
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speedIncrease);
             _animation.Initialize(gameStateService, coroutineService);
             _collisionHandler.Initialize(gameStateService);
-            _wallet = wallet;
         }
 
-        private void TryAddCredit(int reward, float halfMassObstacle)
-        {
-            if (_rigidbody.mass >= halfMassObstacle)
-                return;
+        //private void TryAddCredit(int reward, float halfMassObstacle)
+        //{
+        //    if (_rigidbody.mass >= halfMassObstacle)
+        //        return;
 
-            AddCredit(reward);
-        }
+        //    AddCredit(reward);
+        //}
 
-        private void AddCredit(int reward)
-        {
-            _wallet.AddCredit(reward);
-        }
     }
 }

@@ -10,17 +10,17 @@ namespace Core.Wheel
     [RequireComponent(typeof(ForceScale))]
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float _baseSpeed = 1800;
-        [SerializeField] private float _bounceForce = 200;
+        [SerializeField] private float _baseSpeed = 20;
+        [SerializeField] private float _bounceHeight = 10;
 
-        private const float SpeedDamping = 1.5f;
+        private const float SpeedDamping = 1.2f;
 
-        private Parametr _speedIncrease;
+        private Parameter _speedIncrease;
         private GameStateService _gameStateService;
         private ForceScale _forceScale;
         private Rigidbody _rigidbody;
         private AimDirection _aimDirection;
-        private CollisionHandler _collisionHandler;
+        private InteractionHandler _collisionHandler;
         private Vector3 _offsetAngles;
 
         private CoroutineRunning _moveForward;
@@ -29,7 +29,7 @@ namespace Core.Wheel
         {
             _rigidbody = GetComponent<Rigidbody>();
             _forceScale = GetComponent<ForceScale>();
-            _collisionHandler = GetComponent<CollisionHandler>();
+            _collisionHandler = GetComponent<InteractionHandler>();
         }
 
         private void OnEnable()
@@ -49,7 +49,7 @@ namespace Core.Wheel
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parametr speedIncrease)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease)
         {
             if (_gameStateService != null || _aimDirection != null)
                 return;
@@ -65,6 +65,7 @@ namespace Core.Wheel
         private void Move()
         {
             float force = _baseSpeed * _speedIncrease.Value * _forceScale.FinalValue;
+            Debug.Log(force);
 
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce(transform.forward * force + _offsetAngles, ForceMode.Acceleration);
@@ -91,22 +92,23 @@ namespace Core.Wheel
 
         private void Bounce()
         {
-            _rigidbody.AddForce(Vector3.up * _bounceForce, ForceMode.Acceleration);
+            float bounceForce = _bounceHeight * _rigidbody.velocity.magnitude;
+            _rigidbody.AddForce(Vector3.up * bounceForce, ForceMode.Acceleration);
         }
 
         private void BounceBack()
         {
             const float MultiplierBackBounce = 0.3f;
 
-            _bounceForce *= MultiplierBackBounce;
-            _rigidbody.AddForce(-Vector3.forward * _bounceForce, ForceMode.Acceleration);
+            _bounceHeight *= MultiplierBackBounce;
+            _rigidbody.AddForce(-Vector3.forward * _bounceHeight, ForceMode.Acceleration);
             Bounce();
             Debug.Log("BounceBack");
         }
 
         private void CalculateSpeedAfterCollidedWithGround()
         {
-            Vector3 speedAfterCollided = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z - SpeedDamping);
+            Vector3 speedAfterCollided = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z / SpeedDamping);
             _rigidbody.velocity = speedAfterCollided;
         }
 

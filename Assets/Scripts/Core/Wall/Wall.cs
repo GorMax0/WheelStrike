@@ -8,11 +8,13 @@ namespace Core
     public class Wall : MonoBehaviour
     {
         [SerializeField] private Brick _brickTemplate;
-        [SerializeField] private int _width = 8;
-        [SerializeField] private int _height = 70;
+        [SerializeField] private int _width = 10;
+        [SerializeField] private int _height = 50;
 
         private BoxCollider _boxCollider;
         private List<Brick> _bricks = new List<Brick>();
+
+        [field: SerializeField] public int Reward { get; private set; }
 
         public void Create()
         {

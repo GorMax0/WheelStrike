@@ -14,7 +14,7 @@ namespace Core
         [SerializeField] private CinemachineFreeLook _finishedCamera;
         [SerializeField] private CinemachineVirtualCamera _lookWall;
         [SerializeField] private CameraTrigger _cameraTrigger;
-        [SerializeField] private CollisionHandler _collisionHandler;
+        [SerializeField] private InteractionHandler _collisionHandler;
 
         private const float MinimumFOV = 60f;
         private const float SpeedRotationXAxis = 0.5f;

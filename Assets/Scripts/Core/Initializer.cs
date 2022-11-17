@@ -21,9 +21,10 @@ namespace Core
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private CoroutineService _coroutineService;
-        [SerializeField] private ParametrCreater[] _parametrCreaters;
+        [SerializeField] private ParameterCreater[] _parameterCreaters;
         [SerializeField] private Rope _rope;
         [SerializeField] private Player _wheel;
+        [SerializeField] private InteractionHandler _interactionHandler;
         
         [Header("Manual")]
         [SerializeField] private ControlManual _controlManual;
@@ -41,8 +42,8 @@ namespace Core
         private GamePlayService _gamePlayService;
         private LevelService _levelService;
         private AimDirection _aimDirection;
-        private Parametr[] _parametrs;
-        private Wallet _wallet = new Wallet();
+        private Parameter[] _parameters;
+        private Wallet _wallet;
 
         private void Start()
         {
@@ -57,8 +58,9 @@ namespace Core
         {
             float timeCameraBlend = _cinemachine.m_DefaultBlend.BlendTime;
 
+            _wallet = new Wallet(_parameters);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler,_interactionHandler, _wallet);
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
 
@@ -67,7 +69,7 @@ namespace Core
             _cameraController.Initialize(_gameStateService);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);
-            _wheel.Initialize(_gameStateService, _coroutineService, _wallet, _aimDirection, _parametrs);
+            _wheel.Initialize(_gameStateService, _coroutineService, _wallet, _aimDirection, _parameters);
         }
 
         private void InitializeManual()
@@ -83,16 +85,16 @@ namespace Core
             _pauseView.Initialize(_gameStateService);
             _moneyView.Initialize(_wallet);
             _topPanel.Initialize(_gameStateService, _levelService);
-            _upgradePanel.Initialize(_parametrs);
+            _upgradePanel.Initialize(_parameters);
         }
 
         private void CreateParameters()
         {
-            _parametrs = new Parametr[_parametrCreaters.Length];
+            _parameters = new Parameter[_parameterCreaters.Length];
 
-            for (int i = 0; i < _parametrCreaters.Length; i++)
+            for (int i = 0; i < _parameterCreaters.Length; i++)
             {
-                _parametrs[i] = new Parametr(_parametrCreaters[i]);
+                _parameters[i] = new Parameter(_parameterCreaters[i]);
             }
         }
     }

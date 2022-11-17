@@ -7,9 +7,9 @@ namespace UI.Views
     {
         [SerializeField] private ParametrView _template;
 
-        public void Initialize(Parametr[] parametrs)
+        public void Initialize(Parameter[] parametrs)
         {
-            foreach (Parametr parametr in parametrs)
+            foreach (Parameter parametr in parametrs)
             {
                 ParametrView view = Instantiate(_template, transform);
                 view.Renger(parametr);

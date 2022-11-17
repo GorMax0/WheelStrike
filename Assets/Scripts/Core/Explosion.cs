@@ -39,7 +39,7 @@ namespace Core
 
             for (int i = 0; i < _colliders.Length; i++)
             {
-                _colliders[i].isTrigger = false;
+                _colliders[i].isTrigger = i == 0 ? true : false;
             }
         }
 

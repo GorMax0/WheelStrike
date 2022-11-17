@@ -106,12 +106,20 @@ namespace Core
                 case GameState.Running:
                     OnGameRunning();
                     break;
+                case GameState.Finished:
+                    OnGameFinished();
+                    break;
             }
         }
 
         private void OnGameRunning()
         {
             Move();
+        }
+
+        private void OnGameFinished()
+        {
+            StopMove();
         }
 
         private void OnTriggerEnter(Collider other)

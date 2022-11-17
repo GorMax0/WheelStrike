@@ -6,7 +6,7 @@ using System.Collections;
 namespace Core.Wheel
 {
     [RequireComponent(typeof(ForceScale))]
-    [RequireComponent(typeof(CollisionHandler))]
+    [RequireComponent(typeof(InteractionHandler))]
     public class AnimationWheel : MonoBehaviour
     {
         [SerializeField] private AnimationCurve _deviationWhenSwinging;
@@ -15,14 +15,15 @@ namespace Core.Wheel
 
         private GameStateService _gameStateService;
         private ForceScale _forceScale;
-        private CollisionHandler _collisionHandler;
+        private InteractionHandler _collisionHandler;
         private CoroutineRunning _rotating;
         private CoroutineRunning _figureOfEightRotation;
+        private bool _isRotate;
 
         private void Awake()
         {
             _forceScale = GetComponent<ForceScale>();
-            _collisionHandler = GetComponent<CollisionHandler>();
+            _collisionHandler = GetComponent<InteractionHandler>();
         }
 
         private void OnEnable()
@@ -61,7 +62,7 @@ namespace Core.Wheel
             transform.position = new Vector3(transform.position.x, transform.position.y, swingValue);
         }
 
-        private IEnumerator Rotation()
+        private IEnumerator Rotate()
         {
             while (true)
             {
@@ -102,18 +103,10 @@ namespace Core.Wheel
         {
             switch (state)
             {
-                case GameState.Running:
-                    OnGameRunning();
-                    break;
                 case GameState.Finished:
                     OnGameFinished();
                     break;
             }
-        }
-
-        private void OnGameRunning()
-        {
-            _rotating.Run(Rotation());
         }
 
         private void OnGameFinished()
@@ -126,6 +119,12 @@ namespace Core.Wheel
         private void OnCollidedWithGround()
         {
             _figureOfEightRotation.Run(FigureOfEightRotation());
-        }    
+
+            if (_isRotate == false)
+            {
+                _rotating.Run(Rotate());
+                _isRotate = true;
+            }
+        }
     }
 }

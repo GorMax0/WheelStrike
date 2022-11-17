@@ -12,9 +12,9 @@ namespace UI.Views
         [SerializeField] private TMP_Text _cost;
         [SerializeField] private Image _icon;
 
-        private Parametr _parametr;
+        private Parameter _parametr;
 
-        public void Renger(Parametr parametr)
+        public void Renger(Parameter parametr)
         {
             _parametr = parametr;
             _name.text = _parametr.Name;
