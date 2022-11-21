@@ -10,6 +10,7 @@ namespace UI.Views
         [SerializeField] private Button _settingButton;
         [SerializeField] private Wrap _restartButton;
         [SerializeField] private Wrap _moneyPanel;
+        [SerializeField] private Wrap _distancePanel;
 
         private GameStateService _gameStateService;
         private LevelService _levelService;
@@ -59,7 +60,7 @@ namespace UI.Views
         private void OnGamePause()
         {
             _restartButton.Unroll();
-            _moneyPanel.Unroll();
+            _moneyPanel.Unroll();         
         }
 
         private void OnGameWaiting()
@@ -70,6 +71,7 @@ namespace UI.Views
         private void OnGameRunning()
         {
             _restartButton.Unroll();
+            _distancePanel.Roll();
         }
 
     }

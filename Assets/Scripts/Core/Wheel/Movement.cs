@@ -8,12 +8,13 @@ namespace Core.Wheel
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(ForceScale))]
-    public class Movement : MonoBehaviour
+    public class Movement : MonoBehaviour, ITravelable
     {
         [SerializeField] private float _baseSpeed = 20;
         [SerializeField] private float _bounceHeight = 10;
 
         private const float SpeedDamping = 1.2f;
+        private const float DistanceCoefficient = 5f;
 
         private Parameter _speedIncrease;
         private GameStateService _gameStateService;
@@ -22,8 +23,9 @@ namespace Core.Wheel
         private AimDirection _aimDirection;
         private InteractionHandler _collisionHandler;
         private Vector3 _offsetAngles;
-
         private CoroutineRunning _moveForward;
+
+        public float TraveledDistance => transform.position.z * DistanceCoefficient;
 
         private void Awake()
         {
@@ -64,8 +66,7 @@ namespace Core.Wheel
 
         private void Move()
         {
-            float force = _baseSpeed * _speedIncrease.Value * _forceScale.FinalValue;
-            Debug.Log(force);
+            float force = (_baseSpeed + _speedIncrease.Value) * _forceScale.FinalValue;
 
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce(transform.forward * force + _offsetAngles, ForceMode.Acceleration);
@@ -113,8 +114,8 @@ namespace Core.Wheel
         }
 
         private void UnfreezeRotation()
-        {            
-            _rigidbody.freezeRotation = false;          
+        {
+            _rigidbody.freezeRotation = false;
         }
 
         private void OnGameStateService(GameState state)

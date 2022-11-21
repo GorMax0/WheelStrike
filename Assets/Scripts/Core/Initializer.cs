@@ -69,7 +69,7 @@ namespace Core
             _cameraController.Initialize(_gameStateService);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);
-            _wheel.Initialize(_gameStateService, _coroutineService, _wallet, _aimDirection, _parameters);
+            _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection, _parameters);
         }
 
         private void InitializeManual()

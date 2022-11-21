@@ -26,19 +26,7 @@ namespace Core.Wheel
             _collisionHandler = GetComponent<InteractionHandler>();
         }
 
-        private void OnEnable()
-        {
-           // _collisionHandler.CollidedWithObstacle += TryAddCredit;
-          //  _collisionHandler.CollidedWithCar += AddCredit;
-        }
-
-        private void OnDisable()
-        {
-         //   _collisionHandler.CollidedWithObstacle -= TryAddCredit;
-          //  _collisionHandler.CollidedWithCar -= AddCredit;
-        }
-
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, Wallet wallet, AimDirection aimDirection, Parameter[] parameters)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter[] parameters)
         {
             Parameter speedIncrease = parameters.Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Speed)).First()
                 ?? throw new NullReferenceException($"{typeof(Player)}: Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs): {nameof(ParameterType.Speed)} is null.");
@@ -47,14 +35,5 @@ namespace Core.Wheel
             _animation.Initialize(gameStateService, coroutineService);
             _collisionHandler.Initialize(gameStateService);
         }
-
-        //private void TryAddCredit(int reward, float halfMassObstacle)
-        //{
-        //    if (_rigidbody.mass >= halfMassObstacle)
-        //        return;
-
-        //    AddCredit(reward);
-        //}
-
     }
 }

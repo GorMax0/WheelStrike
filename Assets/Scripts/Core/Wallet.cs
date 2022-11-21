@@ -8,6 +8,7 @@ namespace Core
     {
         private int _money;
         private Parameter _income;
+        private ITravelable _tradeable;
 
         public event Action<int> MoneyChanged;
 
