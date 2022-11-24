@@ -1,20 +1,24 @@
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
+using DG.Tweening;
 
 namespace UI.Views
 {
     public class FinishView : MonoBehaviour
     {
-        public event UnityAction<bool> Enabled;
+        private Material _uiMaterial;
+
+        private void Awake()
+        {
+            _uiMaterial = GetComponent<Image>().material;
+
+            Color transparentColor = new Color(_uiMaterial.color.r,_uiMaterial.color.g,_uiMaterial.color.b, 0f);
+            _uiMaterial.color = transparentColor;
+        }
 
         private void OnEnable()
         {
-            Enabled?.Invoke(true);
-        }
-
-        private void OnDisable()
-        {
-            Enabled?.Invoke(false);
+            _uiMaterial.DOFade(1f, 0.5f).SetEase(Ease.InOutSine);
         }
     }
 }

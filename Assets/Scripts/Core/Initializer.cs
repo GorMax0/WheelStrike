@@ -4,6 +4,7 @@ using Parameters;
 using Services;
 using Services.Coroutines;
 using Services.GameStates;
+using UI;
 using UI.Manual;
 using UI.Views;
 
@@ -31,6 +32,7 @@ namespace Core
         [SerializeField] private AimManual _aimManual;
 
         [Header("View")]
+        [SerializeField] private ViewValidator _finishViewValidator;
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
         [SerializeField] private PauseView _pauseView;
@@ -44,6 +46,7 @@ namespace Core
         private AimDirection _aimDirection;
         private Parameter[] _parameters;
         private Wallet _wallet;
+        private Finish _finish;
 
         private void Start()
         {
@@ -63,6 +66,7 @@ namespace Core
             _gamePlayService = new GamePlayService(_gameStateService, _inputHandler,_interactionHandler, _wallet);
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
+            _finish = new Finish(_gameStateService, _finishViewValidator);
 
             _wall.Create();
             _carFactory.CreateCars(_gameStateService);

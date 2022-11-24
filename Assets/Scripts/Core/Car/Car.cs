@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using Services.GameStates;
-using Core.Wheel;
+using DG.Tweening;
 
 namespace Core
 {
@@ -12,6 +12,7 @@ namespace Core
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
+        private Material _damageMaterial;
         private Explosion _explosion;
         private CarWheel[] _carWheels;
         private GameStateService _gameStateService;
@@ -36,12 +37,13 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        public void Initialize(GameStateService gameStateService, Material colorMaterial)
+        public void Initialize(GameStateService gameStateService, Material colorMaterial, Material damageMaterial)
         {
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{typeof(Car)}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
 
             _gameStateService = gameStateService;
+            _damageMaterial = damageMaterial;
             _rigidbody = GetComponent<Rigidbody>();
             _meshRenders = GetComponentsInChildren<MeshRenderer>();
             _explosion = GetComponent<Explosion>();
@@ -59,6 +61,11 @@ namespace Core
         public void Explode()
         {
             _explosion.Explode();
+
+            foreach (MeshRenderer meshRender in _meshRenders)
+            {
+                meshRender.material.Lerp(meshRender.material,_damageMaterial,2f);
+            }
         }
 
         public void StopMove()

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Cinemachine;
 using Services.Coroutines;
 using Services.GameStates;
 
@@ -18,16 +17,17 @@ namespace Core
 
         public event Action<float> DirectionChanged;
 
-        public void Dispose()
-        {
-            _gameStateService.GameStateChanged -= OnGameStateChanged;
-        }
         public AimDirection(GameStateService gameStateService, CoroutineService coroutineService, float timeCameraBlend)
         {
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
             TimeCameraBlend = timeCameraBlend;
             _aimRunning = new CoroutineRunning(coroutineService);
+        }
+
+        public void Dispose()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
         private IEnumerator SelectDirection(float timeCameraBlend)
@@ -71,6 +71,7 @@ namespace Core
         private void OnGameRunning()
         {
             _aimRunning.Stop();
+            Dispose();
         }
     }
 }

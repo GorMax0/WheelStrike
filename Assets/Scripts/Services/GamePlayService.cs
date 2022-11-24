@@ -54,6 +54,7 @@ namespace Services
         private void OnGameFinished()
         {
             _wallet.EnrollMoney();
+            Dispose();
         }
 
         private void OnPointerDown()
