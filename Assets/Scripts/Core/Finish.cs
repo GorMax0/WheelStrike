@@ -23,6 +23,7 @@ namespace Core
         public void Dispose()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _validator.ViewValidated -= OnViewValidated;
         }
 
         private void OnViewValidated(FinishView finishView)
@@ -52,6 +53,7 @@ namespace Core
         private void OnGameFinished()
         {
             _finishView.gameObject.SetActive(true);
+            _finishView.StartAnimation();
             _isFinished = true;
         }
     }

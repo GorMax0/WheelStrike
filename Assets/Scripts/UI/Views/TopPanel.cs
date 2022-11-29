@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Services;
 using Services.GameStates;
+using System;
 
 namespace UI.Views
 {
@@ -54,6 +55,9 @@ namespace UI.Views
                 case GameState.Running:
                     OnGameRunning();
                     break;
+                case GameState.Finished:
+                    OnGameFinished();
+                    break;
             }
         }
 
@@ -74,5 +78,10 @@ namespace UI.Views
             _distancePanel.Roll();
         }
 
+        private void OnGameFinished()
+        {
+            _distancePanel.Unroll();
+            _restartButton.Roll();
+        }
     }
 }
