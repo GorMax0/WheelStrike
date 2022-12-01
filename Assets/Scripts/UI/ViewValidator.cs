@@ -1,6 +1,6 @@
 using UnityEngine;
-using UI.Views;
 using UnityEngine.Events;
+using UI.Views.Finish;
 
 namespace UI
 {

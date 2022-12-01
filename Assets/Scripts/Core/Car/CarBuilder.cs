@@ -5,7 +5,7 @@ using Services.GameStates;
 
 namespace Core
 {
-    public class CarFactory : MonoBehaviour
+    public class CarBuilder : MonoBehaviour
     {
         [SerializeField] private List<SpawnPoint> _spawnPoints;
         [SerializeField] private List<Car> _prefabs;

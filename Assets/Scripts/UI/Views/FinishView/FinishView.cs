@@ -2,9 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using Services.Coroutines;
 
-namespace UI.Views
+namespace UI.Views.Finish
 {
     public class FinishView : MonoBehaviour
     {
@@ -39,6 +38,8 @@ namespace UI.Views
                .AppendInterval(_intervalBetweenTween)
                .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack)); 
         }
+
+        public void ShowDistance(int distance) => _distanceLabel.text = distance.ToString("##" + "m");
 
         private void PrepareView()
         {

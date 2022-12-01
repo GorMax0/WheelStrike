@@ -55,7 +55,7 @@ namespace Core
         private void GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick)
         {
             if (_brickTemplate.TryGetComponent(out MeshFilter meshFilterBrick) == false)
-                throw new NullReferenceException($"{typeof(Wall)}: GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick): " +
+                throw new NullReferenceException($"{GetType()}: GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick): " +
                     $"Brick Template named {_brickTemplate.name} does not have component MeshFilter.");
 
             widthBrick = meshFilterBrick.sharedMesh.bounds.size.x;

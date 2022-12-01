@@ -7,6 +7,7 @@ using Services.GameStates;
 using UI;
 using UI.Manual;
 using UI.Views;
+using UI.Views.Finish;
 
 namespace Core
 {
@@ -17,7 +18,7 @@ namespace Core
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
         [Header("Core")]
-        [SerializeField] private CarFactory _carFactory;
+        [SerializeField] private CarBuilder _carFactory;
         [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
@@ -26,7 +27,7 @@ namespace Core
         [SerializeField] private Rope _rope;
         [SerializeField] private Player _wheel;
         [SerializeField] private InteractionHandler _interactionHandler;
-        
+
         [Header("Manual")]
         [SerializeField] private ControlManual _controlManual;
         [SerializeField] private AimManual _aimManual;
@@ -38,7 +39,8 @@ namespace Core
         [SerializeField] private PauseView _pauseView;
         [SerializeField] private MoneyView _moneyView;
         [SerializeField] private TopPanel _topPanel;
-        [SerializeField] private UpgradePanel _upgradePanel;
+        [SerializeField] private ParametersShop _parametersShop;
+        [SerializeField] private FacadeFinishView _facadeFinishView;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -46,7 +48,7 @@ namespace Core
         private AimDirection _aimDirection;
         private Parameter[] _parameters;
         private Wallet _wallet;
-        private Finish _finish;
+        private FinishViewHandler _finishViewHandler;
 
         private void Start()
         {
@@ -63,10 +65,10 @@ namespace Core
 
             _wallet = new Wallet(_parameters);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler,_interactionHandler, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _interactionHandler, _wallet);
             _levelService = new LevelService();
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
-            _finish = new Finish(_gameStateService, _finishViewValidator);
+            _finishViewHandler = new FinishViewHandler(_gameStateService, _coroutineService, _finishViewValidator, _wheel.Travelable);
 
             _wall.Create();
             _carFactory.CreateCars(_gameStateService);
@@ -89,7 +91,8 @@ namespace Core
             _pauseView.Initialize(_gameStateService);
             _moneyView.Initialize(_wallet);
             _topPanel.Initialize(_gameStateService, _levelService);
-            _upgradePanel.Initialize(_parameters);
+            _parametersShop.Initialize(_parameters, _wallet);
+            _facadeFinishView.Initialized(_finishViewHandler);
         }
 
         private void CreateParameters()

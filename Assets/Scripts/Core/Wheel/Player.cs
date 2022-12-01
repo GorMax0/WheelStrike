@@ -18,6 +18,8 @@ namespace Core.Wheel
         private AnimationWheel _animation;
         private InteractionHandler _collisionHandler;
 
+        public ITravelable Travelable => _movement;
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
@@ -28,8 +30,10 @@ namespace Core.Wheel
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter[] parameters)
         {
-            Parameter speedIncrease = parameters.Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Speed)).First()
-                ?? throw new NullReferenceException($"{typeof(Player)}: Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs): {nameof(ParameterType.Speed)} is null.");
+            Parameter speedIncrease = parameters
+                .Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Speed))
+                .First()
+                ?? throw new NullReferenceException($"{GetType()}: Initialize(GameStateService gameStateService, AimDirection aimDirection, Parametr[] parametrs): {nameof(ParameterType.Speed)} is null.");
 
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speedIncrease);
             _animation.Initialize(gameStateService, coroutineService);

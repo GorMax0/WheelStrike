@@ -19,7 +19,7 @@ namespace Core.Wheel
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
@@ -34,12 +34,12 @@ namespace Core.Wheel
         public void Initialize(GameStateService gameStateService)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{typeof(InteractionHandler)}: Initialize(GameStateService gameStateService) : Already initialized.");
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService) : Already initialized.");
 
             _gameStateService = gameStateService;
-            OnEnable();
 
             _isInitialized = true;
+            OnEnable();
         }
 
         private void OnGameStateService(GameState state)

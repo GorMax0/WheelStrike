@@ -14,8 +14,10 @@ namespace Core
 
         public Wallet(Parameter[] parameters)
         {
-            _income = parameters.Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Income)).First() 
-                ?? throw new NullReferenceException($"{typeof(Wallet)}: Wallet(Parameter[] parameters): {nameof(ParameterType.Income)} is null.");
+            _income = parameters
+                .Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Income))
+                .First() 
+                ?? throw new NullReferenceException($"{GetType()}: Wallet(Parameter[] parameters): {nameof(ParameterType.Income)} is null.");
         }
 
         public int TemporaryMoney { get; private set; }
@@ -24,7 +26,7 @@ namespace Core
         public void AddTemporaryMoney(int reward)
         {
             if (reward <= 0)
-                throw new InvalidOperationException($"{typeof(Wallet)}: AddTemporaryMoney(int reward): Amount money {reward} is invalid.");
+                throw new InvalidOperationException($"{GetType()}: AddTemporaryMoney(int reward): Amount money {reward} is invalid.");
 
             TemporaryMoney += reward;
         }
@@ -38,7 +40,7 @@ namespace Core
         public void SpendMoney(int price)
         {
             if (price < 0)
-                throw new InvalidOperationException($"{typeof(Wallet)}: SpendMoney(int money): Amount money {price} is invalid.");
+                throw new InvalidOperationException($"{GetType()}: SpendMoney(int money): Amount money {price} is invalid.");
 
             _money -= price;
             MoneyChanged?.Invoke(_money);

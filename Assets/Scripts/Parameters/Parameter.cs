@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Parameters
@@ -8,23 +7,21 @@ namespace Parameters
         private float _baseValue;
         private int _baseCost;
 
+        public Parameter(ParameterCreater creater)
+        {
+            Name = ParameretName.GetName(creater.Type);
+            _baseValue = creater.BaseValue;
+            _baseCost = creater.BaseCost;
+            Icon = creater.Icon;
+        }
+
         //  public event Action<int> LevelChanged;
         //  public event Action<int> CostChanged;
 
         public string Name { get; }
         public Sprite Icon { get; }
         public int Level { get; private set; } = 1;
-        public float Value { get; private set; }
-        public int Cost { get; private set; }
-
-        public Parameter(ParameterCreater creater)
-        {
-            Name = ParameretName.GetName(creater.Type);
-            _baseValue = creater.BaseValue;
-            Value = _baseValue;
-            _baseCost = creater.BaseCost;
-            Cost = _baseCost;
-            Icon = creater.Icon;
-        }
+        public float Value => _baseValue * Level;
+        public int Cost => _baseCost * Level;
     }
 }

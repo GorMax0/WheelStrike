@@ -1,19 +1,24 @@
 using UnityEngine;
 using Parameters;
+using UI.Views;
 
-namespace UI.Views
+namespace Core
 {
-    public class UpgradePanel : MonoBehaviour
+    public class ParametersShop : MonoBehaviour
     {
         [SerializeField] private ParametrView _template;
 
-        public void Initialize(Parameter[] parametrs)
+        private Wallet _wallet;
+
+        public void Initialize(Parameter[] parametrs, Wallet wallet)
         {
             foreach (Parameter parametr in parametrs)
             {
                 ParametrView view = Instantiate(_template, transform);
                 view.Renger(parametr);
             }
+
+            _wallet = wallet;
         }
     }
 }

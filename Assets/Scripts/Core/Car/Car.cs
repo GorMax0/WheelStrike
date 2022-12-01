@@ -40,7 +40,7 @@ namespace Core
         public void Initialize(GameStateService gameStateService, Material colorMaterial, Material damageMaterial)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{typeof(Car)}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
 
             _gameStateService = gameStateService;
             _damageMaterial = damageMaterial;
