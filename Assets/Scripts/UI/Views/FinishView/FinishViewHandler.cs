@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Services.GameStates;
+using Core.Wheel;
 using Services.Coroutines;
-using UI.Views;
+using Services.GameStates;
+using Services.Level;
 
 namespace UI.Views.Finish
 {
@@ -15,9 +16,10 @@ namespace UI.Views.Finish
         private ViewValidator _validator;
         private FinishView _finishView;
         private ITravelable _travelable;
+        private LevelScore _levelScore;
         private bool _isFinished;
 
-        public FinishViewHandler(GameStateService gameStateService, CoroutineService coroutineService, ViewValidator validator, ITravelable travelable)
+        public FinishViewHandler(GameStateService gameStateService, CoroutineService coroutineService, ViewValidator validator, ITravelable travelable, LevelScore levelScore)
         {
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -25,6 +27,7 @@ namespace UI.Views.Finish
             _validator = validator;
             _validator.ViewValidated += OnViewValidated;
             _travelable = travelable;
+            _levelScore = levelScore;
 
             _distanceDisplay = new CoroutineRunning(_coroutineService);
         }
@@ -39,17 +42,17 @@ namespace UI.Views.Finish
 
         private IEnumerator DisplayDistance()
         {
-            WaitForSeconds waitForSeconds = new WaitForSeconds(0.07f);
+            WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
             float distanceTreveled = _travelable.TraveledDistance;
-            float displayedDistance = 0f;
+            float displayedValue = 0f;
             float timeOfMaximum = 14f;
             float step = distanceTreveled / timeOfMaximum;
 
-            while (displayedDistance < distanceTreveled)
+            while (displayedValue < distanceTreveled)
             {
                 yield return waitForSeconds;
-                displayedDistance += Mathf.MoveTowards(displayedDistance, distanceTreveled, step);
-                DisplayedDistanceChanged?.Invoke(displayedDistance);
+                displayedValue += Mathf.MoveTowards(displayedValue, distanceTreveled, step);
+                DisplayedDistanceChanged?.Invoke(displayedValue);
             }
         }
 

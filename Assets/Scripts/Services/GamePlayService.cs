@@ -2,6 +2,7 @@ using System;
 using Core;
 using Core.Wheel;
 using Services.GameStates;
+using Services.Level;
 
 namespace Services
 {
@@ -10,13 +11,15 @@ namespace Services
         private GameStateService _gameStateService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
+        private LevelScore _levelScore;
         private Wallet _wallet;
 
-        public GamePlayService(GameStateService gameStateService, InputHandler inputHandler, InteractionHandler interactionHandler, Wallet wallet)
+        public GamePlayService(GameStateService gameStateService, InputHandler inputHandler, InteractionHandler interactionHandler, LevelScore levelScore, Wallet wallet)
         {
             _gameStateService = gameStateService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
+            _levelScore = levelScore;
             _wallet = wallet;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -53,7 +56,7 @@ namespace Services
 
         private void OnGameFinished()
         {
-            _wallet.EnrollMoney();
+            _wallet.EnrollMoney(_levelScore.ResultScore);
             Dispose();
         }
 
@@ -69,20 +72,20 @@ namespace Services
 
         private void OnCollidedWithObstacle(Obstacle obstacle)
         {
-            _wallet.AddTemporaryMoney(obstacle.Reward);
+            _levelScore.AddScore(obstacle.Reward);
         }
 
         private void OnTriggeredWithCar(Car car)
         {
             car.Explode();
             car.StopMove();
-            _wallet.AddTemporaryMoney(car.Reward);
-          //  UnityEngine.Time.timeScale = 0.1f;
+            _levelScore.AddScore(car.Reward);
+            //  UnityEngine.Time.timeScale = 0.1f;
         }
 
         private void OnTriggeredWithWall(Wall wall)
         {
-            _wallet.AddTemporaryMoney(wall.Reward);
+            _levelScore.AddScore(wall.Reward);
             wall.EnableGravityBricks();
         }
 

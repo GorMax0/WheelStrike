@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-
+using Core.Wheel;
 public class DistanceView : MonoBehaviour
 {
     [SerializeField] private MonoBehaviour _wheelDistance;

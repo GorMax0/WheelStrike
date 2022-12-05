@@ -1,39 +1,19 @@
 using System;
-using System.Linq;
-using Parameters;
 
 namespace Core
 {
     public class Wallet
     {
         private int _money;
-        private Parameter _income;
-        private ITravelable _tradeable;
 
         public event Action<int> MoneyChanged;
 
-        public Wallet(Parameter[] parameters)
+        public void EnrollMoney(int money)
         {
-            _income = parameters
-                .Where(parameter => parameter.Name == ParameretName.GetName(ParameterType.Income))
-                .First() 
-                ?? throw new NullReferenceException($"{GetType()}: Wallet(Parameter[] parameters): {nameof(ParameterType.Income)} is null.");
-        }
+            if (money <= 0)
+                throw new InvalidOperationException($"{GetType()}: EnrollMoney(int money): Amount money {money} is invalid.");
 
-        public int TemporaryMoney { get; private set; }
-        public int BonusMoney { get { return (int)(TemporaryMoney * _income.Value); } }
-
-        public void AddTemporaryMoney(int reward)
-        {
-            if (reward <= 0)
-                throw new InvalidOperationException($"{GetType()}: AddTemporaryMoney(int reward): Amount money {reward} is invalid.");
-
-            TemporaryMoney += reward;
-        }
-
-        public void EnrollMoney()
-        {
-            _money += TemporaryMoney + BonusMoney;
+            _money += money;
             MoneyChanged?.Invoke(_money);
         }
 

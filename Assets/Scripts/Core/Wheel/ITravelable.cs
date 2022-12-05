@@ -1,4 +1,7 @@
-public interface ITravelable
+namespace Core.Wheel
 {
-    public float TraveledDistance { get; }
+    public interface ITravelable
+    {
+        public float TraveledDistance { get; }
+    }
 }
