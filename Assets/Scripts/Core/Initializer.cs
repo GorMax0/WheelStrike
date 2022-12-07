@@ -38,21 +38,18 @@ namespace Core
         [SerializeField] private AimManual _aimManual;
 
         [Header("View")]
-        [SerializeField] private ViewValidator _finishViewValidator;
+        [SerializeField] private FinishViewHandler _finishViewHandler;
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
         [SerializeField] private PauseView _pauseView;
         [SerializeField] private MoneyView _moneyView;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
-        [SerializeField] private FacadeFinishView _facadeFinishView;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
         private AimDirection _aimDirection;
-     //   private Parameter[] _parameters;
         private Wallet _wallet = new Wallet();
-        private FinishViewHandler _finishViewHandler;
         private Dictionary<ParameterType, Parameter> _parameters;
 
         private void Start()
@@ -69,15 +66,15 @@ namespace Core
         {
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _interactionHandler, _levelService.Score, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _interactionHandler, _levelService, _wallet);
         }
 
         private void InitializeCore()
         {
             float timeCameraBlend = _cinemachine.m_DefaultBlend.BlendTime;
-            
+
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
-            
+
 
             _wall.Create();
             _carFactory.CreateCars(_gameStateService);
@@ -99,10 +96,9 @@ namespace Core
             _aimDirectionLine.Initialize(_aimDirection);
             _pauseView.Initialize(_gameStateService);
             _moneyView.Initialize(_wallet);
-            _topPanel.Initialize(_gameStateService, _levelService);
+            _topPanel.Initialize(_gameStateService);
             _parametersShop.Initialize(_parameters, _wallet);
-            _finishViewHandler = new FinishViewHandler(_gameStateService, _coroutineService, _finishViewValidator, _wheel.Travelable, _levelService.Score);
-            _facadeFinishView.Initialized(_finishViewHandler);
+            _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService.Score);
         }
 
         private void CreateParameters()

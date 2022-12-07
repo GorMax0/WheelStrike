@@ -7,7 +7,7 @@ namespace UI
     [RequireComponent(typeof(TMP_Text))]
     public class TextEffect : MonoBehaviour
     {
-        [SerializeField] private bool _isLooping;
+        [SerializeField] private bool _isInfinityLooping;
 
         private const int InfinityLoops = -1;
 
@@ -31,9 +31,14 @@ namespace UI
             DOTween.Kill(_text);
         }
 
-        protected virtual void PlayEffect()
+        public void DisableLoop()
+        {            
+            _text.DOFade(_endTransparency, _duration);
+        }
+
+        private void PlayEffect()
         {
-            if (_isLooping == true)
+            if (_isInfinityLooping == true)
                 _countLoops = InfinityLoops;
 
             _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);

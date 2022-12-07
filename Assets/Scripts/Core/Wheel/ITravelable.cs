@@ -2,6 +2,6 @@ namespace Core.Wheel
 {
     public interface ITravelable
     {
-        public float TraveledDistance { get; }
+        public float DistanceTraveled { get; }
     }
 }

@@ -6,6 +6,7 @@
         Pause,
         Waiting,
         Running,
-        Finished
+        Finished,
+        Restart
     }
 }

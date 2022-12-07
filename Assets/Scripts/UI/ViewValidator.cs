@@ -31,8 +31,6 @@ namespace UI
 
             DisplayValidView();
             CacheWidthAndHeight();
-
-            Debug.Log($"{Screen.width}x{Screen.height}");
         }
 
         private void DisplayValidView()

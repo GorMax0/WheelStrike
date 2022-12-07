@@ -11,15 +11,17 @@ namespace Services
         private GameStateService _gameStateService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
+        private LevelService _levelService;
         private LevelScore _levelScore;
         private Wallet _wallet;
 
-        public GamePlayService(GameStateService gameStateService, InputHandler inputHandler, InteractionHandler interactionHandler, LevelScore levelScore, Wallet wallet)
+        public GamePlayService(GameStateService gameStateService, InputHandler inputHandler, InteractionHandler interactionHandler, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
-            _levelScore = levelScore;
+            _levelService = levelService;
+            _levelScore = _levelService.Score;
             _wallet = wallet;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -51,6 +53,9 @@ namespace Services
                 case GameState.Finished:
                     OnGameFinished();
                     break;
+                case GameState.Restart:
+                    OnGameRestart();
+                    break;
             }
         }
 
@@ -58,6 +63,11 @@ namespace Services
         {
             _wallet.EnrollMoney(_levelScore.ResultScore);
             Dispose();
+        }
+
+        private void OnGameRestart()
+        {
+            _levelService.RestartLevel();
         }
 
         private void OnPointerDown()

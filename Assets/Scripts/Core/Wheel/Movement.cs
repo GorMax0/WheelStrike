@@ -25,7 +25,7 @@ namespace Core.Wheel
         private Vector3 _offsetAngles;
         private CoroutineRunning _moveForward;
 
-        public float TraveledDistance => transform.position.z * DistanceCoefficient;
+        public float DistanceTraveled => transform.position.z * DistanceCoefficient;
 
         private void Awake()
         {

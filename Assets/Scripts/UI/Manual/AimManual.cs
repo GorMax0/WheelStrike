@@ -11,6 +11,7 @@ namespace UI.Manual
     {
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderHandler;
+        [SerializeField] private TextEffect _manualText;
         [SerializeField] private float _fadeTime;
         [SerializeField] private float _duration;
 
@@ -35,6 +36,7 @@ namespace UI.Manual
 
         public void Fade()
         {
+            _manualText.DisableLoop();
             _sliderBackground.DOFade(0, _fadeTime);
             _sliderHandler.DOFade(0, _fadeTime);
             Invoke(nameof(Disable), _fadeTime);

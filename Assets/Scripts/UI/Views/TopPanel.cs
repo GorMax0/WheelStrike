@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Services.Level;
 using Services.GameStates;
 
 namespace UI.Views
@@ -13,7 +12,6 @@ namespace UI.Views
         [SerializeField] private Wrap _distancePanel;
 
         private GameStateService _gameStateService;
-        private LevelService _levelService;
 
         private void OnEnable()
         {
@@ -21,24 +19,28 @@ namespace UI.Views
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _restartButton.GetComponent<Button>().onClick.AddListener(_levelService.RestartLevel);
+            _restartButton.GetComponent<Button>().onClick.AddListener(Restart);
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
-            _restartButton.GetComponent<Button>().onClick.RemoveListener(_levelService.RestartLevel);
+            _restartButton.GetComponent<Button>().onClick.RemoveListener(Restart);
         }
 
-        public void Initialize(GameStateService gameStateService, LevelService levelService)
+        public void Initialize(GameStateService gameStateService)
         {
             if (_gameStateService != null)
                 return;
 
-            _gameStateService = gameStateService;
-            _levelService = levelService;
+            _gameStateService = gameStateService;          
 
             OnEnable();
+        }
+
+        public void Restart()
+        {
+            _gameStateService.ChangeState(GameState.Restart);
         }
 
         private void OnGameStateChanged(GameState state)

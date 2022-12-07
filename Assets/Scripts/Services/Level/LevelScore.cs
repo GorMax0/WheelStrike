@@ -16,9 +16,8 @@ namespace Services.Level
             _income = income;
         }
         
-        private int Score => _score + (int)_travelable.TraveledDistance;
-        private int BonusScore => (int)(Score * _income.Value);
-
+        public int Score => _score + (int)_travelable.DistanceTraveled;
+        public int BonusScore => (int)(Score * _income.Value);
         public int ResultScore => Score + BonusScore;
 
         public void AddScore(int score)
