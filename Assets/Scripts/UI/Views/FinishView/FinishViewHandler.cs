@@ -23,6 +23,7 @@ namespace UI.Views.Finish
         private ViewValidator _validator;
         private FinishView _currentFinishView;
         private ITravelable _travelable;
+        private LevelService _levelService;
         private LevelScore _levelScore;
         private bool _isInitialized;
         private bool _isFinished;
@@ -31,7 +32,7 @@ namespace UI.Views.Finish
         public event Action<int> DisplayedScoreChanged;
         public event Action<int> DisplayedBonusScoreChanged;
 
-        public void OnEnable()
+        private void OnEnable()
         {
             if (_isInitialized == false)
                 return;
@@ -40,21 +41,22 @@ namespace UI.Views.Finish
             _validator.ViewValidated += OnViewValidated;
         }
 
-        public void OnDisable()
+        private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
             _validator.ViewValidated -= OnViewValidated;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelScore levelScore)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
         {
             _validator = GetComponent<ViewValidator>();
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
             _travelable = travelable;
-            _levelScore = levelScore;
+            _levelService = levelService;
+            _levelScore = _levelService.Score;
 
-            InitializeView(this);
+            InitializeViews();
 
             _distanceDisplay = new CoroutineRunning(_coroutineService);
             _scoreDisplay = new CoroutineRunning(_coroutineService);
@@ -81,11 +83,11 @@ namespace UI.Views.Finish
             _bonusScoreDisplay.Run(DisplayValue(bonusScore, DisplayedBonusScoreChanged));
         }
 
-        private void InitializeView(FinishViewHandler finishViewHandler)
+        private void InitializeViews()
         {
             foreach (FinishView view in _finishViews)
             {
-                view.Initialize(finishViewHandler);
+                view.Initialize(this, _levelService.LengthRoad);
             }
         }
 

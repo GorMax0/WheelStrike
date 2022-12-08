@@ -98,7 +98,7 @@ namespace Core
             _moneyView.Initialize(_wallet);
             _topPanel.Initialize(_gameStateService);
             _parametersShop.Initialize(_parameters, _wallet);
-            _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService.Score);
+            _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
         }
 
         private void CreateParameters()

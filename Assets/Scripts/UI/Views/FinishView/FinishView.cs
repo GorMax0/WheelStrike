@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using Services.Level;
 
 namespace UI.Views.Finish
 {
@@ -48,9 +49,11 @@ namespace UI.Views.Finish
         }
 
 
-        public void Initialize(FinishViewHandler finishViewHandler)
+        public void Initialize(FinishViewHandler viewHandler, int lengthRoad)
         {
-            _viewHandler = finishViewHandler;
+            _viewHandler = viewHandler;
+
+            InitializeDistanceBar(viewHandler, lengthRoad);
             _isInitialized = true;
             OnEnable();
         }
@@ -65,21 +68,28 @@ namespace UI.Views.Finish
                .AppendInterval(_intervalBetweenTween)
                .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
-               .AppendCallback(_viewHandler.DisplayDistance)
+               .AppendCallback(_viewHandler.DisplayScore)
                .Append(_rewardBlock.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
-               .AppendCallback(_viewHandler.DisplayScore)
                .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
-               .AppendCallback(_viewHandler.DisplayBonusScore); 
+               .AppendCallback(_viewHandler.DisplayDistance)
+               .AppendCallback(_viewHandler.DisplayBonusScore);
         }
 
         public void Enable() => gameObject.SetActive(true);
 
         public void Disable() => gameObject.SetActive(false);
 
-        public void OnDisplayedDistanceChanged(int distance) => _distance.text = distance.ToString("#" + "m");
-        public void OnDisplayedScoreChanged(int score) => _score.text = score.ToString();
-        public void OnDisplayedBonusScoreChanged(int bonusScore) => _bonusScore.text = bonusScore.ToString();
+        public void OnDisplayedDistanceChanged(int distance) => _distance.text = $"{distance}m";
+
+        public void OnDisplayedScoreChanged(int score) => _score.text = $"{score}";
+
+        public void OnDisplayedBonusScoreChanged(int bonusScore) => _bonusScore.text = $"{bonusScore}";
+
+        private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad)
+        {
+            _distanceBar.Initialize(viewHandler, lengthRoad);
+        }
 
         private void PrepareView()
         {

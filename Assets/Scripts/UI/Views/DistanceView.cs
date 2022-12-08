@@ -22,5 +22,5 @@ public class DistanceView : MonoBehaviour
         ShowDistance();
     }
 
-    private void ShowDistance() => _text.text = Travelable.DistanceTraveled.ToString("##"+"m");
+    private void ShowDistance() => _text.text = $"{Travelable.DistanceTraveled}m";
 }
