@@ -6,10 +6,10 @@ using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
-using UI;
 using UI.Manual;
 using UI.Views;
 using UI.Views.Finish;
+using Agava.YandexGames;
 
 namespace Core
 {
@@ -60,6 +60,7 @@ namespace Core
             InitializeManual();
             InitializeView();
             _gameStateService.ChangeState(GameState.Pause);
+            YandexGamesSdk.Initialize();
         }
 
         private void InitializeServices()

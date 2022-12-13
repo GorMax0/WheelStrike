@@ -104,8 +104,6 @@ namespace Core
             IsMovable?.Invoke(true);
         }
 
-
-
         private void OnGameStateChanged(GameState state)
         {
             switch (state)

@@ -34,5 +34,10 @@ namespace Core.Wheel
             _collisionHandler.Initialize(gameStateService);
             _size = size;
         }
+
+        private void UpSize()
+        {
+            transform.localScale *= _size.Value;
+        }
     }
 }
