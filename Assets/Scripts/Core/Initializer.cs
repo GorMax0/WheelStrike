@@ -10,6 +10,7 @@ using UI.Manual;
 using UI.Views;
 using UI.Views.Finish;
 using Agava.YandexGames;
+using Data;
 
 namespace Core
 {
@@ -22,13 +23,15 @@ namespace Core
         [Header("Services")]
         [SerializeField] private LevelService _levelService;
 
+        private GameStateService _gameStateService;
+        private GamePlayService _gamePlayService;
+
         [Header("Core")]
         [SerializeField] private CarBuilder _carFactory;
         [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private CoroutineService _coroutineService;
-        [SerializeField] private ParameterCreater[] _parameterCreaters;
         [SerializeField] private Rope _rope;
         [SerializeField] private Player _wheel;
         [SerializeField] private InteractionHandler _interactionHandler;
@@ -46,19 +49,26 @@ namespace Core
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
 
-        private GameStateService _gameStateService;
-        private GamePlayService _gamePlayService;
+        [Header("Other")]
+        [SerializeField] private ParameterObject[] _parameterObjects;
+
+        private ParameterCreater _parameterCreater;
+        private Dictionary<ParameterType, Parameter> _parameters;
         private AimDirection _aimDirection;
         private Wallet _wallet = new Wallet();
-        private Dictionary<ParameterType, Parameter> _parameters;
+        private DataOperator _dataOperator;
 
         private void Start()
         {
-            CreateParameters();
+            _parameterCreater = new ParameterCreater();
+            _parameters = _parameterCreater.CreateParameters(_parameterObjects);
+
             InitializeServices();
             InitializeCore();
             InitializeManual();
             InitializeView();
+            _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
+            _dataOperator.Load();
             _gameStateService.ChangeState(GameState.Pause);
             YandexGamesSdk.Initialize();
         }
@@ -100,16 +110,6 @@ namespace Core
             _topPanel.Initialize(_gameStateService);
             _parametersShop.Initialize(_parameters, _wallet);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
-        }
-
-        private void CreateParameters()
-        {
-            _parameters = new Dictionary<ParameterType, Parameter>();
-
-            for (int i = 0; i < _parameterCreaters.Length; i++)
-            {
-                _parameters.Add(_parameterCreaters[i].Type, new Parameter(_parameterCreaters[i]));
-            }
         }
     }
 }

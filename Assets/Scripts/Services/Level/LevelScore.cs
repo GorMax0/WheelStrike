@@ -19,6 +19,7 @@ namespace Services.Level
         public int Score => _score + _travelable.DistanceTraveled;
         public int BonusScore => (int)(Score * _income.Value);
         public int ResultScore => Score + BonusScore;
+        public int Highscore => Highscore > _travelable.DistanceTraveled ? Highscore : _travelable.DistanceTraveled;
 
         public void AddScore(int score)
         {

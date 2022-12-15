@@ -8,7 +8,7 @@ namespace UI.Views
     {
         [SerializeField] private Wrap _worldButton;
         [SerializeField] private Wrap _shopButton;
-        [SerializeField] private Wrap _upgradePanel;
+        [SerializeField] private Wrap _parametersShop;
         [SerializeField] private TMP_Text _levelLable;
 
         private GameStateService _gameStateService;
@@ -54,7 +54,7 @@ namespace UI.Views
         {
             _worldButton.Unroll();
             _shopButton.Unroll();
-            _upgradePanel.Unroll();
+            _parametersShop.Unroll();
             _levelLable.gameObject.SetActive(true);
         }
 
@@ -62,7 +62,7 @@ namespace UI.Views
         {
             _worldButton.Roll();
             _shopButton.Roll();
-            _upgradePanel.Roll();
+            _parametersShop.Roll();
             _levelLable.gameObject.SetActive(false);
         }
     }

@@ -1,18 +1,19 @@
-using UnityEngine;
+using System.Collections.Generic;
+using Parameters;
 
-namespace Parameters
+public class ParameterCreater 
 {
-    [CreateAssetMenu(fileName = "New Parameter", menuName = "Gameplay/Parameter", order = 51)]
-    public class ParameterCreater : ScriptableObject
-    {
-        [SerializeField] private ParameterType _type;
-        [SerializeField] private float _baseValue = 1.05f;
-        [SerializeField] private int _baseCost = 25;
-        [SerializeField] private Sprite _icon;
+    private Dictionary<ParameterType, Parameter> _parameters;
 
-        public ParameterType Type => _type;
-        public float BaseValue => _baseValue;
-        public int BaseCost => _baseCost;
-        public Sprite Icon => _icon;
+    public Dictionary<ParameterType, Parameter> CreateParameters(ParameterObject[] _parameterObject)
+    {
+        _parameters = new Dictionary<ParameterType, Parameter>();
+
+        for (int i = 0; i < _parameterObject.Length; i++)
+        {
+            _parameters.Add(_parameterObject[i].Type, new Parameter(_parameterObject[i]));
+        }
+
+        return _parameters;
     }
 }

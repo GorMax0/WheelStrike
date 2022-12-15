@@ -7,7 +7,7 @@ namespace Parameters
         private float _baseValue;
         private int _baseCost;
 
-        public Parameter(ParameterCreater creater)
+        public Parameter(ParameterObject creater)
         {
             Name = ParameretName.GetName(creater.Type);
             _baseValue = creater.BaseValue;

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03d756c61fd3a0e4abbb53be47f710ba, type: 3}
+  m_Script: {fileID: 11500000, guid: a783438ddbc6e7d4ebcf2a3db2806707, type: 3}
   m_Name: Income
   m_EditorClassIdentifier: 
   _type: 2
