@@ -69,6 +69,7 @@ namespace Core
             InitializeView();
             _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
             _dataOperator.Load();
+            _gamePlayService.SetDataOperator(_dataOperator);
             _gameStateService.ChangeState(GameState.Pause);
             YandexGamesSdk.Initialize();
         }

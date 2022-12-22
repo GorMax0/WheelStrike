@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Parameters
 {
-    public static class ParameretName
+    public static class ParameterName
     {
         private static Dictionary<ParameterType, string> _parameterName = new Dictionary<ParameterType, string>() {
         { ParameterType.Speed, "Скорость" },
@@ -23,7 +23,7 @@ namespace Parameters
                     return _parameterName[ParameterType.Income];
             }
 
-            throw new ArgumentException($"{typeof(ParameretName)}: GetName(ParametrType type): Not available ParameterType {type}.");
+            throw new ArgumentException($"{typeof(ParameterName)}: GetName(ParameterType type): Not available ParameterType {type}.");
         }
     }
 }

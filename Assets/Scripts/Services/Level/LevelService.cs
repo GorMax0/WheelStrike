@@ -12,23 +12,26 @@ namespace Services.Level
 
         private const float DistanceCoefficient = 5f;
 
+        private int _numberCurrentLevel;
+
         public int LengthRoad => (int)(_finishWall.transform.position.z * DistanceCoefficient);
-        public int NumberCurrentLevel => SceneManager.GetActiveScene().buildIndex;
+        public int NumberNextLevel => _numberCurrentLevel; // + 1;
         public LevelScore Score { get; private set; }
 
         public void Initialize(ITravelable travelable, Parameter income)
         {
             Score = new LevelScore(travelable, income);
+            _numberCurrentLevel = SceneManager.GetActiveScene().buildIndex;
         }
 
         public void RestartLevel()
         {
-            SceneManager.LoadScene(NumberCurrentLevel);
+            SceneManager.LoadScene(_numberCurrentLevel);
         }
 
         public void LoadLevel(int indexScene)
         {
-            if (indexScene == NumberCurrentLevel)
+            if (indexScene <= _numberCurrentLevel)
                 return;
 
             SceneManager.LoadScene(indexScene);

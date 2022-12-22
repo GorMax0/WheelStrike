@@ -6,8 +6,16 @@ namespace Core
     {
 
         public event Action<int> MoneyChanged;
-        
+
         public int Money { get; private set; }
+
+        public void LoadMoney(int money)
+        {
+            if (money < 0)
+                return;
+
+            Money = money;
+        }
 
         public void EnrollMoney(int money)
         {

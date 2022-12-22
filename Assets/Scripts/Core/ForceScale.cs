@@ -38,11 +38,6 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        private void Start()
-        {
-            
-        }
-
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
             if (_gameStateService != null)

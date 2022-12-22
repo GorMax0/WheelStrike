@@ -1,6 +1,7 @@
 using System;
 using Core;
 using Core.Wheel;
+using Data;
 using Services.GameStates;
 using Services.Level;
 
@@ -14,6 +15,7 @@ namespace Services
         private LevelService _levelService;
         private LevelScore _levelScore;
         private Wallet _wallet;
+        private DataOperator _dataOperator;
 
         public GamePlayService(GameStateService gameStateService, InputHandler inputHandler, InteractionHandler interactionHandler, LevelService levelService, Wallet wallet)
         {
@@ -46,6 +48,11 @@ namespace Services
             _interactionHandler.TriggeredWithCameraTrigger -= OnTriggeredWithCameraTrigger;
         }
 
+        public void SetDataOperator(DataOperator dataOperator)
+        {
+            _dataOperator = dataOperator;
+        }
+
         private void OnGameStateChanged(GameState state)
         {
             switch (state)
@@ -67,6 +74,7 @@ namespace Services
 
         private void OnGameRestart()
         {
+            _dataOperator.Save();
             _levelService.RestartLevel();
         }
 
