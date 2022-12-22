@@ -10,7 +10,7 @@ namespace Services.GameStates
 
         public void ChangeState(GameState gameState)
         {
-            if (_state == gameState)
+            if (_state == gameState && _state != 0)
                 return;
 
             _state = gameState;

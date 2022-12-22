@@ -39,9 +39,6 @@ namespace UI.Views
         {
             switch (state)
             {
-                case GameState.Pause:
-                    OnGamePause();
-                    break;
                 case GameState.Waiting:
                     OnGameWaiting();
                     break;
@@ -50,19 +47,11 @@ namespace UI.Views
             Debug.Log(state);
         }
 
-        private void OnGamePause()
-        {
-            _worldButton.Unroll();
-            _shopButton.Unroll();
-            _parametersShop.Unroll();
-            _levelLable.gameObject.SetActive(true);
-        }
-
         private void OnGameWaiting()
         {
-            _worldButton.Roll();
-            _shopButton.Roll();
-            _parametersShop.Roll();
+            _worldButton.ApplyOffsetTransform();
+            _shopButton.ApplyOffsetTransform();
+            _parametersShop.ApplyOffsetTransform();
             _levelLable.gameObject.SetActive(false);
         }
     }

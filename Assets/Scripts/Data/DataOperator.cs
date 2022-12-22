@@ -38,7 +38,7 @@ namespace Data
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Save(): _saveSystem is null");
 
-            SaveNumberLevel();
+            SaveIndexScene();
             SaveHighscore(_levelScore.Highscore);
             SaveMoney(_wallet.Money);
 
@@ -46,7 +46,7 @@ namespace Data
         }
 
         public void Load()
-        {
+        {           
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _saveSystem is null");
 
@@ -55,13 +55,13 @@ namespace Data
             if (_gameData == null)
                 return;
 
-            LoadNumberLevel();
+            LoadIndexScene();
             LoadHighscore();
             LoadMoney();
             LoadParameters();
         }
 
-        private void SaveNumberLevel() => _gameData.PassedLevel = _levelService.NumberNextLevel;
+        private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
         private void SaveHighscore(int highscore) => _gameData.Highscore = highscore;
 
@@ -89,7 +89,7 @@ namespace Data
 
         private void LoadHighscore() => _levelScore.LoadHighscore(_gameData.Highscore);
 
-        private void LoadNumberLevel() => _levelService.LoadLevel(_gameData.PassedLevel);
+        private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
         private void LoadParameters()
         {

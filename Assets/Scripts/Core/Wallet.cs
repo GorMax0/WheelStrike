@@ -15,6 +15,7 @@ namespace Core
                 return;
 
             Money = money;
+            MoneyChanged?.Invoke(Money);
         }
 
         public void EnrollMoney(int money)

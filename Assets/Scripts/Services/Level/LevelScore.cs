@@ -38,12 +38,13 @@ namespace Services.Level
                 }
 
                 _highscore = value;
+                HighscoreChanged?.Invoke(_highscore);
             }
         }
 
         public void LoadHighscore(int highscore)
         {
-            Highscore = highscore;
+            Highscore = highscore;            
         }
 
         public void AddScore(int score)

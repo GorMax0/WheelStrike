@@ -47,9 +47,6 @@ namespace UI.Views
         {
             switch (state)
             {
-                case GameState.Pause:
-                    OnGamePause();
-                    break;
                 case GameState.Waiting:
                     OnGameWaiting();
                     break;
@@ -62,27 +59,20 @@ namespace UI.Views
             }
         }
 
-        private void OnGamePause()
-        {
-            _restartButton.Unroll();
-            _moneyPanel.Unroll();         
-        }
-
         private void OnGameWaiting()
-        {
-            _restartButton.Roll();
-            _moneyPanel.Roll();
+        {            
+            _moneyPanel.ApplyOffsetTransform();
         }
         private void OnGameRunning()
         {
-            _restartButton.Unroll();
-            _distancePanel.Roll();
+            _restartButton.ApplyOffsetTransform();
+            _distancePanel.ApplyOffsetTransform();
         }
 
         private void OnGameFinished()
         {
-            _distancePanel.Unroll();
-            _restartButton.Roll();
+            _distancePanel.CancelOffsetTransform();
+            _restartButton.CancelOffsetTransform();
         }
     }
 }

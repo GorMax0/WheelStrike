@@ -36,8 +36,8 @@ namespace UI.Views
         {
             switch (state)
             {
-                case GameState.Pause:
-                    OnGamePause();
+                case GameState.Initializing:
+                    OnGameInitializing();
                     break;
                 case GameState.Waiting:
                     OnGameWaiting();
@@ -48,7 +48,7 @@ namespace UI.Views
             }
         }
 
-        private void OnGamePause()
+        private void OnGameInitializing()
         {
             _forceScaleView.gameObject.SetActive(false);
             _aimDirectionLine.gameObject.SetActive(false);

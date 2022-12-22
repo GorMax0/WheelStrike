@@ -22,13 +22,13 @@ namespace UI
             DOTween.Kill(_transform);
         }
 
-        public void Roll()
+        public void ApplyOffsetTransform()
         {
             _startPositoin = _transform.position;
             _transform.DOMove(_startPositoin + _wrapOffset, _duration);
         }
 
-        public void Unroll()
+        public void CancelOffsetTransform()
         {
             if (_transform.position != (Vector3)_startPositoin)
                 _transform.DOMove(_startPositoin, _duration);

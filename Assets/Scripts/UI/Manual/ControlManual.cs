@@ -37,9 +37,6 @@ namespace UI.Manual
         {
             switch (state)
             {
-                case GameState.Pause:
-                    OnGamePause();
-                    break;
                 case GameState.Waiting:
                     OnGameWaiting();
                     break;
@@ -47,12 +44,6 @@ namespace UI.Manual
                     OnGameRunning();
                     break;
             }
-        }
-
-        private void OnGamePause()
-        {
-            _aimManual.gameObject.SetActive(false);
-            _holdToPlay.gameObject.SetActive(true);
         }
 
         private void OnGameWaiting()
