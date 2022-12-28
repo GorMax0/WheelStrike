@@ -3,6 +3,7 @@ using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
+using System;
 
 namespace Core.Wheel
 {
@@ -24,6 +25,7 @@ namespace Core.Wheel
         private InteractionHandler _collisionHandler;
         private Vector3 _offsetAngles;
         private CoroutineRunning _moveForward;
+        private bool _isInitialized = false;
 
         public int DistanceTraveled => (int)(transform.position.z * DistanceCoefficient);
 
@@ -36,7 +38,7 @@ namespace Core.Wheel
 
         private void OnEnable()
         {
-            if (_gameStateService == null || _aimDirection == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
@@ -53,14 +55,15 @@ namespace Core.Wheel
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease)
         {
-            if (_gameStateService != null || _aimDirection != null)
-                return;
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): Already initialized.");
 
             _gameStateService = gameStateService;
             _aimDirection = aimDirection;
             _speedIncrease = speedIncrease;
             _moveForward = new CoroutineRunning(coroutineService);
 
+            _isInitialized = true;
             OnEnable();
         }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using Services.Coroutines;
 using Services.GameStates;
 using System.Collections;
+using System;
 
 namespace Core.Wheel
 {
@@ -19,6 +20,7 @@ namespace Core.Wheel
         private CoroutineRunning _rotating;
         private CoroutineRunning _figureOfEightRotation;
         private bool _isRotate;
+        private bool _isInitialized = false;
 
         private void Awake()
         {
@@ -28,7 +30,7 @@ namespace Core.Wheel
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
@@ -45,13 +47,14 @@ namespace Core.Wheel
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
-            if (_gameStateService != null)
-                return;
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService): Already initialized.");
 
             _gameStateService = gameStateService;
             _rotating = new CoroutineRunning(coroutineService);
             _figureOfEightRotation = new CoroutineRunning(coroutineService);
 
+            _isInitialized = true;
             OnEnable();
         }
 

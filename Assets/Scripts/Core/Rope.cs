@@ -2,6 +2,7 @@ using UnityEngine;
 using Obi;
 using Core.Wheel;
 using Services.GameStates;
+using System;
 
 namespace Core
 {
@@ -13,7 +14,7 @@ namespace Core
 
         private ObiParticleAttachment[] _joints;
         private GameStateService _gameStateService;
-        private bool _isInitialized;
+        private bool _isInitialized = false;
 
         private void Awake()
         {
@@ -22,7 +23,7 @@ namespace Core
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -35,10 +36,11 @@ namespace Core
 
         public void Initialize(GameStateService gameStateService)
         {
-            if (_gameStateService != null)
-                return;
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
 
             _gameStateService = gameStateService;
+            _isInitialized = true;
             OnEnable();
         }
 

@@ -12,7 +12,6 @@ namespace Data
 
             PlayerPrefs.SetString(DataKey, data);
             PlayerPrefs.Save();
-            Debug.Log("Saved!");
         }
 
         public GameData Load()
@@ -20,7 +19,7 @@ namespace Data
             if (PlayerPrefs.HasKey(DataKey))
             {
                 string data = PlayerPrefs.GetString(DataKey);
-                Debug.Log("Loaded!");
+
                 return JsonUtility.FromJson<GameData>(data);
             }
             

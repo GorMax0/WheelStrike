@@ -46,7 +46,7 @@ namespace Data
         }
 
         public void Load()
-        {           
+        {
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _saveSystem is null");
 

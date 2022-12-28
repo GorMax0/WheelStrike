@@ -21,11 +21,12 @@ namespace Core
         private const float InterpolateValueFOV = 0.02f;
 
         private GameStateService _gameStateService;
-        private bool _isFinished;
+        private bool _isInitialized;
+        private bool _isFinished = false;
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -52,10 +53,11 @@ namespace Core
 
         public void Initialize(GameStateService gameStateService)
         {
-            if (_gameStateService != null)
-                return;
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
 
             _gameStateService = gameStateService;
+            _isInitialized = true;
             OnEnable();
         }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
+using System;
 
 namespace Core.Wheel
 {
@@ -16,6 +17,8 @@ namespace Core.Wheel
         private AnimationWheel _animation;
         private InteractionHandler _collisionHandler;
         private Parameter _size;
+        private GameStateService _gameStateService;
+        private bool _isInitialized = false;
 
         public ITravelable Travelable => _movement;
 
@@ -27,17 +30,64 @@ namespace Core.Wheel
             _collisionHandler = GetComponent<InteractionHandler>();
         }
 
+        private void OnEnable()
+        {
+            if (_isInitialized == false)
+                return;
+
+            _gameStateService.GameStateChanged += OnGameStateService;
+        }
+
+        private void OnDisable()
+        {
+            _gameStateService.GameStateChanged -= OnGameStateService;
+        }
+
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size)
         {
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
+
+
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speed);
             _animation.Initialize(gameStateService, coroutineService);
             _collisionHandler.Initialize(gameStateService);
+            _gameStateService = gameStateService;
             _size = size;
+
+            _isInitialized = true;
+            OnEnable();
         }
 
-        private void UpSize()
+        private void SetSize()
         {
-            transform.localScale *= _size.Value;
+            float newScaleX = transform.localScale.x + _size.Value;
+            float newScaleY = transform.localScale.y + _size.Value;
+            float newScaleZ = transform.localScale.z + _size.Value;
+
+            transform.localScale = new Vector3(newScaleX, newScaleY, newScaleZ);
+        }
+
+        private void SetMass()
+        {
+            int massCorrector = 5000;
+            _rigidbody.mass += _size.Value * massCorrector;
+        }
+
+        private void OnGameStateService(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.Running:
+                    OnGameRunning();
+                    break;
+            }
+        }
+
+        private void OnGameRunning()
+        {
+            SetSize();
+            SetMass();
         }
     }
 }

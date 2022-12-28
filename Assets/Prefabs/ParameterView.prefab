@@ -604,6 +604,7 @@ MonoBehaviour:
   _level: {fileID: 7304212582602739213}
   _cost: {fileID: 6243166701819196581}
   _icon: {fileID: 6325637510338175616}
+  _levelUp: {fileID: 4625619316382795249}
 --- !u!114 &992197144816773465
 MonoBehaviour:
   m_ObjectHideFlags: 0

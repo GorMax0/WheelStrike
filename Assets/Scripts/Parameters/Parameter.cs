@@ -18,7 +18,7 @@ namespace Parameters
         }
 
           public event Action<Parameter> LevelChanged;
-        //  public event Action<int> CostChanged;
+          public event Action Loaded;
 
         public ParameterType Type { get; }
         public string Name { get; }
@@ -33,7 +33,7 @@ namespace Parameters
                 return;
 
             Level = level;
-            LevelChanged?.Invoke(this);
+            Loaded?.Invoke();
         }
 
         public void LevelUp()

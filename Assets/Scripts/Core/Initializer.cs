@@ -11,6 +11,7 @@ using UI.Views;
 using UI.Views.Finish;
 using Agava.YandexGames;
 using Data;
+using Trail;
 
 namespace Core
 {
@@ -51,6 +52,7 @@ namespace Core
 
         [Header("Other")]
         [SerializeField] private ParameterObject[] _parameterObjects;
+        [SerializeField] private TrailManager _trailManager;
 
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
@@ -67,6 +69,7 @@ namespace Core
             InitializeCore();
             InitializeManual();
             InitializeView();
+            _trailManager.Initialize(_gameStateService);
             _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
             _dataOperator.Load();
             _gamePlayService.SetDataOperator(_dataOperator);

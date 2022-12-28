@@ -16,7 +16,7 @@ namespace Core
         private Explosion _explosion;
         private CarWheel[] _carWheels;
         private GameStateService _gameStateService;
-        private bool _isInitialized;
+        private bool _isInitialized = false;
 
         public event Action<bool> IsMovable;
 
@@ -26,7 +26,7 @@ namespace Core
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -52,10 +52,10 @@ namespace Core
             InitializeWheels();
 
             SetColorMaterial(colorMaterial);
-            RandomizeRewardIncrease();
-            OnEnable();
+            RandomizeRewardIncrease();           
 
             _isInitialized = true;
+            OnEnable();
         }
 
         public void Explode()

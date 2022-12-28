@@ -10,6 +10,7 @@ namespace Core
     {
         [SerializeField, Range(0.1f, 0.7f)] private float _valueRange = 0.1f;
         [SerializeField] private float _valueChangeStep;
+        [SerializeField] private bool _useGreenZone;
 
         private readonly float GreenZoneRaito = 12f;
 
@@ -19,6 +20,7 @@ namespace Core
         private float _finalValue = 1f;
         private CoroutineRunning _changeMultiplier;
         private GameStateService _gameStateService;
+        private bool _isInitialized = false;
 
         public event UnityAction<float, float> RangeChanged;
         public event UnityAction<float> MultiplierChanged;
@@ -27,7 +29,7 @@ namespace Core
 
         private void OnEnable()
         {
-            if (_gameStateService == null)
+            if (_isInitialized == false)
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
@@ -40,13 +42,14 @@ namespace Core
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
-            if (_gameStateService != null)
+            if (_isInitialized == true)
                 return;
 
             _gameStateService = gameStateService;
             _changeMultiplier = new CoroutineRunning(coroutineService);
-
             SetRange();
+
+            _isInitialized = true;
             OnEnable();
         }
 
@@ -81,11 +84,21 @@ namespace Core
             }
         }
 
+        private bool HasGreenZone()
+        {
+            if (_useGreenZone == true)
+            {
+                float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
+
+                return _currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue;
+            }
+
+            return false;
+        }
+
         private void CalculateFinalMultiplier()
         {
-            float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
-
-            if (_currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue)
+            if (HasGreenZone())
                 return;
 
             _finalValue -= Mathf.Abs(_currentValue);
@@ -113,7 +126,7 @@ namespace Core
         private void OnGameRunning()
         {
             _changeMultiplier.Stop();
-            CalculateFinalMultiplier();
+            CalculateFinalMultiplier();           
         }
     }
 }
