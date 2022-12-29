@@ -10,6 +10,7 @@ namespace UI
 
         private Vector2 _startPositoin;
         private RectTransform _transform;
+        private Canvas _canvas;
 
         private void Awake()
         {
@@ -20,6 +21,12 @@ namespace UI
         private void OnDisable()
         {
             DOTween.Kill(_transform);
+        }
+
+        private void Start()
+        {
+            _canvas = GetComponentInParent<Canvas>();
+            _wrapOffset *= _canvas.transform.localScale;
         }
 
         public void ApplyOffsetTransform()
