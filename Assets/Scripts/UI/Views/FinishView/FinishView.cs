@@ -21,7 +21,7 @@ namespace UI.Views.Finish
         private Material _uiMaterial;
         private float _alphaOff = 1f;
         private float _endScaleValue = 1f;
-        private float _durationFade = 0.5f;
+        private float _durationFade = 0.7f;
         private float _durationScale = 0.3f;
         private float _intervalBetweenTween = 0.07f;
         private bool _isInitialized;

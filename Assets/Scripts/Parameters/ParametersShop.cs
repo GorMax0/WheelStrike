@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Core;
+using Core.Wheel;
 using UI.Views;
 
 namespace Parameters
@@ -8,6 +9,7 @@ namespace Parameters
     public class ParametersShop : MonoBehaviour
     {
         [SerializeField] private ParameterView _template;
+        [SerializeField] private AnimationWheel _animationWheel;
 
         private Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
         private Wallet _wallet;
@@ -17,7 +19,7 @@ namespace Parameters
             foreach (KeyValuePair<ParameterType, Parameter> parametr in parametrs)
             {
                 ParameterView view = Instantiate(_template, transform);
-                view.LevelUpButtonClicked += OnLevelUpButtonClicked;
+                view.LevelUpButtonClicked += OnLevelUpButtonClicked;  // Где должна быть отписка?
                 view.Renger(parametr.Value);
                 view.SubscribeToLevelChange();
                 _views.Add(parametr.Key, view);
@@ -33,6 +35,7 @@ namespace Parameters
 
             _wallet.SpendMoney(parameter.Cost);
             parameter.LevelUp();
+            _animationWheel.ParameterUp();
         }
 
         private void OnLevelUpButtonClicked(Parameter parameter)

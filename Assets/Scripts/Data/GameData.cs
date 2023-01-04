@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using Parameters;
-using Services.Level;
-using Core;
-
 namespace Data
 {
     [System.Serializable]

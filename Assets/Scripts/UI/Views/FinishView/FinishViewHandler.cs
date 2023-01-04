@@ -14,6 +14,7 @@ namespace UI.Views.Finish
         [SerializeField] private FinishView[] _finishViews;
         [Range(0.001f,0.05f)]
         [SerializeField] private float _waitingDelay;
+        [SerializeField] private ParticleSystem _finishEffect;
 
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
@@ -132,6 +133,7 @@ namespace UI.Views.Finish
 
         private void OnGameFinished()
         {
+            _finishEffect.Play();
             _currentFinishView.gameObject.SetActive(true);
             _currentFinishView.StartAnimation();
             

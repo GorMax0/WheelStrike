@@ -3,6 +3,7 @@ using Services.Coroutines;
 using Services.GameStates;
 using System.Collections;
 using System;
+using DG.Tweening;
 
 namespace Core.Wheel
 {
@@ -11,14 +12,20 @@ namespace Core.Wheel
     public class AnimationWheel : MonoBehaviour
     {
         [SerializeField] private AnimationCurve _deviationWhenSwinging;
-        [SerializeField] private MeshRenderer _meshForRotation;
+        [SerializeField] private MeshRenderer _meshWheel;
         [SerializeField] private float _rotationSpeed;
+        [SerializeField] private ParticleSystem _parameterUpEffect;
+
+        private const float ScaleRatio = 1.1f;
+        private const float AnimationDuration = 0.07f;
 
         private GameStateService _gameStateService;
         private ForceScale _forceScale;
         private InteractionHandler _collisionHandler;
         private CoroutineRunning _rotating;
         private CoroutineRunning _figureOfEightRotation;
+        private Vector3 _startScale;
+        private Vector3 _scaleIncrease;
         private bool _isRotate;
         private bool _isInitialized = false;
 
@@ -53,9 +60,20 @@ namespace Core.Wheel
             _gameStateService = gameStateService;
             _rotating = new CoroutineRunning(coroutineService);
             _figureOfEightRotation = new CoroutineRunning(coroutineService);
+            _startScale = transform.localScale;
+            _scaleIncrease = _startScale * ScaleRatio;
 
             _isInitialized = true;
             OnEnable();
+        }
+
+        public void ParameterUp()
+        {
+            DOTween.Sequence()
+             .Append(transform.DOScale(_scaleIncrease, AnimationDuration)).SetEase(Ease.InOutQuad)
+             .Append(transform.DOScale(_startScale, AnimationDuration));
+
+            _parameterUpEffect.gameObject.SetActive(true);
         }
 
         private void Swing(float currentForceValue)
@@ -69,7 +87,7 @@ namespace Core.Wheel
         {
             while (true)
             {
-                _meshForRotation.transform.Rotate(-Vector3.left * Time.deltaTime * _rotationSpeed);
+                _meshWheel.transform.Rotate(-Vector3.left * Time.deltaTime * _rotationSpeed);
 
                 yield return null;
             }
@@ -88,7 +106,7 @@ namespace Core.Wheel
                 zRotation = Mathf.Cos(angleInRadians);
                 yRotation = Mathf.Sin(angleInRadians);
 
-                _meshForRotation.transform.Rotate(new Vector3(0f, yRotation, zRotation));
+                _meshWheel.transform.Rotate(new Vector3(0f, yRotation, zRotation));
                 jobTime -= Time.deltaTime;
 
                 yield return null;
@@ -99,7 +117,7 @@ namespace Core.Wheel
 
         private void ResetRotationByYZ()
         {
-            _meshForRotation.transform.rotation = new Quaternion(_meshForRotation.transform.rotation.x, 0f, 0f, 1f);
+            _meshWheel.transform.rotation = new Quaternion(_meshWheel.transform.rotation.x, 0f, 0f, 1f);
         }
 
         private void OnGameStateService(GameState state)

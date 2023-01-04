@@ -83,6 +83,8 @@ namespace Data
                 default:
                     throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
+
+            Save();
         }
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
