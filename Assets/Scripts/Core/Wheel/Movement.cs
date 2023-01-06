@@ -28,6 +28,7 @@ namespace Core.Wheel
         private bool _isInitialized = false;
 
         public int DistanceTraveled => (int)(transform.position.z * DistanceCoefficient);
+        public float Speed => _rigidbody.velocity.magnitude;
 
         private void Awake()
         {
@@ -116,10 +117,7 @@ namespace Core.Wheel
             _rigidbody.velocity = speedAfterCollided;
         }
 
-        private void UnfreezeRotation()
-        {
-            _rigidbody.freezeRotation = false;
-        }
+        private void UnfreezeRotation() => _rigidbody.freezeRotation = false;
 
         private void OnGameStateService(GameState state)
         {

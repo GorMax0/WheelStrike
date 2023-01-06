@@ -126,7 +126,7 @@ namespace UI.Views.Finish
             switch (state)
             {
                 case GameState.Finished:
-                    OnGameFinished();
+                    Invoke(nameof(OnGameFinished), 0.5f); //Создать единую константу для 0.5f;
                     break;
             }
         }

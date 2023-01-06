@@ -3,12 +3,14 @@ using System;
 using System.Linq;
 using Services.GameStates;
 using UnityEngine;
+using Core.Wheel;
 
 namespace Trail
 {
     public class TrailManager : MonoBehaviour
     {
         [SerializeField] private List<TrailFX> _trails;
+        [SerializeField] private Movement _wheel;
 
         private TrailFX _currentTrail;
         private GameStateService _gameStateService;
@@ -34,26 +36,29 @@ namespace Trail
 
         private TrailFX FindSelectedTrail() => _trails.Where(trail => trail.IsSelected).First();
 
+        private void PassWheel() => _currentTrail.SetWheel(_wheel);
+
         private void OnGameStateChanged(GameState state)
         {
             switch (state)
             {
                 case GameState.Running:
-                    OnGameStateRunning();
+                    OnGameRunning();
                     break;
                 case GameState.Finished:
-                    OnGameStateFinished();
+                   Invoke(nameof(OnGameFinished),0.5f); //Создать единую константу для 0.5f;
                     break;
             }
         }
 
-        private void OnGameStateRunning()
+        private void OnGameRunning()
         {
             _currentTrail = FindSelectedTrail();
+            PassWheel();
             _currentTrail.gameObject.SetActive(true);
         }
 
-        private void OnGameStateFinished()
+        private void OnGameFinished()
         {
             _currentTrail.gameObject.SetActive(false);
         }
