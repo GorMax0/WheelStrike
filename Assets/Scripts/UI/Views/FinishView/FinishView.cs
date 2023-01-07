@@ -13,6 +13,7 @@ namespace UI.Views.Finish
         [SerializeField] private TMP_Text _bonusScore;
         [SerializeField] private Image _rewardBlock;
         [SerializeField] private DistanceBar _distanceBar;
+        [SerializeField] private RewardScaler _rewardScaler;
         [SerializeField] private Button _playAds;
         [SerializeField] private Button _skipAds;
 
@@ -76,6 +77,8 @@ namespace UI.Views.Finish
                .AppendCallback(_viewHandler.DisplayDistance)
                .AppendCallback(_viewHandler.DisplayBonusScore)
                .AppendInterval(_intervalBetweenTween)
+               .Append(_rewardScaler.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .AppendInterval(_intervalBetweenTween)
                .Append(_playAds.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
                .Append(_skipAds.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack));
@@ -105,6 +108,7 @@ namespace UI.Views.Finish
             _distance.transform.localScale = Vector3.zero;
             _rewardBlock.transform.localScale = Vector3.zero;
             _distanceBar.transform.localScale = Vector3.zero;
+            _rewardScaler.transform.localScale = Vector3.zero;
             _playAds.transform.localScale = Vector3.zero;
             _skipAds.transform.localScale = Vector3.zero;
         }

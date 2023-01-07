@@ -11,8 +11,8 @@ namespace Core.Wheel
     [RequireComponent(typeof(ForceScale))]
     public class Movement : MonoBehaviour, ITravelable
     {
-        [SerializeField] private float _baseSpeed = 900;
-        [SerializeField] private float _bounceHeight = 10;
+        [SerializeField] private float _baseSpeed = 800f;
+        [SerializeField] private float _bounceRatio = 0.2f;
 
         private const float SpeedDamping = 1.2f;
         private const float DistanceCoefficient = 5f;
@@ -97,7 +97,7 @@ namespace Core.Wheel
 
         private void Bounce()
         {
-            float bounceForce = _bounceHeight * _rigidbody.velocity.magnitude;
+            float bounceForce = _rigidbody.velocity.magnitude * _bounceRatio;
             _rigidbody.AddForce(Vector3.up * bounceForce, ForceMode.VelocityChange);
         }
 
@@ -105,8 +105,8 @@ namespace Core.Wheel
         {
             const float MultiplierBackBounce = 0.3f;
 
-            _bounceHeight *= MultiplierBackBounce;
-            _rigidbody.AddForce(-Vector3.forward * _bounceHeight, ForceMode.Acceleration);
+            _bounceRatio *= MultiplierBackBounce;
+            _rigidbody.AddForce(-Vector3.forward * _bounceRatio, ForceMode.Acceleration);
             Bounce();
         }
 
