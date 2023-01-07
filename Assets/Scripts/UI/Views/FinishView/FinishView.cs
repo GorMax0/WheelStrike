@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using Services.Level;
 
 namespace UI.Views.Finish
 {
@@ -19,7 +18,7 @@ namespace UI.Views.Finish
 
         private FinishViewHandler _viewHandler;
         private Material _uiMaterial;
-        private float _alphaOff = 1f;
+        private float _endTransparency = 1f;
         private float _endScaleValue = 1f;
         private float _durationFade = 0.7f;
         private float _durationScale = 0.3f;
@@ -65,7 +64,7 @@ namespace UI.Views.Finish
             PrepareView();
 
             DOTween.Sequence()
-               .Append(_uiMaterial.DOFade(_alphaOff, _durationFade).SetEase(Ease.InOutSine))
+               .Append(_uiMaterial.DOFade(_endTransparency, _durationFade).SetEase(Ease.InOutSine))
                .Append(_topLabel.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
                .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))

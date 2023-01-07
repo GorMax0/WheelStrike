@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d459657b8ea67f2438fe9dd3d5983485, type: 3}
   m_Name: BeigeCarColor
   m_EditorClassIdentifier: 
-  _label: Beige
   _color: {r: 0.7137255, g: 0.6431373, b: 0.46274513, a: 1}
   _material: {fileID: 2100000, guid: 83191f7f796eb6f4f8e71d6209558bcb, type: 2}
   _basePrice: 50
-  _isPurchased: 1
+  _isBought: 1
+  _isSelected: 1

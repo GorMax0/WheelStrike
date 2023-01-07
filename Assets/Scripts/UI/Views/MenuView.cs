@@ -4,12 +4,13 @@ using Services.GameStates;
 
 namespace UI.Views
 {
-    public class PauseView : MonoBehaviour
+    public class MenuView : MonoBehaviour
     {
         [SerializeField] private Wrap _worldButton;
         [SerializeField] private Wrap _shopButton;
         [SerializeField] private Wrap _parametersShop;
         [SerializeField] private TMP_Text _levelLable;
+
 
         private GameStateService _gameStateService;
 

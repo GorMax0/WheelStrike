@@ -6,9 +6,12 @@ namespace Core
     {
         [SerializeField] private float _explosionPower;
 
-        private bool _isExploded;
         private Rigidbody[] _rigidbodies;
         private MeshCollider[] _colliders;
+        private Vector3 _additionalVector = new Vector3(0f, 0.7f, 0.4f);
+        private int _firstIndex = 1;
+        private float _rotationRatio = 1f;
+        private bool _isExploded;
 
         private void Awake()
         {
@@ -23,24 +26,15 @@ namespace Core
 
             _isExploded = true;
 
-            Vector3 origin = GetAveragePosition();
+            Vector3 epicenter = GetAveragePosition();
 
-            for (int i = 0; i < _rigidbodies.Length; i++)
+            for (int i = _firstIndex; i < _rigidbodies.Length; i++)
             {
-                Vector3 force = (_rigidbodies[i].transform.position - origin).normalized * _explosionPower + Vector3.up;
-                _rigidbodies[i].isKinematic = false;
-
-                if (i != 0)
-                {
-                    _rigidbodies[i].AddForce(force, ForceMode.VelocityChange);
-                    _rigidbodies[i].AddTorque(force, ForceMode.VelocityChange);
-                }
+                SetForceOfPart(epicenter, i, out Vector3 force);
+                RotateOfPart(force, i);
             }
 
-            for (int i = 0; i < _colliders.Length; i++)
-            {
-                _colliders[i].isTrigger = i == 0 ? true : false;
-            }
+            DisableTriggers();
         }
 
         private Vector3 GetAveragePosition()
@@ -54,6 +48,31 @@ namespace Core
 
             position /= _rigidbodies.Length;
             return position;
+        }
+
+        private Vector3 CalculateForce(Vector3 epicenter, int partIndex) => (_rigidbodies[partIndex].transform.position - epicenter).normalized * _explosionPower + _additionalVector;
+
+        private void SetForceOfPart(Vector3 epicenter, int partIndex, out Vector3 force)
+        {
+            force = CalculateForce(epicenter, partIndex);
+
+            _rigidbodies[partIndex].isKinematic = false;
+            _rigidbodies[partIndex].AddForce(force, ForceMode.VelocityChange);
+        }
+
+        private void RotateOfPart(Vector3 force, int partIndex)
+        {
+            float randomRatio = Random.Range(-_rotationRatio, _rotationRatio);
+
+            _rigidbodies[partIndex].AddTorque(force * randomRatio, ForceMode.VelocityChange);
+        }
+
+        private void DisableTriggers()
+        {
+            for (int i = _firstIndex; i < _colliders.Length; i++)
+            {
+                _colliders[i].isTrigger = false;
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Core.Wheel
 
         public event UnityAction CollidedWithGround;
         public event UnityAction<Obstacle> CollidedWithObstacle;
-        public event UnityAction<Car> TriggeredWithCar;
+        public event UnityAction<Car> TriggeredEnterWithCar;
         public event UnityAction<Wall> TriggeredWithWall;
         public event UnityAction<CameraTrigger> TriggeredWithCameraTrigger;
 
@@ -86,7 +86,7 @@ namespace Core.Wheel
         {
             if (other.TryGetComponent(out Car car))
             {
-                TriggeredWithCar?.Invoke(car);
+                TriggeredEnterWithCar?.Invoke(car);
             }
         }
 

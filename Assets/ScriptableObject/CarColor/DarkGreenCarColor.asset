@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d459657b8ea67f2438fe9dd3d5983485, type: 3}
   m_Name: DarkGreenCarColor
   m_EditorClassIdentifier: 
-  _label: Dark Green
   _color: {r: 0.003921569, g: 0.19607845, b: 0.1254902, a: 1}
   _material: {fileID: 2100000, guid: 4e47d62cb0d186745ae7f8612a149969, type: 2}
   _basePrice: 50
-  _isPurchased: 1
+  _isBought: 1
+  _isSelected: 1

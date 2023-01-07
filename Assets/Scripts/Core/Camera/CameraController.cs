@@ -1,8 +1,9 @@
-using UnityEngine;
-using Core.Wheel;
-using Services.GameStates;
-using Cinemachine;
 using System;
+using UnityEngine;
+using Cinemachine;
+using Core.Wheel;
+using Services;
+using Services.GameStates;
 
 namespace Core
 {
@@ -11,18 +12,20 @@ namespace Core
         [SerializeField] private CinemachineVirtualCamera _menuCamera;
         [SerializeField] private CinemachineVirtualCamera _launchCamera;
         [SerializeField] private CinemachineVirtualCamera _gameCamera;
-        [SerializeField] private CinemachineFreeLook _finishedCamera;
+        [SerializeField] private CinemachineFreeLook _finishCamera;
         [SerializeField] private CinemachineVirtualCamera _lookWall;
+        [SerializeField] private CinemachineVirtualCamera _carLook;
         [SerializeField] private CameraTrigger _cameraTrigger;
-        [SerializeField] private InteractionHandler _collisionHandler;
 
-        private const float MinimumFOV = 60f;
+        private const float MinimumFieldOfView = 70f;
+        private const float InterpolateValueFieldOfView = 0.02f;
         private const float SpeedRotationXAxis = 0.5f;
-        private const float InterpolateValueFOV = 0.02f;
 
         private GameStateService _gameStateService;
+        private GamePlayService _gamePlayService;
+        private InteractionHandler _interactionHandler;
         private bool _isInitialized;
-        private bool _isFinished = false;
+        private bool _isFinished;
 
         private void OnEnable()
         {
@@ -30,16 +33,19 @@ namespace Core
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
+            _gamePlayService.TriggeredCar += OnTriggeredCar;
+            _gamePlayService.TimeChangedToDefault += OnTimeChangedToDefault;
+            _interactionHandler.CollidedWithGround += OnCollidedWithGrounds;
             _cameraTrigger.WheelTriggered += OnWheelTriggered;
-            _collisionHandler.CollidedWithGround += OnCollidedWithGrounds;
         }
-
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _gamePlayService.TriggeredCar -= OnTriggeredCar;
+            _gamePlayService.TimeChangedToDefault -= OnTimeChangedToDefault;
+            _interactionHandler.CollidedWithGround -= OnCollidedWithGrounds;
             _cameraTrigger.WheelTriggered -= OnWheelTriggered;
-            _collisionHandler.CollidedWithGround -= OnCollidedWithGrounds;
         }
 
         private void Update()
@@ -47,28 +53,51 @@ namespace Core
             if (_isFinished == false)
                 return;
 
-            _finishedCamera.m_Lens.FieldOfView = Mathf.Lerp(_finishedCamera.m_Lens.FieldOfView, MinimumFOV, InterpolateValueFOV);
-            _finishedCamera.m_XAxis.Value += SpeedRotationXAxis;
+            EnableFinishingRotation();
         }
 
-        public void Initialize(GameStateService gameStateService)
+        private void EnableFinishingRotation()
+        {
+            _finishCamera.m_Lens.FieldOfView = Mathf.Lerp(_finishCamera.m_Lens.FieldOfView, MinimumFieldOfView, InterpolateValueFieldOfView);
+            _finishCamera.m_XAxis.Value += SpeedRotationXAxis;
+        }
+
+        public void Initialize(GameStateService gameStateService, GamePlayService gamePlayService, InteractionHandler interactionHandler)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, GamePlayService gamePlayService, InteractionHandler interactionHandler): Already initialized.");
 
             _gameStateService = gameStateService;
+            _gamePlayService = gamePlayService;
+            _interactionHandler = interactionHandler;
             _isInitialized = true;
             OnEnable();
         }
 
-        private void ChangeFOV()
+        private void ChangeFieldOfViewForGameCamera()
         {
-            const float NarrowingOfFOV = 5f;
-            const float MinFOV = 80;
-            float newFOV = Mathf.Clamp(_gameCamera.m_Lens.FieldOfView - NarrowingOfFOV, MinFOV, _gameCamera.m_Lens.FieldOfView);
-                        
-            _gameCamera.m_Lens.FieldOfView = newFOV;
+            const float NarrowingOfFieldOfView = 5f;            
+            float newFieldOfView = Mathf.Clamp(_gameCamera.m_Lens.FieldOfView - NarrowingOfFieldOfView, MinimumFieldOfView, _gameCamera.m_Lens.FieldOfView);
+
+            _gameCamera.m_Lens.FieldOfView = newFieldOfView;
         }
+
+        private void SwitchCamers(CinemachineVirtualCameraBase cameraToDisable, CinemachineVirtualCameraBase cameraToEnable)
+        {
+            cameraToDisable.gameObject.SetActive(false);
+            cameraToEnable.gameObject.SetActive(true);
+        }
+
+        private void SwitchCamers(CinemachineVirtualCameraBase cameraOneToDisable, CinemachineVirtualCameraBase cameraTwoToDisable, CinemachineVirtualCameraBase cameraToEnable)
+        {
+            cameraOneToDisable.gameObject.SetActive(false);
+            cameraTwoToDisable.gameObject.SetActive(false);
+            cameraToEnable.gameObject.SetActive(true);
+        }
+
+        private void SetFollow(CinemachineVirtualCameraBase camera, Car car) => camera.Follow = car.transform;
+
+        private void SetLookAt(CinemachineVirtualCameraBase camera, Car car) => camera.LookAt = car.transform;
 
         private void OnGameStateChanged(GameState gameState)
         {
@@ -86,37 +115,29 @@ namespace Core
             }
         }
 
-        private void OnGameWaiting()
-        {
-            _menuCamera.gameObject.SetActive(false);
-            _launchCamera.gameObject.SetActive(true);
-        }
+        private void OnGameWaiting() => SwitchCamers(_menuCamera, _launchCamera);
 
-        private void OnGameRunning()
-        {
-            _launchCamera.gameObject.SetActive(false);
-            _gameCamera.gameObject.SetActive(true);
-        }
+        private void OnGameRunning() => SwitchCamers(_launchCamera, _gameCamera);
 
         private void OnGameFinished()
         {
-            _gameCamera.gameObject.SetActive(false);
-            _lookWall.gameObject.SetActive(false);
-            _finishedCamera.gameObject.SetActive(true);
+            SwitchCamers(_gameCamera, _lookWall, _finishCamera);
 
-            _finishedCamera.m_Lens.FieldOfView = _gameCamera.m_Lens.FieldOfView;
+            _finishCamera.m_Lens.FieldOfView = _gameCamera.m_Lens.FieldOfView;
             _isFinished = true;
         }
 
-        private void OnCollidedWithGrounds()
+        private void OnCollidedWithGrounds() => ChangeFieldOfViewForGameCamera();
+
+        private void OnWheelTriggered() => SwitchCamers(_gameCamera, _lookWall);
+
+        private void OnTriggeredCar(Car car)
         {
-            ChangeFOV();
+            SetFollow(_carLook, car);
+            SetLookAt(_carLook, car);
+            SwitchCamers(_gameCamera, _carLook);
         }
 
-        private void OnWheelTriggered()
-        {
-            _gameCamera.gameObject.SetActive(false);
-            _lookWall.gameObject.SetActive(true);
-        }
+        private void OnTimeChangedToDefault() => SwitchCamers(_carLook, _gameCamera);
     }
 }

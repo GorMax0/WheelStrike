@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
-using Services.GameStates;
 using DG.Tweening;
+using Services.GameStates;
 
 namespace Core
 {
@@ -12,7 +12,6 @@ namespace Core
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
-        private Material _damageMaterial;
         private Explosion _explosion;
         private CarWheel[] _carWheels;
         private GameStateService _gameStateService;
@@ -22,7 +21,7 @@ namespace Core
 
         [field: SerializeField] public int Reward { get; private set; }
 
-        public bool IsPurchased { get; private set; }
+        public bool IsBought { get; private set; }
 
         private void OnEnable()
         {
@@ -37,13 +36,12 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
-        public void Initialize(GameStateService gameStateService, Material colorMaterial, Material damageMaterial)
+        public void Initialize(GameStateService gameStateService, Material colorMaterial)
         {
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
 
             _gameStateService = gameStateService;
-            _damageMaterial = damageMaterial;
             _rigidbody = GetComponent<Rigidbody>();
             _meshRenders = GetComponentsInChildren<MeshRenderer>();
             _explosion = GetComponent<Explosion>();
@@ -52,7 +50,7 @@ namespace Core
             InitializeWheels();
 
             SetColorMaterial(colorMaterial);
-            RandomizeRewardIncrease();           
+            RandomizeRewardIncrease();
 
             _isInitialized = true;
             OnEnable();
@@ -62,9 +60,9 @@ namespace Core
         {
             _explosion.Explode();
 
-            foreach (MeshRenderer meshRender in _meshRenders)
+            foreach (MeshRenderer meshRenderer in _meshRenders)
             {
-                meshRender.material.Lerp(meshRender.material,_damageMaterial,2f);
+                meshRenderer.material.DOColor(Color.black, 0.3f);
             }
         }
 

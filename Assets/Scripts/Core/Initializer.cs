@@ -9,9 +9,9 @@ using Services.Level;
 using UI.Manual;
 using UI.Views;
 using UI.Views.Finish;
-using Agava.YandexGames;
 using Data;
 using Trail;
+using Agava.YandexGames;
 
 namespace Core
 {
@@ -45,7 +45,7 @@ namespace Core
         [SerializeField] private FinishViewHandler _finishViewHandler;
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
-        [SerializeField] private PauseView _pauseView;
+        [SerializeField] private MenuView _menuView;
         [SerializeField] private MoneyView _moneyView;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
@@ -81,7 +81,7 @@ namespace Core
         {
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _inputHandler, _interactionHandler, _levelService, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _levelService, _wallet);
         }
 
         private void InitializeCore()
@@ -93,7 +93,7 @@ namespace Core
 
             _wall.Create();
             _carFactory.CreateCars(_gameStateService);
-            _cameraController.Initialize(_gameStateService);
+            _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);
             _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection, _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
@@ -109,7 +109,7 @@ namespace Core
         {
             _prerunView.Initialize(_gameStateService);
             _aimDirectionLine.Initialize(_aimDirection);
-            _pauseView.Initialize(_gameStateService);
+            _menuView.Initialize(_gameStateService);
             _moneyView.Initialize(_wallet);
             _topPanel.Initialize(_gameStateService);
             _parametersShop.Initialize(_parameters, _wallet);
