@@ -6,8 +6,10 @@ using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
+using UI;
 using UI.Manual;
 using UI.Views;
+using UI.Views.Money;
 using UI.Views.Finish;
 using Data;
 using Trail;
@@ -46,7 +48,8 @@ namespace Core
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
         [SerializeField] private MenuView _menuView;
-        [SerializeField] private MoneyView _moneyView;
+        [SerializeField] private WalletView _walletView;
+        [SerializeField] private MoneyViewPresenter _moneyPresenter;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
 
@@ -70,9 +73,7 @@ namespace Core
             InitializeManual();
             InitializeView();
             _trailManager.Initialize(_gameStateService);
-            _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
-            _dataOperator.Load();
-            _gamePlayService.SetDataOperator(_dataOperator);
+            InitializeLoad();
             _gameStateService.ChangeState(GameState.Initializing);
             YandexGamesSdk.Initialize();
         }
@@ -89,7 +90,6 @@ namespace Core
             float timeCameraBlend = _cinemachine.m_DefaultBlend.BlendTime;
 
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
-
 
             _wall.Create();
             _carFactory.CreateCars(_gameStateService);
@@ -110,10 +110,18 @@ namespace Core
             _prerunView.Initialize(_gameStateService);
             _aimDirectionLine.Initialize(_aimDirection);
             _menuView.Initialize(_gameStateService);
-            _moneyView.Initialize(_wallet);
+            _walletView.Initialize(_wallet);
+            _moneyPresenter.Initialize(_interactionHandler);
             _topPanel.Initialize(_gameStateService);
             _parametersShop.Initialize(_parameters, _wallet);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
+        }
+
+        private void InitializeLoad()
+        {
+            _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
+            _dataOperator.Load();
+            _gamePlayService.SetDataOperator(_dataOperator);
         }
     }
 }

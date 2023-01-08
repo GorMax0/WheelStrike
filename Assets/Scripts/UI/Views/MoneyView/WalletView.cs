@@ -2,9 +2,9 @@ using TMPro;
 using UnityEngine;
 using Core;
 
-namespace UI.Views
+namespace UI.Views.Money
 {
-    public class MoneyView : MonoBehaviour
+    public class WalletView : MonoBehaviour
     {
         [SerializeField] private TMP_Text _money;
 

@@ -8,11 +8,12 @@ using Services.Level;
 
 namespace UI.Views.Finish
 {
-    [RequireComponent(typeof(ViewValidator))]
+    [RequireComponent(typeof(ScreenOrientationValidator))]
     public class FinishViewHandler : MonoBehaviour
     {
-        [SerializeField] private FinishView[] _finishViews;
-        [Range(0.001f,0.05f)]
+        [SerializeField] private FinishView _viewPortret;
+        [SerializeField] private FinishView _viewLandscape;
+        [Range(0.001f, 0.05f)]
         [SerializeField] private float _waitingDelay;
         [SerializeField] private ParticleSystem _finishEffect;
 
@@ -21,12 +22,13 @@ namespace UI.Views.Finish
         private CoroutineRunning _distanceDisplay;
         private CoroutineRunning _scoreDisplay;
         private CoroutineRunning _bonusScoreDisplay;
-        private ViewValidator _validator;
+        private ScreenOrientationValidator _validator;
         private FinishView _currentFinishView;
         private ITravelable _travelable;
         private LevelService _levelService;
         private LevelScore _levelScore;
         private bool _isInitialized;
+        private bool _hasPortraitOrientation;
         private bool _isFinished;
 
         public event Action<int> DisplayedDistanceChanged;
@@ -39,18 +41,18 @@ namespace UI.Views.Finish
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _validator.ViewValidated += OnViewValidated;
+            _validator.OrientationValidated += OnOrientationValidated;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
-            _validator.ViewValidated -= OnViewValidated;
+            _validator.OrientationValidated -= OnOrientationValidated;
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
         {
-            _validator = GetComponent<ViewValidator>();
+            _validator = GetComponent<ScreenOrientationValidator>();
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
             _travelable = travelable;
@@ -75,7 +77,7 @@ namespace UI.Views.Finish
         public void DisplayScore()
         {
             float score = _levelScore.Score;
-            _scoreDisplay.Run(DisplayValue(score, DisplayedScoreChanged));            
+            _scoreDisplay.Run(DisplayValue(score, DisplayedScoreChanged));
         }
 
         public void DisplayBonusScore()
@@ -86,10 +88,11 @@ namespace UI.Views.Finish
 
         private void InitializeViews()
         {
-            foreach (FinishView view in _finishViews)
-            {
-                view.Initialize(this, _levelService.LengthRoad);
-            }
+            _viewPortret.Initialize(this, _levelService.LengthRoad);
+            _viewLandscape.Initialize(this, _levelService.LengthRoad);
+
+            _currentFinishView = _viewPortret;
+            _hasPortraitOrientation = true;
         }
 
         private IEnumerator DisplayValue(float endValue, Action<int> displayedValueChanged)
@@ -101,21 +104,22 @@ namespace UI.Views.Finish
 
             while (displayedValue < endValue)
             {
-                displayedValue = Mathf.MoveTowards(displayedValue,endValue,step);
+                displayedValue = Mathf.MoveTowards(displayedValue, endValue, step);
                 displayedValueChanged?.Invoke((int)displayedValue);
                 yield return waitForSeconds;
             }
         }
 
-        private void OnViewValidated(FinishView finishView)
+        private void OnOrientationValidated(bool isPortret)
         {
-            if (_currentFinishView == finishView)
+            if (_hasPortraitOrientation == isPortret)
                 return;
 
             if (_currentFinishView != null && _currentFinishView.IsAction == true)
                 _currentFinishView.Disable();
 
-            _currentFinishView = finishView;
+            _hasPortraitOrientation = isPortret;
+            _currentFinishView = _hasPortraitOrientation == true ? _viewPortret : _viewLandscape;
 
             if (_isFinished == true)
                 _currentFinishView.Enable();
@@ -136,7 +140,7 @@ namespace UI.Views.Finish
             _finishEffect.Play();
             _currentFinishView.gameObject.SetActive(true);
             _currentFinishView.StartAnimation();
-            
+
             _isFinished = true;
         }
     }

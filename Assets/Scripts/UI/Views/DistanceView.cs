@@ -1,26 +1,30 @@
 using TMPro;
 using UnityEngine;
 using Core.Wheel;
-public class DistanceView : MonoBehaviour
+
+namespace UI.Views
 {
-    [SerializeField] private MonoBehaviour _wheelDistance;
-    [SerializeField] private TMP_Text _text;
-
-    private ITravelable Travelable => (ITravelable)_wheelDistance;
-
-    private void OnValidate()
+    public class DistanceView : MonoBehaviour
     {
-        if (_wheelDistance is ITravelable)
-            return;
+        [SerializeField] private MonoBehaviour _wheelDistance;
+        [SerializeField] private TMP_Text _text;
 
-        Debug.LogError(_wheelDistance.name + " needs to implement " + nameof(ITravelable));
-        _wheelDistance = null;
+        private ITravelable Travelable => (ITravelable)_wheelDistance;
+
+        private void OnValidate()
+        {
+            if (_wheelDistance is ITravelable)
+                return;
+
+            Debug.LogError(_wheelDistance.name + " needs to implement " + nameof(ITravelable));
+            _wheelDistance = null;
+        }
+
+        private void Update()
+        {
+            ShowDistance();
+        }
+
+        private void ShowDistance() => _text.text = $"{Travelable.DistanceTraveled}m";
     }
-
-    private void Update()
-    {
-        ShowDistance();
-    }
-
-    private void ShowDistance() => _text.text = $"{Travelable.DistanceTraveled}m";
 }
