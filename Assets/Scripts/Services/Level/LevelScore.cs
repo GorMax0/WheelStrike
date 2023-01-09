@@ -22,29 +22,10 @@ namespace Services.Level
         public int Score => _score + _travelable.DistanceTraveled;
         public int BonusScore => (int)(Score * _income.Value);
         public int ResultScore => Score + BonusScore;
-        public int Highscore
-        {
-            get
-            {
-                return _highscore;
-            }
-            private set
-            {
-                if (_highscore < _travelable.DistanceTraveled)
-                {
-                    _highscore = _travelable.DistanceTraveled;
-                    HighscoreChanged?.Invoke(_highscore);
-                    return;
-                }
-
-                _highscore = value;
-                HighscoreChanged?.Invoke(_highscore);
-            }
-        }
 
         public void LoadHighscore(int highscore)
         {
-            Highscore = highscore;            
+            _highscore = highscore;
         }
 
         public void AddScore(int score)
@@ -53,6 +34,15 @@ namespace Services.Level
                 throw new InvalidOperationException($"{GetType()}: AddScore(int score): Amount money {score} is invalid.");
 
             _score += score;
+        }
+        
+        public void SetHighscore(int distance)
+        {
+            if (_highscore >= distance)
+                return;
+
+            _highscore = distance;
+            HighscoreChanged?.Invoke(_highscore);
         }
     }
 }

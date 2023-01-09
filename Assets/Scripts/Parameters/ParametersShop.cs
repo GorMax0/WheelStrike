@@ -30,10 +30,9 @@ namespace Parameters
 
         private void TryParameterLevelUp(Parameter parameter)
         {
-            if (_wallet.Money < parameter.Cost)
+            if (_wallet.TrySpandMoney(parameter.Cost) == false)
                 return;
 
-            _wallet.SpendMoney(parameter.Cost);
             parameter.LevelUp();
             _animationWheel.ParameterUp();
         }

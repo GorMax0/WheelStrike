@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using Services.GameStates;
 
@@ -6,11 +5,10 @@ namespace UI.Views
 {
     public class MenuView : MonoBehaviour
     {
+        [SerializeField] private Wrap _levelLable;
         [SerializeField] private Wrap _worldButton;
         [SerializeField] private Wrap _shopButton;
         [SerializeField] private Wrap _parametersShop;
-        [SerializeField] private TMP_Text _levelLable;
-
 
         private GameStateService _gameStateService;
 
@@ -53,7 +51,7 @@ namespace UI.Views
             _worldButton.ApplyOffsetTransform();
             _shopButton.ApplyOffsetTransform();
             _parametersShop.ApplyOffsetTransform();
-            _levelLable.gameObject.SetActive(false);
+            _levelLable.ApplyOffsetTransform();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace UI
 
         private void OrientationValidation()
         {
-            _hasPortraitOrientation = Screen.width < Screen.height ? true : false;
+            _hasPortraitOrientation = Screen.width < Screen.height;
             OrientationValidated?.Invoke(_hasPortraitOrientation);
         }
 

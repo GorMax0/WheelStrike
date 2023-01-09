@@ -87,7 +87,7 @@ namespace Core.Wheel
         {
             while (true)
             {
-                _meshWheel.transform.Rotate(-Vector3.left * Time.deltaTime * _rotationSpeed);
+                _meshWheel.transform.Rotate(_rotationSpeed * Time.deltaTime * Vector3.right);
 
                 yield return null;
             }

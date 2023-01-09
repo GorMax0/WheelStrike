@@ -20,6 +20,7 @@ namespace Services
         private CoroutineService _coroutineService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
+        private ITravelable _travelable;
         private LevelService _levelService;
         private LevelScore _levelScore;
         private Wallet _wallet;
@@ -27,12 +28,13 @@ namespace Services
         private CoroutineRunning _holdTime;
         private float _delayHoldTime;
 
-        public GamePlayService(GameStateService gameStateService, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, LevelService levelService, Wallet wallet)
+        public GamePlayService(GameStateService gameStateService, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
+            _travelable = travelable;
             _levelService = levelService;
             _levelScore = _levelService.Score;
             _wallet = wallet;
@@ -117,6 +119,7 @@ namespace Services
         {
             _delayHoldTime = 0;
             _wallet.EnrollMoney(_levelScore.ResultScore);
+            _levelScore.SetHighscore(_travelable.DistanceTraveled);
             Dispose();
         }
 

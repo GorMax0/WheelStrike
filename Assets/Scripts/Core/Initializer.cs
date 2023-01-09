@@ -82,7 +82,7 @@ namespace Core
         {
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _levelService, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler,_wheel.Travelable, _levelService, _wallet);
         }
 
         private void InitializeCore()

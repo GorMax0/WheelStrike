@@ -600,44 +600,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e202cc86ef32564bade92549f6e127e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _label: {fileID: 66768313385205013}
   _name: {fileID: 120292595289702448}
   _level: {fileID: 7304212582602739213}
   _cost: {fileID: 6243166701819196581}
   _icon: {fileID: 6325637510338175616}
   _levelUp: {fileID: 4625619316382795249}
-  _buttonAnimation:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -0.03794572
-      outSlope: -0.03794572
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.11287675
-    - serializedVersion: 3
-      time: 0.5
-      value: 1.2
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 3
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.036527146
-      outSlope: 0.036527146
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.117260456
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &992197144816773465
 MonoBehaviour:
   m_ObjectHideFlags: 0

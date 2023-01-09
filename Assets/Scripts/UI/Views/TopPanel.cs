@@ -52,8 +52,8 @@ namespace UI.Views
         }
 
         private void EnableCurtain() => _curtain.gameObject.SetActive(true);
-        private void DisableCurtain() => _curtain.gameObject.SetActive(false);
 
+        private void DisableCurtain() => _curtain.gameObject.SetActive(false);
 
         private void SetGameStateRestart() => _gameStateService.ChangeState(GameState.Restart);
 

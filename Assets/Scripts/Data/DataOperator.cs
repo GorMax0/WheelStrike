@@ -39,7 +39,6 @@ namespace Data
                 throw new NullReferenceException($"{GetType()}: Save(): _saveSystem is null");
 
             SaveIndexScene();
-            SaveHighscore(_levelScore.Highscore);
             SaveMoney(_wallet.Money);
 
             _saveSystem.Save(_gameData);
@@ -63,7 +62,11 @@ namespace Data
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
-        private void SaveHighscore(int highscore) => _gameData.Highscore = highscore;
+        private void SaveHighscore(int highscore)
+        {
+            _gameData.Highscore = highscore;
+            Save();
+        }
 
         private void SaveMoney(int money) => _gameData.Money = money;
 

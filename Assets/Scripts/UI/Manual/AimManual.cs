@@ -18,7 +18,6 @@ namespace UI.Manual
         private Slider _slider;
         private CoroutineRunning _replayRunning;
 
-
         private void Awake()
         {
             _slider = GetComponent<Slider>();

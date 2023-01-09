@@ -34,6 +34,7 @@ namespace UI.Views.Finish
         public event Action<int> DisplayedDistanceChanged;
         public event Action<int> DisplayedScoreChanged;
         public event Action<int> DisplayedBonusScoreChanged;
+        public event Action<int> DisplayedHighscoreChanged;
 
         private void OnEnable()
         {
@@ -42,12 +43,14 @@ namespace UI.Views.Finish
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _validator.OrientationValidated += OnOrientationValidated;
+            _levelScore.HighscoreChanged += OnHighscoreChanged;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
             _validator.OrientationValidated -= OnOrientationValidated;
+            _levelScore.HighscoreChanged -= OnHighscoreChanged;
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
@@ -70,7 +73,7 @@ namespace UI.Views.Finish
 
         public void DisplayDistance()
         {
-            float distanceTraveled = _travelable.DistanceTraveled;
+            int distanceTraveled = _travelable.DistanceTraveled;
             _distanceDisplay.Run(DisplayValue(distanceTraveled, DisplayedDistanceChanged));
         }
 
@@ -123,6 +126,11 @@ namespace UI.Views.Finish
 
             if (_isFinished == true)
                 _currentFinishView.Enable();
+        }
+
+        private void OnHighscoreChanged(int newHighscore)
+        {
+            DisplayedHighscoreChanged?.Invoke(newHighscore);
         }
 
         private void OnGameStateChanged(GameState state)

@@ -48,7 +48,6 @@ namespace Core.Wheel
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
 
-
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speed);
             _animation.Initialize(gameStateService, coroutineService);
             _collisionHandler.Initialize(gameStateService);

@@ -25,7 +25,6 @@ namespace Core.Wheel
             _gameStateService.GameStateChanged += OnGameStateService;
         }
 
-
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateService;

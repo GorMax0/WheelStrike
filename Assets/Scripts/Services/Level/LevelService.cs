@@ -3,12 +3,14 @@ using UnityEngine.SceneManagement;
 using Core.Wheel;
 using Parameters;
 using Core;
+using TMPro;
 
 namespace Services.Level
 {
     public class LevelService : MonoBehaviour
     {
         [SerializeField] private string _name;
+        [SerializeField] private TMP_Text _nameView;
         [SerializeField] private Wall _finishWall;
 
         private const float DistanceCoefficient = 5f;
@@ -23,6 +25,7 @@ namespace Services.Level
         {
             Score = new LevelScore(travelable, income);
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
+            _nameView.text = _name;
         }
 
         public void RestartLevel()

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System;
 
 namespace UI.Views.Finish
 {
@@ -9,6 +10,7 @@ namespace UI.Views.Finish
     {
         [SerializeField] private TMP_Text _topLabel;
         [SerializeField] private TMP_Text _distance;
+        [SerializeField] private TMP_Text _highscoreLable;
         [SerializeField] private TMP_Text _score;
         [SerializeField] private TMP_Text _bonusScore;
         [SerializeField] private Image _rewardBlock;
@@ -25,6 +27,7 @@ namespace UI.Views.Finish
         private float _durationScale = 0.3f;
         private float _intervalBetweenTween = 0.07f;
         private bool _isInitialized;
+        private bool _hasNewHighscore;
 
         public bool IsAction => gameObject.activeInHierarchy == true;
 
@@ -41,6 +44,7 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedScoreChanged += OnDisplayedScoreChanged;
             _viewHandler.DisplayedBonusScoreChanged += OnDisplayedBonusScoreChanged;
+            _viewHandler.DisplayedHighscoreChanged += OnDispalyNewHighscoreLable;
         }
 
         private void OnDisable()
@@ -48,8 +52,8 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedScoreChanged -= OnDisplayedScoreChanged;
             _viewHandler.DisplayedBonusScoreChanged -= OnDisplayedBonusScoreChanged;
+            _viewHandler.DisplayedHighscoreChanged -= OnDispalyNewHighscoreLable;
         }
-
 
         public void Initialize(FinishViewHandler viewHandler, int lengthRoad)
         {
@@ -75,6 +79,7 @@ namespace UI.Views.Finish
                .AppendInterval(_intervalBetweenTween)
                .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
                .AppendCallback(_viewHandler.DisplayDistance)
+               .AppendCallback(DispalyNewHighscoreLable)
                .AppendCallback(_viewHandler.DisplayBonusScore)
                .AppendInterval(_intervalBetweenTween)
                .Append(_rewardScaler.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
@@ -88,12 +93,6 @@ namespace UI.Views.Finish
 
         public void Disable() => gameObject.SetActive(false);
 
-        public void OnDisplayedDistanceChanged(int distance) => _distance.text = $"{distance}m";
-
-        public void OnDisplayedScoreChanged(int score) => _score.text = $"{score}";
-
-        public void OnDisplayedBonusScoreChanged(int bonusScore) => _bonusScore.text = $"{bonusScore}";
-
         private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad)
         {
             _distanceBar.Initialize(viewHandler, lengthRoad);
@@ -106,11 +105,28 @@ namespace UI.Views.Finish
 
             _topLabel.transform.localScale = Vector3.zero;
             _distance.transform.localScale = Vector3.zero;
+            _highscoreLable.transform.localScale = Vector3.zero;
             _rewardBlock.transform.localScale = Vector3.zero;
             _distanceBar.transform.localScale = Vector3.zero;
             _rewardScaler.transform.localScale = Vector3.zero;
             _playAds.transform.localScale = Vector3.zero;
             _skipAds.transform.localScale = Vector3.zero;
         }
+
+        private void DispalyNewHighscoreLable()
+        {
+            if (_hasNewHighscore == false)
+                return;
+
+            _highscoreLable.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack);
+        }
+
+        private void OnDisplayedDistanceChanged(int distance) => _distance.text = $"{distance}m";
+
+        private void OnDisplayedScoreChanged(int score) => _score.text = $"{score}";
+
+        private void OnDisplayedBonusScoreChanged(int bonusScore) => _bonusScore.text = $"{bonusScore}";
+
+        private void OnDispalyNewHighscoreLable(int newHighscore) => _hasNewHighscore = true;
     }
 }
