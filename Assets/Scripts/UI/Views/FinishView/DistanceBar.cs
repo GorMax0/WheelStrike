@@ -21,6 +21,7 @@ namespace UI.Views.Finish
         {
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedHighscoreChanged -= OnDisplayedNewHighscoreLable;
+            _viewHandler.DisplayedHighscoreLoaded -= OnDisplayedNewHighscoreLable;
         }
 
         public void Initialize(FinishViewHandler viewHandler, float lengthRoad)
@@ -47,11 +48,12 @@ namespace UI.Views.Finish
         {
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedHighscoreChanged += OnDisplayedNewHighscoreLable;
+            _viewHandler.DisplayedHighscoreLoaded += OnDisplayedNewHighscoreLable;
         }
 
         private void SetPointerHighscore(int newHighscore)
         {
-            float normalizedDistance = newHighscore / _lengthRoad;
+            float normalizedDistance = newHighscore / (_lengthRoad + LenghRoadCorrector);
             _highscore.value = normalizedDistance;
         }
 
@@ -63,13 +65,12 @@ namespace UI.Views.Finish
 
         private void OnDisplayedDistanceChanged(int distanceTraveled)
         {
-            ChangeValueSlider(distanceTraveled);           
+            ChangeValueSlider(distanceTraveled);
         }
 
         private void OnDisplayedNewHighscoreLable(int newHighscore)
         {
             SetPointerHighscore(newHighscore);
-            Debug.Log("RUN DispalyNewHighscoreLable!");
         }
     }
 }

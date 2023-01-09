@@ -37,9 +37,6 @@ namespace Parameters
             _animationWheel.ParameterUp();
         }
 
-        private void OnLevelUpButtonClicked(Parameter parameter)
-        {
-            TryParameterLevelUp(parameter);
-        }
+        private void OnLevelUpButtonClicked(Parameter parameter) => TryParameterLevelUp(parameter);
     }
 }

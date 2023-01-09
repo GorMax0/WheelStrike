@@ -115,10 +115,7 @@ namespace Core.Wheel
             ResetRotationByYZ();
         }
 
-        private void ResetRotationByYZ()
-        {
-            _meshWheel.transform.rotation = new Quaternion(_meshWheel.transform.rotation.x, 0f, 0f, 1f);
-        }
+        private void ResetRotationByYZ() => _meshWheel.transform.rotation = new Quaternion(_meshWheel.transform.rotation.x, 0f, 0f, 1f);
 
         private void OnGameStateService(GameState state)
         {

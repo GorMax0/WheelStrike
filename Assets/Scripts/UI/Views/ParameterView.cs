@@ -56,10 +56,7 @@ namespace UI.Views
             _label.transform.DOLocalMoveY(animationLabelPosition, AnimationMoveYDuration).SetLoops(InfinityLoops, LoopType.Yoyo);
         }
 
-        public void SubscribeToLevelChange()
-        {
-            _parametr.Loaded += Refresh;
-        }
+        public void SubscribeToLevelChange() => _parametr.Loaded += Refresh;
 
         private void OnButtonClick()
         {

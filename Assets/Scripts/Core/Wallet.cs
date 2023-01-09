@@ -4,7 +4,6 @@ namespace Core
 {
     public class Wallet
     {
-
         public event Action<int> MoneyChanged;
         public event Action<int> MoneySpanded;
 

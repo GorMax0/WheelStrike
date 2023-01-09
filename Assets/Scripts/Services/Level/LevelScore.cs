@@ -18,6 +18,7 @@ namespace Services.Level
         }
 
         public event Action<int> HighscoreChanged;
+        public event Action<int> HighscoreLoaded;
 
         public int Score => _score + _travelable.DistanceTraveled;
         public int BonusScore => (int)(Score * _income.Value);
@@ -26,6 +27,7 @@ namespace Services.Level
         public void LoadHighscore(int highscore)
         {
             _highscore = highscore;
+            HighscoreLoaded?.Invoke(_highscore);
         }
 
         public void AddScore(int score)

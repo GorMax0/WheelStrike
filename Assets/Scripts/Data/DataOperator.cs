@@ -4,6 +4,8 @@ using Core;
 using Parameters;
 using Services.Level;
 
+using UnityEngine;
+
 namespace Data
 {
     public class DataOperator : IDisposable
@@ -55,9 +57,9 @@ namespace Data
                 return;
 
             LoadIndexScene();
-            LoadHighscore();
             LoadMoney();
             LoadParameters();
+            LoadHighscore();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
@@ -122,8 +124,8 @@ namespace Data
 
         private void Subscribe()
         {
-            _levelScore.HighscoreChanged += SaveHighscore;
             _wallet.MoneyChanged += SaveMoney;
+            _levelScore.HighscoreChanged += SaveHighscore;
 
             foreach (var parameter in _parameters)
             {
@@ -133,8 +135,8 @@ namespace Data
 
         private void Unsubscribe()
         {
-            _levelScore.HighscoreChanged -= SaveHighscore;
             _wallet.MoneyChanged -= SaveMoney;
+            _levelScore.HighscoreChanged -= SaveHighscore;
 
             foreach (var parameter in _parameters)
             {

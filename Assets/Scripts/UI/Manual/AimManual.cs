@@ -28,10 +28,7 @@ namespace UI.Manual
             _replayRunning = new CoroutineRunning(coroutineService);
         }
 
-        public void StartTween()
-        {
-            _replayRunning.Run(Replay());
-        }
+        public void StartTween() => _replayRunning.Run(Replay());
 
         public void Fade()
         {

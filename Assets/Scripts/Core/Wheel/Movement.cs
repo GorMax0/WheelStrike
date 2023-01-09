@@ -91,7 +91,10 @@ namespace Core.Wheel
                 yield return new WaitForFixedUpdate();
 
                 if (_rigidbody.velocity.z < MinForwardVelocity)
+                {
+                    _rigidbody.velocity = Vector3.zero;
                     _gameStateService.ChangeState(GameState.Finished);
+                }
             }
         }
 
