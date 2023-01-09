@@ -7,7 +7,7 @@ namespace UI
     {
         private float _screenWidth;
         private float _screenHeight;
-        private bool _hasPortrietOrientation;
+        private bool _hasPortraitOrientation;
 
         public event UnityAction<bool> OrientationValidated;
 
@@ -28,8 +28,8 @@ namespace UI
 
         private void OrientationValidation()
         {
-            _hasPortrietOrientation = Screen.width < Screen.height ? true : false;
-            OrientationValidated?.Invoke(_hasPortrietOrientation);
+            _hasPortraitOrientation = Screen.width < Screen.height ? true : false;
+            OrientationValidated?.Invoke(_hasPortraitOrientation);
         }
 
         private void CacheScreeSizes()

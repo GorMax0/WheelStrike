@@ -11,7 +11,7 @@ namespace UI.Views.Finish
     [RequireComponent(typeof(ScreenOrientationValidator))]
     public class FinishViewHandler : MonoBehaviour
     {
-        [SerializeField] private FinishView _viewPortret;
+        [SerializeField] private FinishView _viewPortrait;
         [SerializeField] private FinishView _viewLandscape;
         [Range(0.001f, 0.05f)]
         [SerializeField] private float _waitingDelay;
@@ -88,10 +88,10 @@ namespace UI.Views.Finish
 
         private void InitializeViews()
         {
-            _viewPortret.Initialize(this, _levelService.LengthRoad);
+            _viewPortrait.Initialize(this, _levelService.LengthRoad);
             _viewLandscape.Initialize(this, _levelService.LengthRoad);
 
-            _currentFinishView = _viewPortret;
+            _currentFinishView = _viewPortrait;
             _hasPortraitOrientation = true;
         }
 
@@ -110,16 +110,16 @@ namespace UI.Views.Finish
             }
         }
 
-        private void OnOrientationValidated(bool isPortret)
+        private void OnOrientationValidated(bool isPortrait)
         {
-            if (_hasPortraitOrientation == isPortret)
+            if (_hasPortraitOrientation == isPortrait)
                 return;
 
             if (_currentFinishView != null && _currentFinishView.IsAction == true)
                 _currentFinishView.Disable();
 
-            _hasPortraitOrientation = isPortret;
-            _currentFinishView = _hasPortraitOrientation == true ? _viewPortret : _viewLandscape;
+            _hasPortraitOrientation = isPortrait;
+            _currentFinishView = _hasPortraitOrientation == true ? _viewPortrait : _viewLandscape;
 
             if (_isFinished == true)
                 _currentFinishView.Enable();
