@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Empty;
 using Services.GameStates;
+using static Unity.Collections.AllocatorManager;
 
 namespace Core.Wheel
 {
@@ -14,7 +15,7 @@ namespace Core.Wheel
         public event UnityAction CollidedWithGround;
         public event UnityAction<Obstacle> CollidedWithObstacle;
         public event UnityAction<Car> TriggeredEnterWithCar;
-        public event UnityAction<Wall> TriggeredWithWall;
+        public event UnityAction<Wall> TriggeredWithWall;        
         public event UnityAction<CameraTrigger> TriggeredWithCameraTrigger;
 
         private void OnEnable()

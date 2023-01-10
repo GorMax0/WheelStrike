@@ -152,6 +152,12 @@ namespace Services
             wall.EnableGravityBricks();
         }
 
+        //private void OnTriggeredWithWall(Brick brick)
+        //{
+        //    _levelScore.AddScore(wall.Reward);
+        //    brick.EnableGravity();
+        //}
+
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
     }
 }
