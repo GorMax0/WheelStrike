@@ -28,11 +28,12 @@ namespace UI
 
         private void OnDisable()
         {
-            DOTween.Kill(_text);
+            KillFade();
         }
 
         public void DisableLoop()
-        {            
+        {
+            KillFade();
             _text.DOFade(_endTransparency, _duration);
         }
 
@@ -43,5 +44,7 @@ namespace UI
 
             _text.DOFade(_endTransparency, _duration).SetLoops(_countLoops, LoopType.Yoyo);
         }
+
+        private void KillFade() => DOTween.Kill(_text);
     }
 }

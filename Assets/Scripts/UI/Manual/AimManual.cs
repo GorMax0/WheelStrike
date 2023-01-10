@@ -18,17 +18,13 @@ namespace UI.Manual
         private Slider _slider;
         private CoroutineRunning _replayRunning;
 
-        private void Awake()
-        {
-            _slider = GetComponent<Slider>();
-        }
-
         public void Initialize(CoroutineService coroutineService)
         {
+            _slider = GetComponent<Slider>();
             _replayRunning = new CoroutineRunning(coroutineService);
         }
 
-        public void StartTween() => _replayRunning.Run(Replay());
+        public void StartTween() => _replayRunning.Run(AnimateHand());
 
         public void Fade()
         {
@@ -38,7 +34,7 @@ namespace UI.Manual
             Invoke(nameof(Disable), _fadeTime);
         }
 
-        private IEnumerator Replay()
+        private IEnumerator AnimateHand()
         {
             float endValue;
             WaitForSeconds waitForSeconds = new WaitForSeconds(_duration);

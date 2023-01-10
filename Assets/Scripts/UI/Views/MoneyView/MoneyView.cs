@@ -42,8 +42,40 @@ namespace UI.Views.Money
         {
             CleanFade();
             _count.text = $"+{moneyCount}";
+            _count.gameObject.SetActive(true);
             gameObject.SetActive(true);
             Animation();
+        }
+
+        public void DisplayOnFinishView(Vector2 spawnPosition)
+        {
+            float offsetPosition;
+            float newPositionX;
+            float newPositionY;
+            float minRandom = -150f;
+            float maxRandom = 10f;
+            float durationScale = 0.1f;
+
+            offsetPosition = Random.Range(minRandom, maxRandom);
+            newPositionX = spawnPosition.x + offsetPosition;
+            offsetPosition = Random.Range(minRandom, maxRandom);
+            newPositionY = spawnPosition.y + offsetPosition;
+
+            _count.gameObject.SetActive(false);
+            gameObject.SetActive(true);
+            _rectTransform.localPosition = new Vector2(newPositionX, newPositionY);
+
+            _rectTransform.DOScale(ScaleCorrection, durationScale).ChangeStartValue(Vector2.zero).SetEase(Ease.InFlash);
+        }
+
+        public void AnimationOnFinishView()
+        {
+            float durationMove = 0.3f;
+            Vector2 endPosition = new Vector2(0, 1000);
+
+            DOTween.Sequence()
+              .Append(_rectTransform.DOAnchorPos(endPosition, durationMove))
+              .AppendCallback(Disable);
         }
 
         private void CleanFade()

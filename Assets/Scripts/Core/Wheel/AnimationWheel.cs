@@ -15,6 +15,7 @@ namespace Core.Wheel
         [SerializeField] private MeshRenderer _meshWheel;
         [SerializeField] private float _rotationSpeed;
         [SerializeField] private ParticleSystem _parameterUpEffect;
+        [SerializeField] private ParticleSystem _groundCollision;
 
         private const float ScaleRatio = 1.1f;
         private const float AnimationDuration = 0.07f;
@@ -137,6 +138,7 @@ namespace Core.Wheel
         private void OnCollidedWithGround()
         {
             _figureOfEightRotation.Run(FigureOfEightRotation());
+            _groundCollision.Play();
 
             if (_isRotate == false)
             {

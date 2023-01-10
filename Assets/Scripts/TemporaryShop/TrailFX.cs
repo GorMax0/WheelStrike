@@ -5,81 +5,53 @@ using Core.Wheel;
 namespace Trail
 {
     [RequireComponent(typeof(ParticleSystem))]
-    public class TrailFX : MonoBehaviour
+    public class TrailFX : ParticleLength
     {
-        private ParticleSystem _particle;
-        private ParticleSystem.VelocityOverLifetimeModule _velocityOverLifetime;
         private ParticleSystem.MainModule _main;
-        private Movement _wheel;
-        private float _initialWheelSpeed;
-        private float _speedZCorrector;
+
         private float _lifetimeCorrector;
         private bool _isBought;
         private bool _isSelected = true;
 
         public bool IsSelected => _isSelected;
 
-        private void Awake()
+        protected override void Update()
         {
-            _particle = GetComponent<ParticleSystem>();
-            SetParticleSystemModules();
-            SetCorrectionValues();
-        }
-
-        private void Update()
-        {
-            if (_wheel == null)
-                return;
-
-            if (HasInitialWheelSpeedNotZero() == false)
-                return;
-
-            DecreaseParticleLength();
+            base.Update();
             AdjustRotationAngle();
         }
 
         public void SetWheel(Movement wheel)
         {
-            if (_wheel != null)
+            if (MovementWheel != null)
                 throw new InvalidOperationException($"{GetType()}: SetWheel(Movement wheel): _wheel already set.");
 
-            _wheel = wheel;
+            MovementWheel = wheel;
         }
 
-        private void SetParticleSystemModules()
+        protected override void SetParticleSystemModules()
         {
-            _velocityOverLifetime = _particle.velocityOverLifetime;
-            _main = _particle.main;
+            base.SetParticleSystemModules();
+            _main = Particle.main;
         }
 
-        private void SetCorrectionValues()
+        protected override void SetCorrectionValues()
         {
-            _speedZCorrector = _velocityOverLifetime.z.constant;
+            base.SetCorrectionValues();
             _lifetimeCorrector = _main.startLifetime.constant;
         }
 
-        private bool HasInitialWheelSpeedNotZero()
+        protected override void DecreaseParticleLength()
         {
-            if (_initialWheelSpeed == 0)
-            {
-                _initialWheelSpeed = _wheel.Speed;
-                return false;
-            }
-
-            return true;
-        }
-
-        private void DecreaseParticleLength()
-        {
-            _velocityOverLifetime.z = _wheel.Speed / _initialWheelSpeed * _speedZCorrector;
-            _main.startLifetime = _wheel.Speed / _initialWheelSpeed * _lifetimeCorrector;
+            base.DecreaseParticleLength();
+            _main.startLifetime = MovementWheel.Speed / InitialWheelSpeed * _lifetimeCorrector;
         }
 
         private void AdjustRotationAngle()
         {
-            if (_wheel.Speed <= 2.1f) //Убрать магическое число, пробросить из константы MinForwardVelocity класса Movement
+            if (MovementWheel.Speed <= 2.1f) //Убрать магическое число, пробросить из константы MinForwardVelocity класса Movement
             {
-                _particle.transform.localEulerAngles = new Vector3(-_wheel.transform.eulerAngles.x, 0f, 0f);
+                Particle.transform.localEulerAngles = new Vector3(-MovementWheel.transform.eulerAngles.x, 0f, 0f);
             }
         }
     }

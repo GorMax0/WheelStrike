@@ -79,7 +79,7 @@ namespace Core
                     endValue = _minValue;
                 else if (_currentValue == _minValue)
                     endValue = _maxValue;
-
+                
                 yield return null;
             }
         }

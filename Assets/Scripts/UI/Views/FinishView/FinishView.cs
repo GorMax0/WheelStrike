@@ -15,9 +15,12 @@ namespace UI.Views.Finish
         [SerializeField] private TMP_Text _bonusScore;
         [SerializeField] private Image _rewardBlock;
         [SerializeField] private DistanceBar _distanceBar;
-        [SerializeField] private RewardScaler _rewardScaler;
+        [SerializeField] private SliderController _rewardScaler;
         [SerializeField] private Button _playAds;
         [SerializeField] private Button _skipAds;
+        [SerializeField] private ParticleSystem _highscoreEffect;
+        [SerializeField] private MoneyViewPresenter _moneyViewPresenter;
+        [SerializeField] private SpawnPoint _spawnMoneyPoint;
 
         private FinishViewHandler _viewHandler;
         private Material _uiMaterial;
@@ -70,47 +73,38 @@ namespace UI.Views.Finish
 
             DOTween.Sequence()
                .Append(_uiMaterial.DOFade(_endTransparency, _durationFade).SetEase(Ease.InOutSine))
-               .Append(_topLabel.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .Append(_topLabel.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
-               .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
                .AppendCallback(_viewHandler.DisplayScore)
-               .Append(_rewardBlock.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .Append(_rewardBlock.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
-               .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                .AppendCallback(_viewHandler.DisplayDistance)
                .AppendCallback(DispalyNewHighscoreLable)
                .AppendCallback(_viewHandler.DisplayBonusScore)
                .AppendInterval(_intervalBetweenTween)
-               .Append(_rewardScaler.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+               .Append(_rewardScaler.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                .AppendInterval(_intervalBetweenTween)
-               .Append(_playAds.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween)
-               .Append(_skipAds.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack));
+               .Append(_playAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+               .AppendInterval(_intervalBetweenTween + 0.27f)
+               .Append(_skipAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack));
+
+            _moneyViewPresenter.RunScatter(_spawnMoneyPoint.transform.localPosition);
         }
 
         public void Enable() => gameObject.SetActive(true);
 
         public void Disable() => gameObject.SetActive(false);
 
-        private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad)
-        {
-            _distanceBar.Initialize(viewHandler, lengthRoad);
-        }
+        private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad) => _distanceBar.Initialize(viewHandler, lengthRoad);
 
         private void PrepareView()
         {
             Color transparentColor = new Color(_uiMaterial.color.r, _uiMaterial.color.g, _uiMaterial.color.b, 0f);
             _uiMaterial.color = transparentColor;
-
-            _topLabel.transform.localScale = Vector3.zero;
-            _distance.transform.localScale = Vector3.zero;
             _highscoreLable.transform.localScale = Vector3.zero;
-            _rewardBlock.transform.localScale = Vector3.zero;
-            _distanceBar.transform.localScale = Vector3.zero;
-            _rewardScaler.transform.localScale = Vector3.zero;
-            _playAds.transform.localScale = Vector3.zero;
-            _skipAds.transform.localScale = Vector3.zero;
         }
 
         private void DispalyNewHighscoreLable()
@@ -118,8 +112,15 @@ namespace UI.Views.Finish
             if (_hasNewHighscore == false)
                 return;
 
-            _highscoreLable.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack);
+            DOTween.Sequence()
+                .Append(_highscoreLable.transform.DOScale(_endScaleValue, _durationScale).SetEase(Ease.InOutBack))
+                .AppendCallback(PlayEffect)
+                .Append(_highscoreLable.transform.DOLocalRotate(new Vector3(0, 0, 20f), 0.12f))
+                .Append(_highscoreLable.transform.DOLocalRotate(new Vector3(0, 0, -20f), 0.12f))
+                .Append(_highscoreLable.transform.DOLocalRotate(Vector3.zero, 0.12f));
         }
+
+        private void PlayEffect() => _highscoreEffect.Play();
 
         private void OnDisplayedDistanceChanged(int distance) => _distance.text = $"{distance}m";
 
