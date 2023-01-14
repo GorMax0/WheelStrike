@@ -6,14 +6,12 @@ using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
-using UI;
 using UI.Manual;
 using UI.Views;
 using UI.Views.Money;
 using UI.Views.Finish;
 using Data;
 using Trail;
-using Agava.YandexGames;
 
 namespace Core
 {
@@ -75,7 +73,6 @@ namespace Core
             _trailManager.Initialize(_gameStateService);
             InitializeLoad();
             _gameStateService.ChangeState(GameState.Initializing);
-            YandexGamesSdk.Initialize();
         }
 
         private void InitializeServices()

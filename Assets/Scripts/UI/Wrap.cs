@@ -7,6 +7,7 @@ namespace UI
     {
         [SerializeField] private Vector2 _wrapOffset;
         [SerializeField] private float _duration;
+        [SerializeField] private bool _isDisableAfterApply;
 
         private Vector2 _startPositoin;
         private Canvas _canvas;
@@ -18,20 +19,29 @@ namespace UI
 
         private void Start()
         {
-            _canvas = GetComponentInParent<Canvas>();            
+            _canvas = GetComponentInParent<Canvas>();
         }
 
         public void ApplyOffsetTransform()
         {
             _wrapOffset *= _canvas.transform.localScale;
             _startPositoin = transform.position;
-            transform.DOMove(_startPositoin + _wrapOffset, _duration);            
+
+            DOTween.Sequence()
+                .Append(transform.DOMove(_startPositoin + _wrapOffset, _duration))
+                .AppendCallback(Disable);
         }
 
         public void CancelOffsetTransform()
         {
             if (transform.position != (Vector3)_startPositoin)
                 transform.DOMove(_startPositoin, _duration);
+        }
+
+        private void Disable()
+        {
+            if (_isDisableAfterApply == true)            
+                gameObject.SetActive(false);   
         }
     }
 }

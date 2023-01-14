@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using System;
+using AdsReward;
 
 namespace UI.Views.Finish
 {
@@ -15,8 +16,9 @@ namespace UI.Views.Finish
         [SerializeField] private TMP_Text _bonusScore;
         [SerializeField] private Image _rewardBlock;
         [SerializeField] private DistanceBar _distanceBar;
-        [SerializeField] private SliderController _rewardScaler;
+        [SerializeField] private RewardScalerView _rewardScalerView;
         [SerializeField] private Button _playAds;
+        [SerializeField] private TMP_Text _textRewardValue;
         [SerializeField] private Button _skipAds;
         [SerializeField] private ParticleSystem _highscoreEffect;
         [SerializeField] private MoneyViewPresenter _moneyViewPresenter;
@@ -44,6 +46,8 @@ namespace UI.Views.Finish
             if (_isInitialized == false)
                 return;
 
+            _rewardScalerView.RewardZoneChanged += OnRewardZoneChanged;
+            _playAds.onClick.AddListener(_viewHandler.OnAdsButtonClick);
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedScoreChanged += OnDisplayedScoreChanged;
             _viewHandler.DisplayedBonusScoreChanged += OnDisplayedBonusScoreChanged;
@@ -52,17 +56,20 @@ namespace UI.Views.Finish
 
         private void OnDisable()
         {
+            _rewardScalerView.RewardZoneChanged -= OnRewardZoneChanged;
+            _playAds.onClick.RemoveListener(_viewHandler.OnAdsButtonClick);
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedScoreChanged -= OnDisplayedScoreChanged;
             _viewHandler.DisplayedBonusScoreChanged -= OnDisplayedBonusScoreChanged;
             _viewHandler.DisplayedHighscoreChanged -= OnDispalyNewHighscoreLable;
         }
 
-        public void Initialize(FinishViewHandler viewHandler, int lengthRoad)
+        public void Initialize(FinishViewHandler viewHandler, RewardScaler rewardScaler, int lengthRoad)
         {
             _viewHandler = viewHandler;
 
             InitializeDistanceBar(viewHandler, lengthRoad);
+            InitializeRewardScalerView(rewardScaler);
             _isInitialized = true;
             OnEnable();
         }
@@ -72,24 +79,24 @@ namespace UI.Views.Finish
             PrepareView();
 
             DOTween.Sequence()
-               .Append(_uiMaterial.DOFade(_endTransparency, _durationFade).SetEase(Ease.InOutSine))
-               .Append(_topLabel.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween)
-               .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween)
-               .AppendCallback(_viewHandler.DisplayScore)
-               .Append(_rewardBlock.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween)
-               .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendCallback(_viewHandler.DisplayDistance)
-               .AppendCallback(DispalyNewHighscoreLable)
-               .AppendCallback(_viewHandler.DisplayBonusScore)
-               .AppendInterval(_intervalBetweenTween)
-               .Append(_rewardScaler.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween)
-               .Append(_playAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
-               .AppendInterval(_intervalBetweenTween + 0.27f)
-               .Append(_skipAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack));
+                .Append(_uiMaterial.DOFade(_endTransparency, _durationFade).SetEase(Ease.InOutSine))
+                .Append(_topLabel.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendInterval(_intervalBetweenTween)
+                .Append(_distance.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendInterval(_intervalBetweenTween)
+                .AppendCallback(_viewHandler.DisplayScore)
+                .Append(_rewardBlock.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendInterval(_intervalBetweenTween)
+                .Append(_distanceBar.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendCallback(_viewHandler.DisplayDistance)
+                .AppendCallback(DispalyNewHighscoreLable)
+                .AppendCallback(_viewHandler.DisplayBonusScore)
+                .AppendInterval(_intervalBetweenTween)
+                .Append(_rewardScalerView.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendInterval(_intervalBetweenTween)
+                .Append(_playAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .AppendInterval(_intervalBetweenTween + 0.27f)
+                .Append(_skipAds.transform.DOScale(_endScaleValue, _durationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack));
 
             _moneyViewPresenter.RunScatter(_spawnMoneyPoint.transform.localPosition);
         }
@@ -99,6 +106,8 @@ namespace UI.Views.Finish
         public void Disable() => gameObject.SetActive(false);
 
         private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad) => _distanceBar.Initialize(viewHandler, lengthRoad);
+
+        private void InitializeRewardScalerView(RewardScaler rewardScaler) => _rewardScalerView.Initialize(rewardScaler);
 
         private void PrepareView()
         {
@@ -129,5 +138,7 @@ namespace UI.Views.Finish
         private void OnDisplayedBonusScoreChanged(int bonusScore) => _bonusScore.text = $"{bonusScore}";
 
         private void OnDispalyNewHighscoreLable(int newHighscore) => _hasNewHighscore = true;
+
+        private void OnRewardZoneChanged(string text) => _textRewardValue.text = text;
     }
 }

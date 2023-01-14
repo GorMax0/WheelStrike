@@ -51,6 +51,7 @@ namespace UI.Manual
         private void Disable()
         {
             _replayRunning.Stop();
+            DOTween.Kill(_slider);
             gameObject.SetActive(false);
         }
     }

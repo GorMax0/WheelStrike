@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using Empty;
 using Services.GameStates;
-using static Unity.Collections.AllocatorManager;
 
 namespace Core.Wheel
 {
@@ -15,7 +14,8 @@ namespace Core.Wheel
         public event UnityAction CollidedWithGround;
         public event UnityAction<Obstacle> CollidedWithObstacle;
         public event UnityAction<Car> TriggeredEnterWithCar;
-        public event UnityAction<Wall> TriggeredWithWall;        
+        public event UnityAction<Wall> TriggeredWithWall;
+        public event UnityAction<Brick> TriggeredWithBrick;
         public event UnityAction<CameraTrigger> TriggeredWithCameraTrigger;
 
         private void OnEnable()
@@ -52,25 +52,18 @@ namespace Core.Wheel
             }
         }
 
-        private void OnGameFinished()
-        {
-            enabled = false;
-        }
+        private void OnGameFinished() => enabled = false;
 
         private void OnCollisionGround(Collision collision)
         {
             if (collision.collider.TryGetComponent(out Ground ground))
-            {
                 CollidedWithGround?.Invoke();
-            }
         }
 
         private void OnCollisionObstacle(Collision collision)
         {
             if (collision.collider.TryGetComponent(out Obstacle obstacle))
-            {
                 CollidedWithObstacle?.Invoke(obstacle);
-            }
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -85,25 +78,25 @@ namespace Core.Wheel
         private void OnTriggerEnterCar(Collider other)
         {
             if (other.TryGetComponent(out Car car))
-            {
                 TriggeredEnterWithCar?.Invoke(car);
-            }
+        }
+
+        private void OnTriggerEnterBirck(Collider other)
+        {
+            if (other.TryGetComponent(out Brick brik))
+                TriggeredWithBrick?.Invoke(brik);
         }
 
         private void OnTriggerEnterWall(Collider other)
         {
             if (other.TryGetComponent(out Wall wall))
-            {
                 TriggeredWithWall?.Invoke(wall);
-            }
         }
 
         private void OnTriggerEnterCameraTrigger(Collider other)
         {
             if (other.TryGetComponent(out CameraTrigger cameraTrigger))
-            {
                 TriggeredWithCameraTrigger?.Invoke(cameraTrigger);
-            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -112,6 +105,7 @@ namespace Core.Wheel
                 return;
 
             OnTriggerEnterCar(other);
+            OnTriggerEnterBirck(other);
             OnTriggerEnterWall(other);
             OnTriggerEnterCameraTrigger(other);
         }

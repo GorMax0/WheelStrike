@@ -10,6 +10,7 @@ namespace UI.Views.Finish
         [SerializeField] private Slider _highscore;
         [SerializeField] private TMP_Text[] _serifs;
 
+        private const float StartSliderValue = 0f;
         private const int NumberOfSerifs = 5;
         private const int LenghRoadCorrector = 62;
 
@@ -28,6 +29,8 @@ namespace UI.Views.Finish
         {
             _viewHandler = viewHandler;
             _lengthRoad = lengthRoad;
+            _distanceTraveled.value = StartSliderValue;
+            _highscore.value = StartSliderValue;
             SetValueForSerifs();
             Subscribe();
         }

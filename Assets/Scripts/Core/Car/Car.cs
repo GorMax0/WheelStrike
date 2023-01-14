@@ -63,6 +63,7 @@ namespace Core
             foreach (MeshRenderer meshRenderer in _meshRenders)
             {
                 meshRenderer.material.DOColor(Color.black, 0.3f);
+                meshRenderer.material.DisableKeyword("_EMISSION");
             }
         }
 

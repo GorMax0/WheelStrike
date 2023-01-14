@@ -44,13 +44,7 @@ namespace Core
             SetColliderParameters(widthBrick, heightBrick, lengthBrick);
         }
 
-        public void EnableGravityBricks()
-        {
-            foreach (Brick brick in _bricks)
-            {
-                brick.EnableGravity();
-            }
-        }
+        public void StopMoveBricks() => _bricks.ForEach(brick => brick.StopMove());
 
         private void GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick)
         {

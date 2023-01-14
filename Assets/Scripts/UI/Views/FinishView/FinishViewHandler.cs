@@ -5,6 +5,8 @@ using Core.Wheel;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
+using AdsReward;
+using Agava.YandexGames;
 
 namespace UI.Views.Finish
 {
@@ -16,9 +18,11 @@ namespace UI.Views.Finish
         [Range(0.001f, 0.05f)]
         [SerializeField] private float _waitingDelay;
         [SerializeField] private ParticleSystem _finishEffect;
+        [SerializeField] private AdsRewards _adsRewards;
 
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
+        private RewardScaler _rewardScaler;
         private CoroutineRunning _distanceDisplay;
         private CoroutineRunning _scoreDisplay;
         private CoroutineRunning _bonusScoreDisplay;
@@ -45,7 +49,7 @@ namespace UI.Views.Finish
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _validator.OrientationValidated += OnOrientationValidated;
             _levelScore.HighscoreChanged += OnHighscoreChanged;
-            _levelScore.HighscoreLoaded += OnHighscoreLoaded;
+            _levelScore.HighscoreLoaded += OnHighscoreLoaded;            
         }
 
         private void OnDisable()
@@ -53,7 +57,7 @@ namespace UI.Views.Finish
             _gameStateService.GameStateChanged -= OnGameStateChanged;
             _validator.OrientationValidated -= OnOrientationValidated;
             _levelScore.HighscoreChanged -= OnHighscoreChanged;
-            _levelScore.HighscoreLoaded -= OnHighscoreLoaded;
+            _levelScore.HighscoreLoaded -= OnHighscoreLoaded;      
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
@@ -64,6 +68,8 @@ namespace UI.Views.Finish
             _travelable = travelable;
             _levelService = levelService;
             _levelScore = _levelService.Score;
+            _rewardScaler = new RewardScaler(gameStateService, coroutineService);
+            
 
             InitializeViews();
 
@@ -92,10 +98,16 @@ namespace UI.Views.Finish
             _bonusScoreDisplay.Run(DisplayValue(bonusScore, DisplayedBonusScoreChanged));
         }
 
+        public void OnAdsButtonClick()
+        {
+           _rewardScaler.StopTween();
+            VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+        }
+
         private void InitializeViews()
         {
-            _viewPortrait.Initialize(this, _levelService.LengthRoad);
-            _viewLandscape.Initialize(this, _levelService.LengthRoad);
+            _viewPortrait.Initialize(this, _rewardScaler, _levelService.LengthRoad);
+            _viewLandscape.Initialize(this,_rewardScaler, _levelService.LengthRoad);
 
             _currentFinishView = _viewPortrait;
             _hasPortraitOrientation = true;
@@ -140,7 +152,7 @@ namespace UI.Views.Finish
             switch (state)
             {
                 case GameState.Finished:
-                    Invoke(nameof(OnGameFinished), 0.3f); //Создать единую константу для 0.5f;
+                    Invoke(nameof(OnGameFinished), 0.3f);
                     break;
             }
         }
@@ -152,6 +164,12 @@ namespace UI.Views.Finish
             _currentFinishView.StartAnimation();
 
             _isFinished = true;
+        }
+
+        private void OnRewardedCallback()
+        {
+            _levelScore.SetAdsScoreRate(_rewardScaler.CurrentRate);
+            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultScore);
         }
     }
 }

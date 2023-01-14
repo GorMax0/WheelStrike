@@ -34,6 +34,7 @@ namespace UI.Views
 
         private void OnDisable()
         {
+            DOTween.Kill(_label.transform);
             _levelUp.onClick.RemoveListener(OnButtonClick);
         }
 

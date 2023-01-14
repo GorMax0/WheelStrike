@@ -15,7 +15,7 @@ namespace Services
     {
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = Time.timeScale;
-        
+
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
         private InputHandler _inputHandler;
@@ -26,6 +26,7 @@ namespace Services
         private Wallet _wallet;
         private DataOperator _dataOperator;
         private CoroutineRunning _holdTime;
+        private Wall _finishWall;
         private float _delayHoldTime;
 
         public GamePlayService(GameStateService gameStateService, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
@@ -47,6 +48,7 @@ namespace Services
 
             _interactionHandler.CollidedWithObstacle += OnCollidedWithObstacle;
             _interactionHandler.TriggeredEnterWithCar += OnTriggeredEnterWithCar;
+            _interactionHandler.TriggeredWithBrick += OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall += OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger += OnTriggeredWithCameraTrigger;
         }
@@ -61,6 +63,7 @@ namespace Services
 
             _interactionHandler.CollidedWithObstacle -= OnCollidedWithObstacle;
             _interactionHandler.TriggeredEnterWithCar -= OnTriggeredEnterWithCar;
+            _interactionHandler.TriggeredWithBrick -= OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall -= OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger -= OnTriggeredWithCameraTrigger;
         }
@@ -118,6 +121,7 @@ namespace Services
         private void OnGameFinished()
         {
             _delayHoldTime = 0;
+            _finishWall?.StopMoveBricks();
             _wallet.EnrollMoney(_levelScore.ResultScore);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
             Dispose();
@@ -146,17 +150,13 @@ namespace Services
             _holdTime.Run(HoldTime());
         }
 
+        private void OnTriggeredWithBrick(Brick brick) => brick.EnableGravity();
+
         private void OnTriggeredWithWall(Wall wall)
         {
+            _finishWall = wall;
             _levelScore.AddScore(wall.Reward);
-            wall.EnableGravityBricks();
         }
-
-        //private void OnTriggeredWithWall(Brick brick)
-        //{
-        //    _levelScore.AddScore(wall.Reward);
-        //    brick.EnableGravity();
-        //}
 
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
     }

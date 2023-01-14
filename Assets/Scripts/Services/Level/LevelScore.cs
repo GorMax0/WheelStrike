@@ -9,6 +9,7 @@ namespace Services.Level
         private ITravelable _travelable;
         private Parameter _income;
         private int _score;
+        private int _adsScoreRate = 1;
         private int _highscore;
 
         public LevelScore(ITravelable travelable, Parameter income)
@@ -22,7 +23,7 @@ namespace Services.Level
 
         public int Score => _score + _travelable.DistanceTraveled;
         public int BonusScore => (int)(Score * _income.Value);
-        public int ResultScore => Score + BonusScore;
+        public int ResultScore => (Score + BonusScore) * _adsScoreRate;
 
         public void LoadHighscore(int highscore)
         {
@@ -46,5 +47,7 @@ namespace Services.Level
             _highscore = distance;
             HighscoreChanged?.Invoke(_highscore);
         }
+
+        public void SetAdsScoreRate(int rate) => _adsScoreRate = rate;
     }
 }

@@ -12,6 +12,7 @@ namespace Core
         private readonly float ClampValue = 1.5f;
         private readonly float TimeCameraBlend;
 
+        private Camera _mainCamera;
         private GameStateService _gameStateService;
         private CoroutineRunning _aimRunning;
 
@@ -19,6 +20,7 @@ namespace Core
 
         public AimDirection(GameStateService gameStateService, CoroutineService coroutineService, float timeCameraBlend)
         {
+            _mainCamera = Camera.main;
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
             TimeCameraBlend = timeCameraBlend;
@@ -34,14 +36,14 @@ namespace Core
         {
             yield return new WaitForSeconds(timeCameraBlend);
 
-            Ray startTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray startTouchPosition = _mainCamera.ScreenPointToRay(Input.mousePosition);
             Ray currentTouchPosition;
             float swipeValue;
             float directionOffsetX;
 
             while (true)
             {
-                currentTouchPosition = Camera.main.ScreenPointToRay(Input.mousePosition);
+                currentTouchPosition = _mainCamera.ScreenPointToRay(Input.mousePosition);
                 swipeValue = (currentTouchPosition.direction.x - startTouchPosition.direction.x) * SwipeSensitivity;
                 directionOffsetX = Mathf.Clamp(swipeValue, -ClampValue, ClampValue);
                 DirectionChanged?.Invoke(directionOffsetX);
