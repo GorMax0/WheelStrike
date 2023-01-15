@@ -102,14 +102,14 @@ namespace AdsReward
 
         private void AnimationTextReward(TMP_Text currentReward)
         {
-           DOTween.Kill(currentReward);
-         //   DOTween.Kill(previousReward);
-           DOTween.Kill(currentReward.transform);
-            //   DOTween.Kill(previousReward.transform);
-            currentReward.DOColor(_rewardSelect, Duration);
-            currentReward.transform.DOScale(EndScale, Duration);
-            currentReward.DOColor(_rewardSelect, Duration);
-            currentReward.transform.DOScale(EndScale, Duration);
+            DOTween.Kill(currentReward);
+            DOTween.Kill(currentReward.transform);
+
+            DOTween.Sequence()
+                .Append(currentReward.DOColor(_rewardSelect, Duration))
+                .Join(currentReward.transform.DOScale(EndScale, Duration))
+                .Append(currentReward.DOColor(_rewardDeselect, Duration))
+                .Join(currentReward.transform.DOScale(StartScale, Duration));
         }
 
         private void ChangeSliderValue(float value) => _slider.value = value;

@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.agava.defineswitchtool": {
+      "version": "https://github.com/tsentler/com.agava.defineswitchtool.git#1.0.2",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "eab1a225332dda244235cf5655bb8b583e8c48e5"
+    },
     "com.agava.webutility": {
       "version": "https://github.com/forcepusher/com.agava.webutility.git#2.0.0",
       "depth": 0,

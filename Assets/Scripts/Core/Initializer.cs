@@ -12,6 +12,7 @@ using UI.Views.Money;
 using UI.Views.Finish;
 using Data;
 using Trail;
+using AdsReward;
 
 namespace Core
 {
@@ -23,6 +24,7 @@ namespace Core
 
         [Header("Services")]
         [SerializeField] private LevelService _levelService;
+        [SerializeField] private AdsRewards _adsRewards;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -80,6 +82,7 @@ namespace Core
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
             _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler,_wheel.Travelable, _levelService, _wallet);
+            _adsRewards.Initialize(_wallet);
         }
 
         private void InitializeCore()

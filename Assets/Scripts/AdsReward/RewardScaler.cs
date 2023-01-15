@@ -60,7 +60,6 @@ namespace AdsReward
                 }
 
                 SetZone();
-                Debug.Log($"{_currentZone} - {CurrentRate}");
 
                 yield return null;
             }

@@ -101,7 +101,7 @@ namespace UI.Views.Finish
         public void OnAdsButtonClick()
         {
            _rewardScaler.StopTween();
-            VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+           VideoAd.Show(onRewardedCallback: OnRewardedCallback);
         }
 
         private void InitializeViews()
