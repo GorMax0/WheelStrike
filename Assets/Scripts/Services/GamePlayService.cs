@@ -13,6 +13,8 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
+        private readonly float IntervalBetweenAds = 180f;
+        private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = Time.timeScale;
 
@@ -26,6 +28,7 @@ namespace Services
         private Wallet _wallet;
         private DataOperator _dataOperator;
         private CoroutineRunning _holdTime;
+        private CoroutineRunning _timerForIntervalBetweenAds;
         private Wall _finishWall;
         private float _delayHoldTime;
 
@@ -40,6 +43,7 @@ namespace Services
             _levelScore = _levelService.Score;
             _wallet = wallet;
             _holdTime = new CoroutineRunning(_coroutineService);
+            _timerForIntervalBetweenAds = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
 
@@ -56,6 +60,8 @@ namespace Services
         public event Action<Car> TriggeredCar;
         public event Action TimeChangedToDefault;
 
+        public float ElapsedTime { get; private set; }
+
         public void Dispose()
         {
             _inputHandler.PointerDown -= OnPointerDown;
@@ -69,6 +75,13 @@ namespace Services
         }
 
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
+
+        public void SetElapsedTime(float elapsedTime)
+        {
+            ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
+            _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
+            Debug.Log($"Loaded ElapsedTime Game Play Service: {ElapsedTime}");
+        }
 
         private void SetDefaultTime()
         {
@@ -93,7 +106,7 @@ namespace Services
         {
             SetSlowTime();
 
-            _delayHoldTime = 3f * Time.timeScale;
+            _delayHoldTime = StartDelayHoldTime * Time.timeScale;
 
             while (_delayHoldTime > 0)
             {
@@ -103,6 +116,25 @@ namespace Services
             }
 
             SetDefaultTime();
+        }
+
+        private IEnumerator StartTimerForIntervalBetweenAds()
+        {
+            while (true)
+            {
+                ElapsedTime+=Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        private bool TryShowInterstitialAds()
+        {
+            if (IntervalBetweenAds - ElapsedTime > 0)
+                return false;
+
+            ElapsedTime = 0;
+            Agava.YandexGames.InterstitialAd.Show();
+            return true;
         }
 
         private void OnGameStateChanged(GameState state)
@@ -124,6 +156,7 @@ namespace Services
             _finishWall?.StopMoveBricks();
             _wallet.EnrollMoney(_levelScore.ResultScore);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
+
             Dispose();
         }
 
@@ -131,7 +164,10 @@ namespace Services
         {
             DOTween.Clear();
             _delayHoldTime = 0;
-            _dataOperator.Save();
+
+            TryShowInterstitialAds();
+            _dataOperator.Save(); 
+
             _levelService.RestartLevel();
         }
 

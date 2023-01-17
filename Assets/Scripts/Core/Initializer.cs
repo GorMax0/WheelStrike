@@ -119,9 +119,8 @@ namespace Core
 
         private void InitializeLoad()
         {
-            _dataOperator = new DataOperator(_levelService, _wallet, _parameters);
-            _dataOperator.Load();
-            _gamePlayService.SetDataOperator(_dataOperator);
+            _dataOperator = new DataOperator(_gamePlayService, _levelService, _wallet, _parameters);
+            _dataOperator.Load();          
         }
     }
 }

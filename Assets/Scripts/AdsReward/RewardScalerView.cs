@@ -68,28 +68,6 @@ namespace AdsReward
             return rates;
         }
 
-        //private void SetZone(RewardZone currentZone, RewardZone previousZone)
-        //{
-        //    if (gameObject.activeInHierarchy == false)
-        //        return;
-
-        //    AnimationTextReward(_rates[currentZone], _rates[previousZone]);
-
-        //    RewardZoneChanged?.Invoke(_rates[currentZone].text);
-        //}
-
-        //private void AnimationTextReward(TMP_Text currentReward, TMP_Text previousReward)
-        //{
-        //    DOTween.Kill(currentReward);
-        //    DOTween.Kill(previousReward);
-        //    DOTween.Kill(currentReward.transform);
-        //    DOTween.Kill(previousReward.transform);
-        //    previousReward.DOColor(_rewardSelect, Duration);
-        //    previousReward.transform.DOScale(EndScale, Duration);
-        //    currentReward.DOColor(_rewardDeselect, Duration);
-        //    currentReward.transform.DOScale(StartScale, Duration);
-        //}
-
         private void SetZone(RewardZone currentZone)
         {
             if (gameObject.activeInHierarchy == false)

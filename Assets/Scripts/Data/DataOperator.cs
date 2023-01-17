@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core;
 using Parameters;
+using Services;
 using Services.Level;
 
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace Data
     {
         private GameData _gameData;
         private ISaveSystem _saveSystem;
+        private GamePlayService _gamePlayService;
         private LevelService _levelService;
         private LevelScore _levelScore;
         private Wallet _wallet;
@@ -19,8 +21,10 @@ namespace Data
         //private List<Skin> _openSkins;
         //private List<TrailFX> _openTrails;
 
-        public DataOperator(LevelService levelService, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
+        public DataOperator(GamePlayService gamePlayService, LevelService levelService, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
         {
+            _gamePlayService = gamePlayService;
+            _gamePlayService.SetDataOperator(this);
             _levelService = levelService;
             _levelScore = _levelService.Score;
             _wallet = wallet;
@@ -42,7 +46,8 @@ namespace Data
 
             SaveIndexScene();
             SaveMoney(_wallet.Money);
-
+            SaveTime(_gamePlayService.ElapsedTime);
+            Debug.Log($"Saved for gameDate: {_gameData.ElapsedTime}");
             _saveSystem.Save(_gameData);
         }
 
@@ -60,6 +65,7 @@ namespace Data
             LoadMoney();
             LoadParameters();
             LoadHighscore();
+            LoadTime();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
@@ -71,6 +77,8 @@ namespace Data
         }
 
         private void SaveMoney(int money) => _gameData.Money = money;
+
+        private void SaveTime(float elapsedTime) => _gameData.ElapsedTime = elapsedTime;
 
         private void SaveParameter(Parameter parameter)
         {
@@ -91,6 +99,8 @@ namespace Data
 
             Save();
         }
+
+        private void LoadTime() => _gamePlayService.SetElapsedTime(_gameData.ElapsedTime);
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 
