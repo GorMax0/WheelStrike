@@ -15,11 +15,13 @@ namespace UI.Views.Money
             if (_wallet == null)
                 return;
 
+            _wallet.MoneyLoaded += DisplayAmountOfMoney;
             _wallet.MoneyChanged += DisplayAmountOfMoney;
         }
 
         private void OnDisable()
         {
+            _wallet.MoneyLoaded -= DisplayAmountOfMoney;
             _wallet.MoneyChanged -= DisplayAmountOfMoney;
         }
 
@@ -32,9 +34,6 @@ namespace UI.Views.Money
             OnEnable();
         }
 
-        private void DisplayAmountOfMoney(int money)
-        {
-            _money.text = money.ToString();
-        }
+        private void DisplayAmountOfMoney(int money) => _money.text = money.ToString();
     }
 }

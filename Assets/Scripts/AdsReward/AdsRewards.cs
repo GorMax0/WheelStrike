@@ -1,4 +1,6 @@
+using System;
 using Core;
+using Parameters;
 using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,17 +12,25 @@ namespace AdsReward
         [SerializeField] private Button _reward;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private MoneyRewardPanel _moneyRewardPanel;
+        [SerializeField] private ParameterRewardPanel _parameterRewardPanel;
 
         private Wallet _wallet;
 
         private void OnDisable()
         {
-            _reward.onClick.RemoveListener(_topPanel.Restart);
+            _reward.onClick.RemoveAllListeners();
         }
 
         public void Initialize(Wallet wallet)
         {
             _wallet = wallet;
+        }
+
+        public void Disable()
+        {
+            _moneyRewardPanel.Disable();
+            _parameterRewardPanel.Disable();
+            gameObject.SetActive(false);
         }
 
         public void EnrollReward(RewardType type, int count = 0)
@@ -33,17 +43,22 @@ namespace AdsReward
             }
         }
 
+        public void EnrollParameterLevelUpReward(Parameter parameter, int count)
+        {
+            parameter.LevelUp(count);
+            _parameterRewardPanel.DisplayReward(parameter, count);
+            _reward.onClick.RemoveAllListeners();
+            _reward.onClick.AddListener(Disable);
+            gameObject.SetActive(true);
+        }
+
         private void EnrollMoney(int count)
         {
             _wallet.EnrollMoney(count);
             _moneyRewardPanel.DisplayCountMoney(count);
+            _reward.onClick.RemoveAllListeners();
             _reward.onClick.AddListener(_topPanel.Restart);
             gameObject.SetActive(true);
-        }
-
-        public void Disable()
-        {
-            gameObject.SetActive(false);
         }
     }
 }

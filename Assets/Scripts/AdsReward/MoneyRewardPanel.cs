@@ -12,5 +12,10 @@ namespace AdsReward
             _countMoneyReward.text = count.ToString();
             gameObject.SetActive(true);
         }
+
+        public void Disable()
+        {
+            gameObject.SetActive(false);
+        }    
     }
 }

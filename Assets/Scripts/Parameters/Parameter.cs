@@ -36,9 +36,12 @@ namespace Parameters
             Loaded?.Invoke();
         }
 
-        public void LevelUp()
+        public void LevelUp(int levelCount = 1)
         {
-            Level++;
+            if (levelCount <= 0)
+                return;
+
+            Level += levelCount;
             LevelChanged?.Invoke(this);
         }
     }

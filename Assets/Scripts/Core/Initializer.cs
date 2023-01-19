@@ -30,7 +30,7 @@ namespace Core
         private GamePlayService _gamePlayService;
 
         [Header("Core")]
-        [SerializeField] private CarBuilder _carFactory;
+        [SerializeField] private CarBuilder _carBuilder;
         [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
@@ -74,6 +74,7 @@ namespace Core
             InitializeView();
             _trailManager.Initialize(_gameStateService);
             InitializeLoad();
+            _parametersShop.ChangeInteractableLevelUpButtons();
             _gameStateService.ChangeState(GameState.Initializing);
         }
 
@@ -81,7 +82,7 @@ namespace Core
         {
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler,_wheel.Travelable, _levelService, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_wallet);
         }
 
@@ -92,7 +93,7 @@ namespace Core
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
 
             _wall.Create();
-            _carFactory.CreateCars(_gameStateService);
+            _carBuilder.CreateCars(_gameStateService);
             _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _rope.Initialize(_gameStateService);
@@ -120,7 +121,7 @@ namespace Core
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _levelService, _wallet, _parameters);
-            _dataOperator.Load();          
+            _dataOperator.Load();
         }
     }
 }

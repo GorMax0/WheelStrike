@@ -47,7 +47,7 @@ namespace Data
             SaveIndexScene();
             SaveMoney(_wallet.Money);
             SaveTime(_gamePlayService.ElapsedTime);
-            Debug.Log($"Saved for gameDate: {_gameData.ElapsedTime}");
+
             _saveSystem.Save(_gameData);
         }
 

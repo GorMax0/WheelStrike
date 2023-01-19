@@ -13,7 +13,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 180f;
+        private readonly float IntervalBetweenAds = 140f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = Time.timeScale;
@@ -80,7 +80,6 @@ namespace Services
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
-            Debug.Log($"Loaded ElapsedTime Game Play Service: {ElapsedTime}");
         }
 
         private void SetDefaultTime()
@@ -131,9 +130,14 @@ namespace Services
         {
             if (IntervalBetweenAds - ElapsedTime > 0)
                 return false;
-
-            ElapsedTime = 0;
+      
+#if !UNITY_WEBGL || UNITY_EDITOR
+            Debug.Log("Show interstitial ads");
+#elif YANDEX_GAMES
             Agava.YandexGames.InterstitialAd.Show();
+#endif
+            ElapsedTime = 0;
+
             return true;
         }
 

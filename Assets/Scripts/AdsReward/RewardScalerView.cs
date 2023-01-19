@@ -14,7 +14,8 @@ namespace AdsReward
         [SerializeField] private Color _rewardSelect;
         [SerializeField] private Color _rewardDeselect = Color.white;
 
-        private const float Duration = 0.15f;
+        private const float SelectDuration = 0.15f;
+        private const float DeselectDuration = 0.65f;
         private const float StartScale = 1f;
         private const float EndScale = 1.3f;
 
@@ -84,10 +85,10 @@ namespace AdsReward
             DOTween.Kill(currentReward.transform);
 
             DOTween.Sequence()
-                .Append(currentReward.DOColor(_rewardSelect, Duration))
-                .Join(currentReward.transform.DOScale(EndScale, Duration))
-                .Append(currentReward.DOColor(_rewardDeselect, Duration))
-                .Join(currentReward.transform.DOScale(StartScale, Duration));
+                .Append(currentReward.DOColor(_rewardSelect, SelectDuration))
+                .Join(currentReward.transform.DOScale(EndScale, SelectDuration))
+                .Append(currentReward.DOColor(_rewardDeselect, DeselectDuration))
+                .Join(currentReward.transform.DOScale(StartScale, DeselectDuration));
         }
 
         private void ChangeSliderValue(float value) => _slider.value = value;

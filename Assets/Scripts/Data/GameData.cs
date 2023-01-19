@@ -5,7 +5,7 @@ namespace Data
     {
         public int IndexScene;
         public int Highscore;
-        public int Money;
+        public int Money = -1;
         public int SpeedParameter;
         public int SizeParameter;
         public int IncomeParameter;

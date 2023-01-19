@@ -6,7 +6,6 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using AdsReward;
-using Agava.YandexGames;
 
 namespace UI.Views.Finish
 {
@@ -49,7 +48,7 @@ namespace UI.Views.Finish
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _validator.OrientationValidated += OnOrientationValidated;
             _levelScore.HighscoreChanged += OnHighscoreChanged;
-            _levelScore.HighscoreLoaded += OnHighscoreLoaded;            
+            _levelScore.HighscoreLoaded += OnHighscoreLoaded;
         }
 
         private void OnDisable()
@@ -57,7 +56,7 @@ namespace UI.Views.Finish
             _gameStateService.GameStateChanged -= OnGameStateChanged;
             _validator.OrientationValidated -= OnOrientationValidated;
             _levelScore.HighscoreChanged -= OnHighscoreChanged;
-            _levelScore.HighscoreLoaded -= OnHighscoreLoaded;      
+            _levelScore.HighscoreLoaded -= OnHighscoreLoaded;
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
@@ -69,7 +68,6 @@ namespace UI.Views.Finish
             _levelService = levelService;
             _levelScore = _levelService.Score;
             _rewardScaler = new RewardScaler(gameStateService, coroutineService);
-            
 
             InitializeViews();
 
@@ -100,14 +98,18 @@ namespace UI.Views.Finish
 
         public void OnAdsButtonClick()
         {
-           _rewardScaler.StopTween();
-           VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+            _rewardScaler.StopTween();
+#if !UNITY_WEBGL || UNITY_EDITOR
+            Debug.Log("OnAdsButtonClicked");
+#elif YANDEX_GAMES
+            Agava.YandexGames.VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+#endif
         }
 
         private void InitializeViews()
         {
             _viewPortrait.Initialize(this, _rewardScaler, _levelService.LengthRoad);
-            _viewLandscape.Initialize(this,_rewardScaler, _levelService.LengthRoad);
+            _viewLandscape.Initialize(this, _rewardScaler, _levelService.LengthRoad);
 
             _currentFinishView = _viewPortrait;
             _hasPortraitOrientation = true;

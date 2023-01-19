@@ -4,18 +4,19 @@ namespace Core
 {
     public class Wallet
     {
-        public event Action<int> MoneyChanged;
-        public event Action<int> MoneySpanded;
+        private const int StartingMoney = 100;
 
-        public int Money { get; private set; }
+        private int _money;
+
+        public event Action<int> MoneyChanged;
+        public event Action<int> MoneyLoaded;
+
+        public int Money => _money;
 
         public void LoadMoney(int money)
-        {
-            if (money < 0)
-                return;
-
-            Money = money;
-            MoneyChanged?.Invoke(Money);
+        {            
+            _money = money < 0? StartingMoney : money;
+            MoneyLoaded?.Invoke(_money);
         }
 
         public void EnrollMoney(int money)
@@ -23,13 +24,13 @@ namespace Core
             if (money <= 0)
                 throw new InvalidOperationException($"{GetType()}: EnrollMoney(int money): Amount money {money} is invalid.");
 
-            Money += money;
-            MoneyChanged?.Invoke(Money);
+            _money += money;
+            MoneyChanged?.Invoke(_money);
         }
 
         public bool TrySpandMoney(int price)
         {
-            if (Money < price)
+            if (_money < price)
                 return false;
 
             SpendMoney(price);
@@ -41,9 +42,8 @@ namespace Core
             if (price < 0)
                 throw new InvalidOperationException($"{GetType()}: SpendMoney(int money): Amount money {price} is invalid.");
 
-            Money -= price;
-            MoneyChanged?.Invoke(Money);
-            MoneySpanded?.Invoke(price);
+            _money -= price;
+            MoneyChanged?.Invoke(_money);
         }
     }
 }
