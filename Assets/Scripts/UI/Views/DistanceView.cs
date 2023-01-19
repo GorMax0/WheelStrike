@@ -1,6 +1,9 @@
-using TMPro;
+using System;
 using UnityEngine;
+using TMPro;
 using Core.Wheel;
+using Services.Coroutines;
+using System.Collections;
 
 namespace UI.Views
 {
@@ -8,6 +11,10 @@ namespace UI.Views
     {
         [SerializeField] private MonoBehaviour _wheelDistance;
         [SerializeField] private TMP_Text _text;
+
+        private CoroutineService _coroutineService;
+        private CoroutineRunning _showDistance;
+        private bool _isInitialize;
 
         private ITravelable Travelable => (ITravelable)_wheelDistance;
 
@@ -20,11 +27,27 @@ namespace UI.Views
             _wheelDistance = null;
         }
 
-        private void Update()
+        public void Initialize(CoroutineService coroutineService)
         {
-            ShowDistance();
+            if (_isInitialize == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(CoroutineService coroutineService): Already initialized.");
+
+            _showDistance = new CoroutineRunning(coroutineService);
+            _isInitialize = true;
         }
 
-        private void ShowDistance() => _text.text = $"{Travelable.DistanceTraveled}m";
+        public void RunShowDistance() => _showDistance.Run(ShowDistance());
+
+        public void StopShowDistance() => _showDistance.Stop();
+
+        private IEnumerator ShowDistance()
+        {
+            WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+            while (true)
+            {
+                _text.text = $"{Travelable.DistanceTraveled}m";
+                yield return waitForFixedUpdate;
+            }
+        }
     }
 }

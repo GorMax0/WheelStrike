@@ -23,8 +23,10 @@ namespace Core
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
         [Header("Services")]
+        [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
+        [SerializeField] private SoundController _soundController;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -34,10 +36,9 @@ namespace Core
         [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
-        [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private Rope _rope;
         [SerializeField] private Player _wheel;
-        [SerializeField] private InteractionHandler _interactionHandler;
+        [SerializeField] private InteractionHandler _interactionHandler;        
 
         [Header("Manual")]
         [SerializeField] private ControlManual _controlManual;
@@ -84,6 +85,7 @@ namespace Core
             _gameStateService = new GameStateService();
             _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_wallet);
+            _soundController.Initialize(_gameStateService);
         }
 
         private void InitializeCore()
@@ -113,14 +115,14 @@ namespace Core
             _menuView.Initialize(_gameStateService);
             _walletView.Initialize(_wallet);
             _moneyPresenter.Initialize(_interactionHandler);
-            _topPanel.Initialize(_gameStateService);
+            _topPanel.Initialize(_gameStateService,_coroutineService);
             _parametersShop.Initialize(_parameters, _wallet);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
         }
 
         private void InitializeLoad()
         {
-            _dataOperator = new DataOperator(_gamePlayService, _levelService, _wallet, _parameters);
+            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _wallet, _parameters);
             _dataOperator.Load();
         }
     }

@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Services.Coroutines;
 using Services.GameStates;
-using System;
 
 namespace UI.Views
 {
@@ -11,10 +11,11 @@ namespace UI.Views
         [SerializeField] private Button _settingButton;
         [SerializeField] private Wrap _restartButton;
         [SerializeField] private Wrap _moneyPanel;
-        [SerializeField] private Wrap _distancePanel;
+        [SerializeField] private Wrap _distancePanelWrap;
         [SerializeField] private Image _curtain;
 
         private GameStateService _gameStateService;
+        private DistanceView _distanceView;
         private float _transparency = 0f;
         private float _notTransparency = 1f;
         private float _delayFade = 0.3f;
@@ -34,11 +35,13 @@ namespace UI.Views
             _restartButton.GetComponent<Button>().onClick.RemoveListener(Restart);
         }
 
-        public void Initialize(GameStateService gameStateService)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
             if (_gameStateService != null)
                 return;
 
+            _distanceView = _distancePanelWrap.GetComponent<DistanceView>();
+            _distanceView.Initialize(coroutineService);
             _gameStateService = gameStateService;
 
             OnEnable();
@@ -92,13 +95,15 @@ namespace UI.Views
         }
         private void OnGameRunning()
         {
+            _distanceView.RunShowDistance();
             _restartButton.ApplyOffsetTransform();
-            _distancePanel.ApplyOffsetTransform();
+            _distancePanelWrap.ApplyOffsetTransform();
         }
 
         private void OnGameFinished()
         {
-            _distancePanel.CancelOffsetTransform();
+            _distanceView.StopShowDistance();
+            _distancePanelWrap.CancelOffsetTransform();
             _restartButton.CancelOffsetTransform();
         }
     }

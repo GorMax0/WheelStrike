@@ -6,6 +6,7 @@ using DG.Tweening;
 namespace UI.Views.Money
 {
     [RequireComponent(typeof(RectTransform))]
+    [RequireComponent(typeof(AudioSource))]
     public class MoneyView : MonoBehaviour
     {
         [SerializeField] private Image _icon;
@@ -16,6 +17,7 @@ namespace UI.Views.Money
         private readonly float WidthLimiter = Screen.width / 6;
 
         private RectTransform _rectTransform;
+        private AudioSource _audioEffect;
         private Vector3 _startPosition;
         private Color _startColor = new Color(1, 1, 1, 1);
         private float _maxRandomOffset = 80;
@@ -27,6 +29,7 @@ namespace UI.Views.Money
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
+            _audioEffect = GetComponent<AudioSource>();
         }
 
         public void SetTransformParameters(Vector3 position)
@@ -45,6 +48,7 @@ namespace UI.Views.Money
             _count.gameObject.SetActive(true);
             gameObject.SetActive(true);
             Animation();
+            _audioEffect.Play();
         }
 
         public void DisplayOnFinishView(Vector2 spawnPosition)

@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Core
 {
     [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(AudioSource))]
     public class Wall : MonoBehaviour
     {
         [SerializeField] private Brick _brickTemplate;
@@ -12,6 +13,7 @@ namespace Core
         [SerializeField] private int _height = 50;
 
         private BoxCollider _boxCollider;
+        private AudioSource _audioSource;
         private List<Brick> _bricks = new List<Brick>();
 
         [field: SerializeField] public int Reward { get; private set; }
@@ -42,7 +44,10 @@ namespace Core
             }
 
             SetColliderParameters(widthBrick, heightBrick, lengthBrick);
+            GetAudioSource();
         }
+
+        public void PlaySound() => _audioSource.Play();
 
         public void StopMoveBricks() => _bricks.ForEach(brick => brick.StopMove());
 
@@ -67,6 +72,11 @@ namespace Core
             _boxCollider = GetComponent<BoxCollider>();
             _boxCollider.size = new Vector3(widthCollider, heightCollider, lengthBrick);
             _boxCollider.center = new Vector3(halfWidthCollider, halfHeightCollider, 0f);
+        }
+
+        private void GetAudioSource()
+        {
+            _audioSource = GetComponent<AudioSource>();
         }
     }
 }

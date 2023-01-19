@@ -75,11 +75,22 @@ namespace Parameters
         {
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Parameter level up for ads!");
-
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show();
-            _adsRewards.EnrollParameterLevelUpReward(parameter,_adsRewardMultiplier);
+            Agava.YandexGames.VideoAd.Show(OnOpenCallback,onCloseCallback: OnCloseCallback);
 #endif
+            _adsRewards.EnrollParameterLevelUpReward(parameter, _adsRewardMultiplier);
+        }
+
+        private void OnOpenCallback()
+        {
+            AudioListener.pause = true;
+            AudioListener.volume = 0f;
+        }
+
+        private void OnCloseCallback()
+        {
+            AudioListener.pause = false;
+            AudioListener.volume = 1f;
         }
     }
 }

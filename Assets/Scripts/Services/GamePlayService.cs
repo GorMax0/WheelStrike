@@ -134,11 +134,23 @@ namespace Services
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Show interstitial ads");
 #elif YANDEX_GAMES
-            Agava.YandexGames.InterstitialAd.Show();
+            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback);
 #endif
             ElapsedTime = 0;
 
             return true;
+        }
+
+        private void OnOpenCallback()
+        {
+            AudioListener.pause = true;
+            AudioListener.volume = 0f;
+        }
+
+        private void OnCloseCallback(bool isClose)
+        {
+            AudioListener.pause = !isClose;
+            AudioListener.volume = !isClose ? 0f : 1f;
         }
 
         private void OnGameStateChanged(GameState state)
@@ -196,6 +208,7 @@ namespace Services
         {
             _finishWall = wall;
             _levelScore.AddScore(wall.Reward);
+            wall.PlaySound();
         }
 
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();

@@ -5,8 +5,6 @@ using Parameters;
 using Services;
 using Services.Level;
 
-using UnityEngine;
-
 namespace Data
 {
     public class DataOperator : IDisposable
@@ -16,17 +14,19 @@ namespace Data
         private GamePlayService _gamePlayService;
         private LevelService _levelService;
         private LevelScore _levelScore;
+        private SoundController _soundController;
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
         //private List<Skin> _openSkins;
         //private List<TrailFX> _openTrails;
 
-        public DataOperator(GamePlayService gamePlayService, LevelService levelService, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
+        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
         {
             _gamePlayService = gamePlayService;
             _gamePlayService.SetDataOperator(this);
             _levelService = levelService;
             _levelScore = _levelService.Score;
+            _soundController = soundController;
             _wallet = wallet;
             _parameters = parameters;
             _saveSystem = new PlayerPrefsSystem();
@@ -66,6 +66,7 @@ namespace Data
             LoadParameters();
             LoadHighscore();
             LoadTime();
+            LoadMutedState();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
@@ -73,6 +74,12 @@ namespace Data
         private void SaveHighscore(int highscore)
         {
             _gameData.Highscore = highscore;
+            Save();
+        }
+
+        private void SaveMuted(bool isMuted)
+        {
+            _gameData.IsMuted = isMuted;
             Save();
         }
 
@@ -108,6 +115,8 @@ namespace Data
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
+        private void LoadMutedState() => _soundController.LoadMutedState(_gameData.IsMuted);
+
         private void LoadParameters()
         {
             foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
@@ -136,6 +145,7 @@ namespace Data
         {
             _wallet.MoneyChanged += SaveMoney;
             _levelScore.HighscoreChanged += SaveHighscore;
+            _soundController.MutedChanged += SaveMuted;
 
             foreach (var parameter in _parameters)
             {
@@ -147,6 +157,7 @@ namespace Data
         {
             _wallet.MoneyChanged -= SaveMoney;
             _levelScore.HighscoreChanged -= SaveHighscore;
+            _soundController.MutedChanged -= SaveMuted;
 
             foreach (var parameter in _parameters)
             {

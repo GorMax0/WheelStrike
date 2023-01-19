@@ -18,7 +18,7 @@ namespace Core
         private float _minValue;
         private float _currentValue;
         private float _finalValue = 1f;
-        private float _startTimerValue = 1;
+        private float _startTimerValue = 1f;
         private CoroutineRunning _changeMultiplier;
         private GameStateService _gameStateService;
         private bool _isInitialized = false;
@@ -61,12 +61,6 @@ namespace Core
             RangeChanged?.Invoke(_minValue, _maxValue);
         }
 
-        private void RandomizeStartValue()
-        {
-            float randomValue = Random.Range(_minValue, _maxValue);
-            _currentValue = randomValue;
-        }
-
         private IEnumerator ChangeMultiplier()
         {
             float timer = _startTimerValue;
@@ -83,7 +77,7 @@ namespace Core
                     _currentValue = _maxValue;
                     _maxValue = _minValue;
                     _minValue = _currentValue;
-                    timer = _startTimerValue;                  
+                    timer = _startTimerValue;   
                 }
 
                 yield return null;
@@ -120,7 +114,6 @@ namespace Core
 
         private void OnGameWaiting()
         {
-            RandomizeStartValue();
             _changeMultiplier.Run(ChangeMultiplier());
         }
 

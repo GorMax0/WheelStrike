@@ -10,6 +10,7 @@ namespace Data
         public int SizeParameter;
         public int IncomeParameter;
         public float ElapsedTime;
+        public bool IsMuted;
 
         //public IEnumerable<Skin> OpenSkins;
         //public IEnumerable<TrailFX> OpenTrails;

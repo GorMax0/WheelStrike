@@ -6,14 +6,21 @@ using Services.GameStates;
 namespace Core
 {
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Explosion))]
+    [RequireComponent(typeof(AudioSource))]
     public class Car : MonoBehaviour
     {
+        [SerializeField] private int _minRandomReward;
+        [SerializeField] private int _maxRandomReward;
+
+        private const int FullPercent = 100;
         private const float Speed = 3.5f;
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
         private Explosion _explosion;
         private CarWheel[] _carWheels;
+        private AudioSource _audioSource;
         private GameStateService _gameStateService;
         private bool _isInitialized = false;
 
@@ -45,6 +52,7 @@ namespace Core
             _rigidbody = GetComponent<Rigidbody>();
             _meshRenders = GetComponentsInChildren<MeshRenderer>();
             _explosion = GetComponent<Explosion>();
+            _audioSource = GetComponent<AudioSource>();
             _carWheels = GetComponentsInChildren<CarWheel>();
 
             InitializeWheels();
@@ -65,6 +73,8 @@ namespace Core
                 meshRenderer.material.DOColor(Color.black, 0.3f);
                 meshRenderer.material.DisableKeyword("_EMISSION");
             }
+
+            _audioSource.Play();
         }
 
         public void StopMove()
@@ -92,10 +102,7 @@ namespace Core
             }
         }
 
-        private void RandomizeRewardIncrease()
-        {
-            Reward += (int)(Reward * UnityEngine.Random.value);
-        }
+        private void RandomizeRewardIncrease() => Reward += (Reward * UnityEngine.Random.Range(_minRandomReward, _maxRandomReward)) / FullPercent;
 
         private void Move()
         {

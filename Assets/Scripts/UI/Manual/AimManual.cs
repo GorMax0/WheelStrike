@@ -28,7 +28,7 @@ namespace UI.Manual
 
         public void Fade()
         {
-            _manualText.DisableLoop();
+            _manualText.Fade();
             _sliderBackground.DOFade(0, _fadeTime);
             _sliderHandler.DOFade(0, _fadeTime);
             Invoke(nameof(Disable), _fadeTime);

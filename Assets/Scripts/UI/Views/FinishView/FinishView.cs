@@ -71,7 +71,9 @@ namespace UI.Views.Finish
             InitializeDistanceBar(viewHandler, lengthRoad);
             InitializeRewardScalerView(rewardScaler);
             _isInitialized = true;
-            OnEnable();
+
+            if (gameObject.activeInHierarchy == true)
+                OnEnable();
         }
 
         public void StartAnimation()

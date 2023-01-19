@@ -61,6 +61,9 @@ namespace UI.Views.Finish
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
         {
+            if (_isInitialized == true)
+                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService): Already initialized.");
+
             _validator = GetComponent<ScreenOrientationValidator>();
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
@@ -102,7 +105,7 @@ namespace UI.Views.Finish
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("OnAdsButtonClicked");
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+            Agava.YandexGames.VideoAd.Show(onOpenCallback: OnOpenCallback, onRewardedCallback: OnRewardedCallback, onCloseCallback: OnCloseCallback);
 #endif
         }
 
@@ -166,6 +169,18 @@ namespace UI.Views.Finish
             _currentFinishView.StartAnimation();
 
             _isFinished = true;
+        }
+
+        private void OnOpenCallback()
+        {
+            AudioListener.pause = true;
+            AudioListener.volume = 0f;
+        }
+
+        private void OnCloseCallback()
+        {
+            AudioListener.pause = false;
+            AudioListener.volume = 1f;
         }
 
         private void OnRewardedCallback()
