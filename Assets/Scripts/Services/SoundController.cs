@@ -13,6 +13,7 @@ namespace Services
         [SerializeField] private AudioClip _wind;
         [SerializeField] private AudioClip _swingWheel;
         [SerializeField] private AudioClip _runWheel;
+        [SerializeField] private AudioClip _finish;
         [SerializeField] private Movement _movementWheel;
         [SerializeField] private AudioSource _craneAudioSource;
         [SerializeField] private Toggle _mutedSwitcher;
@@ -137,6 +138,8 @@ namespace Services
         private void OnGameFinished()
         {
             _mainAudioSource.Stop();
+            _craneAudioSource.clip = _finish;
+            _craneAudioSource.Play();
         }
 
         private void OnInBackgroundChange(bool inBackground)

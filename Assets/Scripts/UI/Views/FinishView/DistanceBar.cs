@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,9 +55,9 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedHighscoreLoaded += OnDisplayedNewHighscoreLable;
         }
 
-        private void SetPointerHighscore(int newHighscore)
+        private void SetPointerHighscore(int highscore)
         {
-            float normalizedDistance = newHighscore / (_lengthRoad + LenghRoadCorrector);
+            float normalizedDistance = highscore / (_lengthRoad + LenghRoadCorrector);
             _highscore.value = normalizedDistance;
         }
 

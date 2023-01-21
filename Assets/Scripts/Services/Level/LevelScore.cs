@@ -8,8 +8,8 @@ namespace Services.Level
     {
         private ITravelable _travelable;
         private Parameter _income;
-        private int _score;
-        private int _adsScoreRate = 1;
+        private int _reward;
+        private int _adsRewardRate = 1;
         private int _highscore;
 
         public LevelScore(ITravelable travelable, Parameter income)
@@ -21,9 +21,9 @@ namespace Services.Level
         public event Action<int> HighscoreChanged;
         public event Action<int> HighscoreLoaded;
 
-        public int Score => _score + _travelable.DistanceTraveled;
-        public int BonusScore => (int)(Score * _income.Value);
-        public int ResultScore => (Score + BonusScore) * _adsScoreRate;
+        public int Reward => _reward + _travelable.DistanceTraveled;
+        public int BonusReward => (int)(Reward * _income.Value);
+        public int ResultReward => (Reward + BonusReward) * _adsRewardRate;
 
         public void LoadHighscore(int highscore)
         {
@@ -31,12 +31,12 @@ namespace Services.Level
             HighscoreLoaded?.Invoke(_highscore);
         }
 
-        public void AddScore(int score)
+        public void AddReward(int reward)
         {
-            if (score <= 0)
-                throw new InvalidOperationException($"{GetType()}: AddScore(int score): Amount money {score} is invalid.");
+            if (reward <= 0)
+                throw new InvalidOperationException($"{GetType()}: AddScore(int reward): Amount money {reward} is invalid.");
 
-            _score += score;
+            _reward += reward;
         }
         
         public void SetHighscore(int distance)
@@ -48,6 +48,6 @@ namespace Services.Level
             HighscoreChanged?.Invoke(_highscore);
         }
 
-        public void SetAdsScoreRate(int rate) => _adsScoreRate = rate;
+        public void SetAdsRewardRate(int rate) => _adsRewardRate = rate;
     }
 }

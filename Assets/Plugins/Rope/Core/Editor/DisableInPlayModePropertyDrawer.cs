@@ -3,6 +3,7 @@ using UnityEditor;
 
 namespace RopeMinikit
 {
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(DisableInPlayModeAttribute))]
     public class BeginLockInPlayModeDecoratorDrawer : PropertyDrawer
     {
@@ -40,4 +41,5 @@ namespace RopeMinikit
             }
         }
     }
+#endif
 }

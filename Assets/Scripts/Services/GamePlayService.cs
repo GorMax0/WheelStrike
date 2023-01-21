@@ -190,7 +190,7 @@ namespace Services
         {
             _delayHoldTime = 0;
             _finishWall?.StopMoveBricks();
-            _wallet.EnrollMoney(_levelScore.ResultScore);
+            _wallet.EnrollMoney(_levelScore.ResultReward);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
 
             Dispose();
@@ -211,13 +211,13 @@ namespace Services
 
         private void OnPointerUp() => _gameStateService.ChangeState(GameState.Running);
 
-        private void OnCollidedWithObstacle(Obstacle obstacle) => _levelScore.AddScore(obstacle.Reward);
+        private void OnCollidedWithObstacle(Obstacle obstacle) => _levelScore.AddReward(obstacle.Reward);
 
         private void OnTriggeredEnterWithCar(Car car)
         {
             car.Explode();
             car.StopMove();
-            _levelScore.AddScore(car.Reward);
+            _levelScore.AddReward(car.Reward);
             TriggeredCar?.Invoke(car);
             _holdTime.Run(HoldTime());
         }
@@ -227,7 +227,7 @@ namespace Services
         private void OnTriggeredWithWall(Wall wall)
         {
             _finishWall = wall;
-            _levelScore.AddScore(wall.Reward);
+            _levelScore.AddReward(wall.Reward);
             wall.PlaySound();
         }
 

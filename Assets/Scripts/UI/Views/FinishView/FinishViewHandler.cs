@@ -10,12 +10,13 @@ using AdsReward;
 namespace UI.Views.Finish
 {
     [RequireComponent(typeof(ScreenOrientationValidator))]
+    [RequireComponent(typeof(FinishViewTopLabelSetter))]
     public class FinishViewHandler : MonoBehaviour
     {
         [SerializeField] private FinishView _viewPortrait;
         [SerializeField] private FinishView _viewLandscape;
         [Range(0.001f, 0.05f)]
-        [SerializeField] private float _waitingDelay;
+        [SerializeField] private float _waitingDelayDisplayValue;
         [SerializeField] private ParticleSystem _finishEffect;
         [SerializeField] private AdsRewards _adsRewards;
 
@@ -26,6 +27,7 @@ namespace UI.Views.Finish
         private CoroutineRunning _scoreDisplay;
         private CoroutineRunning _bonusScoreDisplay;
         private ScreenOrientationValidator _validator;
+        private FinishViewTopLabelSetter _topLabelSetter;
         private FinishView _currentFinishView;
         private ITravelable _travelable;
         private LevelService _levelService;
@@ -35,8 +37,8 @@ namespace UI.Views.Finish
         private bool _isFinished;
 
         public event Action<int> DisplayedDistanceChanged;
-        public event Action<int> DisplayedScoreChanged;
-        public event Action<int> DisplayedBonusScoreChanged;
+        public event Action<int> DisplayedRewardChanged;
+        public event Action<int> DisplayedBonusRewardChanged;
         public event Action<int> DisplayedHighscoreChanged;
         public event Action<int> DisplayedHighscoreLoaded;
 
@@ -65,6 +67,7 @@ namespace UI.Views.Finish
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService): Already initialized.");
 
             _validator = GetComponent<ScreenOrientationValidator>();
+            _topLabelSetter = GetComponent<FinishViewTopLabelSetter>();
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
             _travelable = travelable;
@@ -81,23 +84,11 @@ namespace UI.Views.Finish
             OnEnable();
         }
 
-        public void DisplayDistance()
-        {
-            float distanceTraveled = _travelable.DistanceTraveled;
-            _distanceDisplay.Run(DisplayValue(distanceTraveled, DisplayedDistanceChanged));
-        }
+        public void DisplayDistance() => _distanceDisplay.Run(DisplayValue(_travelable.DistanceTraveled, DisplayedDistanceChanged));
 
-        public void DisplayScore()
-        {
-            float score = _levelScore.Score;
-            _scoreDisplay.Run(DisplayValue(score, DisplayedScoreChanged));
-        }
+        public void DisplayReward() => _scoreDisplay.Run(DisplayValue(_levelScore.Reward, DisplayedRewardChanged));
 
-        public void DisplayBonusScore()
-        {
-            float bonusScore = _levelScore.BonusScore;
-            _bonusScoreDisplay.Run(DisplayValue(bonusScore, DisplayedBonusScoreChanged));
-        }
+        public void DisplayBonusReward() => _bonusScoreDisplay.Run(DisplayValue(_levelScore.BonusReward, DisplayedBonusRewardChanged));
 
         public void OnAdsButtonClick()
         {
@@ -121,7 +112,7 @@ namespace UI.Views.Finish
 
         private IEnumerator DisplayValue(float endValue, Action<int> displayedValueChanged)
         {
-            WaitForSeconds waitForSeconds = new WaitForSeconds(_waitingDelay);
+            WaitForSeconds waitForSeconds = new WaitForSeconds(_waitingDelayDisplayValue);
             float displayedValue = 0f;
             float dividerForStep = 14f;
             float step = endValue / dividerForStep;
@@ -167,6 +158,7 @@ namespace UI.Views.Finish
         {
             _finishEffect.Play();
             _currentFinishView.gameObject.SetActive(true);
+            _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);
             _currentFinishView.StartAnimation();
 
             _isFinished = true;
@@ -186,8 +178,8 @@ namespace UI.Views.Finish
 
         private void OnRewardedCallback()
         {
-            _levelScore.SetAdsScoreRate(_rewardScaler.CurrentRate);
-            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultScore);
+            _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
+            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
         }
     }
 }
