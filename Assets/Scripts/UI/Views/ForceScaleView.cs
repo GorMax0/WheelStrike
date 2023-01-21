@@ -32,15 +32,6 @@ namespace UI.Views
             _forceScale.MultiplierChanged -= OnMultiplierChanged;
         }
 
-        public void Initialize(ForceScale forceScale)
-        {
-            if (_forceScale != null)
-                return;
-
-            _forceScale = forceScale;
-            OnEnable();
-        }
-
         public void Fade()
         {
             _sliderBackground.DOFade(0, _fadeTime);

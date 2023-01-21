@@ -78,7 +78,9 @@ namespace Parameters
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(OnOpenCallback,onCloseCallback: OnCloseCallback);
 #endif
+            
             _adsRewards.EnrollParameterLevelUpReward(parameter, _adsRewardMultiplier);
+            // -------------> if(Agava.WebUtility.AdBlock.Enabled)
         }
 
         private void OnOpenCallback()

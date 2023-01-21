@@ -107,6 +107,7 @@ namespace UI.Views.Finish
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(onOpenCallback: OnOpenCallback, onRewardedCallback: OnRewardedCallback, onCloseCallback: OnCloseCallback);
 #endif
+            // -------------> if(Agava.WebUtility.AdBlock.Enabled)
         }
 
         private void InitializeViews()

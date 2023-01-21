@@ -134,23 +134,43 @@ namespace Services
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Show interstitial ads");
 #elif YANDEX_GAMES
-            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback);
+            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback,OnOfflineCallback);
 #endif
             ElapsedTime = 0;
 
             return true;
         }
 
-        private void OnOpenCallback()
+        private void SoundOff()
         {
             AudioListener.pause = true;
             AudioListener.volume = 0f;
         }
 
+        private static void SoundOn()
+        {
+            AudioListener.pause = false;
+            AudioListener.volume = 1f;
+        }
+
+        private void OnOpenCallback()
+        {
+            SoundOff();
+        }
+
         private void OnCloseCallback(bool isClose)
         {
-            AudioListener.pause = !isClose;
-            AudioListener.volume = !isClose ? 0f : 1f;
+            SoundOn();
+        }
+
+        private void OnErrorCallback(string error)
+        {
+            SoundOn();
+        }
+
+        private void OnOfflineCallback()
+        {
+            SoundOn();
         }
 
         private void OnGameStateChanged(GameState state)

@@ -35,13 +35,13 @@ namespace Services
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-       //     Agava.WebUtility.WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
+            Agava.WebUtility.WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
-          //  Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
+            Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
         }
 
         private void Update()

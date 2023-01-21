@@ -36,7 +36,7 @@ namespace Core
         [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
-        [SerializeField] private Rope _rope;
+        [SerializeField] private RopeDisconnection _ropeDisconnection;
         [SerializeField] private Player _wheel;
         [SerializeField] private InteractionHandler _interactionHandler;        
 
@@ -98,7 +98,7 @@ namespace Core
             _carBuilder.CreateCars(_gameStateService);
             _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);
-            _rope.Initialize(_gameStateService);
+            _ropeDisconnection.Initialize(_gameStateService);
             _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection, _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
         }
 
