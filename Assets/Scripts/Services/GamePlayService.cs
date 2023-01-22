@@ -29,6 +29,7 @@ namespace Services
         private DataOperator _dataOperator;
         private CoroutineRunning _holdTime;
         private CoroutineRunning _timerForIntervalBetweenAds;
+        private CoroutineRunning _unlockInputHandler;
         private Wall _finishWall;
         private float _delayHoldTime;
 
@@ -44,6 +45,7 @@ namespace Services
             _wallet = wallet;
             _holdTime = new CoroutineRunning(_coroutineService);
             _timerForIntervalBetweenAds = new CoroutineRunning(_coroutineService);
+            _unlockInputHandler = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
 
@@ -80,6 +82,12 @@ namespace Services
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
+        }
+
+        private IEnumerator UnlockInputHandler()
+        {
+            yield return new WaitForSeconds(0.25f);
+            _inputHandler.gameObject.SetActive(true);
         }
 
         private void SetDefaultTime()
@@ -121,7 +129,7 @@ namespace Services
         {
             while (true)
             {
-                ElapsedTime+=Time.deltaTime;
+                ElapsedTime += Time.deltaTime;
                 yield return null;
             }
         }
@@ -130,7 +138,7 @@ namespace Services
         {
             if (IntervalBetweenAds - ElapsedTime > 0)
                 return false;
-      
+
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Show interstitial ads");
 #elif YANDEX_GAMES
@@ -141,42 +149,48 @@ namespace Services
             return true;
         }
 
-        private void SoundOff()
+        private void PauseOn()
         {
             AudioListener.pause = true;
             AudioListener.volume = 0f;
+            Time.timeScale = 0f;
         }
 
-        private static void SoundOn()
+        private static void PauseOff()
         {
             AudioListener.pause = false;
             AudioListener.volume = 1f;
+            Time.timeScale = 1f;
         }
 
         private void OnOpenCallback()
         {
-            SoundOff();
+            PauseOn();
         }
 
         private void OnCloseCallback(bool isClose)
         {
-            SoundOn();
+            PauseOff();
         }
 
         private void OnErrorCallback(string error)
         {
-            SoundOn();
+            Debug.LogWarning(error);
+            PauseOff();
         }
 
         private void OnOfflineCallback()
         {
-            SoundOn();
+            PauseOff();
         }
 
         private void OnGameStateChanged(GameState state)
         {
             switch (state)
             {
+                case GameState.Initializing:
+                    OnGameInitializing();
+                    break;
                 case GameState.Finished:
                     OnGameFinished();
                     break;
@@ -185,6 +199,8 @@ namespace Services
                     break;
             }
         }
+
+        private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
 
         private void OnGameFinished()
         {
@@ -202,7 +218,7 @@ namespace Services
             _delayHoldTime = 0;
 
             TryShowInterstitialAds();
-            _dataOperator.Save(); 
+            _dataOperator.Save();
 
             _levelService.RestartLevel();
         }

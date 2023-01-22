@@ -10,9 +10,8 @@ namespace Core
     {
         [SerializeField, Range(0.1f, 0.7f)] private float _valueRange = 0.18f;
         [SerializeField] private float _duration;
-        [SerializeField] private ParticleSystem _greenZoneParticle;
 
-        private readonly float GreenZoneRaito = 12;
+        private const float GreenZoneRaito = 24;
 
         private float _maxValue;
         private float _minValue;
@@ -25,6 +24,7 @@ namespace Core
 
         public event UnityAction<float, float> RangeChanged;
         public event UnityAction<float> MultiplierChanged;
+        public event UnityAction HitGreenZone;
 
         public float FinalValue => _finalValue;
 
@@ -77,24 +77,18 @@ namespace Core
                     _currentValue = _maxValue;
                     _maxValue = _minValue;
                     _minValue = _currentValue;
-                    timer = _startTimerValue;   
+                    timer = _startTimerValue;
                 }
 
                 yield return null;
             }
         }
 
-        private bool HasGreenZone()
+        private bool TryHitGreenZone()
         {
-            float GreenZoneValue = (Mathf.Abs(_minValue) + _maxValue) / GreenZoneRaito;
+            float GreenZoneValue = (Mathf.Abs(_minValue) + Mathf.Abs(_maxValue)) / GreenZoneRaito;
 
             return _currentValue >= -GreenZoneValue && _currentValue <= GreenZoneValue;
-        }
-
-        private void PlayEffectGreenZone()
-        {
-            if (HasGreenZone() == true)
-                _greenZoneParticle.Play();
         }
 
         private void CalculateFinalMultiplier() => _finalValue -= Mathf.Abs(_currentValue);
@@ -112,16 +106,15 @@ namespace Core
             }
         }
 
-        private void OnGameWaiting()
-        {
-            _changeMultiplier.Run(ChangeMultiplier());
-        }
+        private void OnGameWaiting() => _changeMultiplier.Run(ChangeMultiplier());
 
         private void OnGameRunning()
         {
             _changeMultiplier.Stop();
             CalculateFinalMultiplier();
-            PlayEffectGreenZone();
+
+            if (TryHitGreenZone() == true)
+                HitGreenZone?.Invoke();
         }
     }
 }

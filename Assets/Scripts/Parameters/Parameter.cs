@@ -11,17 +11,15 @@ namespace Parameters
         public Parameter(ParameterObject creater)
         {
             Type = creater.Type;
-            Name = ParameterName.GetName(creater.Type);
             _baseValue = creater.BaseValue;
             _baseCost = creater.BaseCost;
             Icon = creater.Icon;
         }
 
-          public event Action<Parameter> LevelChanged;
-          public event Action Loaded;
+        public event Action<Parameter> LevelChanged;
+        public event Action Loaded;
 
         public ParameterType Type { get; }
-        public string Name { get; }
         public Sprite Icon { get; }
         public int Level { get; private set; } = 1;
         public float Value => _baseValue * Level;
@@ -29,7 +27,7 @@ namespace Parameters
 
         public void LoadLevel(int level)
         {
-            if(level <= 0)
+            if (level <= 0)
                 return;
 
             Level = level;

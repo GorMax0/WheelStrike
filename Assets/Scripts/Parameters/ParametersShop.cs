@@ -16,7 +16,10 @@ namespace Parameters
 
         private Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
         private Wallet _wallet;
+        private Parameter _tempParameterForRewardAds;
         private int _adsRewardMultiplier = 3;
+
+        private event Action<string> ErrorCallback;
 
         private void OnDestroy()
         {
@@ -40,6 +43,7 @@ namespace Parameters
             }
 
             _wallet = wallet;
+            ErrorCallback += OnErrorCallback;
         }
 
         public void ChangeInteractableLevelUpButtons()
@@ -66,20 +70,20 @@ namespace Parameters
         }
 
         private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action Refresh)
-        {
+        {            
             ShowAds(parameter);
             Refresh();
         }
 
         private void ShowAds(Parameter parameter)
         {
+            _tempParameterForRewardAds = parameter;
+
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Parameter level up for ads!");
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(OnOpenCallback,onCloseCallback: OnCloseCallback);
-#endif
-            
-            _adsRewards.EnrollParameterLevelUpReward(parameter, _adsRewardMultiplier);
+            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, ErrorCallback);
+#endif     
             // -------------> if(Agava.WebUtility.AdBlock.Enabled)
         }
 
@@ -87,12 +91,26 @@ namespace Parameters
         {
             AudioListener.pause = true;
             AudioListener.volume = 0f;
+            Time.timeScale = 0f;
         }
+
+        private void OnRewardedCallback()
+        {
+            _adsRewards.EnrollParameterLevelUpReward(_tempParameterForRewardAds, _adsRewardMultiplier);
+            _tempParameterForRewardAds = null;
+        }    
 
         private void OnCloseCallback()
         {
             AudioListener.pause = false;
             AudioListener.volume = 1f;
+            Time.timeScale = 1f;
+        }
+
+        private void OnErrorCallback(string message)
+        {
+            Debug.LogWarning(message);
+            OnCloseCallback();
         }
     }
 }

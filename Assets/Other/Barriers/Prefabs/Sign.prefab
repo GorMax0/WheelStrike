@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 437368}
   - component: {fileID: 6553272}
   - component: {fileID: 7248397981922105258}
+  - component: {fileID: 8643256775151183168}
   m_Layer: 0
   m_Name: Sign
   m_TagString: Untagged
@@ -146,3 +147,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8643256775151183168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e93c6438e5cc8844866660b29b0c316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Reward>k__BackingField: 15

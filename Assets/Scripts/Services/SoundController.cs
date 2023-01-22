@@ -70,13 +70,13 @@ namespace Services
 
         public void LoadMutedState(bool isMuted)
         {
-            _mutedSwitcher.isOn = !isMuted;
+            _mutedSwitcher.isOn = isMuted;
             AudioListener.volume = isMuted == true ? _minVolume : _maxVolume;
         }
 
-        public void SwitchMuted(bool isUnmuted)
+        public void SwitchMuted(bool isMuted)
         {
-            _isMuted = !isUnmuted;
+            _isMuted = isMuted;
             AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
             MutedChanged?.Invoke(_isMuted);            
         }

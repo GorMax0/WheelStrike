@@ -21,6 +21,7 @@ namespace Core.Wheel
         private bool _isInitialized = false;
 
         public ITravelable Travelable => _movement;
+        public float Mass => _rigidbody.mass;
 
         private void Awake()
         {

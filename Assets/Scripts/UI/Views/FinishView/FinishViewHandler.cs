@@ -9,7 +9,6 @@ using AdsReward;
 
 namespace UI.Views.Finish
 {
-    [RequireComponent(typeof(ScreenOrientationValidator))]
     [RequireComponent(typeof(FinishViewTopLabelSetter))]
     public class FinishViewHandler : MonoBehaviour
     {
@@ -26,7 +25,6 @@ namespace UI.Views.Finish
         private CoroutineRunning _distanceDisplay;
         private CoroutineRunning _scoreDisplay;
         private CoroutineRunning _bonusScoreDisplay;
-        private ScreenOrientationValidator _validator;
         private FinishViewTopLabelSetter _topLabelSetter;
         private FinishView _currentFinishView;
         private ITravelable _travelable;
@@ -48,7 +46,7 @@ namespace UI.Views.Finish
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _validator.OrientationValidated += OnOrientationValidated;
+            ScreenOrientationValidator.Instance.OrientationValidated += OnOrientationValidated;
             _levelScore.HighscoreChanged += OnHighscoreChanged;
             _levelScore.HighscoreLoaded += OnHighscoreLoaded;
         }
@@ -56,7 +54,7 @@ namespace UI.Views.Finish
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateChanged;
-            _validator.OrientationValidated -= OnOrientationValidated;
+            ScreenOrientationValidator.Instance.OrientationValidated -= OnOrientationValidated;
             _levelScore.HighscoreChanged -= OnHighscoreChanged;
             _levelScore.HighscoreLoaded -= OnHighscoreLoaded;
         }
@@ -66,7 +64,6 @@ namespace UI.Views.Finish
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService): Already initialized.");
 
-            _validator = GetComponent<ScreenOrientationValidator>();
             _topLabelSetter = GetComponent<FinishViewTopLabelSetter>();
             _gameStateService = gameStateService;
             _coroutineService = coroutineService;
@@ -168,12 +165,14 @@ namespace UI.Views.Finish
         {
             AudioListener.pause = true;
             AudioListener.volume = 0f;
+            Time.timeScale = 0f;
         }
 
         private void OnCloseCallback()
         {
             AudioListener.pause = false;
             AudioListener.volume = 1f;
+            Time.timeScale = 1f;
         }
 
         private void OnRewardedCallback()

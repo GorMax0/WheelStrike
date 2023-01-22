@@ -5,11 +5,26 @@ namespace UI
 {
     public class ScreenOrientationValidator : MonoBehaviour
     {
+        public static ScreenOrientationValidator Instance;
+
         private float _screenWidth;
         private float _screenHeight;
         private bool _hasPortraitOrientation;
 
         public event UnityAction<bool> OrientationValidated;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
 
         private void Start()
         {

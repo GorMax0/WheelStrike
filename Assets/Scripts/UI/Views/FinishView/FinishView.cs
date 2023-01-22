@@ -8,10 +8,7 @@ namespace UI.Views.Finish
 {
     public class FinishView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _topLabelGoodStart;
-        [SerializeField] private TMP_Text _topLabelAlreadyHalfwayThere;
-        [SerializeField] private TMP_Text _topLabelAlmostThere;
-        [SerializeField] private TMP_Text _topLabelNextLevelIsOpen;
+        [SerializeField] private TMP_Text _topLabel;
         [SerializeField] private TMP_Text _distance;
         [SerializeField] private TMP_Text _highscoreLable;
         [SerializeField] private TMP_Text _score;
@@ -35,7 +32,6 @@ namespace UI.Views.Finish
 
         private FinishViewHandler _viewHandler;
         private Material _uiMaterial;
-        private TMP_Text _selectedTopLabel;
         private bool _isInitialized;
         private bool _hasNewHighscore;
 
@@ -86,7 +82,7 @@ namespace UI.Views.Finish
 
             DOTween.Sequence()
                 .Append(_uiMaterial.DOFade(EndTransparency, DurationFade).SetEase(Ease.InOutSine))
-                .Append(_topLabelGoodStart.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(_topLabel.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)
                 .Append(_distance.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)

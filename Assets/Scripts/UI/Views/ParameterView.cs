@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Parameters;
 using DG.Tweening;
+using Lean.Localization;
 
 namespace UI.Views
 {
@@ -35,6 +36,12 @@ namespace UI.Views
         private const float AnimationMoveYDuration = 0.7f;
         private const float AnimationScaleDuration = 0.07f;
         private const float LabelOffsetY = 20f;
+        private const string TurkishLanguage = "Turkish";
+        private const string RussianLanguage = "Russian";
+        private const string EnglishLanguage = "English";
+        private const string LevelTurkey = "Seviyesi";
+        private const string LevelRussian = "”ровень";
+        private const string LevelEnglish = "Level";
 
         private Parameter _parametr;
         private Vector2 _startScale;
@@ -48,12 +55,14 @@ namespace UI.Views
 
         private void OnEnable()
         {
+            LeanLocalization.OnLocalizationChanged += OnLocalizationChanged;
             _levelUp.onClick.AddListener(OnButtonClick);
         }
 
         private void OnDisable()
         {
             DOTween.Kill(_label.transform);
+            LeanLocalization.OnLocalizationChanged -= OnLocalizationChanged;
             _levelUp.onClick.RemoveListener(OnButtonClick);
         }
 
@@ -65,8 +74,8 @@ namespace UI.Views
         public void Renger(Parameter parametr, int rewardMultiplier)
         {
             _parametr = parametr;
-            _name.text = _parametr.Name;
-            _level.text = $"”р. {_parametr.Level}";
+            _name.text = ParameterName.GetName(parametr.Type);
+            _level.text = GetLevelText();
             _cost.text = _parametr.Cost.ToString();
             _icon.sprite = _parametr.Icon;
             _adsMultiplierText.text = $"+{rewardMultiplier}";
@@ -98,7 +107,7 @@ namespace UI.Views
 
         private void Refresh()
         {
-            _level.text = $"”р. {_parametr.Level}";
+            _level.text = GetLevelText();
             _cost.text = _parametr.Cost.ToString();
         }
 
@@ -116,6 +125,30 @@ namespace UI.Views
             {
                 LevelUpForAdsButtonClicked?.Invoke(_parametr, Refresh);
             }
+        }
+
+        private string GetLevelText()
+        {
+            string language = LeanLocalization.GetFirstCurrentLanguage();
+
+            switch (language)
+            {
+                case TurkishLanguage:
+                    return $"{LevelTurkey} {_parametr.Level}";
+
+                case RussianLanguage:
+                    return $"{LevelRussian} {_parametr.Level}";
+
+                case EnglishLanguage:
+                default:
+                    return $"{LevelEnglish} {_parametr.Level}";
+            }
+        }
+
+        private void OnLocalizationChanged()
+        {
+            _name.text = ParameterName.GetName(_parametr.Type);
+            _level.text = GetLevelText();
         }
     }
 }
