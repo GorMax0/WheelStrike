@@ -19,17 +19,16 @@ namespace Services
         [SerializeField] private AudioSource _craneAudioSource;
         [SerializeField] private Toggle _mutedSwitcher;
 
+        private static bool _isMuted;
+
         private AudioSource _mainAudioSource;
         private GameStateService _gameStateService;
         private float _minVolume = 0f;
         private float _maxVolume = 1f;
         private float _initialWheelSpeed;
-        private bool _isMuted;
         private bool _isInitialized;
 
         public event Action<bool> MutedChanged;
-
-        public bool IsMute => _isMuted;
 
         private void OnEnable()
         {
@@ -147,7 +146,21 @@ namespace Services
         private void OnInBackgroundChange(bool inBackground)
         {            
             AudioListener.pause = inBackground;
-            AudioListener.volume = inBackground ? 0f : 1f;
+
+            if (inBackground == true)
+                AudioListener.volume = 0f;
+            else
+                AudioListener.volume = _isMuted == true ? 0f : 1f;
+        }
+
+        public static void ChangeWhenAd(bool _isShowAd)
+        {
+            AudioListener.pause = _isShowAd;
+
+            if (_isShowAd == true)
+                AudioListener.volume = 0f;
+            else
+                AudioListener.volume = _isMuted == true ? 0f : 1f;
         }
     }
 }

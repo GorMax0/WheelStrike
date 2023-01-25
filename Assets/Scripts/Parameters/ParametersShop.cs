@@ -5,6 +5,7 @@ using GameAnalyticsSDK;
 using Core;
 using Core.Wheel;
 using UI.Views;
+using Services;
 
 namespace Parameters
 {
@@ -20,7 +21,6 @@ namespace Parameters
         private int _adsRewardMultiplier = 3;
 
         private event Action<string> ErrorCallback;
-        private event Action RefreshView;
 
         private void OnDestroy()
         {
@@ -59,7 +59,7 @@ namespace Parameters
 
         private bool HasMoneyToBuy(Parameter parameter) => _wallet.Money >= parameter.Cost;
 
-        private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action Refresh)
+        private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action onRefresh)
         {
             if (TryParameterLevelUp(parameter) == false)
                 return;
@@ -67,50 +67,49 @@ namespace Parameters
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Money", parameter.Cost, "ParameterShop", $"{parameter.Type}");
             parameter.LevelUp();
             _animationWheel.ParameterUp();
-            Refresh();
+            onRefresh();
             ChangeInteractableLevelUpButtons();
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
         }
 
-        private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action Refresh)
+        private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action onRefresh)
         {            
-            ShowAds(parameter);
-            RefreshView = Refresh;
+            ShowAds(parameter, onRefresh);
         }
 
-        private void ShowAds(Parameter parameter)
+        private void ShowAds(Parameter parameter, Action onRefresh)
         {
             _tempParameterForRewardAds = parameter;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Parameter level up for ads!");
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, ErrorCallback);
+            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback(onRefresh), OnCloseCallback, ErrorCallback);
 #endif     
-            // -------------> if(Agava.WebUtility.AdBlock.Enabled)
+            // -------------> if(Agava.WebUtility.AdBlock.Enabled
         }
 
         private void OnOpenCallback()
         {
-            AudioListener.pause = true;
-            AudioListener.volume = 0f;
+            SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
-            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "Yandex", $"Yandex");
-            GameAnalytics.NewDesignEvent("rewardMultiplier-ad-click");
+            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
+            GameAnalytics.NewDesignEvent("AdClick:ParameterLevelUp");
         }
 
-        private void OnRewardedCallback()
+        private Action OnRewardedCallback(Action onRefresh)
         {
-            RefreshView();
             _adsRewards.EnrollParameterLevelUpReward(_tempParameterForRewardAds, _adsRewardMultiplier);
             _tempParameterForRewardAds = null;
-            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
+            onRefresh();
+
+            return null;
         }    
 
         private void OnCloseCallback()
         {
-            AudioListener.pause = false;
-            AudioListener.volume = 1f;
+            SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;            
         }
 
@@ -118,7 +117,7 @@ namespace Parameters
         {
             Debug.LogWarning(message);
             OnCloseCallback();
-            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.RewardedVideo, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
         }
     }
 }

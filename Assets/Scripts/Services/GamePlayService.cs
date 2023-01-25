@@ -96,9 +96,6 @@ namespace Services
 
         private void SetDefaultTime()
         {
-            if (Time.timeScale == TimeScaleDefault)
-                return;
-
             Time.timeScale = TimeScaleDefault;
             Time.fixedDeltaTime = Time.fixedUnscaledDeltaTime;
             TimeChangedToDefault?.Invoke();
@@ -106,9 +103,6 @@ namespace Services
 
         private void SetSlowTime()
         {
-            if (Time.timeScale == TimeScaleSlow)
-                return;
-
             Time.timeScale = TimeScaleSlow;
             Time.fixedDeltaTime = Time.timeScale * Time.fixedUnscaledDeltaTime;
         }
@@ -155,22 +149,20 @@ namespace Services
 
         private void PauseOn()
         {
-            AudioListener.pause = true;
-            AudioListener.volume = 0f;
+            SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
         }
 
         private static void PauseOff()
         {
-            AudioListener.pause = false;
-            AudioListener.volume = 1f;
+            SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }
 
         private void OnOpenCallback()
         {
             PauseOn();
-            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.Interstitial, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.Interstitial, "YandexSDK", $"Yandex");
         }
 
         private void OnCloseCallback(bool isClose)
@@ -182,13 +174,13 @@ namespace Services
         {
             Debug.LogWarning(error);
             PauseOff();
-            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.Interstitial, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.Interstitial, "YandexSDK", $"Yandex");
         }
 
         private void OnOfflineCallback()
         {
             PauseOff();
-            GameAnalytics.NewAdEvent(GAAdAction.Undefined, GAAdType.Interstitial, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.Undefined, GAAdType.Interstitial, "YandexSDK", $"Yandex");
         }
 
         private void OnGameStateChanged(GameState state)
@@ -222,6 +214,8 @@ namespace Services
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
 
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "DistanceTraveled", _travelable.DistanceTraveled, "Traveled", "Finishing");
+
             if (_travelable.DistanceTraveled >= _levelService.LengthRoad)
                 GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, _levelService.NameForAnalytic, _travelable.DistanceTraveled);
             else
@@ -245,7 +239,11 @@ namespace Services
 
         private void OnPointerUp() => _gameStateService.ChangeState(GameState.Running);
 
-        private void OnCollidedWithObstacle(Obstacle obstacle) => _levelScore.AddReward(obstacle.Reward);
+        private void OnCollidedWithObstacle(Obstacle obstacle)
+        {
+            GameAnalytics.NewDesignEvent("Collision:Obstacle");
+            _levelScore.AddReward(obstacle.Reward);
+        }
 
         private void OnTriggeredEnterWithCar(Car car)
         {
@@ -253,6 +251,7 @@ namespace Services
             car.StopMove();
             _levelScore.AddReward(car.Reward);
             TriggeredCar?.Invoke(car);
+            GameAnalytics.NewDesignEvent("Collision:Car");
             _holdTime.Run(HoldTime());
         }
 

@@ -165,16 +165,15 @@ namespace UI.Views.Finish
 
         private void OnOpenCallback()
         {
-            AudioListener.pause = true;
-            AudioListener.volume = 0f;
+            SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
-            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
+            GameAnalytics.NewDesignEvent("AdClick:RewardMultiplier");
         }
 
         private void OnCloseCallback()
         {
-            AudioListener.pause = false;
-            AudioListener.volume = 1f;
+            SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }
 
@@ -182,7 +181,7 @@ namespace UI.Views.Finish
         {
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
-            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "Yandex", $"Yandex");
+            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
         }
     }
 }

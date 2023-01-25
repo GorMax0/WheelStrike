@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Core;
 using UnityEngine.SceneManagement;
+using GameAnalyticsSDK;
 
 namespace UI.Manual.Tutorial
 {
@@ -54,13 +55,13 @@ namespace UI.Manual.Tutorial
             _menuView.gameObject.SetActive(false);
             ScreenOrientationValidator.Instance.OrientationValidated += OnOrientationValidated;
             _isInitialize = true;
-            Debug.Log($"Initialize {_currentState}");
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, TutorialData);
+
             StartTutorial(_currentState);
         }
 
         private void SaveTutorialProgress()
         {
-            Debug.Log($"Save {_currentState}");
             PlayerPrefs.SetInt(TutorialData, (int)_currentState);
             PlayerPrefs.Save();
         }
@@ -141,6 +142,7 @@ namespace UI.Manual.Tutorial
         {
             _currentState = TutorialState.FullCompleted;
             SaveTutorialProgress();
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
             SceneManager.LoadScene(NextSceneName);
         }
 

@@ -62,6 +62,7 @@ MonoBehaviour:
   ResourceItemTypes:
   - Reward
   - ParameterShop
+  - Traveled
   ResourceCurrencies:
   - DistanceTraveled
   - Money
