@@ -8,7 +8,6 @@ namespace UI.Views
         [SerializeField] private Wrap _levelLable;
         [SerializeField] private Wrap _worldButton;
         [SerializeField] private Wrap _shopButton;
-        [SerializeField] private Wrap _leaderboardButton;
         [SerializeField] private Wrap _parametersShop;
 
         private GameStateService _gameStateService;
@@ -51,7 +50,6 @@ namespace UI.Views
         {
             _worldButton.ApplyOffsetTransform();
             _shopButton.ApplyOffsetTransform();
-            _leaderboardButton.ApplyOffsetTransform();
             _parametersShop.ApplyOffsetTransform();
             _levelLable.ApplyOffsetTransform();
         }

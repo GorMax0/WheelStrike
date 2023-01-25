@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Services;
 using Lean.Localization;
+using GameAnalyticsSDK;
 
 namespace UI.Views
 {
@@ -53,11 +55,23 @@ namespace UI.Views
             _turkeyLanguage.onClick.RemoveListener(SwitchOnTurkish);
         }
 
-        private void SwitchOnEnglish() => LeanLocalization.SetCurrentLanguageAll(EnglishLanguage);
+        private void SwitchOnEnglish()
+        {
+            LeanLocalization.SetCurrentLanguageAll(EnglishLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:English");
+        }
 
-        private void SwitchOnRussian() => LeanLocalization.SetCurrentLanguageAll(RussianLanguage);
+        private void SwitchOnRussian()
+        {
+            LeanLocalization.SetCurrentLanguageAll(RussianLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:Russian");
+        }
 
-        private void SwitchOnTurkish() => LeanLocalization.SetCurrentLanguageAll(TurkishLanguage);
+        private void SwitchOnTurkish()
+        {
+            LeanLocalization.SetCurrentLanguageAll(TurkishLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:Turkish");
+        }
 
         private void OnButtonSettingClick()
         {

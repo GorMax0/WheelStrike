@@ -112,6 +112,13 @@ namespace Core
                 case GameState.Finished:
                     OnGameFinished();
                     break;
+                case GameState.TutorialStepZero:
+                    OnGameTutorialStepZero();
+                    break;
+                case GameState.TutorialStepThree:
+                    OnGameTutorialStepThree();
+                    break;
+
             }
         }
 
@@ -126,6 +133,10 @@ namespace Core
             _finishCamera.m_Lens.FieldOfView = _gameCamera.m_Lens.FieldOfView;
             _isFinished = true;
         }
+
+        private void OnGameTutorialStepZero() => SwitchCamers(_menuCamera, _launchCamera);
+        
+        private void OnGameTutorialStepThree() => SwitchCamers(_launchCamera, _menuCamera);
 
         private void OnCollidedWithGrounds() => ChangeFieldOfViewForGameCamera();
 

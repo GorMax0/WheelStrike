@@ -45,8 +45,18 @@ namespace UI.Views
                 case GameState.Running:
                     OnGameRunning();
                     break;
+                case GameState.TutorialStepZero:
+                    OnGameTutorialStepZero();
+                    break;
+                case GameState.TutorialStepTwo:
+                    OnGameTutorialStepTwo();
+                    break;
+                case GameState.TutorialStepThree:
+                    OnGameTutorialStepThree();
+                    break;
+
             }
-        }
+        } 
 
         private void OnGameInitializing()
         {
@@ -63,6 +73,22 @@ namespace UI.Views
         private void OnGameRunning()
         {
             _forceScaleView.Fade();
+            _aimDirectionLine.gameObject.SetActive(false);
+        }
+
+        private void OnGameTutorialStepZero()
+        {
+            _forceScaleView.gameObject.SetActive(true);
+        }
+
+        private void OnGameTutorialStepTwo()
+        {
+            _aimDirectionLine.gameObject.SetActive(true);
+        }
+
+        private void OnGameTutorialStepThree()
+        {
+            _forceScaleView.gameObject.SetActive(false);
             _aimDirectionLine.gameObject.SetActive(false);
         }
     }

@@ -10,6 +10,7 @@ namespace UI.Views
     {
         [SerializeField] private Button _settingButton;
         [SerializeField] private Wrap _restartButton;
+        [SerializeField] private Wrap _leaderboardButton;
         [SerializeField] private Wrap _moneyPanel;
         [SerializeField] private Wrap _distancePanelWrap;
         [SerializeField] private Image _curtain;
@@ -92,6 +93,7 @@ namespace UI.Views
         private void OnGameWaiting()
         {
             _moneyPanel.ApplyOffsetTransform();
+            _leaderboardButton.ApplyOffsetTransform();
         }
         private void OnGameRunning()
         {

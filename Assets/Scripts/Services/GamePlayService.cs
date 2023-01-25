@@ -8,6 +8,7 @@ using Data;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
+using GameAnalyticsSDK;
 
 namespace Services
 {
@@ -49,8 +50,11 @@ namespace Services
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
 
-            _inputHandler.PointerDown += OnPointerDown;
-            _inputHandler.PointerUp += OnPointerUp;
+            if (_inputHandler != null)
+            {
+                _inputHandler.PointerDown += OnPointerDown;
+                _inputHandler.PointerUp += OnPointerUp;
+            }
 
             _interactionHandler.CollidedWithObstacle += OnCollidedWithObstacle;
             _interactionHandler.TriggeredEnterWithCar += OnTriggeredEnterWithCar;
@@ -166,6 +170,7 @@ namespace Services
         private void OnOpenCallback()
         {
             PauseOn();
+            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.Interstitial, "Yandex", $"Yandex");
         }
 
         private void OnCloseCallback(bool isClose)
@@ -177,11 +182,13 @@ namespace Services
         {
             Debug.LogWarning(error);
             PauseOff();
+            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.Interstitial, "Yandex", $"Yandex");
         }
 
         private void OnOfflineCallback()
         {
             PauseOff();
+            GameAnalytics.NewAdEvent(GAAdAction.Undefined, GAAdType.Interstitial, "Yandex", $"Yandex");
         }
 
         private void OnGameStateChanged(GameState state)
@@ -190,6 +197,9 @@ namespace Services
             {
                 case GameState.Initializing:
                     OnGameInitializing();
+                    break;
+                case GameState.Waiting:
+                    OnGameWaiting();
                     break;
                 case GameState.Finished:
                     OnGameFinished();
@@ -202,12 +212,20 @@ namespace Services
 
         private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
 
+        private void OnGameWaiting() => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, _levelService.NameForAnalytic);
+
         private void OnGameFinished()
         {
             _delayHoldTime = 0;
             _finishWall?.StopMoveBricks();
             _wallet.EnrollMoney(_levelScore.ResultReward);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
+
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
+            if (_travelable.DistanceTraveled >= _levelService.LengthRoad)
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, _levelService.NameForAnalytic, _travelable.DistanceTraveled);
+            else
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, _levelService.NameForAnalytic, _travelable.DistanceTraveled);
 
             Dispose();
         }

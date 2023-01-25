@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Core.Wheel;
+using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using AdsReward;
+using GameAnalyticsSDK;
 
 namespace UI.Views.Finish
 {
@@ -154,7 +156,7 @@ namespace UI.Views.Finish
         private void OnGameFinished()
         {
             _finishEffect.Play();
-            _currentFinishView.gameObject.SetActive(true);
+            _currentFinishView.Enable();
             _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);
             _currentFinishView.StartAnimation();
 
@@ -166,6 +168,7 @@ namespace UI.Views.Finish
             AudioListener.pause = true;
             AudioListener.volume = 0f;
             Time.timeScale = 0f;
+            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "Yandex", $"Yandex");
         }
 
         private void OnCloseCallback()
@@ -179,6 +182,7 @@ namespace UI.Views.Finish
         {
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
+            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "Yandex", $"Yandex");
         }
     }
 }

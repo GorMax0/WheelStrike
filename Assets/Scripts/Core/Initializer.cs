@@ -7,17 +7,21 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using UI.Manual;
+using UI.Manual.Tutorial;
 using UI.Views;
 using UI.Views.Money;
 using UI.Views.Finish;
 using Data;
 using Trail;
 using AdsReward;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
     public class Initializer : MonoBehaviour
     {
+        private const string TutorialData = "Tutorial";
+
         [Header("Camera")]
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
@@ -38,13 +42,10 @@ namespace Core
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private RopeDisconnection _ropeDisconnection;
         [SerializeField] private Player _wheel;
-        [SerializeField] private InteractionHandler _interactionHandler;        
-
-        [Header("Manual")]
-        [SerializeField] private ControlManual _controlManual;
-        [SerializeField] private AimManual _aimManual;
+        [SerializeField] private InteractionHandler _interactionHandler;
 
         [Header("View")]
+        [SerializeField] private ControlManual _controlManual;
         [SerializeField] private FinishViewHandler _finishViewHandler;
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
@@ -57,12 +58,14 @@ namespace Core
         [Header("Other")]
         [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
+        [SerializeField] private TutorialManager _tutorial;
 
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
         private AimDirection _aimDirection;
         private Wallet _wallet = new Wallet();
         private DataOperator _dataOperator;
+        private TutorialState _tutorialState = TutorialState.Start;
 
         private void Start()
         {
@@ -71,12 +74,15 @@ namespace Core
 
             InitializeServices();
             InitializeCore();
-            InitializeManual();
             InitializeView();
             _trailManager.Initialize(_gameStateService);
             InitializeLoad();
             _parametersShop.ChangeInteractableLevelUpButtons();
-            _gameStateService.ChangeState(GameState.Initializing);
+            InitializeTutorial();
+            ScreenOrientationValidator.Instance.Initialize();
+
+            if (_tutorialState == TutorialState.FullCompleted)
+                _gameStateService.ChangeState(GameState.Initializing);
         }
 
         private void InitializeServices()
@@ -102,20 +108,15 @@ namespace Core
             _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection, _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
         }
 
-        private void InitializeManual()
-        {
-            _controlManual.Initialize(_gameStateService);
-            _aimManual.Initialize(_coroutineService);
-        }
-
         private void InitializeView()
         {
+            _controlManual.Initialize(_gameStateService, _coroutineService);
             _prerunView.Initialize(_gameStateService);
             _aimDirectionLine.Initialize(_aimDirection);
             _menuView.Initialize(_gameStateService);
             _walletView.Initialize(_wallet);
             _moneyPresenter.Initialize(_interactionHandler);
-            _topPanel.Initialize(_gameStateService,_coroutineService);
+            _topPanel.Initialize(_gameStateService, _coroutineService);
             _parametersShop.Initialize(_parameters, _wallet);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
         }
@@ -124,6 +125,17 @@ namespace Core
         {
             _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _wallet, _parameters);
             _dataOperator.Load();
+        }
+
+        private void InitializeTutorial()
+        {
+            if (PlayerPrefs.HasKey(TutorialData))
+                _tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
+
+            if (_tutorialState == TutorialState.FullCompleted)
+                return;
+
+            _tutorial.Initialize(_gameStateService, _tutorialState);
         }
     }
 }

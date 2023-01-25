@@ -1,5 +1,6 @@
 using System;
 using Core;
+using GameAnalyticsSDK;
 using Parameters;
 using UI.Views;
 using UnityEngine;
@@ -55,6 +56,7 @@ namespace AdsReward
         private void EnrollMoney(int count)
         {
             _wallet.EnrollMoney(count);
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", count, "Reward", "videoAd");
             _moneyRewardPanel.DisplayCountMoney(count);
             _reward.onClick.RemoveAllListeners();
             _reward.onClick.AddListener(_topPanel.Restart);

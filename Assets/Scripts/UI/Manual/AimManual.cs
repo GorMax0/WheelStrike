@@ -28,10 +28,18 @@ namespace UI.Manual
 
         public void Fade()
         {
+            KillTween();
             _manualText.Fade();
             _sliderBackground.DOFade(0, _fadeTime);
             _sliderHandler.DOFade(0, _fadeTime);
             Invoke(nameof(Disable), _fadeTime);
+        }
+
+        public void Display()
+        {
+            _manualText.Prepare();
+            _sliderBackground.color = Color.white;
+            _sliderHandler.color = Color.white;
         }
 
         private IEnumerator AnimateHand()
@@ -51,8 +59,16 @@ namespace UI.Manual
         private void Disable()
         {
             _replayRunning.Stop();
-            DOTween.Kill(_slider);
+            _slider.value = _slider.minValue;
+            KillTween();
             gameObject.SetActive(false);
+        }
+
+        private void KillTween()
+        {
+            DOTween.Kill(_sliderBackground);
+            DOTween.Kill(_sliderHandler);
+            DOTween.Kill(_slider);
         }
     }
 }

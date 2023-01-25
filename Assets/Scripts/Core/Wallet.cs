@@ -1,11 +1,10 @@
 using System;
+using GameAnalyticsSDK;
 
 namespace Core
 {
     public class Wallet
     {
-        private const int StartingMoney = 100;
-
         private int _money;
 
         public event Action<int> MoneyChanged;
@@ -14,8 +13,11 @@ namespace Core
         public int Money => _money;
 
         public void LoadMoney(int money)
-        {            
-            _money = money < 0? StartingMoney : money;
+        {
+            if (money < 0)
+                return;
+
+            _money = money;
             MoneyLoaded?.Invoke(_money);
         }
 

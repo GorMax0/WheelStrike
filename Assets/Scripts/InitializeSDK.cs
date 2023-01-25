@@ -1,14 +1,16 @@
-using System;
 using System.Collections;
+using GameAnalyticsSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Data;
 
 public class InitializeSDK : MonoBehaviour
 {
-    public event Action Initialized;
+    private const string DataKey = "GameData";
 
     private void Awake()
-    {        
+    {
+
         StartCoroutine(Init());
     }
 
@@ -23,6 +25,21 @@ public class InitializeSDK : MonoBehaviour
             yield return Agava.YandexGames.YandexGamesSdk.Initialize();
         }
 #endif
-        SceneManager.LoadScene(1);
+
+        GameAnalytics.Initialize();
+        SceneManager.LoadScene(GetLevelIndex());
+    }
+
+    private int GetLevelIndex()
+    {
+        if (PlayerPrefs.HasKey(DataKey))
+        {
+            string data = PlayerPrefs.GetString(DataKey);
+
+            GameData gameData = JsonUtility.FromJson<GameData>(data);
+            return gameData.IndexScene;
+        }
+
+        return SceneManager.GetActiveScene().buildIndex + 1;
     }
 }

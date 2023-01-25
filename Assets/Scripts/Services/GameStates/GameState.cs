@@ -3,10 +3,14 @@
     public enum GameState
     {
         Initializing,
-        Pause,
         Waiting,
         Running,
         Finished,
-        Restart
+        Restart,
+        TutorialStepZero,
+        TutorialStepTwo,
+        TutorialStepThree,
+        TutorialStepFour,
+        TutorialStepNine
     }
 }

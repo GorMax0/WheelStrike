@@ -3,6 +3,7 @@ using UnityEngine;
 using Services.GameStates;
 using Core.Wheel;
 using UnityEngine.UI;
+using GameAnalyticsSDK;
 
 namespace Services
 {
@@ -78,7 +79,8 @@ namespace Services
         {
             _isMuted = isMuted;
             AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
-            MutedChanged?.Invoke(_isMuted);            
+            MutedChanged?.Invoke(_isMuted);
+            GameAnalytics.NewDesignEvent($"guiClick:Sound:{!_isMuted}");
         }
 
         private bool HasInitialWheelSpeedNotZero()

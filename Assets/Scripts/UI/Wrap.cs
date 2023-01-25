@@ -9,7 +9,7 @@ namespace UI
         [SerializeField] private float _duration;
         [SerializeField] private bool _isDisableAfterApply;
 
-        private Vector2 _startPositoin;
+        private Vector3 _startPositoin;
         private Canvas _canvas;
 
         private void OnDisable()
@@ -28,7 +28,7 @@ namespace UI
             _startPositoin = transform.position;
 
             DOTween.Sequence()
-                .Append(transform.DOMove(_startPositoin + _wrapOffset, _duration))
+                .Append(transform.DOMove(_startPositoin +  new Vector3(_wrapOffset.x, _wrapOffset.y,0f), _duration))
                 .AppendCallback(Disable);
         }
 

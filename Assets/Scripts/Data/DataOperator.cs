@@ -17,8 +17,6 @@ namespace Data
         private SoundController _soundController;
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
-        //private List<Skin> _openSkins;
-        //private List<TrailFX> _openTrails;
 
         public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
         {
