@@ -67,6 +67,8 @@ namespace Services
         public event Action TimeChangedToDefault;
 
         public float ElapsedTime { get; private set; }
+        public int CountCollisionObstacles { get; private set; }
+        public int DistanceTraveledOverAllTime { get; private set; }
 
         public void Dispose()
         {
@@ -86,6 +88,23 @@ namespace Services
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
+        }
+
+        public void LoadCountCollisionObstacles(int countCollisionObstacles)
+        {
+            if (CountCollisionObstacles >= countCollisionObstacles)
+                return;
+
+            CountCollisionObstacles = countCollisionObstacles;
+        }
+
+        public void LoadDistanceTraveledOverAllTime(int distanceTraveledOverAllTime)
+        {
+            if (DistanceTraveledOverAllTime >= distanceTraveledOverAllTime)
+                return;
+
+            DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
+            Debug.Log($"Load distance - {DistanceTraveledOverAllTime}");
         }
 
         private IEnumerator UnlockInputHandler()
@@ -212,6 +231,7 @@ namespace Services
             _finishWall?.StopMoveBricks();
             _wallet.EnrollMoney(_levelScore.ResultReward);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
+            DistanceTraveledOverAllTime += _travelable.DistanceTraveled;
 
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "DistanceTraveled", _travelable.DistanceTraveled, "Traveled", "Finishing");
@@ -243,15 +263,17 @@ namespace Services
         {
             GameAnalytics.NewDesignEvent("Collision:Obstacle");
             _levelScore.AddReward(obstacle.Reward);
+            CountCollisionObstacles++;
         }
 
         private void OnTriggeredEnterWithCar(Car car)
         {
             car.Explode();
             car.StopMove();
+            GameAnalytics.NewDesignEvent("Collision:Car");
             _levelScore.AddReward(car.Reward);
             TriggeredCar?.Invoke(car);
-            GameAnalytics.NewDesignEvent("Collision:Car");
+            CountCollisionObstacles++;
             _holdTime.Run(HoldTime());
         }
 

@@ -45,6 +45,8 @@ namespace Data
             SaveIndexScene();
             SaveMoney(_wallet.Money);
             SaveTime(_gamePlayService.ElapsedTime);
+            SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
+            SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
 
             _saveSystem.Save(_gameData);
         }
@@ -64,6 +66,8 @@ namespace Data
             LoadParameters();
             LoadHighscore();
             LoadTime();
+            LoadCountCollisionObstacles();
+            LoadAllDistanceTraveled();
             LoadMutedState();
         }
 
@@ -75,15 +79,19 @@ namespace Data
             Save();
         }
 
+        private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) => _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
+
+        private void SaveMoney(int money) => _gameData.Money = money;
+
+        private void SaveTime(float elapsedTime) => _gameData.ElapsedTime = elapsedTime;
+
+        private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
+
         private void SaveMuted(bool isMuted)
         {
             _gameData.IsMuted = isMuted;
             Save();
         }
-
-        private void SaveMoney(int money) => _gameData.Money = money;
-
-        private void SaveTime(float elapsedTime) => _gameData.ElapsedTime = elapsedTime;
 
         private void SaveParameter(Parameter parameter)
         {
@@ -106,6 +114,9 @@ namespace Data
         }
 
         private void LoadTime() => _gamePlayService.SetElapsedTime(_gameData.ElapsedTime);
+
+        private void LoadCountCollisionObstacles() => _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
+        private void LoadAllDistanceTraveled() => _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 

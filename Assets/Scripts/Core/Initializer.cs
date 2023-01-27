@@ -14,7 +14,7 @@ using UI.Views.Finish;
 using Data;
 using Trail;
 using AdsReward;
-using UnityEngine.SceneManagement;
+using Leaderboards;
 
 namespace Core
 {
@@ -31,6 +31,7 @@ namespace Core
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private SoundController _soundController;
+        [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -92,6 +93,7 @@ namespace Core
             _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_wallet);
             _soundController.Initialize(_gameStateService);
+            _leaderboardsHandler.Initialize(_gamePlayService);
         }
 
         private void InitializeCore()
