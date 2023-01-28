@@ -278,7 +278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -752,6 +752,5 @@ MonoBehaviour:
   _playerRank: {fileID: 7691301510212084745}
   _playerNick: {fileID: 7602135358201288799}
   _playerResult: {fileID: 7602135359743145561}
-  _playerMedalRank: {fileID: 7602135357925974660}
   _medalIcon: {fileID: 9092699295359512200}
   _playerColor: {r: 1, g: 0.6862745, b: 0.29411766, a: 1}

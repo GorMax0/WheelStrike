@@ -3,6 +3,7 @@ using GameAnalyticsSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Data;
+using Agava.YandexGames;
 
 public class InitializeSDK : MonoBehaviour
 {
@@ -18,12 +19,13 @@ public class InitializeSDK : MonoBehaviour
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
         yield return new WaitForSeconds(0.1f);
-
 #elif YANDEX_GAMES
-        while(Agava.YandexGames.YandexGamesSdk.IsInitialized == false)
+        while(YandexGamesSdk.IsInitialized == false)
         {
-            yield return Agava.YandexGames.YandexGamesSdk.Initialize();
+            yield return YandexGamesSdk.Initialize();
         }
+
+      //  YandexGamesSdk.CallbackLogging = true;
 #endif
 
         GameAnalytics.Initialize();

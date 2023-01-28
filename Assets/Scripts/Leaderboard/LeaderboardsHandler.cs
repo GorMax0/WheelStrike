@@ -1,12 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
-using Services;
 using UnityEngine;
 using UnityEngine.UI;
+using Services;
 
 namespace Leaderboards
 {
     public class LeaderboardsHandler : MonoBehaviour
     {
+        [SerializeField] private GameObject _container;
         [SerializeField] private LeaderboardTabMenu _tabMenu;
         [SerializeField] private LeaderboardView _distanceTraveledLeaderboardView;
         [SerializeField] private LeaderboardView _collisionsLeaderboardView;
@@ -15,11 +17,14 @@ namespace Leaderboards
 
         private const string DistanceTraveledBoard = "DistanceTraveledBoard";
         private const string CollisionsBoard = "CollisionsBoard";
+        private const float WaitBetweenSaveScore = 1.15f;
 
         private LeaderboardYandex _distanceTraveledLeaderboard;
         private LeaderboardYandex _collisionsLeaderboard;
         private GamePlayService _gamePlayService;
         private bool _isInitialized;
+        private bool _isCollisionsLeaderboardCached;
+        private bool _isDistanceTraveledLeaderboardCached;
 
         private void OnEnable()
         {
@@ -33,15 +38,29 @@ namespace Leaderboards
             _close.onClick.RemoveListener(Disable);
         }
 
+        private void OnDestroy()
+        {
+            _distanceTraveledLeaderboard.GetEntriesComplited -= OnGetEntriesComplited;
+            _distanceTraveledLeaderboard.GetPlayerEntryComplited -= OnGetPlayerEntryComplited;
+            _collisionsLeaderboard.GetEntriesComplited -= OnGetEntriesComplited;
+            _collisionsLeaderboard.GetPlayerEntryComplited -= OnGetPlayerEntryComplited;
+        }
+
         public void Initialize(GamePlayService gamePlayService)
         {
             if (_isInitialized == true)
                 return;
 
             _gamePlayService = gamePlayService;
+
             _distanceTraveledLeaderboard = new LeaderboardYandex(DistanceTraveledBoard, _numberTopPlayers);
+            _distanceTraveledLeaderboard.GetPlayerEntryComplited += OnGetPlayerEntryComplited;
+            _distanceTraveledLeaderboard.GetEntriesComplited += OnGetEntriesComplited;
             InstantiateLeaderboardView(_distanceTraveledLeaderboardView);
+
             _collisionsLeaderboard = new LeaderboardYandex(CollisionsBoard, _numberTopPlayers);
+            _collisionsLeaderboard.GetPlayerEntryComplited += OnGetPlayerEntryComplited;
+            _collisionsLeaderboard.GetEntriesComplited += OnGetEntriesComplited;
             InstantiateLeaderboardView(_collisionsLeaderboardView);
 
             _isInitialized = true;
@@ -49,46 +68,87 @@ namespace Leaderboards
 
         public void Enable()
         {
+            _container.SetActive(true);
             GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Open");
-            SavePlayerScoreToLeaderboard(_distanceTraveledLeaderboard, _gamePlayService.DistanceTraveledOverAllTime);
-            SavePlayerScoreToLeaderboard(_collisionsLeaderboard, _gamePlayService.CountCollisionObstacles);
-            PrepareLeaderboard(_distanceTraveledLeaderboard, _distanceTraveledLeaderboardView);
-            PrepareLeaderboard(_collisionsLeaderboard, _collisionsLeaderboardView);
-            gameObject.SetActive(true);
+
+            OnCollisionTabSelected(false);
         }
+
+        public void SaveScore() => StartCoroutine(SaveScoreToLeaderboard());
 
         private void Disable()
         {
-            gameObject.SetActive(false);
+            _isCollisionsLeaderboardCached = false;
+            _isDistanceTraveledLeaderboardCached = false;
+
             _distanceTraveledLeaderboardView.gameObject.SetActive(true);
             _collisionsLeaderboardView.gameObject.SetActive(false);
+            _container.SetActive(false);
         }
 
-        private void SavePlayerScoreToLeaderboard(LeaderboardYandex leaderboard, int score) => leaderboard.SetPlayerScoreToLeaderboard(score);
-
-        private void OnCollisionTabSelected(bool isCollisionTab)
+        private IEnumerator SaveScoreToLeaderboard()
         {
-            _distanceTraveledLeaderboardView.gameObject.SetActive(!isCollisionTab);
-            _collisionsLeaderboardView.gameObject.SetActive(isCollisionTab);
+            SavePlayerScoreToLeaderboard(_distanceTraveledLeaderboard, _gamePlayService.DistanceTraveledOverAllTime);
+
+            yield return new WaitForSeconds(WaitBetweenSaveScore);
+
+            SavePlayerScoreToLeaderboard(_collisionsLeaderboard, _gamePlayService.CountCollisionObstacles);
         }
+
+        private void SavePlayerScoreToLeaderboard(LeaderboardYandex leaderboard, int score) => leaderboard.SetScore(score);
 
         private void InstantiateLeaderboardView(LeaderboardView leaderboardView) => leaderboardView.InstantiateLeaderboardElements(_numberTopPlayers);
 
-        private IEnumerable<PlayerInfoLeaderboard> GetEntries(LeaderboardYandex leaderboard, out PlayerInfoLeaderboard currentPlayer)
+        private void OnCollisionTabSelected(bool isCollisionTab)
         {
-            IEnumerable<PlayerInfoLeaderboard> topPlayers = leaderboard.GetEntries();
-            currentPlayer = leaderboard.GetCurrentPlayer();
-
-            return topPlayers;
+            if (isCollisionTab == true)
+            {
+                if (_isCollisionsLeaderboardCached == false)
+                {
+                    _collisionsLeaderboard.GetCurrentPlayer();
+                    _collisionsLeaderboard.GetEntries();
+                    _isCollisionsLeaderboardCached = true;
+                }
+            }
+            else
+            {
+                if (_isDistanceTraveledLeaderboardCached == false)
+                {
+                    _distanceTraveledLeaderboard.GetCurrentPlayer();
+                    _distanceTraveledLeaderboard.GetEntries();
+                    _isDistanceTraveledLeaderboardCached = true;
+                }
+            }
         }
 
-        private void RenderLeaderboardView(LeaderboardView leaderboardView, IEnumerable<PlayerInfoLeaderboard> topPlayers, PlayerInfoLeaderboard currentPlayer)
-            => leaderboardView.Render(topPlayers, currentPlayer);
-
-        private void PrepareLeaderboard(LeaderboardYandex leaderboard, LeaderboardView leaderboardView)
+        private void OnGetEntriesComplited(string nameLeaderboard, List<PlayerInfoLeaderboard> topPlayers)
         {
-            IEnumerable<PlayerInfoLeaderboard> topPlayers = GetEntries(leaderboard, out PlayerInfoLeaderboard currentPlayer);
-            RenderLeaderboardView(leaderboardView, topPlayers, currentPlayer);
+            switch (nameLeaderboard)
+            {
+                case DistanceTraveledBoard:
+                    _distanceTraveledLeaderboardView.RenderTop(topPlayers);
+                    break;
+                case CollisionsBoard:
+                    _collisionsLeaderboardView.RenderTop(topPlayers);
+                    break;
+            }
+
+            Debug.Log($"Invoke OnGetEntriesComplited for {nameLeaderboard}");
+        }
+
+        private void OnGetPlayerEntryComplited(string nameLeaderboard, PlayerInfoLeaderboard currentPlayer)
+        {
+            switch (nameLeaderboard)
+            {
+                case DistanceTraveledBoard:
+                    _distanceTraveledLeaderboardView.RenderCurrentPlayer(currentPlayer);
+                    break;
+                case CollisionsBoard:
+                    _collisionsLeaderboardView.RenderCurrentPlayer(currentPlayer);
+                    break;
+            }
+
+            Debug.Log($"Invoke OnGetPlayerEntryComplited for {nameLeaderboard}");
         }
     }
 }

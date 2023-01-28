@@ -28,8 +28,6 @@ namespace Core
 
         [field: SerializeField] public int Reward { get; private set; }
 
-        public bool IsBought { get; private set; }
-
         private void OnEnable()
         {
             if (_isInitialized == false)

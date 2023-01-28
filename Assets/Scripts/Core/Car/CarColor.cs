@@ -7,7 +7,6 @@ namespace Core
     {
         [SerializeField] private Color _color;
         [SerializeField] private Material _material;
-        [SerializeField] private int _basePrice = 50; //Будет содержать магазин, удалить.
         [SerializeField] private bool _isBought;
         [SerializeField] private bool _isSelected;
 

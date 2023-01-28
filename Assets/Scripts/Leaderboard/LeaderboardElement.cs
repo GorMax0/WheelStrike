@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,7 +9,6 @@ namespace Leaderboards
         [SerializeField] private TMP_Text _playerRank;
         [SerializeField] private TMP_Text _playerNick;
         [SerializeField] private TMP_Text _playerResult;
-        [SerializeField] private TMP_Text _playerMedalRank;
         [SerializeField] private Image _medalIcon;
         [SerializeField] private Color _playerColor;
 
@@ -20,15 +18,13 @@ namespace Leaderboards
 
         public void Render(PlayerInfoLeaderboard playerInfo, bool isPlayer, Sprite medal = null)
         {
+            if (playerInfo == null)
+                throw new System.NullReferenceException($"{GetType()}: Render(PlayerInfoLeaderboard playerInfo, bool isPlayer, Sprite medal = null): playerInfo nullable.");
+
             if (medal != null)
             {
-                _playerMedalRank.text = playerInfo.Rank.ToString();
                 _medalIcon.sprite = medal;
                 _medalIcon.gameObject.SetActive(true);
-            }
-            else if (playerInfo.Name == AnonymousName)
-            {
-                _playerRank.text = NoInfo;
             }
             else
             {
@@ -36,7 +32,7 @@ namespace Leaderboards
             }
 
             _playerNick.text = playerInfo.Name;
-            _playerResult.text = playerInfo.Name == AnonymousName ? NoInfo : playerInfo.Score.ToString();
+            _playerResult.text = playerInfo.Score.ToString();
 
             if (isPlayer == true)
             {

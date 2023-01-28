@@ -118,12 +118,15 @@ namespace Services
             Time.timeScale = TimeScaleDefault;
             Time.fixedDeltaTime = Time.fixedUnscaledDeltaTime;
             TimeChangedToDefault?.Invoke();
+            Debug.Log($"SetDefaultTime timeScale {Time.timeScale}, fixedDeltaTime{Time.fixedDeltaTime}");
         }
 
         private void SetSlowTime()
         {
             Time.timeScale = TimeScaleSlow;
             Time.fixedDeltaTime = Time.timeScale * Time.fixedUnscaledDeltaTime;
+
+            Debug.Log($"SetSlowTime timeScale {Time.timeScale}, fixedDeltaTime{Time.fixedDeltaTime}");
         }
 
         private IEnumerator HoldTime()
@@ -135,6 +138,8 @@ namespace Services
             while (_delayHoldTime > 0)
             {
                 _delayHoldTime -= Time.deltaTime;
+
+                Debug.Log($"HoldTime _delayHoldTime {_delayHoldTime}");
 
                 yield return null;
             }
@@ -219,6 +224,8 @@ namespace Services
                     OnGameRestart();
                     break;
             }
+
+            Debug.Log(state);
         }
 
         private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
@@ -261,6 +268,9 @@ namespace Services
 
         private void OnCollidedWithObstacle(Obstacle obstacle)
         {
+            if (obstacle.IsCollided == true)
+                return;
+
             GameAnalytics.NewDesignEvent("Collision:Obstacle");
             _levelScore.AddReward(obstacle.Reward);
             CountCollisionObstacles++;

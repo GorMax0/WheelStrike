@@ -42,8 +42,6 @@ namespace UI.Views
                     OnGameWaiting();
                     break;
             }
-
-            Debug.Log(state);
         }
 
         private void OnGameWaiting()

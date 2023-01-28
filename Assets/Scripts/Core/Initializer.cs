@@ -93,7 +93,7 @@ namespace Core
             _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_wallet);
             _soundController.Initialize(_gameStateService);
-            _leaderboardsHandler.Initialize(_gamePlayService);
+            _leaderboardsHandler?.Initialize(_gamePlayService);
         }
 
         private void InitializeCore()
@@ -135,6 +135,9 @@ namespace Core
                 _tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
 
             if (_tutorialState == TutorialState.FullCompleted)
+                return;
+
+            if (_tutorial == null)
                 return;
 
             _tutorial.Initialize(_gameStateService, _tutorialState);

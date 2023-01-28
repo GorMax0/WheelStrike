@@ -1,6 +1,6 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Leaderboards
 {
@@ -11,6 +11,8 @@ namespace Leaderboards
         [SerializeField] private Color _unselectedColor;
         [SerializeField] private Image _focusDistanceTab;
         [SerializeField] private Image _focusCollisionTab;
+        [SerializeField] private LeaderboardView _distanceTab;
+        [SerializeField] private LeaderboardView _collisioneTab;
 
         private Color _selectedColor = Color.white;
         private bool _selectedCollisionTab;
@@ -19,11 +21,16 @@ namespace Leaderboards
 
         public void SelectCollisionTab(bool isSelected)
         {
+            if (_selectedCollisionTab == isSelected)
+                return;
+
             _selectedCollisionTab = isSelected;
 
+            _distanceTab.gameObject.SetActive(!_selectedCollisionTab);
             _focusDistanceTab.gameObject.SetActive(!_selectedCollisionTab);
             _distanceTabText.color = _selectedCollisionTab ? _unselectedColor : _selectedColor;
 
+            _collisioneTab.gameObject.SetActive(_selectedCollisionTab);
             _focusCollisionTab.gameObject.SetActive(_selectedCollisionTab);
             _collisionTabText.color = _selectedCollisionTab ? _selectedColor : _unselectedColor;
 

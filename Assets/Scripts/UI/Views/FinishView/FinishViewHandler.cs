@@ -7,6 +7,7 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using AdsReward;
+using Leaderboards;
 using GameAnalyticsSDK;
 
 namespace UI.Views.Finish
@@ -20,6 +21,7 @@ namespace UI.Views.Finish
         [SerializeField] private float _waitingDelayDisplayValue;
         [SerializeField] private ParticleSystem _finishEffect;
         [SerializeField] private AdsRewards _adsRewards;
+        [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
 
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
@@ -97,7 +99,6 @@ namespace UI.Views.Finish
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(onOpenCallback: OnOpenCallback, onRewardedCallback: OnRewardedCallback, onCloseCallback: OnCloseCallback);
 #endif
-            // -------------> if(Agava.WebUtility.AdBlock.Enabled)
         }
 
         private void InitializeViews()
@@ -159,6 +160,7 @@ namespace UI.Views.Finish
             _currentFinishView.Enable();
             _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);
             _currentFinishView.StartAnimation();
+            _leaderboardsHandler.SaveScore();
 
             _isFinished = true;
         }
@@ -167,7 +169,6 @@ namespace UI.Views.Finish
         {
             SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
-            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
             GameAnalytics.NewDesignEvent("AdClick:RewardMultiplier");
         }
 
@@ -180,8 +181,7 @@ namespace UI.Views.Finish
         private void OnRewardedCallback()
         {
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
-            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
-            GameAnalytics.NewAdEvent(GAAdAction.RewardReceived, GAAdType.RewardedVideo, "YandexSDK", $"Yandex");
+            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);           
         }
     }
 }

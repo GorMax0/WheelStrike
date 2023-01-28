@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Agava.YandexGames;
@@ -6,7 +7,6 @@ namespace Leaderboards
 {
     public class LeaderboardYandex
     {
-
         private const int AnonymousRank = 0;
         private const int AnonymousScore = 0;
         private const string AnonymousName = "Anonymous";
@@ -14,15 +14,18 @@ namespace Leaderboards
         private int _numberTopPlayers;
         private string _leaderboardName;
 
+        public Action<string, List<PlayerInfoLeaderboard>> GetEntriesComplited;
+        public Action<string, PlayerInfoLeaderboard> GetPlayerEntryComplited;
+
         public LeaderboardYandex(string leaderboardName, int countEntries)
         {
             _leaderboardName = leaderboardName;
             _numberTopPlayers = countEntries;
         }
 
-        public List<PlayerInfoLeaderboard> GetEntries()
+        public void GetEntries()
         {
-            List<PlayerInfoLeaderboard> topPlayers = new List<PlayerInfoLeaderboard>();
+            List<PlayerInfoLeaderboard> topPlayers = new List<PlayerInfoLeaderboard>(_numberTopPlayers);
 
 #if !UNITY_WEBGL || UNITY_EDITOR
             for (int i = 1; i <= _numberTopPlayers; i++)
@@ -30,13 +33,10 @@ namespace Leaderboards
                 topPlayers.Add(new PlayerInfoLeaderboard(i, "name", i));
             }
 
-            return topPlayers;
+            GetEntriesComplited?.Invoke(_leaderboardName, topPlayers);
+            Debug.Log($"{_leaderboardName} - GetEntriesComplited (UNITY_EDITOR)");
+
 #elif YANDEX_GAMES
-            PlayerAccount.Authorize();
-
-            if (PlayerAccount.IsAuthorized == true)
-                PlayerAccount.RequestPersonalProfileDataPermission();
-
             Leaderboard.GetEntries(_leaderboardName, (result) =>
             {
                 int resultsCount = result.entries.Length;
@@ -45,63 +45,71 @@ namespace Leaderboards
 
                 for (int i = 0; i < resultsCount; i++)
                 {
-                    string name = CheckNameForNull(result.entries[i].player.publicName);
+                    LeaderboardEntryResponse entry = result.entries[i];
+                    string name = CheckNameForNull(entry.player.publicName);
 
-                    int score = result.entries[i].score;
-
-                    topPlayers.Add(new PlayerInfoLeaderboard(i, name, score));
+                    topPlayers.Add(new PlayerInfoLeaderboard(entry.rank, name, entry.score));
                 }
-            });
 
-            return topPlayers;
+                Debug.Log($"{_leaderboardName} - GetEntriesComplited (Yandex)");
+                GetEntriesComplited?.Invoke(_leaderboardName, topPlayers);
+            }, (massage) => Debug.Log(massage), _numberTopPlayers, 0, true);
 #endif
         }
 
-        public PlayerInfoLeaderboard GetCurrentPlayer()
+        public void GetCurrentPlayer()
         {
             PlayerInfoLeaderboard player;
-
-            player = new PlayerInfoLeaderboard(AnonymousRank, AnonymousName, AnonymousScore);
 #if !UNITY_WEBGL || UNITY_EDITOR
-            return player;
-#elif YANDEX_GAMES
+            player = new PlayerInfoLeaderboard(AnonymousRank, AnonymousName, AnonymousScore);
+            GetPlayerEntryComplited?.Invoke(_leaderboardName, player);
+            Debug.Log($"{_leaderboardName} - GetCurrentPlayer (UNITY_EDITOR)");
+
+#elif YANDEX_GAMES           
+            TryAuthorize();
+            TryGetPersonalData();
+
             Leaderboard.GetPlayerEntry(_leaderboardName, (result) =>
             {
-                if (result == null)
-                    return;
-
-                Debug.Log($"My rank = {result.rank}");
                 string name = CheckNameForNull(result.player.publicName);
 
                 player = new PlayerInfoLeaderboard(result.rank, result.player.publicName, result.score);
+                Debug.Log($"{_leaderboardName} - GetPlayerEntryComplited (Yandex)");
+                GetPlayerEntryComplited?.Invoke(_leaderboardName, player);
             });
-
-            return player;
 #endif
         }
 
-        public void SetPlayerScoreToLeaderboard(int score)
+        public void SetScore(int score)
         {
-#if !UNITY_WEBGL || UNITY_EDITOR
-            return;
-#elif YANDEX_GAMES
+#if YANDEX_GAMES   
             if (PlayerAccount.IsAuthorized == false)
                 return;
 
-            Leaderboard.GetPlayerEntry(_leaderboardName, (result) =>
-             {
-                 if (result.score < score)
-                     Leaderboard.SetScore(_leaderboardName, score);
-             });
+            Leaderboard.GetPlayerEntry(_leaderboardName, result =>
+            {
+                Debug.Log($"SetScore {result.score} new score {score}, name {result.player.publicName}");
+
+                if (result.score < score)
+                    Leaderboard.SetScore(_leaderboardName, score);
+            });
 #endif
         }
 
-        private string CheckNameForNull(string name)
+        private void TryAuthorize()
         {
-            if (string.IsNullOrEmpty(name))
-                name = AnonymousName;
+            if (PlayerAccount.IsAuthorized == true)
+                return;
 
-            return name;
+            PlayerAccount.Authorize();
         }
+
+        private void TryGetPersonalData()
+        {
+            if (PlayerAccount.IsAuthorized == true && PlayerAccount.HasPersonalProfileDataPermission == false)
+                PlayerAccount.RequestPersonalProfileDataPermission();
+        }
+
+        private string CheckNameForNull(string name) => string.IsNullOrEmpty(name) ? AnonymousName : name;
     }
 }

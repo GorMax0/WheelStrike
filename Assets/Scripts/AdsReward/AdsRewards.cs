@@ -55,12 +55,12 @@ namespace AdsReward
 
         private void EnrollMoney(int count)
         {
+            gameObject.SetActive(true);
             _wallet.EnrollMoney(count);
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", count, "Reward", "videoAd");
             _moneyRewardPanel.DisplayCountMoney(count);
             _reward.onClick.RemoveAllListeners();
             _reward.onClick.AddListener(_topPanel.Restart);
-            gameObject.SetActive(true);
         }
     }
 }

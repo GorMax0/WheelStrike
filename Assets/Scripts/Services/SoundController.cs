@@ -151,6 +151,8 @@ namespace Services
                 AudioListener.volume = 0f;
             else
                 AudioListener.volume = _isMuted == true ? 0f : 1f;
+
+            Debug.Log($"Background = {inBackground}, volume {AudioListener.volume}, is muted {_isMuted}");
         }
 
         public static void ChangeWhenAd(bool _isShowAd)
