@@ -9,6 +9,7 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using GameAnalyticsSDK;
+using Authorization;
 
 namespace Services
 {
@@ -20,6 +21,7 @@ namespace Services
         private readonly float TimeScaleDefault = Time.timeScale;
 
         private GameStateService _gameStateService;
+        private YandexAuthorization _yandexAuthorization;
         private CoroutineService _coroutineService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
@@ -34,9 +36,10 @@ namespace Services
         private Wall _finishWall;
         private float _delayHoldTime;
 
-        public GamePlayService(GameStateService gameStateService, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
+        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
+            _yandexAuthorization = yandexAuthorization;
             _coroutineService = coroutineService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
@@ -49,6 +52,7 @@ namespace Services
             _unlockInputHandler = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
+            _yandexAuthorization.Authorized += OnAuthorized;
 
             if (_inputHandler != null)
             {
@@ -104,7 +108,6 @@ namespace Services
                 return;
 
             DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
-            Debug.Log($"Load distance - {DistanceTraveledOverAllTime}");
         }
 
         private IEnumerator UnlockInputHandler()
@@ -183,29 +186,17 @@ namespace Services
             Time.timeScale = 1f;
         }
 
-        private void OnOpenCallback()
-        {
-            PauseOn();
-            GameAnalytics.NewAdEvent(GAAdAction.Show, GAAdType.Interstitial, "YandexSDK", $"Yandex");
-        }
+        private void OnOpenCallback() => PauseOn();
 
-        private void OnCloseCallback(bool isClose)
-        {
-            PauseOff();
-        }
+        private void OnCloseCallback(bool isClose) => PauseOff();
 
         private void OnErrorCallback(string error)
         {
             Debug.LogWarning(error);
             PauseOff();
-            GameAnalytics.NewAdEvent(GAAdAction.FailedShow, GAAdType.Interstitial, "YandexSDK", $"Yandex");
         }
 
-        private void OnOfflineCallback()
-        {
-            PauseOff();
-            GameAnalytics.NewAdEvent(GAAdAction.Undefined, GAAdType.Interstitial, "YandexSDK", $"Yandex");
-        }
+        private void OnOfflineCallback() => PauseOff();
 
         private void OnGameStateChanged(GameState state)
         {
@@ -259,12 +250,15 @@ namespace Services
             TryShowInterstitialAds();
             _dataOperator.Save();
 
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
             _levelService.RestartLevel();
         }
 
         private void OnPointerDown() => _gameStateService.ChangeState(GameState.Waiting);
 
         private void OnPointerUp() => _gameStateService.ChangeState(GameState.Running);
+
+        private void OnAuthorized() => _gameStateService.ChangeState(GameState.Restart);
 
         private void OnCollidedWithObstacle(Obstacle obstacle)
         {

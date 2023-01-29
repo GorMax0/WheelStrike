@@ -160,7 +160,7 @@ namespace UI.Views.Finish
             _currentFinishView.Enable();
             _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);
             _currentFinishView.StartAnimation();
-            _leaderboardsHandler.SaveScore();
+            _leaderboardsHandler?.SaveScore();
 
             _isFinished = true;
         }

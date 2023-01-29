@@ -28,7 +28,7 @@ namespace UI.Manual.Tutorial
         private const int Step2 = 2;
         private const int Step3 = 3;
         private const int Step4 = 4;
-        private const int Step5 = 5;    
+        private const int Step5 = 5;
         private const int Step9 = 9;
 
         private GameStateService _gameStateService;
@@ -37,7 +37,6 @@ namespace UI.Manual.Tutorial
         private Image _image;
         private int _indexStep;
         private bool _hasPortraitOrientation;
-        private bool _isCompletedTutorial;
         private bool _isInitialize;
 
         public void Initialize(GameStateService gameStateService, TutorialState state)
@@ -157,8 +156,7 @@ namespace UI.Manual.Tutorial
             _hasPortraitOrientation = isPortrait;
             SetCurrentStep();
 
-            if (_isCompletedTutorial == false)
-                _currentStep.Enable();
+            _currentStep.Enable();
         }
 
         public void OnPointerDown(PointerEventData eventData)

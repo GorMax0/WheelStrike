@@ -20,7 +20,7 @@ namespace Parameters
         private Parameter _parameterForRewardAds;
         private int _adsRewardMultiplier = 3;
 
-        private Action RefreshView;
+        private Action _refreshView;
 
         private void OnDestroy()
         {
@@ -29,6 +29,9 @@ namespace Parameters
                 view.LevelUpForMoneyButtonClicked -= OnLevelUpForMoneyButtonClicked;
                 view.LevelUpForAdsButtonClicked -= OnLevelUpForAdsButtonClicked;
             }
+
+            _wallet.MoneyLoaded -= ChangeInteractableLevelUpButtons;
+            _wallet.MoneyChanged -= ChangeInteractableLevelUpButtons;
         }
 
         public void Initialize(Dictionary<ParameterType, Parameter> parametrs, Wallet wallet)
@@ -44,19 +47,23 @@ namespace Parameters
             }
 
             _wallet = wallet;
+            _wallet.MoneyLoaded += ChangeInteractableLevelUpButtons;
+            _wallet.MoneyChanged += ChangeInteractableLevelUpButtons;
         }
 
-        public void ChangeInteractableLevelUpButtons()
+        public void ChangeInteractableLevelUpButtons(int moneyInWallet)
         {
             foreach (var view in _views)
             {
-                view.Value.ChangeStateButton(HasMoneyToBuy(view.Value.Parameter));
+                var moneyToBuy = HasMoneyToBuy(view.Value.Parameter, moneyInWallet);
+                view.Value.ChangeStateButton(moneyToBuy);
+            //    Debug.Log($"Money wallet - {moneyInWallet} = {view.Value.Parameter.Type} - lvl. {view.Value.Parameter.Level} - Cost {view.Value.Parameter.Cost}");
             }
         }
 
         private bool TryParameterLevelUp(Parameter parameter) => _wallet.TrySpandMoney(parameter.Cost);
 
-        private bool HasMoneyToBuy(Parameter parameter) => _wallet.Money >= parameter.Cost;
+        private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
 
         private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action onRefresh)
         {
@@ -67,13 +74,12 @@ namespace Parameters
             parameter.LevelUp();
             _animationWheel.ParameterUp();
             onRefresh();
-            ChangeInteractableLevelUpButtons();
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
         }
 
         private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action onRefresh)
         {
-            RefreshView = onRefresh;
+            _refreshView = onRefresh;
             ShowAds(parameter);
         }
 
@@ -84,7 +90,7 @@ namespace Parameters
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Parameter level up for ads!");
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
-            RefreshView();
+            _refreshView();
 
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
@@ -102,7 +108,7 @@ namespace Parameters
         {
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
             _parameterForRewardAds = null;
-            RefreshView();
+            _refreshView();
         }
 
         private void OnCloseCallback()

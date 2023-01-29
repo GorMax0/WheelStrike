@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using Empty;
 using AdsReward;
 
 namespace UI.Views.Finish

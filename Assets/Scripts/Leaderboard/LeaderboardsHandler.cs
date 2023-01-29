@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Services;
+using UI.Views;
+using Agava.YandexGames;
 
 namespace Leaderboards
 {
@@ -14,6 +16,9 @@ namespace Leaderboards
         [SerializeField] private LeaderboardView _collisionsLeaderboardView;
         [SerializeField] private int _numberTopPlayers = 10;
         [SerializeField] private Button _close;
+
+        [Header("Authorization request")]
+        [SerializeField] private AuthorizationView _authorizationView;
 
         private const string DistanceTraveledBoard = "DistanceTraveledBoard";
         private const string CollisionsBoard = "CollisionsBoard";
@@ -30,20 +35,22 @@ namespace Leaderboards
         {
             _tabMenu.CollisionTabSelected += OnCollisionTabSelected;
             _close.onClick.AddListener(Disable);
+
         }
 
         private void OnDisable()
         {
             _tabMenu.CollisionTabSelected -= OnCollisionTabSelected;
             _close.onClick.RemoveListener(Disable);
+
         }
 
         private void OnDestroy()
         {
-            _distanceTraveledLeaderboard.GetEntriesComplited -= OnGetEntriesComplited;
-            _distanceTraveledLeaderboard.GetPlayerEntryComplited -= OnGetPlayerEntryComplited;
-            _collisionsLeaderboard.GetEntriesComplited -= OnGetEntriesComplited;
-            _collisionsLeaderboard.GetPlayerEntryComplited -= OnGetPlayerEntryComplited;
+            _distanceTraveledLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
+            _distanceTraveledLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
+            _collisionsLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
+            _collisionsLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
         }
 
         public void Initialize(GamePlayService gamePlayService)
@@ -54,13 +61,13 @@ namespace Leaderboards
             _gamePlayService = gamePlayService;
 
             _distanceTraveledLeaderboard = new LeaderboardYandex(DistanceTraveledBoard, _numberTopPlayers);
-            _distanceTraveledLeaderboard.GetPlayerEntryComplited += OnGetPlayerEntryComplited;
-            _distanceTraveledLeaderboard.GetEntriesComplited += OnGetEntriesComplited;
+            _distanceTraveledLeaderboard.GetPlayerEntryCompleted += OnGetPlayerEntryCompleted;
+            _distanceTraveledLeaderboard.GetEntriesCompleted += OnGetEntriesCompleted;
             InstantiateLeaderboardView(_distanceTraveledLeaderboardView);
 
             _collisionsLeaderboard = new LeaderboardYandex(CollisionsBoard, _numberTopPlayers);
-            _collisionsLeaderboard.GetPlayerEntryComplited += OnGetPlayerEntryComplited;
-            _collisionsLeaderboard.GetEntriesComplited += OnGetEntriesComplited;
+            _collisionsLeaderboard.GetPlayerEntryCompleted += OnGetPlayerEntryCompleted;
+            _collisionsLeaderboard.GetEntriesCompleted += OnGetEntriesCompleted;
             InstantiateLeaderboardView(_collisionsLeaderboardView);
 
             _isInitialized = true;
@@ -71,20 +78,33 @@ namespace Leaderboards
             _container.SetActive(true);
             GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Open");
 
-            OnCollisionTabSelected(false);
+            if (PlayerAccount.IsAuthorized == true)
+            {
+                OnCollisionTabSelected(false);
+                _tabMenu.gameObject.SetActive(true);
+                _tabMenu.SelectCollisionTab(false);
+            }
+            else
+            {
+                _distanceTraveledLeaderboardView.gameObject.SetActive(false);
+                _collisionsLeaderboardView.gameObject.SetActive(false);
+                _authorizationView.gameObject.SetActive(true);
+            }
         }
-
-        public void SaveScore() => StartCoroutine(SaveScoreToLeaderboard());
 
         private void Disable()
         {
             _isCollisionsLeaderboardCached = false;
             _isDistanceTraveledLeaderboardCached = false;
 
-            _distanceTraveledLeaderboardView.gameObject.SetActive(true);
+            _tabMenu.gameObject.SetActive(false);
+            _distanceTraveledLeaderboardView.gameObject.SetActive(false);
             _collisionsLeaderboardView.gameObject.SetActive(false);
+            _authorizationView.gameObject.SetActive(false);
             _container.SetActive(false);
         }
+
+        public void SaveScore() => StartCoroutine(SaveScoreToLeaderboard());
 
         private IEnumerator SaveScoreToLeaderboard()
         {
@@ -121,7 +141,7 @@ namespace Leaderboards
             }
         }
 
-        private void OnGetEntriesComplited(string nameLeaderboard, List<PlayerInfoLeaderboard> topPlayers)
+        private void OnGetEntriesCompleted(string nameLeaderboard, List<PlayerInfoLeaderboard> topPlayers)
         {
             switch (nameLeaderboard)
             {
@@ -133,10 +153,10 @@ namespace Leaderboards
                     break;
             }
 
-            Debug.Log($"Invoke OnGetEntriesComplited for {nameLeaderboard}");
+       //     Debug.Log($"Invoke OnGetEntriesCompleted for {nameLeaderboard}");
         }
 
-        private void OnGetPlayerEntryComplited(string nameLeaderboard, PlayerInfoLeaderboard currentPlayer)
+        private void OnGetPlayerEntryCompleted(string nameLeaderboard, PlayerInfoLeaderboard currentPlayer)
         {
             switch (nameLeaderboard)
             {
@@ -148,7 +168,7 @@ namespace Leaderboards
                     break;
             }
 
-            Debug.Log($"Invoke OnGetPlayerEntryComplited for {nameLeaderboard}");
+        //    Debug.Log($"Invoke OnGetPlayerEntryCompleted for {nameLeaderboard}");
         }
     }
 }

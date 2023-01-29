@@ -4,6 +4,9 @@ using Core;
 using Parameters;
 using Services;
 using Services.Level;
+using Authorization;
+using Agava.YandexGames;
+using UnityEngine;
 
 namespace Data
 {
@@ -17,8 +20,10 @@ namespace Data
         private SoundController _soundController;
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
+        private YandexAuthorization _yandexAuthorization;
 
-        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, Wallet wallet, Dictionary<ParameterType, Parameter> parameters)
+        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController,
+            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, YandexAuthorization yandexAuthorization)
         {
             _gamePlayService = gamePlayService;
             _gamePlayService.SetDataOperator(this);
@@ -27,8 +32,12 @@ namespace Data
             _soundController = soundController;
             _wallet = wallet;
             _parameters = parameters;
+            _yandexAuthorization = yandexAuthorization;
+#if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem();
-
+#elif YANDEX_GAMES
+            _saveSystem = PlayerAccount.IsAuthorized == true ? new YandexSaveSystem() : new PlayerPrefsSystem();
+#endif
             Subscribe();
         }
 
@@ -51,19 +60,19 @@ namespace Data
             _saveSystem.Save(_gameData);
         }
 
-        public void Load()
+        public async void Load()
         {
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _saveSystem is null");
 
-            _gameData = _saveSystem.Load();
+            _gameData = await _saveSystem.Load();
 
             if (_gameData == null)
                 return;
 
             LoadIndexScene();
-            LoadMoney();
             LoadParameters();
+            LoadMoney();
             LoadHighscore();
             LoadTime();
             LoadCountCollisionObstacles();
@@ -155,6 +164,7 @@ namespace Data
             _wallet.MoneyChanged += SaveMoney;
             _levelScore.HighscoreChanged += SaveHighscore;
             _soundController.MutedChanged += SaveMuted;
+            _yandexAuthorization.Authorized += OnAuthorized;
 
             foreach (var parameter in _parameters)
             {
@@ -162,11 +172,21 @@ namespace Data
             }
         }
 
+        private async void OnAuthorized()
+        {
+            _saveSystem = new YandexSaveSystem();
+            var gameDate = await _saveSystem.Load();
+
+            if (gameDate.IndexScene == 0)
+                _saveSystem.Save(_gameData);
+        }
+
         private void Unsubscribe()
         {
             _wallet.MoneyChanged -= SaveMoney;
             _levelScore.HighscoreChanged -= SaveHighscore;
             _soundController.MutedChanged -= SaveMuted;
+            _yandexAuthorization.Authorized -= OnAuthorized;
 
             foreach (var parameter in _parameters)
             {

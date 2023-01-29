@@ -9,6 +9,8 @@ public class InitializeSDK : MonoBehaviour
 {
     private const string DataKey = "GameData";
 
+    private int _levelIndex;
+
     private void Awake()
     {
 
@@ -27,21 +29,35 @@ public class InitializeSDK : MonoBehaviour
 
       //  YandexGamesSdk.CallbackLogging = true;
 #endif
+        yield return GetLevelIndex();
 
         GameAnalytics.Initialize();
-        SceneManager.LoadScene(GetLevelIndex());
+        SceneManager.LoadScene(_levelIndex);
     }
 
-    private int GetLevelIndex()
+    private IEnumerator GetLevelIndex()
     {
+        GameData gameData = null;
+
         if (PlayerPrefs.HasKey(DataKey))
         {
             string data = PlayerPrefs.GetString(DataKey);
 
-            GameData gameData = JsonUtility.FromJson<GameData>(data);
-            return gameData.IndexScene;
+            gameData = JsonUtility.FromJson<GameData>(data);
         }
-
-        return SceneManager.GetActiveScene().buildIndex + 1;
+#if !UNITY_WEBGL || UNITY_EDITOR
+#elif YANDEX_GAMES
+        else
+        {
+            PlayerAccount.GetPlayerData((string data) =>
+            {
+                gameData = ConvertJsonToGameData(data);
+            });
+        }
+#endif
+        yield return new WaitForSeconds(1f);
+        _levelIndex = gameData == null ? SceneManager.GetActiveScene().buildIndex + 1 : gameData.IndexScene;
     }
+
+    private GameData ConvertJsonToGameData(string data) => string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
 }

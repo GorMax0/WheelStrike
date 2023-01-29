@@ -14,8 +14,8 @@ namespace Leaderboards
         private int _numberTopPlayers;
         private string _leaderboardName;
 
-        public Action<string, List<PlayerInfoLeaderboard>> GetEntriesComplited;
-        public Action<string, PlayerInfoLeaderboard> GetPlayerEntryComplited;
+        public event Action<string, List<PlayerInfoLeaderboard>> GetEntriesCompleted;
+        public event Action<string, PlayerInfoLeaderboard> GetPlayerEntryCompleted;
 
         public LeaderboardYandex(string leaderboardName, int countEntries)
         {
@@ -33,8 +33,7 @@ namespace Leaderboards
                 topPlayers.Add(new PlayerInfoLeaderboard(i, "name", i));
             }
 
-            GetEntriesComplited?.Invoke(_leaderboardName, topPlayers);
-            Debug.Log($"{_leaderboardName} - GetEntriesComplited (UNITY_EDITOR)");
+            GetEntriesCompleted?.Invoke(_leaderboardName, topPlayers);
 
 #elif YANDEX_GAMES
             Leaderboard.GetEntries(_leaderboardName, (result) =>
@@ -51,8 +50,8 @@ namespace Leaderboards
                     topPlayers.Add(new PlayerInfoLeaderboard(entry.rank, name, entry.score));
                 }
 
-                Debug.Log($"{_leaderboardName} - GetEntriesComplited (Yandex)");
-                GetEntriesComplited?.Invoke(_leaderboardName, topPlayers);
+                Debug.Log($"{_leaderboardName} - GetEntriesCompleted (Yandex)");
+                GetEntriesCompleted?.Invoke(_leaderboardName, topPlayers);
             }, (massage) => Debug.Log(massage), _numberTopPlayers, 0, true);
 #endif
         }
@@ -62,20 +61,18 @@ namespace Leaderboards
             PlayerInfoLeaderboard player;
 #if !UNITY_WEBGL || UNITY_EDITOR
             player = new PlayerInfoLeaderboard(AnonymousRank, AnonymousName, AnonymousScore);
-            GetPlayerEntryComplited?.Invoke(_leaderboardName, player);
-            Debug.Log($"{_leaderboardName} - GetCurrentPlayer (UNITY_EDITOR)");
+            GetPlayerEntryCompleted?.Invoke(_leaderboardName, player);
 
 #elif YANDEX_GAMES           
-            TryAuthorize();
             TryGetPersonalData();
 
             Leaderboard.GetPlayerEntry(_leaderboardName, (result) =>
             {
                 string name = CheckNameForNull(result.player.publicName);
 
-                player = new PlayerInfoLeaderboard(result.rank, result.player.publicName, result.score);
-                Debug.Log($"{_leaderboardName} - GetPlayerEntryComplited (Yandex)");
-                GetPlayerEntryComplited?.Invoke(_leaderboardName, player);
+                player = new PlayerInfoLeaderboard(result.rank, name, result.score);
+                Debug.Log($"{_leaderboardName} - PlayerEntryCompleted (Yandex)");
+                GetPlayerEntryCompleted?.Invoke(_leaderboardName, player);
             });
 #endif
         }
@@ -94,14 +91,6 @@ namespace Leaderboards
                     Leaderboard.SetScore(_leaderboardName, score);
             });
 #endif
-        }
-
-        private void TryAuthorize()
-        {
-            if (PlayerAccount.IsAuthorized == true)
-                return;
-
-            PlayerAccount.Authorize();
         }
 
         private void TryGetPersonalData()

@@ -15,6 +15,7 @@ using Data;
 using Trail;
 using AdsReward;
 using Leaderboards;
+using Authorization;
 
 namespace Core
 {
@@ -35,6 +36,7 @@ namespace Core
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
+        private YandexAuthorization _yandexAuthorization;
 
         [Header("Core")]
         [SerializeField] private CarBuilder _carBuilder;
@@ -55,6 +57,7 @@ namespace Core
         [SerializeField] private MoneyViewPresenter _moneyPresenter;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
+        [SerializeField] private AuthorizationView _authorizationView;
 
         [Header("Other")]
         [SerializeField] private ParameterObject[] _parameterObjects;
@@ -66,7 +69,7 @@ namespace Core
         private AimDirection _aimDirection;
         private Wallet _wallet = new Wallet();
         private DataOperator _dataOperator;
-        private TutorialState _tutorialState = TutorialState.Start;
+
 
         private void Start()
         {
@@ -78,11 +81,10 @@ namespace Core
             InitializeView();
             _trailManager.Initialize(_gameStateService);
             InitializeLoad();
-            _parametersShop.ChangeInteractableLevelUpButtons();
             InitializeTutorial();
             ScreenOrientationValidator.Instance.Initialize();
 
-            if (_tutorialState == TutorialState.FullCompleted)
+            if (_tutorial == null)
                 _gameStateService.ChangeState(GameState.Initializing);
         }
 
@@ -90,7 +92,9 @@ namespace Core
         {
             _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
-            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService, _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
+            _yandexAuthorization = new YandexAuthorization();
+            _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService, _inputHandler,
+                _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_wallet);
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService);
@@ -107,7 +111,8 @@ namespace Core
             _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _ropeDisconnection.Initialize(_gameStateService);
-            _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection, _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
+            _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection,
+                _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
         }
 
         private void InitializeView()
@@ -121,26 +126,27 @@ namespace Core
             _topPanel.Initialize(_gameStateService, _coroutineService);
             _parametersShop.Initialize(_parameters, _wallet);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
+            _authorizationView.Initialize(_yandexAuthorization);
         }
 
         private void InitializeLoad()
         {
-            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _wallet, _parameters);
+            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController,
+                _wallet, _parameters, _yandexAuthorization);
             _dataOperator.Load();
         }
 
         private void InitializeTutorial()
         {
+            TutorialState tutorialState = TutorialState.Start;
+
             if (PlayerPrefs.HasKey(TutorialData))
-                _tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
+                tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
 
-            if (_tutorialState == TutorialState.FullCompleted)
+            if (tutorialState == TutorialState.FullCompleted)
                 return;
 
-            if (_tutorial == null)
-                return;
-
-            _tutorial.Initialize(_gameStateService, _tutorialState);
+            _tutorial?.Initialize(_gameStateService, tutorialState);
         }
     }
 }

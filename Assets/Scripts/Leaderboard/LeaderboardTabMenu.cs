@@ -15,7 +15,7 @@ namespace Leaderboards
         [SerializeField] private LeaderboardView _collisioneTab;
 
         private Color _selectedColor = Color.white;
-        private bool _selectedCollisionTab;
+        private bool _selectedCollisionTab = true;
 
         public event System.Action<bool> CollisionTabSelected;
 

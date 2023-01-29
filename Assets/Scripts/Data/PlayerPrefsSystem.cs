@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Data
@@ -14,15 +15,16 @@ namespace Data
             PlayerPrefs.Save();
         }
 
-        public GameData Load()
+        public async Task<GameData> Load()
         {
             if (PlayerPrefs.HasKey(DataKey))
             {
                 string data = PlayerPrefs.GetString(DataKey);
-
                 return JsonUtility.FromJson<GameData>(data);
             }
-            
+
+            await Task.Yield();
+
             return new GameData();
         }
     }
