@@ -70,7 +70,6 @@ namespace Core
         private Wallet _wallet = new Wallet();
         private DataOperator _dataOperator;
 
-
         private void Start()
         {
             _parameterCreater = new ParameterCreater();

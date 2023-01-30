@@ -65,6 +65,7 @@ namespace Services
             _interactionHandler.TriggeredWithBrick += OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall += OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger += OnTriggeredWithCameraTrigger;
+            Agava.WebUtility.WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
         }
 
         public event Action<Car> TriggeredCar;
@@ -84,7 +85,10 @@ namespace Services
             _interactionHandler.TriggeredWithBrick -= OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall -= OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger -= OnTriggeredWithCameraTrigger;
+            Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
         }
+
+
 
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
 
@@ -291,5 +295,7 @@ namespace Services
         }
 
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
+
+        private void OnInBackgroundChange(bool inBackground) => Time.timeScale = inBackground == true ? 0 : TimeScaleDefault;
     }
 }

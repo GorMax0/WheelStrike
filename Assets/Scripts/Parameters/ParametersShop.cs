@@ -57,7 +57,7 @@ namespace Parameters
             {
                 var moneyToBuy = HasMoneyToBuy(view.Value.Parameter, moneyInWallet);
                 view.Value.ChangeStateButton(moneyToBuy);
-            //    Debug.Log($"Money wallet - {moneyInWallet} = {view.Value.Parameter.Type} - lvl. {view.Value.Parameter.Level} - Cost {view.Value.Parameter.Cost}");
+                Debug.Log($"Money wallet - {moneyInWallet} = {view.Value.Parameter.Type} - lvl. {view.Value.Parameter.Level} - Cost {view.Value.Parameter.Cost}");
             }
         }
 
@@ -73,6 +73,7 @@ namespace Parameters
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Money", parameter.Cost, "ParameterShop", $"{parameter.Type}");
             parameter.LevelUp();
             _animationWheel.ParameterUp();
+            ChangeInteractableLevelUpButtons(_wallet.Money);
             onRefresh();
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
         }

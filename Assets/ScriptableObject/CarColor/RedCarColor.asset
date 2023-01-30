@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _color: {r: 1, g: 0, b: 0, a: 1}
   _material: {fileID: 2100000, guid: cec7024fdbc7637419be6b4a700adcd3, type: 2}
-  _basePrice: 50
   _isBought: 1
   _isSelected: 1
