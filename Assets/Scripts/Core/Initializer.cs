@@ -40,7 +40,6 @@ namespace Core
 
         [Header("Core")]
         [SerializeField] private CarBuilder _carBuilder;
-        [SerializeField] private Wall _wall;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private RopeDisconnection _ropeDisconnection;
@@ -72,7 +71,6 @@ namespace Core
 
         private void Start()
         {
-            AudioListener.volume = 0;
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
 
@@ -106,7 +104,6 @@ namespace Core
 
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
 
-            _wall.Create();
             _carBuilder.CreateCars(_gameStateService);
             _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);

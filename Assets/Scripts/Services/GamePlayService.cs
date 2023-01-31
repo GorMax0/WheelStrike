@@ -289,7 +289,7 @@ namespace Services
         {
             _finishWall = wall;
             _levelScore.AddReward(wall.Reward);
-            wall.PlaySound();
+            wall.Collide();
         }
 
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
