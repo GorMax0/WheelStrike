@@ -6,7 +6,6 @@ using Services;
 using Services.Level;
 using Authorization;
 using Agava.YandexGames;
-using UnityEngine;
 
 namespace Data
 {
@@ -51,6 +50,9 @@ namespace Data
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Save(): _saveSystem is null");
 
+            if (_gameData == null)
+                throw new NullReferenceException($"{GetType()}: Save(): GameData is null");
+
             SaveIndexScene();
             SaveMoney(_wallet.Money);
             SaveTime(_gamePlayService.ElapsedTime);
@@ -68,7 +70,7 @@ namespace Data
             _gameData = await _saveSystem.Load();
 
             if (_gameData == null)
-                return;
+                throw new NullReferenceException($"{GetType()}: Load(): _gameData is null");
 
             LoadIndexScene();
             LoadParameters();
@@ -122,6 +124,8 @@ namespace Data
             Save();
         }
 
+        private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
+
         private void LoadTime() => _gamePlayService.SetElapsedTime(_gameData.ElapsedTime);
 
         private void LoadCountCollisionObstacles() => _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
@@ -130,8 +134,6 @@ namespace Data
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 
         private void LoadHighscore() => _levelScore.LoadHighscore(_gameData.Highscore);
-
-        private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
         private void LoadMutedState() => _soundController.LoadMutedState(_gameData.IsMuted);
 
@@ -175,7 +177,7 @@ namespace Data
         private async void OnAuthorized()
         {
             _saveSystem = new YandexSaveSystem();
-            var gameDate = await _saveSystem.Load();
+            GameData gameDate = await _saveSystem.Load();
 
             if (gameDate.IndexScene == 0)
                 _saveSystem.Save(_gameData);

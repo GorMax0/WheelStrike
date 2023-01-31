@@ -72,6 +72,7 @@ namespace Core
 
         private void Start()
         {
+            AudioListener.volume = 0;
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
 

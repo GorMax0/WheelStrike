@@ -39,23 +39,26 @@ public class InitializeSDK : MonoBehaviour
     {
         GameData gameData = null;
 
-        if (PlayerPrefs.HasKey(DataKey))
-        {
-            string data = PlayerPrefs.GetString(DataKey);
-
-            gameData = JsonUtility.FromJson<GameData>(data);
-        }
 #if !UNITY_WEBGL || UNITY_EDITOR
 #elif YANDEX_GAMES
-        else
+        if (PlayerAccount.IsAuthorized == true)
         {
             PlayerAccount.GetPlayerData((string data) =>
             {
                 gameData = ConvertJsonToGameData(data);
             });
         }
+        else
 #endif
+        if (PlayerPrefs.HasKey(DataKey))
+        {
+            string data = PlayerPrefs.GetString(DataKey);
+
+            gameData = JsonUtility.FromJson<GameData>(data);
+        }
+
         yield return new WaitForSeconds(1f);
+    
         _levelIndex = gameData == null ? SceneManager.GetActiveScene().buildIndex + 1 : gameData.IndexScene;
     }
 

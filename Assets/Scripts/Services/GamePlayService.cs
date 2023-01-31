@@ -88,8 +88,6 @@ namespace Services
             Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
         }
 
-
-
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
 
         public void SetElapsedTime(float elapsedTime)

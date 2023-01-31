@@ -1,11 +1,9 @@
-using UI.Manual.Tutorial;
-
 namespace Data
 {
     [System.Serializable]
     public class GameData
     {
-        public int IndexScene;
+        public int IndexScene = 1;
         public int Highscore;
         public int Money = -1;
         public int SpeedParameter;
