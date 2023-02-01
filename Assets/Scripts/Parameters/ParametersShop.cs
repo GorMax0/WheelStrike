@@ -98,10 +98,21 @@ namespace Parameters
 #endif     
         }
 
-        private void OnOpenCallback()
+        private void PauseOn()
         {
             SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
+        }
+
+        private static void PauseOff()
+        {
+            SoundController.ChangeWhenAd(false);
+            Time.timeScale = 1f;
+        }
+
+        private void OnOpenCallback()
+        {
+            PauseOn();
             GameAnalytics.NewDesignEvent("AdClick:ParameterLevelUp");
         }
 
@@ -110,18 +121,15 @@ namespace Parameters
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
             _parameterForRewardAds = null;
             _refreshView();
+            PauseOff();
         }
 
-        private void OnCloseCallback()
-        {
-            SoundController.ChangeWhenAd(false);
-            Time.timeScale = 1f;
-        }
+        private void OnCloseCallback() => PauseOff();
 
         private void OnErrorCallback(string message)
         {
             Debug.LogWarning(message);
-            OnCloseCallback();
+            PauseOff();
         }
     }
 }

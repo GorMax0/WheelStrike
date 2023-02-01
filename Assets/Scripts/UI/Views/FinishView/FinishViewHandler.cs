@@ -97,7 +97,7 @@ namespace UI.Views.Finish
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("OnAdsButtonClicked");
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(onOpenCallback: OnOpenCallback, onRewardedCallback: OnRewardedCallback, onCloseCallback: OnCloseCallback);
+            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
 #endif
         }
 
@@ -123,6 +123,18 @@ namespace UI.Views.Finish
                 displayedValueChanged?.Invoke((int)displayedValue);
                 yield return waitForSeconds;
             }
+        }
+
+        private void PauseOn()
+        {
+            SoundController.ChangeWhenAd(true);
+            Time.timeScale = 0f;
+        }
+
+        private static void PauseOff()
+        {
+            SoundController.ChangeWhenAd(false);
+            Time.timeScale = 1f;
         }
 
         private void OnOrientationValidated(bool isPortrait)
@@ -167,21 +179,23 @@ namespace UI.Views.Finish
 
         private void OnOpenCallback()
         {
-            SoundController.ChangeWhenAd(true);
-            Time.timeScale = 0f;
+            PauseOn();
             GameAnalytics.NewDesignEvent("AdClick:RewardMultiplier");
-        }
-
-        private void OnCloseCallback()
-        {
-            SoundController.ChangeWhenAd(false);
-            Time.timeScale = 1f;
         }
 
         private void OnRewardedCallback()
         {
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
-            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);           
+            _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
+            PauseOff();
+        }
+
+        private void OnCloseCallback() => PauseOff();
+
+        private void OnErrorCallback(string message)
+        {
+            Debug.LogWarning(message);
+            PauseOff();
         }
     }
 }

@@ -169,7 +169,7 @@ namespace Services
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("Show interstitial ads");
 #elif YANDEX_GAMES
-            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback,OnOfflineCallback);
+            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
 #endif
             ElapsedTime = 0;
 
@@ -188,7 +188,11 @@ namespace Services
             Time.timeScale = 1f;
         }
 
-        private void OnOpenCallback() => PauseOn();
+        private void OnOpenCallback()
+        {
+            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds");
+            PauseOn();
+        }
 
         private void OnCloseCallback(bool isClose) => PauseOff();
 
