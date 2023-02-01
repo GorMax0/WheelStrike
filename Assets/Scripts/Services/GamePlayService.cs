@@ -221,8 +221,6 @@ namespace Services
                     OnGameRestart();
                     break;
             }
-
-            Debug.Log(state);
         }
 
         private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
@@ -254,6 +252,7 @@ namespace Services
             _delayHoldTime = 0;
 
             TryShowInterstitialAds();
+            _levelService.SetNextLevel();
             _dataOperator.Save();
 
             _gameStateService.GameStateChanged -= OnGameStateChanged;

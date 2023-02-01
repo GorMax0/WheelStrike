@@ -57,7 +57,6 @@ namespace Parameters
             {
                 var moneyToBuy = HasMoneyToBuy(view.Value.Parameter, moneyInWallet);
                 view.Value.ChangeStateButton(moneyToBuy);
-                Debug.Log($"Money wallet - {moneyInWallet} = {view.Value.Parameter.Type} - lvl. {view.Value.Parameter.Level} - Cost {view.Value.Parameter.Cost}");
             }
         }
 

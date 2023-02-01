@@ -72,6 +72,8 @@ namespace Services
         {
             _mutedSwitcher.isOn = isMuted;
             AudioListener.volume = isMuted == true ? _minVolume : _maxVolume;
+
+            Debug.Log($"Load isMuted = {isMuted}");
         }
 
         public void SwitchMuted(bool isMuted)
@@ -80,6 +82,8 @@ namespace Services
             AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
             MutedChanged?.Invoke(_isMuted);
             GameAnalytics.NewDesignEvent($"guiClick:Sound:{!_isMuted}");
+
+            Debug.Log($"SwitchMuted isMuted = {_isMuted}; Volume = {AudioListener.volume}");
         }
 
         private bool HasInitialWheelSpeedNotZero()
@@ -159,10 +163,14 @@ namespace Services
         {
             AudioListener.pause = _isShowAd;
 
+            Debug.Log($"Before check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
+
             if (_isShowAd == true)
                 AudioListener.volume = 0f;
             else
                 AudioListener.volume = _isMuted == true ? 0f : 1f;
+
+            Debug.Log($"After check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
         }
     }
 }

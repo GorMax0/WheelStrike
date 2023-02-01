@@ -28,6 +28,13 @@
       "dependencies": {},
       "hash": "2937380390844fc76ae88d6cd570a19ee86ac2e2"
     },
+    "com.dungeongames.vkgames": {
+      "version": "https://github.com/punisherpete/com.dungeongames.vkgames.git#2.0.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "156ca8000c4428ab6e52976418da3489bf91c973"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

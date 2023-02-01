@@ -17,6 +17,7 @@ namespace Services.Level
         private const float DistanceCoefficient = 5f;
 
         private int _indexCurrentScene;
+        private ITravelable _travelable;
         private bool _isInitialize;
 
         public string NameForAnalytic => _nameForAnalytic;
@@ -32,12 +33,8 @@ namespace Services.Level
             Score = new LevelScore(travelable, income);
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
             _nameView.text = _name;
+            _travelable = travelable;
             _isInitialize = true;
-        }
-
-        public void RestartLevel()
-        {
-            SceneManager.LoadScene(_indexCurrentScene);
         }
 
         public void LoadLevel(int indexScene)
@@ -47,5 +44,13 @@ namespace Services.Level
 
             SceneManager.LoadScene(indexScene);
         }
+
+        public void SetNextLevel()
+        {
+            if (_travelable.DistanceTraveled >= LengthRoad && _indexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
+                _indexCurrentScene++;
+        }
+
+        public void RestartLevel() => SceneManager.LoadScene(_indexCurrentScene);
     }
 }

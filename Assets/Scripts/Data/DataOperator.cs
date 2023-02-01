@@ -45,6 +45,12 @@ namespace Data
             Unsubscribe();
         }
 
+        public void ClearSave()
+        {
+            _gameData = new GameData();
+            _saveSystem.Save(_gameData);
+        }
+
         public void Save()
         {
             if (_saveSystem == null)
