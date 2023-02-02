@@ -187,7 +187,6 @@ namespace UI.Views.Finish
         {
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
-            PauseOff();
         }
 
         private void OnCloseCallback() => PauseOff();

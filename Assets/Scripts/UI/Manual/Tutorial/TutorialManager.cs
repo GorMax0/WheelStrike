@@ -3,7 +3,6 @@ using Parameters;
 using Services;
 using Services.GameStates;
 using UI.Views;
-using System;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Core;
@@ -139,8 +138,6 @@ namespace UI.Manual.Tutorial
 
         private void FinishTutorial()
         {
-            _currentState = TutorialState.FullCompleted;
-            SaveTutorialProgress();
             GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
             SceneManager.LoadScene(NextSceneName);
         }

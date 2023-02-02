@@ -6,11 +6,14 @@ using Services;
 using Services.Level;
 using Authorization;
 using Agava.YandexGames;
+using UnityEngine;
 
 namespace Data
 {
     public class DataOperator : IDisposable
     {
+        private const int DefaultScene = 1;
+
         private GameData _gameData;
         private ISaveSystem _saveSystem;
         private GamePlayService _gamePlayService;
@@ -20,6 +23,8 @@ namespace Data
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
         private YandexAuthorization _yandexAuthorization;
+
+        private int _countSave;
 
         public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController,
             Wallet wallet, Dictionary<ParameterType, Parameter> parameters, YandexAuthorization yandexAuthorization)
@@ -45,6 +50,12 @@ namespace Data
             Unsubscribe();
         }
 
+        public void ClearSave()
+        {
+            _gameData = new GameData();
+            _saveSystem.Save(_gameData);
+        }
+
         public void Save()
         {
             if (_saveSystem == null)
@@ -53,13 +64,13 @@ namespace Data
             if (_gameData == null)
                 throw new NullReferenceException($"{GetType()}: Save(): GameData is null");
 
-            SaveIndexScene();
-            SaveMoney(_wallet.Money);
+            SaveIndexScene();         
             SaveTime(_gamePlayService.ElapsedTime);
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
 
             _saveSystem.Save(_gameData);
+            Debug.Log($"Save #{++_countSave}");
         }
 
         public async void Load()
@@ -87,7 +98,6 @@ namespace Data
         private void SaveHighscore(int highscore)
         {
             _gameData.Highscore = highscore;
-            Save();
         }
 
         private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) => _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
@@ -98,11 +108,7 @@ namespace Data
 
         private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
 
-        private void SaveMuted(bool isMuted)
-        {
-            _gameData.IsMuted = isMuted;
-            Save();
-        }
+        private void SaveMuted(bool isMuted) => _gameData.IsMuted = isMuted;
 
         private void SaveParameter(Parameter parameter)
         {
@@ -120,8 +126,6 @@ namespace Data
                 default:
                     throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
-
-            Save();
         }
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
@@ -179,7 +183,7 @@ namespace Data
             _saveSystem = new YandexSaveSystem();
             GameData gameDate = await _saveSystem.Load();
 
-            if (gameDate.IndexScene == 0)
+            if (gameDate.IndexScene == DefaultScene)
                 _saveSystem.Save(_gameData);
         }
 

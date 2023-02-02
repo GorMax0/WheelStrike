@@ -7,6 +7,7 @@
         Running,
         Finished,
         Restart,
+        Save,
         TutorialStepZero,
         TutorialStepTwo,
         TutorialStepThree,

@@ -65,7 +65,7 @@ namespace Core.Wheel
             _speedIncrease = speedIncrease;
             _bounceIncrease = size;
             _moveForward = new CoroutineRunning(coroutineService);
-
+            
             _isInitialized = true;
             OnEnable();
         }
@@ -74,6 +74,7 @@ namespace Core.Wheel
         {
             float randomForce = UnityEngine.Random.Range(0.95f, 1.05f);
             float force = (_baseSpeed + _speedIncrease.Value) * _forceScale.FinalValue;
+            Debug.Log($"SpeedIncrease {_speedIncrease.Value}; Force value = {force}");
 
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce(transform.forward * force * randomForce + _offsetAngles, ForceMode.Acceleration);

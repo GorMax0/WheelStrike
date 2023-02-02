@@ -86,14 +86,27 @@ namespace Core
                 _gameStateService.ChangeState(GameState.Initializing);
         }
 
+
+        private void Update()  //Delete this
+        {
+            if (Input.GetKeyUp(KeyCode.L) && Input.GetKeyUp(KeyCode.Q))
+            {
+                Debug.Log($"CLEAR SAVE!");
+                _dataOperator.ClearSave();
+                PlayerPrefs.DeleteAll();
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            }
+        }
+
+
         private void InitializeServices()
         {
-            _levelService.Initialize(_wheel.Travelable, _parameters[ParameterType.Income]);
             _gameStateService = new GameStateService();
+            _levelService.Initialize(_gameStateService, _wheel.Travelable, _parameters[ParameterType.Income]);
             _yandexAuthorization = new YandexAuthorization();
             _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService, _inputHandler,
                 _interactionHandler, _wheel.Travelable, _levelService, _wallet);
-            _adsRewards.Initialize(_wallet);
+            _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService);
         }
@@ -139,9 +152,6 @@ namespace Core
 
             if (PlayerPrefs.HasKey(TutorialData))
                 tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
-
-            if (tutorialState == TutorialState.FullCompleted)
-                return;
 
             _tutorial?.Initialize(_gameStateService, tutorialState);
         }

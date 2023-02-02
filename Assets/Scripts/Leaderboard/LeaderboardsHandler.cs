@@ -94,9 +94,6 @@ namespace Leaderboards
 
         private void Disable()
         {
-            _isCollisionsLeaderboardCached = false;
-            _isDistanceTraveledLeaderboardCached = false;
-
             _tabMenu.gameObject.SetActive(false);
             _distanceTraveledLeaderboardView.gameObject.SetActive(false);
             _collisionsLeaderboardView.gameObject.SetActive(false);
@@ -153,7 +150,7 @@ namespace Leaderboards
                     break;
             }
 
-       //     Debug.Log($"Invoke OnGetEntriesCompleted for {nameLeaderboard}");
+            //     Debug.Log($"Invoke OnGetEntriesCompleted for {nameLeaderboard}");
         }
 
         private void OnGetPlayerEntryCompleted(string nameLeaderboard, PlayerInfoLeaderboard currentPlayer)
@@ -168,7 +165,7 @@ namespace Leaderboards
                     break;
             }
 
-        //    Debug.Log($"Invoke OnGetPlayerEntryCompleted for {nameLeaderboard}");
+            //    Debug.Log($"Invoke OnGetPlayerEntryCompleted for {nameLeaderboard}");
         }
     }
 }
