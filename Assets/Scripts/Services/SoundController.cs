@@ -20,12 +20,13 @@ namespace Services
         [SerializeField] private Toggle _mutedSwitcher;
 
         private static bool _isMuted;
+        private static float _minVolume = 0f;
+        private static float _maxVolume = 1f;
 
         private AudioSource _mainAudioSource;
         private GameStateService _gameStateService;
-        private float _minVolume = 0f;
-        private float _maxVolume = 1f;
         private float _initialWheelSpeed;
+        private float _cacheVolume;
         private bool _isInitialized;
 
         public event Action<bool> MutedChanged;
@@ -70,6 +71,7 @@ namespace Services
 
         public void LoadMutedState(bool isMuted)
         {
+            _isMuted = isMuted;
             _mutedSwitcher.isOn = isMuted;
             AudioListener.volume = isMuted == true ? _minVolume : _maxVolume;
 
@@ -97,7 +99,7 @@ namespace Services
             return true;
         }
 
-        private void DecreaseMainAudioSourceVolume() => _mainAudioSource.volume = _movementWheel.Speed / _initialWheelSpeed;
+        private void DecreaseMainAudioSourceVolume() => _mainAudioSource.volume = _movementWheel.Speed / _initialWheelSpeed * _maxVolume;
 
         private void OnGameStateChanged(GameState state)
         {
@@ -148,13 +150,16 @@ namespace Services
         }
 
         private void OnInBackgroundChange(bool inBackground)
-        {            
+        {
+            if (inBackground == true)
+                _cacheVolume = AudioListener.volume;
+
             AudioListener.pause = inBackground;
 
             if (inBackground == true)
-                AudioListener.volume = 0f;
+                AudioListener.volume = _minVolume;
             else
-                AudioListener.volume = _isMuted == true ? 0f : 1f;
+                AudioListener.volume = _cacheVolume;
 
             Debug.Log($"Background = {inBackground}, volume {AudioListener.volume}, is muted {_isMuted}");
         }
@@ -166,9 +171,9 @@ namespace Services
             Debug.Log($"Before check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
 
             if (_isShowAd == true)
-                AudioListener.volume = 0f;
+                AudioListener.volume = _minVolume;
             else
-                AudioListener.volume = _isMuted == true ? 0f : 1f;
+                AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
 
             Debug.Log($"After check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
         }

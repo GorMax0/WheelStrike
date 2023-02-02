@@ -27,7 +27,7 @@ public class InitializeSDK : MonoBehaviour
             yield return YandexGamesSdk.Initialize();
         }
 
-        YandexGamesSdk.CallbackLogging = true;
+      //  YandexGamesSdk.CallbackLogging = true;
 #endif
         yield return GetLevelIndex();
 

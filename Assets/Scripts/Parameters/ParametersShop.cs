@@ -120,7 +120,6 @@ namespace Parameters
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
             _parameterForRewardAds = null;
             _refreshView();
-            PauseOff();
         }
 
         private void OnCloseCallback() => PauseOff();

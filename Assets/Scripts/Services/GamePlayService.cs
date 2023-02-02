@@ -178,12 +178,14 @@ namespace Services
 
         private void PauseOn()
         {
+            Debug.Log("PauseOn");
             SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
         }
 
         private static void PauseOff()
         {
+            Debug.Log("PauseOff");
             SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }
@@ -220,6 +222,9 @@ namespace Services
                 case GameState.Restart:
                     OnGameRestart();
                     break;
+                case GameState.Save:
+                    OnGameSave();
+                    break;
             }
         }
 
@@ -234,6 +239,8 @@ namespace Services
             _wallet.EnrollMoney(_levelScore.ResultReward);
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
             DistanceTraveledOverAllTime += _travelable.DistanceTraveled;
+            _levelService.SetNextScene();
+            _gameStateService.ChangeState(GameState.Save);
 
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "DistanceTraveled", _travelable.DistanceTraveled, "Traveled", "Finishing");
@@ -250,14 +257,13 @@ namespace Services
         {
             DOTween.Clear();
             _delayHoldTime = 0;
-
             TryShowInterstitialAds();
-            _levelService.SetNextLevel();
-            _dataOperator.Save();
 
             _gameStateService.GameStateChanged -= OnGameStateChanged;
             _levelService.RestartLevel();
         }
+
+        private void OnGameSave() => _dataOperator.Save();
 
         private void OnPointerDown() => _gameStateService.ChangeState(GameState.Waiting);
 

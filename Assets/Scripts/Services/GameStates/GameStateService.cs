@@ -10,7 +10,7 @@ namespace Services.GameStates
 
         public void ChangeState(GameState gameState)
         {
-            if (_state == gameState && _state != 0)
+            if (_state != GameState.Save && _state != GameState.Initializing && _state == gameState)
                 return;
 
             _state = gameState;

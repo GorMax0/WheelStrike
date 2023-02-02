@@ -13,7 +13,7 @@ namespace UI.Views.Finish
 
         private const float StartSliderValue = 0f;
         private const int NumberOfSerifs = 5;
-        private const int LenghRoadCorrector = 62;
+        private const float LenghRoadCorrector = 0.16f;
 
         private FinishViewHandler _viewHandler;
         private float _lengthRoad;
@@ -55,26 +55,20 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedHighscoreLoaded += OnDisplayedNewHighscoreLable;
         }
 
-        private void SetPointerHighscore(int highscore)
+        private void ChangeValueSlider(Slider slider, int ValueForNormalization)
         {
-            float normalizedDistance = highscore / (_lengthRoad + LenghRoadCorrector);
-            _highscore.value = normalizedDistance;
-        }
-
-        private void ChangeValueSlider(int distanceTraveled)
-        {
-            _normalizedDistance = distanceTraveled / (_lengthRoad + LenghRoadCorrector);
-            _distanceTraveled.value = _normalizedDistance;
+            _normalizedDistance = ValueForNormalization / (_lengthRoad + LenghRoadCorrector * _lengthRoad);
+            slider.value = _normalizedDistance;
         }
 
         private void OnDisplayedDistanceChanged(int distanceTraveled)
         {
-            ChangeValueSlider(distanceTraveled);
+            ChangeValueSlider(_distanceTraveled, distanceTraveled);
         }
 
         private void OnDisplayedNewHighscoreLable(int newHighscore)
         {
-            SetPointerHighscore(newHighscore);
+            ChangeValueSlider(_highscore, newHighscore);
         }
     }
 }
