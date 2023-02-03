@@ -69,7 +69,7 @@ namespace Core.Wheel
 
         private void SetMass()
         {
-            int massCorrector = 5000;
+            int massCorrector = 10000;
             _rigidbody.mass += _size.Value * massCorrector;
         }
 

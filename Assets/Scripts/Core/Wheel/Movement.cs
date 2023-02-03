@@ -105,7 +105,7 @@ namespace Core.Wheel
         private void Bounce()
         {
             float deviationToSide = UnityEngine.Random.Range(-0.12f, 0.12f);
-            float increaseCorrector = 10f;
+            float increaseCorrector = 20f;
             float bounceForce = _rigidbody.velocity.magnitude * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
 
             _rigidbody.AddForce(new Vector3(deviationToSide, bounceForce), ForceMode.VelocityChange);
