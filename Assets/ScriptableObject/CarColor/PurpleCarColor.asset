@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d459657b8ea67f2438fe9dd3d5983485, type: 3}
   m_Name: PurpleCarColor
   m_EditorClassIdentifier: 
-  _color: {r: 0.2627451, g: 0.07450981, b: 0.33333334, a: 1}
+  _color: {r: 0.34966338, g: 0.12486649, b: 0.4339623, a: 1}
   _material: {fileID: 2100000, guid: e7a3c8ae1ffbb4247942bc424081360b, type: 2}
   _isBought: 1
   _isSelected: 1

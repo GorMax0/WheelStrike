@@ -21076,7 +21076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _reward: {fileID: 615693401320295025}
-  _topPanel: {fileID: 204640186}
+  _levelService: {fileID: 0}
   _moneyRewardPanel: {fileID: 3384543620718165072}
   _parameterRewardPanel: {fileID: 615934515}
 --- !u!1 &607539441
@@ -23141,7 +23141,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714671739}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: -0.002, z: -7.73}
+  m_LocalPosition: {x: -60, y: -0.002, z: -7.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24466,6 +24466,8 @@ MonoBehaviour:
   _name: "\u0421\u0443\u043B\u0430\u043A \u043A\u0430\u043D\u044C\u043E\u043D"
   _nameView: {fileID: 939057012}
   _finishWall: {fileID: 1286283552}
+  _topPanel: {fileID: 0}
+  _worldPanel: {fileID: 0}
 --- !u!1001 &804126466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57539,7 +57541,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0.306694, y: 1}
-  m_AnchoredPosition: {x: 126.001114, y: -157}
+  m_AnchoredPosition: {x: 126.00111, y: -157}
   m_SizeDelta: {x: -463.06693, y: 98.44}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2025265157
@@ -66754,7 +66756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.27672482}
   m_AnchorMax: {x: 1, y: 0.37389925}
-  m_AnchoredPosition: {x: 0, y: 108}
+  m_AnchoredPosition: {x: 0, y: 107.999985}
   m_SizeDelta: {x: 0, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127656249

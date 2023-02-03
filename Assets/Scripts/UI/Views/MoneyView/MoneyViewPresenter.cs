@@ -83,6 +83,9 @@ public class MoneyViewPresenter : MonoBehaviour
 
     private void OnCollidedWithObstacle(Obstacle obstacle)
     {
+        if (obstacle.IsCollided == true)
+            return;
+
         _view = _pool.GetObject();
         _view.SetTransformParameters(obstacle.transform.position);
         _view.Display(obstacle.Reward);

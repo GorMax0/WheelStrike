@@ -55,6 +55,12 @@ namespace Core.Wheel
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
+        private void FixedUpdate()
+        {
+            if (_rigidbody.velocity.y >= 10f) 
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,8f, _rigidbody.velocity.z);
+        }
+
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size)
         {
             if (_isInitialized == true)
@@ -72,7 +78,7 @@ namespace Core.Wheel
 
         private void Move()
         {
-            float randomForce = UnityEngine.Random.Range(0.95f, 1.05f);
+            float randomForce = UnityEngine.Random.Range(0.93f, 1.03f);
             float force = (_baseSpeed + _speedIncrease.Value) * _forceScale.FinalValue;
             Debug.Log($"SpeedIncrease {_speedIncrease.Value}; Force value = {force}");
 
@@ -104,7 +110,7 @@ namespace Core.Wheel
 
         private void Bounce()
         {
-            float deviationToSide = UnityEngine.Random.Range(-0.12f, 0.12f);
+            float deviationToSide = UnityEngine.Random.Range(-0.135f, 0.135f);
             float increaseCorrector = 20f;
             float bounceForce = _rigidbody.velocity.magnitude * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
 

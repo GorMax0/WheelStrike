@@ -38107,6 +38107,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 812824938}
     m_Modifications:
+    - target: {fileID: 3408954114734075827, guid: d17b64587d812584196527c4be2b255d, type: 3}
+      propertyPath: m_HeightmapPixelError
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 3408954114939870828, guid: d17b64587d812584196527c4be2b255d, type: 3}
       propertyPath: m_Name
       value: Level
@@ -38165,6 +38169,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3408954114939870831, guid: d17b64587d812584196527c4be2b255d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408954115062983824, guid: d17b64587d812584196527c4be2b255d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408954115062983828, guid: d17b64587d812584196527c4be2b255d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408954115899852814, guid: d17b64587d812584196527c4be2b255d, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -38314,7 +38330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364098500721, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 108
+      value: 107.999756
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
