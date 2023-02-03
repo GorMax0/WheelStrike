@@ -64,7 +64,7 @@ namespace Data
             if (_gameData == null)
                 throw new NullReferenceException($"{GetType()}: Save(): GameData is null");
 
-            SaveIndexScene();         
+            SaveIndexScene();
             SaveTime(_gamePlayService.ElapsedTime);
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
@@ -183,7 +183,7 @@ namespace Data
             _saveSystem = new YandexSaveSystem();
             GameData gameDate = await _saveSystem.Load();
 
-            if (gameDate.IndexScene == DefaultScene)
+            if (gameDate.IndexScene == DefaultScene || gameDate == null)
                 _saveSystem.Save(_gameData);
         }
 

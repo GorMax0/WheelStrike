@@ -26603,6 +26603,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2778850361642266993, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 2873442905088092426, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_text
       value: 400
@@ -26666,6 +26670,10 @@ PrefabInstance:
     - target: {fileID: 7972466092235538168, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 127
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512523005079271328, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_text
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 9088321614095386655, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_CastShadows
@@ -30545,6 +30553,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2778850361642266993, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 2873442905088092426, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_text
       value: 300
@@ -30608,6 +30620,10 @@ PrefabInstance:
     - target: {fileID: 7972466092235538168, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 127
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512523005079271328, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_text
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 9088321614095386655, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_CastShadows
@@ -39961,7 +39977,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.976866}
   m_AnchorMax: {x: 0.42900002, y: 1}
-  m_AnchoredPosition: {x: 40.70996, y: -198.5}
+  m_AnchoredPosition: {x: 40.709953, y: -198.5}
   m_SizeDelta: {x: 9.77, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1614942180
@@ -44182,6 +44198,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2778850361642266993, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 2873442905088092426, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_text
       value: '100
@@ -44247,6 +44267,10 @@ PrefabInstance:
     - target: {fileID: 7972466092235538168, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 127
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512523005079271328, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_text
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 9088321614095386655, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_CastShadows
@@ -56316,7 +56340,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.27672482}
   m_AnchorMax: {x: 1, y: 0.37389925}
-  m_AnchoredPosition: {x: 0, y: 108.00023}
+  m_AnchoredPosition: {x: 0, y: 108.000244}
   m_SizeDelta: {x: 0, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127656249
@@ -69373,6 +69397,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2778850361642266993, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 5450730151217524976, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -69432,6 +69460,10 @@ PrefabInstance:
     - target: {fileID: 7972466092235538168, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 127
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512523005079271328, guid: 8f1940326fe483047a543547898cee57, type: 3}
+      propertyPath: m_text
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 9088321614095386655, guid: 8f1940326fe483047a543547898cee57, type: 3}
       propertyPath: m_CastShadows

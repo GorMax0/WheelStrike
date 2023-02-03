@@ -29,7 +29,9 @@ namespace Services.Coroutines
             Coroutine job = _coroutines[id];
 
             if (job != null)
+            {
                 StopCoroutine(job);
+            }
         }
     }
 }

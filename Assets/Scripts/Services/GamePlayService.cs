@@ -18,7 +18,7 @@ namespace Services
         private readonly float IntervalBetweenAds = 140f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
-        private readonly float TimeScaleDefault = Time.timeScale;
+        private readonly float TimeScaleDefault = 1f;
 
         private GameStateService _gameStateService;
         private YandexAuthorization _yandexAuthorization;
@@ -143,8 +143,6 @@ namespace Services
             while (_delayHoldTime > 0)
             {
                 _delayHoldTime -= Time.deltaTime;
-
-                Debug.Log($"HoldTime _delayHoldTime {_delayHoldTime}");
 
                 yield return null;
             }

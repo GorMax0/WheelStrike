@@ -14,6 +14,7 @@ namespace Core.Wheel
         [SerializeField] private float _baseSpeed = 800f;
         [SerializeField] private float _bounceRatio = 0.2f;
 
+        private const float DeviationToSide = 0.135f;
         private const float SpeedDamping = 1.2f;
         private const float DistanceCoefficient = 5f;
 
@@ -57,8 +58,8 @@ namespace Core.Wheel
 
         private void FixedUpdate()
         {
-            if (_rigidbody.velocity.y >= 10f) 
-                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x,8f, _rigidbody.velocity.z);
+            if (_rigidbody.velocity.y >= 10f)
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 8f, _rigidbody.velocity.z);
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size)
@@ -71,7 +72,7 @@ namespace Core.Wheel
             _speedIncrease = speedIncrease;
             _bounceIncrease = size;
             _moveForward = new CoroutineRunning(coroutineService);
-            
+
             _isInitialized = true;
             OnEnable();
         }
@@ -110,7 +111,7 @@ namespace Core.Wheel
 
         private void Bounce()
         {
-            float deviationToSide = UnityEngine.Random.Range(-0.135f, 0.135f);
+            float deviationToSide = UnityEngine.Random.Range(-DeviationToSide, DeviationToSide);
             float increaseCorrector = 20f;
             float bounceForce = _rigidbody.velocity.magnitude * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
 

@@ -83,13 +83,13 @@ namespace Leaderboards
             if (PlayerAccount.IsAuthorized == false)
                 return;
 
-            Leaderboard.GetPlayerEntry(_leaderboardName, result =>
-            {
-                Debug.Log($"SetScore {result.score} new score {score}, name {result.player.publicName}");
+            //Leaderboard.GetPlayerEntry(_leaderboardName, result =>
+            //{
 
-                if (result.score < score)
-                    Leaderboard.SetScore(_leaderboardName, score);
-            });
+            //    if (result.score < score)
+            //});
+            Debug.Log($"SetScore new score {score}");
+            Leaderboard.SetScore(_leaderboardName, score);
 #endif
         }
 
