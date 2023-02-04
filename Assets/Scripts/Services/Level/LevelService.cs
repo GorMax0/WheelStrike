@@ -27,7 +27,7 @@ namespace Services.Level
 
         public string NameForAnalytic => _nameForAnalytic;
         public int LengthRoad => (int)(_finishWall.transform.position.z * DistanceCoefficient);
-        public int IndexNextScene => _indexCurrentScene; // + 1;
+        public int IndexNextScene => _indexCurrentScene;
         public LevelScore Score { get; private set; }
 
         public void Initialize(GameStateService gameStateService, ITravelable travelable, Parameter income)

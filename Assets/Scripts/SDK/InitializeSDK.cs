@@ -1,7 +1,7 @@
 using System.Collections;
-using GameAnalyticsSDK;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GameAnalyticsSDK;
 using Data;
 using Agava.YandexGames;
 

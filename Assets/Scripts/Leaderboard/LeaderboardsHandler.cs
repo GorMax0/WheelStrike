@@ -149,8 +149,6 @@ namespace Leaderboards
                     _collisionsLeaderboardView.RenderTop(topPlayers);
                     break;
             }
-
-            //     Debug.Log($"Invoke OnGetEntriesCompleted for {nameLeaderboard}");
         }
 
         private void OnGetPlayerEntryCompleted(string nameLeaderboard, PlayerInfoLeaderboard currentPlayer)
@@ -164,8 +162,6 @@ namespace Leaderboards
                     _collisionsLeaderboardView.RenderCurrentPlayer(currentPlayer);
                     break;
             }
-
-            //    Debug.Log($"Invoke OnGetPlayerEntryCompleted for {nameLeaderboard}");
         }
     }
 }

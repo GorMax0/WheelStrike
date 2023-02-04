@@ -1,8 +1,8 @@
+using System;
 using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
-using System;
 
 namespace Core.Wheel
 {
@@ -12,6 +12,8 @@ namespace Core.Wheel
     [RequireComponent(typeof(InteractionHandler))]
     public class Player : MonoBehaviour
     {
+        private const int MassCorrector = 10000;
+
         private Rigidbody _rigidbody;
         private Movement _movement;
         private AnimationWheel _animation;
@@ -67,11 +69,7 @@ namespace Core.Wheel
             transform.localScale = new Vector3(newScaleX, newScaleY, newScaleZ);
         }
 
-        private void SetMass()
-        {
-            int massCorrector = 10000;
-            _rigidbody.mass += _size.Value * massCorrector;
-        }
+        private void SetMass() => _rigidbody.mass += _size.Value * MassCorrector;
 
         private void OnGameStateService(GameState state)
         {

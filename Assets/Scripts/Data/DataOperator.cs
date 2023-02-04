@@ -6,7 +6,6 @@ using Services;
 using Services.Level;
 using Authorization;
 using Agava.YandexGames;
-using UnityEngine;
 
 namespace Data
 {
@@ -20,13 +19,12 @@ namespace Data
         private LevelService _levelService;
         private LevelScore _levelScore;
         private SoundController _soundController;
+        private QualityToggle _qualityToggle;
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
         private YandexAuthorization _yandexAuthorization;
 
-        private int _countSave;
-
-        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController,
+        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, QualityToggle qualityToggle,
             Wallet wallet, Dictionary<ParameterType, Parameter> parameters, YandexAuthorization yandexAuthorization)
         {
             _gamePlayService = gamePlayService;
@@ -34,6 +32,7 @@ namespace Data
             _levelService = levelService;
             _levelScore = _levelService.Score;
             _soundController = soundController;
+            _qualityToggle = qualityToggle;
             _wallet = wallet;
             _parameters = parameters;
             _yandexAuthorization = yandexAuthorization;
@@ -70,7 +69,6 @@ namespace Data
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
 
             _saveSystem.Save(_gameData);
-            Debug.Log($"Save #{++_countSave}");
         }
 
         public async void Load()
@@ -91,6 +89,7 @@ namespace Data
             LoadCountCollisionObstacles();
             LoadAllDistanceTraveled();
             LoadMutedState();
+            LoadSelectedQuality();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
@@ -109,6 +108,7 @@ namespace Data
         private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
 
         private void SaveMuted(bool isMuted) => _gameData.IsMuted = isMuted;
+        private void SaveSelectedQuality(bool isNormalQuality) => _gameData.IsNormalQuality = isNormalQuality;
 
         private void SaveParameter(Parameter parameter)
         {
@@ -141,6 +141,8 @@ namespace Data
 
         private void LoadMutedState() => _soundController.LoadMutedState(_gameData.IsMuted);
 
+        private void LoadSelectedQuality() => _qualityToggle.LoadSelectedQuality(_gameData.IsNormalQuality);
+
         private void LoadParameters()
         {
             foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
@@ -170,6 +172,7 @@ namespace Data
             _wallet.MoneyChanged += SaveMoney;
             _levelScore.HighscoreChanged += SaveHighscore;
             _soundController.MutedChanged += SaveMuted;
+            _qualityToggle.QualityChanged += SaveSelectedQuality;
             _yandexAuthorization.Authorized += OnAuthorized;
 
             foreach (var parameter in _parameters)
@@ -183,7 +186,7 @@ namespace Data
             _saveSystem = new YandexSaveSystem();
             GameData gameDate = await _saveSystem.Load();
 
-            if (gameDate.IndexScene == DefaultScene || gameDate == null)
+            if (gameDate == null || gameDate.IndexScene == DefaultScene)
                 _saveSystem.Save(_gameData);
         }
 
@@ -192,6 +195,7 @@ namespace Data
             _wallet.MoneyChanged -= SaveMoney;
             _levelScore.HighscoreChanged -= SaveHighscore;
             _soundController.MutedChanged -= SaveMuted;
+            _qualityToggle.QualityChanged -= SaveSelectedQuality;
             _yandexAuthorization.Authorized -= OnAuthorized;
 
             foreach (var parameter in _parameters)

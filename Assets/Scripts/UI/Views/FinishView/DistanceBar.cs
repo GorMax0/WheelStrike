@@ -1,7 +1,6 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace UI.Views.Finish
 {
@@ -61,14 +60,8 @@ namespace UI.Views.Finish
             slider.value = _normalizedDistance;
         }
 
-        private void OnDisplayedDistanceChanged(int distanceTraveled)
-        {
-            ChangeValueSlider(_distanceTraveled, distanceTraveled);
-        }
+        private void OnDisplayedDistanceChanged(int distanceTraveled) => ChangeValueSlider(_distanceTraveled, distanceTraveled);
 
-        private void OnDisplayedNewHighscoreLable(int newHighscore)
-        {
-            ChangeValueSlider(_highscore, newHighscore);
-        }
+        private void OnDisplayedNewHighscoreLable(int newHighscore) => ChangeValueSlider(_highscore, newHighscore);
     }
 }

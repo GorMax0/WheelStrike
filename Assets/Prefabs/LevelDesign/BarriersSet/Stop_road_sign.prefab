@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 923118677739253920}
   - component: {fileID: 6856569982219970924}
   - component: {fileID: 255560602910325568}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stop_road_sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,6 +197,10 @@ PrefabInstance:
     - target: {fileID: 2333979031032067178, guid: e2fd7bbe97a92824b9b34e3991334847, type: 3}
       propertyPath: m_Name
       value: road_sign_stop_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333979031032067178, guid: e2fd7bbe97a92824b9b34e3991334847, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2333979031032067178, guid: e2fd7bbe97a92824b9b34e3991334847, type: 3}
       propertyPath: m_StaticEditorFlags

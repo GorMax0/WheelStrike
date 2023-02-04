@@ -16,6 +16,7 @@ using Trail;
 using AdsReward;
 using Leaderboards;
 using Authorization;
+using Particles;
 
 namespace Core
 {
@@ -32,6 +33,7 @@ namespace Core
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private SoundController _soundController;
+        [SerializeField] private QualityToggle _qualityToggle;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
 
         private GameStateService _gameStateService;
@@ -62,6 +64,7 @@ namespace Core
         [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
         [SerializeField] private TutorialManager _tutorial;
+        [SerializeField] private Fog _fog;
 
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
@@ -78,6 +81,7 @@ namespace Core
             InitializeCore();
             InitializeView();
             _trailManager.Initialize(_gameStateService);
+            _fog.Initialize(_gameStateService);
             InitializeLoad();
             InitializeTutorial();
             ScreenOrientationValidator.Instance.Initialize();
@@ -141,7 +145,7 @@ namespace Core
 
         private void InitializeLoad()
         {
-            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController,
+            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _qualityToggle,
                 _wallet, _parameters, _yandexAuthorization);
             _dataOperator.Load();
         }

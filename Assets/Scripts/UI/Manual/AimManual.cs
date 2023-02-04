@@ -15,6 +15,8 @@ namespace UI.Manual
         [SerializeField] private float _fadeTime;
         [SerializeField] private float _duration;
 
+        private const int EndValueForTween = 0;
+
         private Slider _slider;
         private CoroutineRunning _replayRunning;
 
@@ -30,8 +32,8 @@ namespace UI.Manual
         {
             KillTween();
             _manualText.Fade();
-            _sliderBackground.DOFade(0, _fadeTime);
-            _sliderHandler.DOFade(0, _fadeTime);
+            _sliderBackground.DOFade(EndValueForTween, _fadeTime);
+            _sliderHandler.DOFade(EndValueForTween, _fadeTime);
             Invoke(nameof(Disable), _fadeTime);
         }
 

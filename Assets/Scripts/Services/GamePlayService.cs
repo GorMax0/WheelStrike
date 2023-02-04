@@ -36,7 +36,8 @@ namespace Services
         private Wall _finishWall;
         private float _delayHoldTime;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler, InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
+        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler, 
+            InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
             _yandexAuthorization = yandexAuthorization;
@@ -115,6 +116,7 @@ namespace Services
         private IEnumerator UnlockInputHandler()
         {
             yield return new WaitForSeconds(0.25f);
+
             _inputHandler.gameObject.SetActive(true);
         }
 
@@ -123,15 +125,12 @@ namespace Services
             Time.timeScale = TimeScaleDefault;
             Time.fixedDeltaTime = Time.fixedUnscaledDeltaTime;
             TimeChangedToDefault?.Invoke();
-            Debug.Log($"SetDefaultTime timeScale {Time.timeScale}, fixedDeltaTime{Time.fixedDeltaTime}");
         }
 
         private void SetSlowTime()
         {
             Time.timeScale = TimeScaleSlow;
             Time.fixedDeltaTime = Time.timeScale * Time.fixedUnscaledDeltaTime;
-
-            Debug.Log($"SetSlowTime timeScale {Time.timeScale}, fixedDeltaTime{Time.fixedDeltaTime}");
         }
 
         private IEnumerator HoldTime()
@@ -165,7 +164,6 @@ namespace Services
                 return false;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-            Debug.Log("Show interstitial ads");
 #elif YANDEX_GAMES
             Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
 #endif

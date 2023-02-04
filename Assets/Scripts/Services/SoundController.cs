@@ -74,8 +74,6 @@ namespace Services
             _isMuted = isMuted;
             _mutedSwitcher.isOn = isMuted;
             AudioListener.volume = isMuted == true ? _minVolume : _maxVolume;
-
-            Debug.Log($"Load isMuted = {isMuted}");
         }
 
         public void SwitchMuted(bool isMuted)
@@ -84,8 +82,6 @@ namespace Services
             AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
             MutedChanged?.Invoke(_isMuted);
             GameAnalytics.NewDesignEvent($"guiClick:Sound:{!_isMuted}");
-
-            Debug.Log($"SwitchMuted isMuted = {_isMuted}; Volume = {AudioListener.volume}");
         }
 
         private bool HasInitialWheelSpeedNotZero()
@@ -137,6 +133,7 @@ namespace Services
         {
             _craneAudioSource.clip = _runWheel;
             _craneAudioSource.Play();
+
             _mainAudioSource.Stop();
             _mainAudioSource.clip = _wind;
             _mainAudioSource.Play();
@@ -145,6 +142,7 @@ namespace Services
         private void OnGameFinished()
         {
             _mainAudioSource.Stop();
+
             _craneAudioSource.clip = _finish;
             _craneAudioSource.Play();
         }
@@ -160,22 +158,16 @@ namespace Services
                 AudioListener.volume = _minVolume;
             else
                 AudioListener.volume = _cacheVolume;
-
-            Debug.Log($"Background = {inBackground}, volume {AudioListener.volume}, is muted {_isMuted}");
         }
 
         public static void ChangeWhenAd(bool _isShowAd)
         {
             AudioListener.pause = _isShowAd;
 
-            Debug.Log($"Before check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
-
             if (_isShowAd == true)
                 AudioListener.volume = _minVolume;
             else
                 AudioListener.volume = _isMuted == true ? _minVolume : _maxVolume;
-
-            Debug.Log($"After check _isMuted: isShowAd = {_isShowAd}; Volume {AudioListener.volume}; isMuted = {_isMuted}");
         }
     }
 }

@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
-using System;
 
 namespace Core.Wheel
 {
@@ -17,6 +17,10 @@ namespace Core.Wheel
         private const float DeviationToSide = 0.135f;
         private const float SpeedDamping = 1.2f;
         private const float DistanceCoefficient = 5f;
+        private const float MaximumUpVelocity = 10f;
+        private const float LowUpVelocity = 8f;
+        private const float MinForwardVelocity = 2.1f;
+        private const float MultiplierBackBounce = 0.3f;
 
         private Parameter _speedIncrease;
         private Parameter _bounceIncrease;
@@ -58,8 +62,8 @@ namespace Core.Wheel
 
         private void FixedUpdate()
         {
-            if (_rigidbody.velocity.y >= 10f)
-                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 8f, _rigidbody.velocity.z);
+            if (_rigidbody.velocity.y >= MaximumUpVelocity)
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, LowUpVelocity, _rigidbody.velocity.z);
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size)
@@ -79,12 +83,13 @@ namespace Core.Wheel
 
         private void Move()
         {
-            float randomForce = UnityEngine.Random.Range(0.93f, 1.03f);
+            float minRandomForceRatio = 0.93f;
+            float maxRandomForceRatio = 1.03f;
+            float randomForceRatio = UnityEngine.Random.Range(minRandomForceRatio, maxRandomForceRatio);
             float force = (_baseSpeed + _speedIncrease.Value) * _forceScale.FinalValue;
-            Debug.Log($"SpeedIncrease {_speedIncrease.Value}; Force value = {force}");
 
             _rigidbody.isKinematic = false;
-            _rigidbody.AddForce(transform.forward * force * randomForce + _offsetAngles, ForceMode.Acceleration);
+            _rigidbody.AddForce(transform.forward * force * randomForceRatio + _offsetAngles, ForceMode.Acceleration);
         }
 
         private void RotateInDirection(float directionOffsetX)
@@ -95,8 +100,6 @@ namespace Core.Wheel
 
         private IEnumerator HasMoveForward()
         {
-            const float MinForwardVelocity = 2.1f;
-
             while (true)
             {
                 yield return new WaitForFixedUpdate();
@@ -120,8 +123,6 @@ namespace Core.Wheel
 
         private void BounceBack()
         {
-            const float MultiplierBackBounce = 0.3f;
-
             _bounceRatio *= MultiplierBackBounce;
             _rigidbody.AddForce(-Vector3.forward * _bounceRatio, ForceMode.Acceleration);
             Bounce();

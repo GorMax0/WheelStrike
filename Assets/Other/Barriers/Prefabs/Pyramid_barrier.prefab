@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8009163808021769613}
   - component: {fileID: 7384928654973963422}
   - component: {fileID: 8639703568619388769}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pyramid_barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,12 +89,12 @@ GameObject:
   - component: {fileID: 434186}
   - component: {fileID: 3335860}
   - component: {fileID: 2394960}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &434186
 Transform:

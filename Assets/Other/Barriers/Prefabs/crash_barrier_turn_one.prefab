@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 440974}
   - component: {fileID: 6457936}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 459032}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: crash_barrier_colon (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 461826}
   - component: {fileID: 3333386}
   - component: {fileID: 2332966}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 454786}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: crash_barrier_colon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 463266}
   - component: {fileID: 3393700}
   - component: {fileID: 2383046}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 423680}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: crash_barrier_turn_one
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 496764}
   - component: {fileID: 3344872}
   - component: {fileID: 2367796}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

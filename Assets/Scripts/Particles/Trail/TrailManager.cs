@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Services.GameStates;
 using UnityEngine;
@@ -11,6 +11,8 @@ namespace Trail
     {
         [SerializeField] private List<TrailFX> _trails;
         [SerializeField] private Movement _wheel;
+
+        private const float DelayInvoke = 0.5f;
 
         private TrailFX _currentTrail;
         private GameStateService _gameStateService;
@@ -46,7 +48,7 @@ namespace Trail
                     OnGameRunning();
                     break;
                 case GameState.Finished:
-                   Invoke(nameof(OnGameFinished),0.5f); //Создать единую константу для 0.5f;
+                    Invoke(nameof(OnGameFinished), DelayInvoke);
                     break;
             }
         }
@@ -58,9 +60,6 @@ namespace Trail
             _currentTrail.gameObject.SetActive(true);
         }
 
-        private void OnGameFinished()
-        {
-            _currentTrail.gameObject.SetActive(false);
-        }
+        private void OnGameFinished() => _currentTrail.gameObject.SetActive(false);
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 459252}
   - component: {fileID: 3366172}
   - component: {fileID: 2396702}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 414714}
   - component: {fileID: 6544618}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: iron_barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}

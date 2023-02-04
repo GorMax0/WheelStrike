@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 492470}
   - component: {fileID: 6555700}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: painted_barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 449462}
   - component: {fileID: 3371694}
   - component: {fileID: 2310080}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 410818}
   - component: {fileID: 3351880}
   - component: {fileID: 2381478}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 411752}
   - component: {fileID: 6541634}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: big_cone_orange
   m_TagString: Untagged
   m_Icon: {fileID: 0}

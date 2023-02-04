@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8411342626183958465}
   - component: {fileID: 20621291582628332}
   - component: {fileID: 5910047052392345131}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: fenced_barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 478070}
   - component: {fileID: 3355970}
   - component: {fileID: 2313842}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 418254}
   - component: {fileID: 3339272}
   - component: {fileID: 2396944}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: fence_front
   m_TagString: Untagged
   m_Icon: {fileID: 0}

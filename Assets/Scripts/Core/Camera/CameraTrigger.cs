@@ -1,10 +1,9 @@
-using Core.Wheel;
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class CameraTrigger : MonoBehaviour
 {
-    public event UnityAction WheelTriggered;
+    public event Action WheelTriggered;
 
     public void OnTriggerEnterWheel()
     {

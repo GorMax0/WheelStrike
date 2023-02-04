@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3068085564054767825}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mini1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,6 +44,14 @@ PrefabInstance:
     - target: {fileID: 128852, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
       propertyPath: m_Name
       value: Warning_sign (5)_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 128852, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 163896, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 420576, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
       propertyPath: m_RootOrder
@@ -107,6 +115,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Warning_sign (4)_01
       objectReference: {fileID: 0}
+    - target: {fileID: 128852, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 163896, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 420576, guid: a2bef607e5bbd014d8d69755562c0d35, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -168,6 +184,14 @@ PrefabInstance:
     - target: {fileID: 104396, guid: f803fe526d65cae43ae20517514374c0, type: 3}
       propertyPath: m_Name
       value: pyramid_barrier (3)_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 104396, guid: f803fe526d65cae43ae20517514374c0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 152852, guid: f803fe526d65cae43ae20517514374c0, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 490876, guid: f803fe526d65cae43ae20517514374c0, type: 3}
       propertyPath: m_RootOrder

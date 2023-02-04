@@ -6,7 +6,7 @@ using Services.GameStates;
 
 namespace Core
 {
-    public class AimDirection : IDisposable
+    public class AimDirection
     {
         private readonly float SwipeSensitivity = 10f;
         private readonly float ClampValue = 1.5f;
@@ -27,10 +27,7 @@ namespace Core
             _aimRunning = new CoroutineRunning(coroutineService);
         }
 
-        public void Dispose()
-        {
-            _gameStateService.GameStateChanged -= OnGameStateChanged;
-        }
+        private void Dispose() => _gameStateService.GameStateChanged -= OnGameStateChanged;
 
         private IEnumerator SelectDirection(float timeCameraBlend)
         {
@@ -65,10 +62,7 @@ namespace Core
             }
         }
 
-        private void OnGameWaiting()
-        {
-            _aimRunning.Run(SelectDirection(TimeCameraBlend));
-        }
+        private void OnGameWaiting() => _aimRunning.Run(SelectDirection(TimeCameraBlend));
 
         private void OnGameRunning()
         {

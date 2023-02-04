@@ -2,7 +2,6 @@ using UnityEngine;
 using Services.GameStates;
 using Services.Coroutines;
 using Services;
-using System;
 
 namespace UI.Manual
 {
@@ -77,25 +76,13 @@ namespace UI.Manual
             ScreenOrientationValidator.Instance.OrientationValidated -= OnOrientationValidated;
         }
 
-        private void OnGameRunning()
-        {
-            _aimManual.Fade();
-        }
+        private void OnGameRunning() => _aimManual.Fade();
 
-        private void OnGameTutorialStepTwo()
-        {
-            ActivateAimManual();
-        }
+        private void OnGameTutorialStepTwo() => ActivateAimManual();
 
-        private void OnGameTutorialStepThree()
-        {
-            _aimManual.Fade();
-        }
+        private void OnGameTutorialStepThree() => _aimManual.Fade();
 
-        private void OnGameTutorialStepFour()
-        {
-            _holdToPlay.SetActive(true);
-        }
+        private void OnGameTutorialStepFour() => _holdToPlay.SetActive(true);
 
         private void OnOrientationValidated(bool isPortraitOrientation)
         {

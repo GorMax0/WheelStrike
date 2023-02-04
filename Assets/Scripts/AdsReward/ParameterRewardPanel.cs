@@ -32,10 +32,7 @@ namespace AdsReward
             gameObject.SetActive(true);
         }
 
-        public void Disable()
-        {
-            gameObject.SetActive(false);
-        }    
+        public void Disable() => gameObject.SetActive(false);
 
         private void Prepare()
         {

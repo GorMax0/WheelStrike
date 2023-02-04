@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 405064}
   - component: {fileID: 3399854}
   - component: {fileID: 2383158}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &405064
 Transform:
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6553272}
   - component: {fileID: 7248397981922105258}
   - component: {fileID: 8643256775151183168}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}

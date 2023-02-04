@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3177958254134655685}
   - component: {fileID: 8351462186013039077}
   - component: {fileID: 1814945276968471986}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Warning_sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,12 +116,12 @@ GameObject:
   - component: {fileID: 443402}
   - component: {fileID: 3301466}
   - component: {fileID: 2387516}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &443402
 Transform:

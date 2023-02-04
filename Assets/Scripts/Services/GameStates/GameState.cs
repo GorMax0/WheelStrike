@@ -2,6 +2,7 @@
 {
     public enum GameState
     {
+        Default,
         Initializing,
         Waiting,
         Running,

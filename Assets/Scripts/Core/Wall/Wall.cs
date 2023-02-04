@@ -32,8 +32,9 @@ namespace Core
             _wallSubstrate.SetActive(false);
             _bricks.ForEach(brick => brick.gameObject.SetActive(true));
         }
-        private void PlaySound() => _audioSource.Play();
 
         public void StopMoveBricks() => _bricks.ForEach(brick => brick.StopMove());
+
+        private void PlaySound() => _audioSource.Play();
     }
 }

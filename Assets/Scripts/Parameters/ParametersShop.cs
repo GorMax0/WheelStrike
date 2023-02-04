@@ -51,7 +51,7 @@ namespace Parameters
             _wallet.MoneyChanged += ChangeInteractableLevelUpButtons;
         }
 
-        public void ChangeInteractableLevelUpButtons(int moneyInWallet)
+        private void ChangeInteractableLevelUpButtons(int moneyInWallet)
         {
             foreach (var view in _views)
             {
@@ -88,7 +88,6 @@ namespace Parameters
             _parameterForRewardAds = parameter;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-            Debug.Log("Parameter level up for ads!");
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
             _refreshView();
 

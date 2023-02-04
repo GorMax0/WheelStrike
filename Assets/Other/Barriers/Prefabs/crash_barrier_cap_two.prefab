@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 493056}
   - component: {fileID: 6512600}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: crash_barrier_cap_two
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 492080}
   - component: {fileID: 3344134}
   - component: {fileID: 2381862}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

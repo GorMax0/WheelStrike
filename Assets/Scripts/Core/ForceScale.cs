@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using Services.Coroutines;
 using Services.GameStates;
 
@@ -22,9 +22,9 @@ namespace Core
         private GameStateService _gameStateService;
         private bool _isInitialized = false;
 
-        public event UnityAction<float, float> RangeChanged;
-        public event UnityAction<float> MultiplierChanged;
-        public event UnityAction HitGreenZone;
+        public event Action<float, float> RangeChanged;
+        public event Action<float> MultiplierChanged;
+        public event Action HitGreenZone;
 
         public float FinalValue => _finalValue;
 

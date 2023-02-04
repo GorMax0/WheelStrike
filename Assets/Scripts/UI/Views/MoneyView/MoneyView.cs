@@ -75,7 +75,9 @@ namespace UI.Views.Money
         public void AnimationOnFinishView()
         {
             float durationMove = 0.3f;
-            Vector2 endPosition = new Vector2(0, 1000);
+            float endPointX = 0;
+            float endPointY = 1000;
+            Vector2 endPosition = new Vector2(endPointX, endPointY);
 
             DOTween.Sequence()
               .Append(_rectTransform.DOAnchorPos(endPosition, durationMove))

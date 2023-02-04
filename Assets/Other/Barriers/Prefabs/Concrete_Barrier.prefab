@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2467856272867221105}
   - component: {fileID: 735578439600910057}
   - component: {fileID: 5947433701854171270}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bracket2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4123355540032424451}
   - component: {fileID: 3608719793270923356}
   - component: {fileID: 996675483012727327}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bracket1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 2537823092962350136}
   - component: {fileID: 6383302333325726947}
   - component: {fileID: 3664542375598980178}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bracket3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 1590586925506088433}
   - component: {fileID: 5599982065303528797}
   - component: {fileID: 1608140858287413019}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Concrete_Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7595436115926168925}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.52, y: 0.52, z: 1}
   m_ConstrainProportionsScale: 0
@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 2359529024964290035}
   - component: {fileID: 2879133255791428129}
   - component: {fileID: 2204588826694635983}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Concrete
   m_TagString: Untagged
   m_Icon: {fileID: 0}

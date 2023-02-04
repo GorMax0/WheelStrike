@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Core
@@ -8,8 +8,8 @@ namespace Core
     {
         private bool _handleInput = true;
 
-        public event UnityAction PointerDown;
-        public event UnityAction PointerUp;
+        public event Action PointerDown;
+        public event Action PointerUp;
 
         public void OnPointerDown(PointerEventData eventData)
         {

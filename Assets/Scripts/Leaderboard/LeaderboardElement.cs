@@ -12,8 +12,6 @@ namespace Leaderboards
         [SerializeField] private Image _medalIcon;
         [SerializeField] private Color _playerColor;
 
-        private const string AnonymousName = "Anonymous";
-        private const string NoInfo = "---";
         private const int MaximumDisplayedRank = 999;
 
         public void Render(PlayerInfoLeaderboard playerInfo, bool isPlayer, Sprite medal = null)

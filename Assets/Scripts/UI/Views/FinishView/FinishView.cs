@@ -28,11 +28,13 @@ namespace UI.Views.Finish
         private const float EndScaleValue = 1f;
         private const float DurationFade = 0.7f;
         private const float DurationScale = 0.3f;
+        private const float DurationRotate = 0.12f;
         private const float IntervalBetweenTween = 0.07f;
         private const float AdditionalInterval = 0.27f;
 
         private FinishViewHandler _viewHandler;
         private Material _uiMaterial;
+        private Vector3 _angleRotationHighscorLabel = new Vector3(0, 0, 20f);
         private bool _isInitialized;
         private bool _hasNewHighscore;
 
@@ -134,9 +136,9 @@ namespace UI.Views.Finish
             DOTween.Sequence()
                 .Append(_highscoreLable.transform.DOScale(EndScaleValue, DurationScale).SetEase(Ease.InOutBack))
                 .AppendCallback(PlayEffect)
-                .Append(_highscoreLable.transform.DOLocalRotate(new Vector3(0, 0, 20f), 0.12f))
-                .Append(_highscoreLable.transform.DOLocalRotate(new Vector3(0, 0, -20f), 0.12f))
-                .Append(_highscoreLable.transform.DOLocalRotate(Vector3.zero, 0.12f));
+                .Append(_highscoreLable.transform.DOLocalRotate(_angleRotationHighscorLabel, DurationRotate))
+                .Append(_highscoreLable.transform.DOLocalRotate(-_angleRotationHighscorLabel, DurationRotate))
+                .Append(_highscoreLable.transform.DOLocalRotate(Vector3.zero, DurationRotate));
         }
 
         private void PlayEffect() => _highscoreEffect.Play();

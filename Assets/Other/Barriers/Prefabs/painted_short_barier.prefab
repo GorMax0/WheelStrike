@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 449972}
   - component: {fileID: 6562640}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: painted_short_barier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 438542}
   - component: {fileID: 3328790}
   - component: {fileID: 2375664}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

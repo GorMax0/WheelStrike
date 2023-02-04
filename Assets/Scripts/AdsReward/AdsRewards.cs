@@ -1,10 +1,8 @@
-using System;
 using Core;
 using GameAnalyticsSDK;
 using Parameters;
 using Services.GameStates;
 using Services.Level;
-using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,15 +26,7 @@ namespace AdsReward
         public void Initialize(GameStateService gameStateService, Wallet wallet)
         {
             _gameStateService = gameStateService;
-
             _wallet = wallet;
-        }
-
-        public void Disable()
-        {
-            _moneyRewardPanel.Disable();
-            _parameterRewardPanel.Disable();
-            gameObject.SetActive(false);
         }
 
         public void EnrollReward(RewardType type, int count = 0)
@@ -68,6 +58,13 @@ namespace AdsReward
             _moneyRewardPanel.DisplayCountMoney(count);
             _reward.onClick.RemoveAllListeners();
             _reward.onClick.AddListener(_levelService.ShowWorldPanel);
+        }
+
+        private void Disable()
+        {
+            _moneyRewardPanel.Disable();
+            _parameterRewardPanel.Disable();
+            gameObject.SetActive(false);
         }
     }
 }

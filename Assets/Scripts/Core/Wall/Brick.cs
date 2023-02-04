@@ -12,7 +12,7 @@ namespace Core
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void EnableGravity() => _rigidbody.useGravity = true;    
+        public void EnableGravity() => _rigidbody.useGravity = true;
 
         public void StopMove() => _rigidbody.isKinematic = true;
     }

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2449979327629585317}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SticksThree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,6 +44,14 @@ PrefabInstance:
     - target: {fileID: 174412, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
       propertyPath: m_Name
       value: stick_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 174412, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 191526, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 461292, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
       propertyPath: m_RootOrder
@@ -107,6 +115,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: stick_02
       objectReference: {fileID: 0}
+    - target: {fileID: 174412, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 191526, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 461292, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -168,6 +184,14 @@ PrefabInstance:
     - target: {fileID: 174412, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
       propertyPath: m_Name
       value: stick
+      objectReference: {fileID: 0}
+    - target: {fileID: 174412, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 191526, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 461292, guid: d91011873a48699488e1c1b9b86925e5, type: 3}
       propertyPath: m_RootOrder

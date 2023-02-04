@@ -10,6 +10,8 @@ namespace Core
         [SerializeField] private int _width = 10;
         [SerializeField] private int _height = 34;
 
+        private const int Half = 2;
+
         private BoxCollider _boxCollider;
 
         public List<Brick> Create()
@@ -18,8 +20,8 @@ namespace Core
 
             GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick);
 
-            float halfWidthBrick = widthBrick / 2;
-            float halfHeightBrick = heightBrick / 2;
+            float halfWidthBrick = widthBrick / Half;
+            float halfHeightBrick = heightBrick / Half;
             float nextBrickPositionX;
             float nextBrickPositionY;
             bool isEvenRow;
@@ -27,7 +29,7 @@ namespace Core
             for (int i = 0; i < _height; i++)
             {
                 nextBrickPositionY = transform.position.y + halfHeightBrick + heightBrick * i;
-                isEvenRow = i % 2 == 0;
+                isEvenRow = i % Half == 0;
 
                 for (int j = 0; j < _width; j++)
                 {
@@ -60,8 +62,8 @@ namespace Core
         {
             float widthCollider = widthBrick * _width;
             float heightCollider = heightBrick * _height;
-            float halfWidthCollider = widthCollider / 2;
-            float halfHeightCollider = heightCollider / 2;
+            float halfWidthCollider = widthCollider / Half;
+            float halfHeightCollider = heightCollider / Half;
 
             _boxCollider = GetComponent<BoxCollider>();
             _boxCollider.size = new Vector3(widthCollider, heightCollider, lengthBrick);

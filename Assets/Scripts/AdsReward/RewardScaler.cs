@@ -36,8 +36,6 @@ namespace AdsReward
 
         public int CurrentRate { get; private set; }
 
-        public void StartTween() => _replayRunning.Run(ChangeMultiplier());
-
         public void StopTween() => _replayRunning.Stop();
 
         private IEnumerator ChangeMultiplier()
@@ -100,6 +98,8 @@ namespace AdsReward
 
             return CurrentRate;
         }
+
+        private void StartTween() => _replayRunning.Run(ChangeMultiplier());
 
         private void OnGameStateChanged(GameState state)
         {

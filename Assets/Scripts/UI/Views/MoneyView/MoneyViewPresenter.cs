@@ -1,11 +1,9 @@
 using UnityEngine;
 using Core.Wheel;
 using Core;
-using UI;
 using UI.Views.Money;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 
 public class MoneyViewPresenter : MonoBehaviour
 {

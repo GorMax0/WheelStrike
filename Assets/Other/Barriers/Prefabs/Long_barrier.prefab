@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 451504}
   - component: {fileID: 3383548}
   - component: {fileID: 2332816}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &451504
 Transform:
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 459171339931181602}
   - component: {fileID: 3171147436798155434}
   - component: {fileID: 4181189987659678432}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Long_barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}

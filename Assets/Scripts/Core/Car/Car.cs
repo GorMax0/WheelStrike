@@ -15,6 +15,8 @@ namespace Core
 
         private const int FullPercent = 100;
         private const float Speed = 3.5f;
+        private const float DurationColorChange = 0.3f;
+        private const string Emission = "_EMISSION";
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
@@ -68,8 +70,8 @@ namespace Core
 
             foreach (MeshRenderer meshRenderer in _meshRenders)
             {
-                meshRenderer.material.DOColor(Color.black, 0.3f);
-                meshRenderer.material.DisableKeyword("_EMISSION");
+                meshRenderer.material.DOColor(Color.black, DurationColorChange);
+                meshRenderer.material.DisableKeyword(Emission);
             }
 
             _audioSource.Play();

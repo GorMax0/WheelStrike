@@ -50,7 +50,6 @@ namespace Leaderboards
                     topPlayers.Add(new PlayerInfoLeaderboard(entry.rank, name, entry.score));
                 }
 
-                Debug.Log($"{_leaderboardName} - GetEntriesCompleted (Yandex)");
                 GetEntriesCompleted?.Invoke(_leaderboardName, topPlayers);
             }, (massage) => Debug.Log(massage), _numberTopPlayers, 0, true);
 #endif
@@ -71,7 +70,6 @@ namespace Leaderboards
                 string name = CheckNameForNull(result.player.publicName);
 
                 player = new PlayerInfoLeaderboard(result.rank, name, result.score);
-                Debug.Log($"{_leaderboardName} - PlayerEntryCompleted (Yandex)");
                 GetPlayerEntryCompleted?.Invoke(_leaderboardName, player);
             });
 #endif
@@ -88,7 +86,7 @@ namespace Leaderboards
 
             //    if (result.score < score)
             //});
-            Debug.Log($"SetScore new score {score}");
+
             Leaderboard.SetScore(_leaderboardName, score);
 #endif
         }

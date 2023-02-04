@@ -13,5 +13,6 @@ namespace Data
         public int CountCollisionObstacles;
         public float ElapsedTime;
         public bool IsMuted;
+        public bool IsNormalQuality = true;
     }
 }

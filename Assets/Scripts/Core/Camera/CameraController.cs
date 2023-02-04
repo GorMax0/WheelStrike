@@ -16,10 +16,14 @@ namespace Core
         [SerializeField] private CinemachineVirtualCamera _lookWall;
         [SerializeField] private CinemachineVirtualCamera _carLook;
         [SerializeField] private CameraTrigger _cameraTrigger;
+        [SerializeField] private QualityToggle _qualityToggle;
 
+        private const float NarrowingOfFieldOfView = 5f;
         private const float MinimumFieldOfView = 70f;
         private const float InterpolateValueFieldOfView = 0.02f;
         private const float SpeedRotationXAxis = 0.5f;
+        private const float NormalViewingDistance = 1000f;
+        private const float LowViewingDistance = 80f;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -37,6 +41,7 @@ namespace Core
             _gamePlayService.TimeChangedToDefault += OnTimeChangedToDefault;
             _interactionHandler.CollidedWithGround += OnCollidedWithGrounds;
             _cameraTrigger.WheelTriggered += OnWheelTriggered;
+            _qualityToggle.QualityChanged += OnQualityChanged;
         }
 
         private void OnDisable()
@@ -46,6 +51,7 @@ namespace Core
             _gamePlayService.TimeChangedToDefault -= OnTimeChangedToDefault;
             _interactionHandler.CollidedWithGround -= OnCollidedWithGrounds;
             _cameraTrigger.WheelTriggered -= OnWheelTriggered;
+            _qualityToggle.QualityChanged -= OnQualityChanged;
         }
 
         private void Update()
@@ -54,12 +60,6 @@ namespace Core
                 return;
 
             EnableFinishingRotation();
-        }
-
-        private void EnableFinishingRotation()
-        {
-            _finishCamera.m_Lens.FieldOfView = Mathf.Lerp(_finishCamera.m_Lens.FieldOfView, MinimumFieldOfView, InterpolateValueFieldOfView);
-            _finishCamera.m_XAxis.Value += SpeedRotationXAxis;
         }
 
         public void Initialize(GameStateService gameStateService, GamePlayService gamePlayService, InteractionHandler interactionHandler)
@@ -74,9 +74,14 @@ namespace Core
             OnEnable();
         }
 
+        private void EnableFinishingRotation()
+        {
+            _finishCamera.m_Lens.FieldOfView = Mathf.Lerp(_finishCamera.m_Lens.FieldOfView, MinimumFieldOfView, InterpolateValueFieldOfView);
+            _finishCamera.m_XAxis.Value += SpeedRotationXAxis;
+        }
+
         private void ChangeFieldOfViewForGameCamera()
         {
-            const float NarrowingOfFieldOfView = 5f;            
             float newFieldOfView = Mathf.Clamp(_gameCamera.m_Lens.FieldOfView - NarrowingOfFieldOfView, MinimumFieldOfView, _gameCamera.m_Lens.FieldOfView);
 
             _gameCamera.m_Lens.FieldOfView = newFieldOfView;
@@ -135,7 +140,7 @@ namespace Core
         }
 
         private void OnGameTutorialStepZero() => SwitchCamers(_menuCamera, _launchCamera);
-        
+
         private void OnGameTutorialStepThree() => SwitchCamers(_launchCamera, _menuCamera);
 
         private void OnCollidedWithGrounds() => ChangeFieldOfViewForGameCamera();
@@ -150,5 +155,16 @@ namespace Core
         }
 
         private void OnTimeChangedToDefault() => SwitchCamers(_carLook, _gameCamera);
+
+        private void OnQualityChanged(bool isNormalFPS)
+        {
+            float newFarClipPlane = isNormalFPS ? NormalViewingDistance : LowViewingDistance;
+
+            _menuCamera.m_Lens.FarClipPlane = newFarClipPlane;
+            _launchCamera.m_Lens.FarClipPlane = newFarClipPlane;
+            _gameCamera.m_Lens.FarClipPlane = newFarClipPlane;
+            _lookWall.m_Lens.FarClipPlane = newFarClipPlane;
+            _carLook.m_Lens.FarClipPlane = newFarClipPlane;
+        }
     }
 }

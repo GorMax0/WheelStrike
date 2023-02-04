@@ -1,5 +1,4 @@
 using UnityEngine;
-using Parameters;
 using Services;
 using Services.GameStates;
 using UI.Views;
@@ -22,13 +21,12 @@ namespace UI.Manual.Tutorial
         [SerializeField] private Image _overlayingSubstrate;
 
         private const string TutorialData = "Tutorial";
-        private const string NextSceneName = "Level1";
         private const int Step0 = 0;
         private const int Step2 = 2;
         private const int Step3 = 3;
         private const int Step4 = 4;
         private const int Step5 = 5;
-        private const int Step9 = 9;
+        private const int Step10 = 10;
 
         private GameStateService _gameStateService;
         private TutorialState _currentState;
@@ -56,6 +54,17 @@ namespace UI.Manual.Tutorial
             GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, TutorialData);
 
             StartTutorial(_currentState);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (_indexStep == Step0)
+            {
+                _gameStateService.ChangeState(GameState.TutorialStepZero);
+                _indexStep++;
+                SwitchCurrentStep();
+                _image.raycastTarget = false;
+            }
         }
 
         private void SaveTutorialProgress()
@@ -103,7 +112,7 @@ namespace UI.Manual.Tutorial
             if (_indexStep != Step4)
                 _currentStep.Enable();
 
-            if (_indexStep > Step9)
+            if (_indexStep > Step10)
                 FinishTutorial();
         }
 
@@ -128,7 +137,7 @@ namespace UI.Manual.Tutorial
                     _overlayingSubstrate.gameObject.SetActive(true);
                     _parametersShop.ApplyOffsetTransform();
                     break;
-                case Step9:
+                case Step10:
                     _parametersShop.CancelOffsetTransform();
                     break;
             }
@@ -139,7 +148,7 @@ namespace UI.Manual.Tutorial
         private void FinishTutorial()
         {
             GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
-            SceneManager.LoadScene(NextSceneName);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
         private void OnOrientationValidated(bool isPortrait)
@@ -154,17 +163,6 @@ namespace UI.Manual.Tutorial
             SetCurrentStep();
 
             _currentStep.Enable();
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (_indexStep == Step0)
-            {
-                _gameStateService.ChangeState(GameState.TutorialStepZero);
-                _indexStep++;
-                SwitchCurrentStep();
-                _image.raycastTarget = false;
-            }
         }
 
         private void OnGameStateChanged(GameState state)

@@ -7,8 +7,9 @@ namespace Trail
     [RequireComponent(typeof(ParticleSystem))]
     public class TrailFX : ParticleLength
     {
-        private ParticleSystem.MainModule _main;
+        private const float MinForwardVelocity = 2.1f;
 
+        private ParticleSystem.MainModule _main;
         private float _lifetimeCorrector;
         private bool _isBought;
         private bool _isSelected = true;
@@ -49,7 +50,7 @@ namespace Trail
 
         private void AdjustRotationAngle()
         {
-            if (MovementWheel.Speed <= 2.1f) //Убрать магическое число, пробросить из константы MinForwardVelocity класса Movement
+            if (MovementWheel.Speed <= MinForwardVelocity)
             {
                 Particle.transform.localEulerAngles = new Vector3(-MovementWheel.transform.eulerAngles.x, 0f, 0f);
             }

@@ -14,6 +14,7 @@ namespace UI.Views
         [SerializeField] private Button _englishLanguage;
         [SerializeField] private Button _russianLanguage;
         [SerializeField] private Button _turkeyLanguage;
+        [SerializeField] private Toggle _fps;
 
         private const string TurkishLanguage = "Turkish";
         private const string RussianLanguage = "Russian";
@@ -35,6 +36,7 @@ namespace UI.Views
             _englishLanguage.gameObject.SetActive(_enabled);
             _russianLanguage.gameObject.SetActive(_enabled);
             _turkeyLanguage.gameObject.SetActive(_enabled);
+            _fps.gameObject.SetActive(_enabled);
         }
 
         private void OnEnable()
@@ -75,12 +77,15 @@ namespace UI.Views
 
         private void OnButtonSettingClick()
         {
-            _soundToggle.gameObject.SetActive(_enabled ? false : true);
-            _englishLanguage.gameObject.SetActive(_enabled ? false : true);
-            _russianLanguage.gameObject.SetActive(_enabled ? false : true);
-            _turkeyLanguage.gameObject.SetActive(_enabled ? false : true);
-
             _enabled = !_enabled;
+
+            bool enabled = _enabled ? true : false;
+
+            _soundToggle.gameObject.SetActive(enabled);
+            _englishLanguage.gameObject.SetActive(enabled);
+            _russianLanguage.gameObject.SetActive(enabled);
+            _turkeyLanguage.gameObject.SetActive(enabled);
+            _fps.gameObject.SetActive(enabled);
         }
 
         private void OnOrientationValidated(bool isPortraitOrientation)

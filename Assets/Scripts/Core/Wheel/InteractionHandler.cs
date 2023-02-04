@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using Empty;
 using Services.GameStates;
 
@@ -11,12 +10,12 @@ namespace Core.Wheel
         private GameStateService _gameStateService;
         private bool _isInitialized = false;
 
-        public event UnityAction CollidedWithGround;
-        public event UnityAction<Obstacle> CollidedWithObstacle;
-        public event UnityAction<Car> TriggeredEnterWithCar;
-        public event UnityAction<Wall> TriggeredWithWall;
-        public event UnityAction<Brick> TriggeredWithBrick;
-        public event UnityAction<CameraTrigger> TriggeredWithCameraTrigger;
+        public event Action CollidedWithGround;
+        public event Action<Obstacle> CollidedWithObstacle;
+        public event Action<Car> TriggeredEnterWithCar;
+        public event Action<Wall> TriggeredWithWall;
+        public event Action<Brick> TriggeredWithBrick;
+        public event Action<CameraTrigger> TriggeredWithCameraTrigger;
 
         private void OnEnable()
         {

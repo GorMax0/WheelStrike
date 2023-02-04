@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using Agava.YandexGames;
-using System.Threading.Tasks;
 
 namespace Data
 {

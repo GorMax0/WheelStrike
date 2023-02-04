@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5399385461796536263}
   - component: {fileID: 4568070593107944382}
   - component: {fileID: 6161625018323529392}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TrafficCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 431480}
   - component: {fileID: 3303440}
   - component: {fileID: 2381162}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
