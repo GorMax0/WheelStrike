@@ -30,7 +30,7 @@ MonoBehaviour:
   secretKey:
   - da46561a1f112280e2d05f3e09e93467d0fc5d16
   Build:
-  - 0.1
+  - 0.2
   SelectedPlatformOrganization:
   - KeeperOfGames
   SelectedPlatformStudio:
@@ -68,7 +68,7 @@ MonoBehaviour:
   - Money
   LastCreatedGamePlatform: -1
   Platforms: 11000000
-  CurrentInspectorState: 3
+  CurrentInspectorState: 1
   ClosedHints: 
   DisplayHints: 0
   DisplayHintsScrollState: {x: 0, y: 0}

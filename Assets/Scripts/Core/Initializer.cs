@@ -90,19 +90,6 @@ namespace Core
                 _gameStateService.ChangeState(GameState.Initializing);
         }
 
-
-        private void Update()  //Delete this
-        {
-            if (Input.GetKeyUp(KeyCode.L) && Input.GetKeyUp(KeyCode.Q))
-            {
-                Debug.Log($"CLEAR SAVE!");
-                _dataOperator.ClearSave();
-                PlayerPrefs.DeleteAll();
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-            }
-        }
-
-
         private void InitializeServices()
         {
             _gameStateService = new GameStateService();

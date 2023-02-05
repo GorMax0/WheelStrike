@@ -15,15 +15,12 @@ namespace Leaderboards
         [SerializeField] private LeaderboardView _collisioneTab;
 
         private Color _selectedColor = Color.white;
-        private bool _selectedCollisionTab = true;
+        private bool _selectedCollisionTab;
 
         public event System.Action<bool> CollisionTabSelected;
 
         public void SelectCollisionTab(bool isSelected)
         {
-            if (_selectedCollisionTab == isSelected)
-                return;
-
             _selectedCollisionTab = isSelected;
 
             _distanceTab.gameObject.SetActive(!_selectedCollisionTab);

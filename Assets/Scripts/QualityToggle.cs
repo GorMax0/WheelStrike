@@ -33,7 +33,11 @@ namespace Services
             _qualityToggle.onValueChanged.RemoveListener(SwitchQuality);
         }
 
-        public void LoadSelectedQuality(bool isNormalQuality) => _qualityToggle.isOn = isNormalQuality;
+        public void LoadSelectedQuality(bool isNormalQuality)
+        {
+            _qualityToggle.isOn = isNormalQuality;
+            SwitchQuality(isNormalQuality);
+        }
 
         private void SwitchQuality(bool isOn)
         {
