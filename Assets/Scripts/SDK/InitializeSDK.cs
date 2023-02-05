@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using GameAnalyticsSDK;
 using Data;
+using GameAnalyticsSDK;
 using Agava.YandexGames;
 
 public class InitializeSDK : MonoBehaviour
@@ -22,12 +22,13 @@ public class InitializeSDK : MonoBehaviour
 #if !UNITY_WEBGL || UNITY_EDITOR
         yield return new WaitForSeconds(0.1f);
 #elif YANDEX_GAMES
-        while(YandexGamesSdk.IsInitialized == false)
+        while (YandexGamesSdk.IsInitialized == false)
         {
             yield return YandexGamesSdk.Initialize();
         }
 
-      //  YandexGamesSdk.CallbackLogging = true;
+        Services.Localization.SetLanguage();
+        //  YandexGamesSdk.CallbackLogging = true;
 #endif
         yield return GetLevelIndex();
 
@@ -58,7 +59,7 @@ public class InitializeSDK : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-    
+
         _levelIndex = gameData == null ? SceneManager.GetActiveScene().buildIndex + 1 : gameData.IndexScene;
     }
 

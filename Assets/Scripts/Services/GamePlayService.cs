@@ -36,7 +36,7 @@ namespace Services
         private Wall _finishWall;
         private float _delayHoldTime;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler, 
+        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler,
             InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
@@ -174,14 +174,12 @@ namespace Services
 
         private void PauseOn()
         {
-            Debug.Log("PauseOn");
             SoundController.ChangeWhenAd(true);
             Time.timeScale = 0f;
         }
 
         private static void PauseOff()
         {
-            Debug.Log("PauseOff");
             SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }

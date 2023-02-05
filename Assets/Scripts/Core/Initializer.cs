@@ -17,6 +17,8 @@ using AdsReward;
 using Leaderboards;
 using Authorization;
 using Particles;
+using Lean.Localization;
+using Agava.YandexGames;
 
 namespace Core
 {
@@ -74,6 +76,9 @@ namespace Core
 
         private void Start()
         {
+#if !UNITY_EDITOR
+            Localization.SetLanguage();
+#endif
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
 

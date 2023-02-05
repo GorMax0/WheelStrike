@@ -10386,7 +10386,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F"
+  m_text: Distance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -10413,7 +10413,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.4
+  m_fontSize: 57.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -12679,7 +12679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521353307871596490, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -180.00037
+      value: -180.0004
       objectReference: {fileID: 0}
     - target: {fileID: 521353308167428070, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -12687,7 +12687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521353308201439226, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.000977
+      value: -24.001038
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f755132273f4574aa011372b09b5361, type: 3}
@@ -13801,7 +13801,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0438\u0440"
+  m_text: World
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -15060,7 +15060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364000073037, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 126.001465
+      value: 126.00146
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364064688634, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15076,7 +15076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364136197648, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -212.68457
+      value: -212.6846
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364141437610, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -16586,7 +16586,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0421\u0443\u043B\u0430\u043A \u041A\u0430\u043D\u044C\u043E\u043D"
+  m_text: Sulak Canyon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -32874,7 +32874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80.000015, y: -80}
+  m_AnchoredPosition: {x: 80, y: -80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699675001
@@ -34016,7 +34016,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  m_text: Shop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}

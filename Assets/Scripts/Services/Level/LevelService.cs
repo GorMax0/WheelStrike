@@ -12,7 +12,6 @@ namespace Services.Level
     public class LevelService : MonoBehaviour
     {
         [SerializeField] private string _nameForAnalytic;
-        [SerializeField] private string _name;
         [SerializeField] private TMP_Text _nameView;
         [SerializeField] private Wall _finishWall;
         [SerializeField] private TopPanel _topPanel;
@@ -38,7 +37,6 @@ namespace Services.Level
             Score = new LevelScore(travelable, income);
             _gameStateService = gameStateService;
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
-            _nameView.text = _name;
             _travelable = travelable;
             _isInitialize = true;
         }
