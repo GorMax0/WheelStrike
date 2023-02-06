@@ -33,8 +33,10 @@ namespace Services
         private CoroutineRunning _holdTime;
         private CoroutineRunning _timerForIntervalBetweenAds;
         private CoroutineRunning _unlockInputHandler;
+        private CoroutineRunning _restartLevel;
         private Wall _finishWall;
         private float _delayHoldTime;
+        private bool _isRunningAds;
 
         public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler,
             InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
@@ -51,6 +53,7 @@ namespace Services
             _holdTime = new CoroutineRunning(_coroutineService);
             _timerForIntervalBetweenAds = new CoroutineRunning(_coroutineService);
             _unlockInputHandler = new CoroutineRunning(_coroutineService);
+            _restartLevel = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _yandexAuthorization.Authorized += OnAuthorized;
@@ -67,10 +70,12 @@ namespace Services
             _interactionHandler.TriggeredWithWall += OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger += OnTriggeredWithCameraTrigger;
             Agava.WebUtility.WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
+            CanceledAds += Restart;
         }
 
         public event Action<Car> TriggeredCar;
         public event Action TimeChangedToDefault;
+        public event Action CanceledAds;
 
         public float ElapsedTime { get; private set; }
         public int CountCollisionObstacles { get; private set; }
@@ -87,6 +92,7 @@ namespace Services
             _interactionHandler.TriggeredWithWall -= OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger -= OnTriggeredWithCameraTrigger;
             Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
+            CanceledAds -= Restart;
         }
 
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
@@ -172,33 +178,39 @@ namespace Services
             return true;
         }
 
-        private void PauseOn()
+        private void ChangePause(bool isPause)
         {
-            SoundController.ChangeWhenAd(true);
-            Time.timeScale = 0f;
-        }
-
-        private static void PauseOff()
-        {
-            SoundController.ChangeWhenAd(false);
-            Time.timeScale = 1f;
+            SoundController.ChangeWhenAd(isPause);
+            Time.timeScale = isPause == true ? 0f : TimeScaleDefault;
         }
 
         private void OnOpenCallback()
         {
             GameAnalytics.NewDesignEvent("AdClick:InterstitialAds");
-            PauseOn();
+            _isRunningAds = true;
+            ChangePause(_isRunningAds);
         }
 
-        private void OnCloseCallback(bool isClose) => PauseOff();
+        private void OnCloseCallback(bool isClose)
+        {
+            _isRunningAds = false;
+            ChangePause(_isRunningAds);
+            CanceledAds?.Invoke();
+        }
 
         private void OnErrorCallback(string error)
         {
             Debug.LogWarning(error);
-            PauseOff();
+            OnOfflineCallback();
+            CanceledAds?.Invoke();
         }
 
-        private void OnOfflineCallback() => PauseOff();
+        private void OnOfflineCallback()
+        {
+            _isRunningAds = false;
+            ChangePause(_isRunningAds);
+            CanceledAds?.Invoke();
+        }
 
         private void OnGameStateChanged(GameState state)
         {
@@ -251,11 +263,24 @@ namespace Services
         {
             DOTween.Clear();
             _delayHoldTime = 0;
-            TryShowInterstitialAds();
 
+            TryShowInterstitialAds();
             _gameStateService.GameStateChanged -= OnGameStateChanged;
+            _restartLevel.Run(TryRestartLevel());
+        }
+
+        private IEnumerator TryRestartLevel()
+        {
+            yield return new WaitForSeconds(0.3f);
+
+            if (_isRunningAds == false)
+                Restart();
+        }
+        private void Restart()
+        {
             _levelService.RestartLevel();
         }
+
 
         private void OnGameSave() => _dataOperator.Save();
 

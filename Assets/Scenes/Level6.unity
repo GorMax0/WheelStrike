@@ -5378,7 +5378,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 65
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.15
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -12679,7 +12679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521353307871596490, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -180.0004
+      value: -180.00043
       objectReference: {fileID: 0}
     - target: {fileID: 521353308167428070, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -12687,7 +12687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 521353308201439226, guid: 6f755132273f4574aa011372b09b5361, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.001038
+      value: -24.000977
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f755132273f4574aa011372b09b5361, type: 3}
@@ -12846,7 +12846,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.15
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -15060,7 +15060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364000073037, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 126.00146
+      value: 126.001465
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364064688634, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15072,11 +15072,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364098500721, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 107.99657
+      value: 107.99655
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364136197648, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -212.6846
+      value: -212.68463
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364141437610, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -15271,7 +15271,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nameForAnalytic: Sulak Canyon 2000
-  _name: "\u0421\u0443\u043B\u0430\u043A \u043A\u0430\u043D\u044C\u043E\u043D"
   _nameView: {fileID: 939057012}
   _finishWall: {fileID: 1175583398}
   _topPanel: {fileID: 204640186}
@@ -19972,7 +19971,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.15
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -33945,7 +33944,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 100
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.15
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0

@@ -6,7 +6,7 @@ namespace Services
 {
     public static class Localization
     {
-        private static string _localizationName;
+        private static string _language;
 
         public static void SetLanguage()
         {
@@ -26,9 +26,9 @@ namespace Services
                     break;
             }
 
-            GameAnalytics.NewDesignEvent($"Language:{_localizationName}");
+            GameAnalytics.NewDesignEvent($"Language:{_language}");
         }
 
-        private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_localizationName) ? _localizationName = YandexGamesSdk.Environment.i18n.lang : _localizationName;
+        private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language) ? _language = YandexGamesSdk.Environment.i18n.lang : _language;
     }
 }

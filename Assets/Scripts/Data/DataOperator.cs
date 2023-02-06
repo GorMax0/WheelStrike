@@ -53,6 +53,8 @@ namespace Data
         {
             _gameData = new GameData();
             _saveSystem.Save(_gameData);
+            UnityEngine.PlayerPrefs.DeleteAll();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
 
         public void Save()

@@ -163,6 +163,9 @@ namespace UI.Views.Finish
                 case GameState.Finished:
                     Invoke(nameof(OnGameFinished), 0.3f);
                     break;
+                case GameState.Restart:
+                    OnGameRestart();
+                    break;
             }
         }
 
@@ -176,6 +179,8 @@ namespace UI.Views.Finish
 
             _isFinished = true;
         }
+
+        private void OnGameRestart() => _rewardScaler.StopTween();
 
         private void OnOpenCallback()
         {
