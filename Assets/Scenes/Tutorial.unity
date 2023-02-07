@@ -15511,7 +15511,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.8
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -20926,7 +20926,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nameForAnalytic: Tutorial
-  _name: "\u041E\u0431\u0443\u0447\u0435\u043D\u0438\u0435"
   _nameView: {fileID: 6877208670604771928}
   _finishWall: {fileID: 304055746}
   _topPanel: {fileID: 204640186}
@@ -42539,7 +42538,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.8
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -43728,7 +43727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80.000015, y: -80}
+  m_AnchoredPosition: {x: 80, y: -80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699675001
@@ -49360,7 +49359,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0.306694, y: 1}
-  m_AnchoredPosition: {x: 126.0005, y: -170}
+  m_AnchoredPosition: {x: 126.00049, y: -170}
   m_SizeDelta: {x: -463.0627, y: 98.44}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2025265157
@@ -58869,7 +58868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.27672482}
   m_AnchorMax: {x: 1, y: 0.37389925}
-  m_AnchoredPosition: {x: 0, y: 107.999985}
+  m_AnchoredPosition: {x: 0, y: 107.999954}
   m_SizeDelta: {x: 0, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127656249
@@ -70816,7 +70815,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  m_text: Shop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -70936,13 +70935,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6877208669762584650}
   - component: {fileID: 6877208669762584651}
+  - component: {fileID: 6877208669762584652}
   m_Layer: 5
   m_Name: MenuView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6877208669762584650
 RectTransform:
   m_ObjectHideFlags: 0
@@ -70982,6 +70982,18 @@ MonoBehaviour:
   _worldButton: {fileID: 6877208671296262472}
   _shopButton: {fileID: 6877208671258879726}
   _parametersShop: {fileID: 1937896230}
+--- !u!225 &6877208669762584652
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6877208669762584649}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!224 &6877208670036339308
 RectTransform:
   m_ObjectHideFlags: 0
@@ -71083,7 +71095,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0438\u0440"
+  m_text: World
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -71186,7 +71198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0421\u0443\u043B\u0430\u043A \u041A\u0430\u043D\u044C\u043E\u043D"
+  m_text: Sulak Canyon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
