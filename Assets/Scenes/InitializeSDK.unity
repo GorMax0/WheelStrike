@@ -854,7 +854,7 @@ MonoBehaviour:
   currentLanguage: English
   detectLanguage: 0
   defaultLanguage: English
-  saveLoad: 0
+  saveLoad: 1
   prefabs: []
 --- !u!4 &1821725903
 Transform:

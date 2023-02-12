@@ -10749,7 +10749,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!198 &358610425 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 19877600, guid: 235ff7b92e81d634b98af46d3070f115, type: 3}
@@ -13475,7 +13475,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F"
+  m_text: Distance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -13502,7 +13502,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.4
+  m_fontSize: 57.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17268,7 +17268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0438\u0440"
+  m_text: World
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -21476,7 +21476,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0421\u0443\u043B\u0430\u043A \u041A\u0430\u043D\u044C\u043E\u043D"
+  m_text: Sulak Canyon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -43726,7 +43726,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  m_text: Shop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}

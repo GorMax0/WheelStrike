@@ -47,7 +47,7 @@ namespace UI.Views
         private void OnGameWaiting()
         {
             _worldButton.ApplyOffsetTransform();
-            _shopButton.ApplyOffsetTransform();
+        //    _shopButton.ApplyOffsetTransform();
             _parametersShop.ApplyOffsetTransform();
             _levelLable.ApplyOffsetTransform();
         }

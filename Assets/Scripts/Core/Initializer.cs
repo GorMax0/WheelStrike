@@ -77,7 +77,7 @@ namespace Core
         private void Start()
         {
 #if !UNITY_EDITOR
-            Localization.SetLanguage();
+         //   Localization.SetLanguage();
 #endif
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);

@@ -6219,7 +6219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!198 &358610425 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 19877600, guid: 235ff7b92e81d634b98af46d3070f115, type: 3}
@@ -6845,7 +6845,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F"
+  m_text: Distance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -6872,7 +6872,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.4
+  m_fontSize: 57.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8270,7 +8270,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0438\u0440"
+  m_text: World
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -9481,7 +9481,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0421\u0443\u043B\u0430\u043A \u041A\u0430\u043D\u044C\u043E\u043D"
+  m_text: Sulak Canyon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -12363,7 +12363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364098500721, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 107.99875
+      value: 107.99878
       objectReference: {fileID: 0}
     - target: {fileID: 4831247364136197648, guid: 67e61a56d27fbee4ca484bdb16295428, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -19679,7 +19679,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u041C\u0430\u0433\u0430\u0437\u0438\u043D"
+  m_text: Shop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
   m_sharedMaterial: {fileID: 9221886150594759354, guid: 02217536c0db9644cbab1878a680c3fb, type: 2}
@@ -19856,7 +19856,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 64787913197513755, guid: 4a1d14c63089746479633dcae8d88147, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 68.33984
+      value: 68.33983
       objectReference: {fileID: 0}
     - target: {fileID: 858133907282991554, guid: 4a1d14c63089746479633dcae8d88147, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -19972,7 +19972,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8038414228526798956, guid: 4a1d14c63089746479633dcae8d88147, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 68.33984
+      value: 68.33983
       objectReference: {fileID: 0}
     - target: {fileID: 8427089340430682064, guid: 4a1d14c63089746479633dcae8d88147, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -20425,7 +20425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -75}
+  m_AnchoredPosition: {x: 0, y: -75.00003}
   m_SizeDelta: {x: 0, y: -150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2033524071
@@ -37883,7 +37883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 713977427828835390, guid: 4ed7e4cee39237d4fb6581139fbf5194, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -75
+      value: -75.00003
       objectReference: {fileID: 0}
     - target: {fileID: 713977427828835390, guid: 4ed7e4cee39237d4fb6581139fbf5194, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -38187,6 +38187,10 @@ PrefabInstance:
     - target: {fileID: 3224642930697580178, guid: d81d3ba011c4be447ab009515e2a5667, type: 3}
       propertyPath: m_Name
       value: ShopView
+      objectReference: {fileID: 0}
+    - target: {fileID: 3224642931227397095, guid: d81d3ba011c4be447ab009515e2a5667, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -85.05667
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d81d3ba011c4be447ab009515e2a5667, type: 3}
@@ -38930,6 +38934,10 @@ PrefabInstance:
     - target: {fileID: 7300987069739271629, guid: 8713ac6c8fae69f4197ae641d1302685, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300987070633435898, guid: 8713ac6c8fae69f4197ae641d1302685, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -123
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8713ac6c8fae69f4197ae641d1302685, type: 3}
