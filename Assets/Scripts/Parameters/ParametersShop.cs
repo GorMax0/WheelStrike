@@ -19,6 +19,7 @@ namespace Parameters
         private Wallet _wallet;
         private Parameter _parameterForRewardAds;
         private int _adsRewardMultiplier = 3;
+        private bool _hasOpenVideoAd;
 
         private Action _refreshView;
 
@@ -111,12 +112,17 @@ namespace Parameters
         private void OnOpenCallback()
         {
             PauseOn();
+            _hasOpenVideoAd = true;
             GameAnalytics.NewDesignEvent("AdClick:ParameterLevelUp");
         }
 
         private void OnRewardedCallback()
         {
+            if (_hasOpenVideoAd == false)
+                return;
+
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
+            _hasOpenVideoAd = false;
             _parameterForRewardAds = null;
             _refreshView();
         }
@@ -125,6 +131,10 @@ namespace Parameters
 
         private void OnErrorCallback(string message)
         {
+            if (_hasOpenVideoAd == true)
+                return;
+
+            _adsRewards.ShowErrorAds();
             Debug.LogWarning(message);
             PauseOff();
         }

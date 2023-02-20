@@ -79,10 +79,10 @@ namespace Leaderboards
             _container.SetActive(true);
             GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Open");
 
-                _tabMenu.gameObject.SetActive(true);
-                _tabMenu.SwitchTab(DefaultLeaderboard);
             if (PlayerAccount.IsAuthorized == true)
             {
+                _tabMenu.gameObject.SetActive(true);
+                _tabMenu.SwitchTab(DefaultLeaderboard);
             }
             else
             {
@@ -137,7 +137,6 @@ namespace Leaderboards
             if (isCached == true)
                 return;
 
-            Debug.Log(leaderboard);
             leaderboard.GetCurrentPlayer();
             leaderboard.GetEntries();
             isCached = true;

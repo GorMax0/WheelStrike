@@ -40,6 +40,7 @@ namespace UI.Views.Finish
         private bool _hasPortraitOrientation = true;
         private bool _isLevelInfinity;
         private bool _isFinished;
+        private bool _hasOpenVideoAd;
 
         public event Action<int> DisplayedDistanceChanged;
         public event Action<int> DisplayedRewardChanged;
@@ -107,7 +108,7 @@ namespace UI.Views.Finish
 
         private void InitializeViews()
         {
-            int sliderLength = _isLevelInfinity == false ? _levelService.LengthRoad : Mathf.RoundToInt(_travelable.DistanceTraveled/100)*100 + ValueIfInfinity;
+            int sliderLength = _isLevelInfinity == false ? _levelService.LengthRoad : Mathf.RoundToInt(_travelable.DistanceTraveled / 100) * 100 + ValueIfInfinity;
             _viewPortrait.Initialize(this, _rewardScaler, sliderLength);
             _viewLandscape.Initialize(this, _rewardScaler, sliderLength);
 
@@ -190,19 +191,28 @@ namespace UI.Views.Finish
         private void OnOpenCallback()
         {
             PauseOn();
+            _hasOpenVideoAd = true;
             GameAnalytics.NewDesignEvent("AdClick:RewardMultiplier");
         }
 
         private void OnRewardedCallback()
         {
+            if (_hasOpenVideoAd == false)
+                return;
+
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
+            _hasOpenVideoAd = false;
         }
 
         private void OnCloseCallback() => PauseOff();
 
         private void OnErrorCallback(string message)
         {
+            if (_hasOpenVideoAd == true)
+                return;
+
+            _adsRewards.ShowErrorAds();
             Debug.LogWarning(message);
             PauseOff();
         }

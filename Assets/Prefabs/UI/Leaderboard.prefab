@@ -334,19 +334,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3131307934209563453}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3128043041140930331}
-        m_TargetAssemblyTypeName: LeaderboardTabMenu, Assembly-CSharp
-        m_MethodName: SelectCollisionTab
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &3131307934209563427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,19 +813,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 33994129812449236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3128043041140930331}
-        m_TargetAssemblyTypeName: LeaderboardTabMenu, Assembly-CSharp
-        m_MethodName: SelectCollisionTab
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2723958557941846357
 MonoBehaviour:
   m_ObjectHideFlags: 0

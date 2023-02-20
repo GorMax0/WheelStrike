@@ -10,7 +10,10 @@ namespace AdsReward
 {
     public class AdsRewards : MonoBehaviour
     {
-        [SerializeField] private Button _reward;
+        [SerializeField] private GameObject _rewardView;
+        [SerializeField] private GameObject _rewardErrorView;
+        [SerializeField] private Button _rewardEnroll;
+        [SerializeField] private Button _rewardError;
         [SerializeField] private LevelService _levelService;
         [SerializeField] private MoneyRewardPanel _moneyRewardPanel;
         [SerializeField] private ParameterRewardPanel _parameterRewardPanel;
@@ -20,7 +23,10 @@ namespace AdsReward
 
         private void OnDisable()
         {
-            _reward.onClick.RemoveAllListeners();
+            _rewardView.SetActive(false);
+            _rewardErrorView.SetActive(false);
+            _rewardEnroll.onClick.RemoveAllListeners();
+            _rewardError.onClick.RemoveAllListeners();
         }
 
         public void Initialize(GameStateService gameStateService, Wallet wallet)
@@ -42,22 +48,31 @@ namespace AdsReward
         public void EnrollParameterLevelUpReward(Parameter parameter, int count)
         {
             gameObject.SetActive(true);
+            _rewardView.SetActive(true);
             parameter.LevelUp(count);
             _gameStateService.ChangeState(GameState.Save);
             _parameterRewardPanel.DisplayReward(parameter, count);
-            _reward.onClick.RemoveAllListeners();
-            _reward.onClick.AddListener(Disable);
+            _rewardEnroll.onClick.RemoveAllListeners();
+            _rewardEnroll.onClick.AddListener(Disable);
+        }
+
+        public void ShowErrorAds()
+        {
+            gameObject.SetActive(true);
+            _rewardErrorView.SetActive(true);
+            _rewardError.onClick.AddListener(Disable);
         }
 
         private void EnrollMoney(int count)
         {
             gameObject.SetActive(true);
+            _rewardView.SetActive(true);
             _wallet.EnrollMoney(count);
             _gameStateService.ChangeState(GameState.Save);
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", count, "Reward", "videoAd");
             _moneyRewardPanel.DisplayCountMoney(count);
-            _reward.onClick.RemoveAllListeners();
-            _reward.onClick.AddListener(_levelService.ShowWorldPanel);
+            _rewardEnroll.onClick.RemoveAllListeners();
+            _rewardEnroll.onClick.AddListener(_levelService.ShowWorldPanel);
         }
 
         private void Disable()
