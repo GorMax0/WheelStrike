@@ -51,7 +51,7 @@ namespace UI.Views.Finish
                 return;
 
             _rewardScalerView.RewardZoneChanged += OnRewardZoneChanged;
-            
+
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedRewardChanged += OnDisplayedRewardChanged;
             _viewHandler.DisplayedBonusRewardChanged += OnDisplayedBonusRewardChanged;
@@ -61,7 +61,7 @@ namespace UI.Views.Finish
         private void OnDisable()
         {
             _rewardScalerView.RewardZoneChanged -= OnRewardZoneChanged;
-            
+
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedRewardChanged -= OnDisplayedRewardChanged;
             _viewHandler.DisplayedBonusRewardChanged -= OnDisplayedBonusRewardChanged;
@@ -70,7 +70,8 @@ namespace UI.Views.Finish
 
         public void Initialize(FinishViewHandler viewHandler, RewardScaler rewardScaler, int lengthRoad)
         {
-            _viewHandler = viewHandler;
+            if (_viewHandler == null)
+                _viewHandler = viewHandler;
 
             InitializeDistanceBar(viewHandler, lengthRoad);
             InitializeRewardScalerView(rewardScaler);

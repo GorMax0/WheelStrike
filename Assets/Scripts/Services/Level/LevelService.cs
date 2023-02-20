@@ -20,16 +20,19 @@ namespace Services.Level
         private const float DistanceCoefficient = 5f;
 
         private GameStateService _gameStateService;
+        private LevelInfinity _levelInfinity;
         private ITravelable _travelable;
         private int _indexCurrentScene;
+        private bool _isInfinity;
         private bool _isInitialize;
 
         public string NameForAnalytic => _nameForAnalytic;
         public int LengthRoad => (int)(_finishWall.transform.position.z * DistanceCoefficient);
         public int IndexNextScene => _indexCurrentScene;
+        public bool IsInfinity => _isInfinity;
         public LevelScore Score { get; private set; }
 
-        public void Initialize(GameStateService gameStateService, ITravelable travelable, Parameter income)
+        public void Initialize(GameStateService gameStateService, ITravelable travelable, InteractionHandler interactionHandler, Parameter income)
         {
             if (_isInitialize == true)
                 throw new System.InvalidOperationException($"{GetType()}: Initialize(ITravelable travelable, Parameter income): Already initialized.");
@@ -38,6 +41,10 @@ namespace Services.Level
             _gameStateService = gameStateService;
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
             _travelable = travelable;
+
+            if (TryGetLevelInfinity(out _levelInfinity))
+                _levelInfinity.Initialize(interactionHandler);
+
             _isInitialize = true;
         }
 
@@ -69,5 +76,18 @@ namespace Services.Level
         }
 
         public void RestartLevel() => SceneManager.LoadScene(_indexCurrentScene);
+
+        private bool TryGetLevelInfinity(out LevelInfinity levelInfinity)
+        {
+            if (TryGetComponent(out LevelInfinity component))
+            {             
+                levelInfinity = component;
+                _isInfinity = true;
+                return true;
+            }
+           
+            levelInfinity = null;
+            return false;
+        }
     }
 }

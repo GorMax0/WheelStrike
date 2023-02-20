@@ -10,6 +10,7 @@ namespace UI.Manual
         [SerializeField] private AimManual _aimManual;
         [SerializeField] private GameObject _holdToPlayPortrait;
         [SerializeField] private GameObject _holdToPlayLandscape;
+        [SerializeField] private bool _isTutorial;
 
         private GameStateService _gameStateService;
         private GameObject _holdToPlay;
@@ -37,6 +38,7 @@ namespace UI.Manual
             _aimManual.Initialize(coroutineService);
             _holdToPlay = Screen.width < Screen.height ? _holdToPlayPortrait : _holdToPlayLandscape;
             ScreenOrientationValidator.Instance.OrientationValidated += OnOrientationValidated;
+            _holdToPlay.SetActive(!_isTutorial);
             OnEnable();
         }
 

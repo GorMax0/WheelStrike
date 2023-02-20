@@ -23,6 +23,8 @@ namespace UI.Views.Finish
         [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
 
+        private const int ValueIfInfinity = 5000;
+
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
         private RewardScaler _rewardScaler;
@@ -35,7 +37,8 @@ namespace UI.Views.Finish
         private LevelService _levelService;
         private LevelScore _levelScore;
         private bool _isInitialized;
-        private bool _hasPortraitOrientation;
+        private bool _hasPortraitOrientation = true;
+        private bool _isLevelInfinity;
         private bool _isFinished;
 
         public event Action<int> DisplayedDistanceChanged;
@@ -74,6 +77,7 @@ namespace UI.Views.Finish
             _travelable = travelable;
             _levelService = levelService;
             _levelScore = _levelService.Score;
+            _isLevelInfinity = _levelService.IsInfinity;
             _rewardScaler = new RewardScaler(gameStateService, coroutineService);
 
             InitializeViews();
@@ -103,11 +107,11 @@ namespace UI.Views.Finish
 
         private void InitializeViews()
         {
-            _viewPortrait.Initialize(this, _rewardScaler, _levelService.LengthRoad);
-            _viewLandscape.Initialize(this, _rewardScaler, _levelService.LengthRoad);
+            int sliderLength = _isLevelInfinity == false ? _levelService.LengthRoad : Mathf.RoundToInt(_travelable.DistanceTraveled/100)*100 + ValueIfInfinity;
+            _viewPortrait.Initialize(this, _rewardScaler, sliderLength);
+            _viewLandscape.Initialize(this, _rewardScaler, sliderLength);
 
-            _currentFinishView = _viewPortrait;
-            _hasPortraitOrientation = true;
+            _currentFinishView = _hasPortraitOrientation == true ? _viewPortrait : _viewLandscape;
         }
 
         private IEnumerator DisplayValue(float endValue, Action<int> displayedValueChanged)
@@ -171,6 +175,7 @@ namespace UI.Views.Finish
 
         private void OnGameFinished()
         {
+            InitializeViews();
             _finishEffect.Play();
             _currentFinishView.Enable();
             _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);

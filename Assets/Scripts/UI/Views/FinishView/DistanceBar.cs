@@ -15,14 +15,17 @@ namespace UI.Views.Finish
         private const float LenghRoadCorrector = 0.16f;
 
         private FinishViewHandler _viewHandler;
+        private int _highscoreValue;
         private float _lengthRoad;
         private float _normalizedDistance;
+        private bool _isSubscribe;
 
         private void OnDisable()
         {
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedHighscoreChanged -= OnDisplayedNewHighscoreLable;
             _viewHandler.DisplayedHighscoreLoaded -= OnDisplayedNewHighscoreLable;
+            _isSubscribe = false;
         }
 
         public void Initialize(FinishViewHandler viewHandler, float lengthRoad)
@@ -30,7 +33,7 @@ namespace UI.Views.Finish
             _viewHandler = viewHandler;
             _lengthRoad = lengthRoad;
             _distanceTraveled.value = StartSliderValue;
-            _highscore.value = StartSliderValue;
+            ChangeValueSlider(_highscore, _highscoreValue);
             SetValueForSerifs();
             Subscribe();
         }
@@ -49,9 +52,13 @@ namespace UI.Views.Finish
 
         private void Subscribe()
         {
+            if (_isSubscribe == true)
+                return;
+
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedHighscoreChanged += OnDisplayedNewHighscoreLable;
             _viewHandler.DisplayedHighscoreLoaded += OnDisplayedNewHighscoreLable;
+            _isSubscribe = true;
         }
 
         private void ChangeValueSlider(Slider slider, int ValueForNormalization)
@@ -62,6 +69,6 @@ namespace UI.Views.Finish
 
         private void OnDisplayedDistanceChanged(int distanceTraveled) => ChangeValueSlider(_distanceTraveled, distanceTraveled);
 
-        private void OnDisplayedNewHighscoreLable(int newHighscore) => ChangeValueSlider(_highscore, newHighscore);
+        private void OnDisplayedNewHighscoreLable(int newHighscore) => _highscoreValue = newHighscore;
     }
 }

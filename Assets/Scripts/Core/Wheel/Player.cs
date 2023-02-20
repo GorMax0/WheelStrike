@@ -13,6 +13,7 @@ namespace Core.Wheel
     public class Player : MonoBehaviour
     {
         private const int MassCorrector = 10000;
+        private const float MaximumSize = 2.5f;
 
         private Rigidbody _rigidbody;
         private Movement _movement;
@@ -62,11 +63,9 @@ namespace Core.Wheel
 
         private void SetSize()
         {
-            float newScaleX = transform.localScale.x + _size.Value;
-            float newScaleY = transform.localScale.y + _size.Value;
-            float newScaleZ = transform.localScale.z + _size.Value;
+            float newScale = transform.localScale.x + _size.Value > MaximumSize ? MaximumSize : transform.localScale.x + _size.Value;
 
-            transform.localScale = new Vector3(newScaleX, newScaleY, newScaleZ);
+            transform.localScale = new Vector3(newScale, newScale, newScale);
         }
 
         private void SetMass() => _rigidbody.mass += _size.Value * MassCorrector;

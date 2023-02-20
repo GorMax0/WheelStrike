@@ -16,6 +16,7 @@ namespace Core.Wheel
         public event Action<Wall> TriggeredWithWall;
         public event Action<Brick> TriggeredWithBrick;
         public event Action<CameraTrigger> TriggeredWithCameraTrigger;
+        public event Action TriggeredNextTile;
 
         private void OnEnable()
         {
@@ -55,7 +56,7 @@ namespace Core.Wheel
 
         private void OnCollisionGround(Collision collision)
         {
-            if (collision.collider.TryGetComponent(out Ground ground))
+            if (collision.collider.TryGetComponent(out Ground _))
                 CollidedWithGround?.Invoke();
         }
 
@@ -98,6 +99,12 @@ namespace Core.Wheel
                 TriggeredWithCameraTrigger?.Invoke(cameraTrigger);
         }
 
+        private void OnTriggerEnterNextTile(Collider other)
+        {
+            if (other.TryGetComponent(out TriggerNextTile _))
+                TriggeredNextTile?.Invoke();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (enabled == false)
@@ -107,6 +114,7 @@ namespace Core.Wheel
             OnTriggerEnterBirck(other);
             OnTriggerEnterWall(other);
             OnTriggerEnterCameraTrigger(other);
+            OnTriggerEnterNextTile(other);
         }
     }
 }

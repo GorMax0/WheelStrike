@@ -17,6 +17,7 @@ namespace Core
         [SerializeField] private CinemachineVirtualCamera _carLook;
         [SerializeField] private CameraTrigger _cameraTrigger;
         [SerializeField] private QualityToggle _qualityToggle;
+        [SerializeField] private bool _isNotChangeFOV;
 
         private const float NarrowingOfFieldOfView = 5f;
         private const float MinimumFieldOfView = 70f;
@@ -82,6 +83,9 @@ namespace Core
 
         private void ChangeFieldOfViewForGameCamera()
         {
+            if (_isNotChangeFOV == true)
+                return;
+
             float newFieldOfView = Mathf.Clamp(_gameCamera.m_Lens.FieldOfView - NarrowingOfFieldOfView, MinimumFieldOfView, _gameCamera.m_Lens.FieldOfView);
 
             _gameCamera.m_Lens.FieldOfView = newFieldOfView;

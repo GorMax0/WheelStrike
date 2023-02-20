@@ -98,7 +98,7 @@ namespace Core
         private void InitializeServices()
         {
             _gameStateService = new GameStateService();
-            _levelService.Initialize(_gameStateService, _wheel.Travelable, _parameters[ParameterType.Income]);
+            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler, _parameters[ParameterType.Income]);
             _yandexAuthorization = new YandexAuthorization();
             _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService, _inputHandler,
                 _interactionHandler, _wheel.Travelable, _levelService, _wallet);
