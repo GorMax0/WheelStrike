@@ -56,7 +56,7 @@ namespace Leaderboards
         }
 
         public void GetCurrentPlayer()
-        {
+        {            
             PlayerInfoLeaderboard player;
 #if !UNITY_WEBGL || UNITY_EDITOR
             player = new PlayerInfoLeaderboard(AnonymousRank, AnonymousName, AnonymousScore);

@@ -1,37 +1,54 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 namespace Leaderboards
 {
     public class LeaderboardTabMenu : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _distanceTabText;
-        [SerializeField] private TMP_Text _collisionTabText;
+        [SerializeField] private LeaderboardTab _distanceTab;
+        [SerializeField] private LeaderboardTab _highscoreTab;
+        [SerializeField] private LeaderboardTab _collisionTab;
         [SerializeField] private Color _unselectedColor;
-        [SerializeField] private Image _focusDistanceTab;
-        [SerializeField] private Image _focusCollisionTab;
-        [SerializeField] private LeaderboardView _distanceTab;
-        [SerializeField] private LeaderboardView _collisioneTab;
 
+        private LeaderboardTab _selectedTab;
         private Color _selectedColor = Color.white;
-        private bool _selectedCollisionTab;
 
-        public event System.Action<bool> CollisionTabSelected;
+        public event System.Action<LeaderboardType> TabSwitched;
 
-        public void SelectCollisionTab(bool isSelected)
+        private void OnEnable()
         {
-            _selectedCollisionTab = isSelected;
+            _distanceTab.ButtonClicked += SwitchTab;
+            _highscoreTab.ButtonClicked += SwitchTab;
+            _collisionTab.ButtonClicked += SwitchTab;
+        }
 
-            _distanceTab.gameObject.SetActive(!_selectedCollisionTab);
-            _focusDistanceTab.gameObject.SetActive(!_selectedCollisionTab);
-            _distanceTabText.color = _selectedCollisionTab ? _unselectedColor : _selectedColor;
+        private void OnDisable()
+        {
+            _distanceTab.ButtonClicked -= SwitchTab;
+            _highscoreTab.ButtonClicked -= SwitchTab;
+            _collisionTab.ButtonClicked -= SwitchTab;
+        }
 
-            _collisioneTab.gameObject.SetActive(_selectedCollisionTab);
-            _focusCollisionTab.gameObject.SetActive(_selectedCollisionTab);
-            _collisionTabText.color = _selectedCollisionTab ? _selectedColor : _unselectedColor;
+        public void SwitchTab(LeaderboardType leaderboard)
+        {
+            _selectedTab?.Disable(_unselectedColor);
 
-            CollisionTabSelected?.Invoke(_selectedCollisionTab);
+            switch (leaderboard)
+            {
+                case LeaderboardType.Traveled:
+                    _selectedTab = _distanceTab;
+                    break;
+                case LeaderboardType.Highscore:
+                    _selectedTab = _highscoreTab;
+                    break;
+                case LeaderboardType.Collisions:
+                    _selectedTab = _collisionTab;
+                    break;
+            
+            }
+
+            _selectedTab.Enable(_selectedColor);
+
+            TabSwitched?.Invoke(leaderboard);
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Services.Level
         public int Reward => _reward + _travelable.DistanceTraveled;
         public int BonusReward => (int)(Reward * _income.Value);
         public int ResultReward => (Reward + BonusReward) * _adsRewardRate;
+        public int Highscore => _highscore;
 
         public void LoadHighscore(int highscore)
         {

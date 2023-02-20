@@ -13,6 +13,7 @@ namespace Leaderboards
         [SerializeField] private GameObject _container;
         [SerializeField] private LeaderboardTabMenu _tabMenu;
         [SerializeField] private LeaderboardView _distanceTraveledLeaderboardView;
+        [SerializeField] private LeaderboardView _highscoreDistanceLeaderboardView;
         [SerializeField] private LeaderboardView _collisionsLeaderboardView;
         [SerializeField] private int _numberTopPlayers = 10;
         [SerializeField] private Button _close;
@@ -20,27 +21,31 @@ namespace Leaderboards
         [Header("Authorization request")]
         [SerializeField] private AuthorizationView _authorizationView;
 
+        private const LeaderboardType DefaultLeaderboard = LeaderboardType.Traveled;
         private const string DistanceTraveledBoard = "DistanceTraveledBoard";
+        private const string HighscoreDistanceBoard = "HighscoreDistanceBoard";
         private const string CollisionsBoard = "CollisionsBoard";
         private const float WaitBetweenSaveScore = 1.15f;
 
         private LeaderboardYandex _distanceTraveledLeaderboard;
+        private LeaderboardYandex _highscoreDistanceLeaderboard;
         private LeaderboardYandex _collisionsLeaderboard;
         private GamePlayService _gamePlayService;
         private bool _isInitialized;
-        private bool _isCollisionsLeaderboardCached;
         private bool _isDistanceTraveledLeaderboardCached;
+        private bool _isHighscoreDistanceLeaderboardCached;
+        private bool _isCollisionsLeaderboardCached;
 
         private void OnEnable()
         {
-            _tabMenu.CollisionTabSelected += OnCollisionTabSelected;
+            _tabMenu.TabSwitched += OnTabSwitched;
             _close.onClick.AddListener(Disable);
 
         }
 
         private void OnDisable()
         {
-            _tabMenu.CollisionTabSelected -= OnCollisionTabSelected;
+            _tabMenu.TabSwitched -= OnTabSwitched;
             _close.onClick.RemoveListener(Disable);
 
         }
@@ -49,6 +54,8 @@ namespace Leaderboards
         {
             _distanceTraveledLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
             _distanceTraveledLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
+            _highscoreDistanceLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
+            _highscoreDistanceLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
             _collisionsLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
             _collisionsLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
         }
@@ -60,15 +67,9 @@ namespace Leaderboards
 
             _gamePlayService = gamePlayService;
 
-            _distanceTraveledLeaderboard = new LeaderboardYandex(DistanceTraveledBoard, _numberTopPlayers);
-            _distanceTraveledLeaderboard.GetPlayerEntryCompleted += OnGetPlayerEntryCompleted;
-            _distanceTraveledLeaderboard.GetEntriesCompleted += OnGetEntriesCompleted;
-            InstantiateLeaderboardView(_distanceTraveledLeaderboardView);
-
-            _collisionsLeaderboard = new LeaderboardYandex(CollisionsBoard, _numberTopPlayers);
-            _collisionsLeaderboard.GetPlayerEntryCompleted += OnGetPlayerEntryCompleted;
-            _collisionsLeaderboard.GetEntriesCompleted += OnGetEntriesCompleted;
-            InstantiateLeaderboardView(_collisionsLeaderboardView);
+            _distanceTraveledLeaderboard = CreateLeaderboard(_distanceTraveledLeaderboardView, DistanceTraveledBoard);
+            _highscoreDistanceLeaderboard = CreateLeaderboard(_highscoreDistanceLeaderboardView, HighscoreDistanceBoard);
+            _collisionsLeaderboard = CreateLeaderboard(_collisionsLeaderboardView, CollisionsBoard);
 
             _isInitialized = true;
         }
@@ -78,30 +79,41 @@ namespace Leaderboards
             _container.SetActive(true);
             GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Open");
 
+                _tabMenu.gameObject.SetActive(true);
+                _tabMenu.SwitchTab(DefaultLeaderboard);
             if (PlayerAccount.IsAuthorized == true)
             {
-                OnCollisionTabSelected(false);
-                _tabMenu.gameObject.SetActive(true);
-                _tabMenu.SelectCollisionTab(false);
             }
             else
             {
                 _distanceTraveledLeaderboardView.gameObject.SetActive(false);
+                _highscoreDistanceLeaderboardView.gameObject.SetActive(false);
                 _collisionsLeaderboardView.gameObject.SetActive(false);
                 _authorizationView.gameObject.SetActive(true);
             }
         }
 
+        public void SaveScore() => StartCoroutine(SaveScoreToLeaderboard());
+
         private void Disable()
         {
             _tabMenu.gameObject.SetActive(false);
             _distanceTraveledLeaderboardView.gameObject.SetActive(false);
+            _highscoreDistanceLeaderboardView.gameObject.SetActive(false);
             _collisionsLeaderboardView.gameObject.SetActive(false);
             _authorizationView.gameObject.SetActive(false);
             _container.SetActive(false);
         }
 
-        public void SaveScore() => StartCoroutine(SaveScoreToLeaderboard());
+        private LeaderboardYandex CreateLeaderboard(LeaderboardView leaderboardView, string leaderboardName)
+        {
+            LeaderboardYandex leaderboard = new LeaderboardYandex(leaderboardName, _numberTopPlayers);
+            leaderboard.GetPlayerEntryCompleted += OnGetPlayerEntryCompleted;
+            leaderboard.GetEntriesCompleted += OnGetEntriesCompleted;
+            InstantiateLeaderboardView(leaderboardView);
+
+            return leaderboard;
+        }
 
         private IEnumerator SaveScoreToLeaderboard()
         {
@@ -110,31 +122,40 @@ namespace Leaderboards
             yield return new WaitForSeconds(WaitBetweenSaveScore);
 
             SavePlayerScoreToLeaderboard(_collisionsLeaderboard, _gamePlayService.CountCollisionObstacles);
+
+            yield return new WaitForSeconds(WaitBetweenSaveScore);
+
+            SavePlayerScoreToLeaderboard(_highscoreDistanceLeaderboard, _gamePlayService.Highscore);
         }
 
         private void SavePlayerScoreToLeaderboard(LeaderboardYandex leaderboard, int score) => leaderboard.SetScore(score);
 
         private void InstantiateLeaderboardView(LeaderboardView leaderboardView) => leaderboardView.InstantiateLeaderboardElements(_numberTopPlayers);
 
-        private void OnCollisionTabSelected(bool isCollisionTab)
+        private void GetLeaderboardInformation(LeaderboardYandex leaderboard, ref bool isCached)
         {
-            if (isCollisionTab == true)
+            if (isCached == true)
+                return;
+
+            Debug.Log(leaderboard);
+            leaderboard.GetCurrentPlayer();
+            leaderboard.GetEntries();
+            isCached = true;
+        }
+
+        private void OnTabSwitched(LeaderboardType leaderboardType)
+        {
+            switch (leaderboardType)
             {
-                if (_isCollisionsLeaderboardCached == false)
-                {
-                    _collisionsLeaderboard.GetCurrentPlayer();
-                    _collisionsLeaderboard.GetEntries();
-                    _isCollisionsLeaderboardCached = true;
-                }
-            }
-            else
-            {
-                if (_isDistanceTraveledLeaderboardCached == false)
-                {
-                    _distanceTraveledLeaderboard.GetCurrentPlayer();
-                    _distanceTraveledLeaderboard.GetEntries();
-                    _isDistanceTraveledLeaderboardCached = true;
-                }
+                case LeaderboardType.Traveled:
+                    GetLeaderboardInformation(_distanceTraveledLeaderboard, ref _isDistanceTraveledLeaderboardCached);
+                    break;
+                case LeaderboardType.Highscore:
+                    GetLeaderboardInformation(_highscoreDistanceLeaderboard, ref _isHighscoreDistanceLeaderboardCached);
+                    break;
+                case LeaderboardType.Collisions:
+                    GetLeaderboardInformation(_collisionsLeaderboard, ref _isCollisionsLeaderboardCached);
+                    break;
             }
         }
 
@@ -144,6 +165,9 @@ namespace Leaderboards
             {
                 case DistanceTraveledBoard:
                     _distanceTraveledLeaderboardView.RenderTop(topPlayers);
+                    break;
+                case HighscoreDistanceBoard:
+                    _highscoreDistanceLeaderboardView.RenderTop(topPlayers);
                     break;
                 case CollisionsBoard:
                     _collisionsLeaderboardView.RenderTop(topPlayers);
@@ -157,6 +181,9 @@ namespace Leaderboards
             {
                 case DistanceTraveledBoard:
                     _distanceTraveledLeaderboardView.RenderCurrentPlayer(currentPlayer);
+                    break;
+                case HighscoreDistanceBoard:
+                    _highscoreDistanceLeaderboardView.RenderCurrentPlayer(currentPlayer);
                     break;
                 case CollisionsBoard:
                     _collisionsLeaderboardView.RenderCurrentPlayer(currentPlayer);

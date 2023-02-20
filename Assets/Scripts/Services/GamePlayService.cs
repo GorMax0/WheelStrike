@@ -77,6 +77,7 @@ namespace Services
         public event Action TimeChangedToDefault;
         public event Action CanceledAds;
 
+        public int Highscore => _levelScore.Highscore;
         public float ElapsedTime { get; private set; }
         public int CountCollisionObstacles { get; private set; }
         public int DistanceTraveledOverAllTime { get; private set; }
@@ -280,7 +281,6 @@ namespace Services
         {
             _levelService.RestartLevel();
         }
-
 
         private void OnGameSave() => _dataOperator.Save();
 
