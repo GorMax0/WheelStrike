@@ -1,28 +1,33 @@
 using System;
 using Core.Wheel;
 using Parameters;
+using Boost;
 
 namespace Services.Level
 {
     public class LevelScore
     {
+        private const int HundredPercent = 1;
+
         private ITravelable _travelable;
         private Parameter _income;
+        private BoostParameter _boost;
         private int _reward;
         private int _adsRewardRate = 1;
         private int _highscore;
 
-        public LevelScore(ITravelable travelable, Parameter income)
+        public LevelScore(ITravelable travelable, Parameter income, BoostParameter boost)
         {
             _travelable = travelable;
             _income = income;
+            _boost = boost;
         }
 
         public event Action<int> HighscoreChanged;
         public event Action<int> HighscoreLoaded;
 
         public int Reward => _reward + _travelable.DistanceTraveled;
-        public int BonusReward => (int)(Reward * _income.Value);
+        public int BonusReward => (int)(Reward * (_income.Value * (HundredPercent + _boost.IncomeMultiplier)));
         public int ResultReward => (Reward + BonusReward) * _adsRewardRate;
         public int Highscore => _highscore;
 
@@ -39,7 +44,7 @@ namespace Services.Level
 
             _reward += reward;
         }
-        
+
         public void SetHighscore(int distance)
         {
             if (_highscore >= distance)

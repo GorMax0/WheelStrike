@@ -15,7 +15,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 140f;
+        private readonly float IntervalBetweenAds = 90f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
@@ -185,9 +185,21 @@ namespace Services
             Time.timeScale = isPause == true ? 0f : TimeScaleDefault;
         }
 
+        private IEnumerator TryRestartLevel()
+        {
+            yield return new WaitForSeconds(0.3f);
+
+            if (_isRunningAds == false)
+                Restart();
+        }
+        private void Restart()
+        {
+            _levelService.RestartLevel();
+        }
+
         private void OnOpenCallback()
         {
-            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds");
+            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:GamePlay");
             _isRunningAds = true;
             ChangePause(_isRunningAds);
         }
@@ -228,6 +240,9 @@ namespace Services
                     break;
                 case GameState.Restart:
                     OnGameRestart();
+                    break;
+                case GameState.ApplyBoost:
+                    OnApplyBoost();
                     break;
                 case GameState.Save:
                     OnGameSave();
@@ -270,16 +285,12 @@ namespace Services
             _restartLevel.Run(TryRestartLevel());
         }
 
-        private IEnumerator TryRestartLevel()
+        private void OnApplyBoost()
         {
-            yield return new WaitForSeconds(0.3f);
-
-            if (_isRunningAds == false)
-                Restart();
-        }
-        private void Restart()
-        {
-            _levelService.RestartLevel();
+            _wallet.Reset();
+            _levelService.ResetLevelProgress();
+            OnGameSave();
+            OnGameRestart();
         }
 
         private void OnGameSave() => _dataOperator.Save();

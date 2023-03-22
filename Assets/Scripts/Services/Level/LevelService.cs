@@ -4,6 +4,7 @@ using TMPro;
 using Core;
 using Core.Wheel;
 using Parameters;
+using Boost;
 using UI.Views;
 using Services.GameStates;
 
@@ -17,6 +18,7 @@ namespace Services.Level
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private WorldPanel _worldPanel;
 
+        private const int IndexLevelOne = 2;
         private const float DistanceCoefficient = 5f;
 
         private GameStateService _gameStateService;
@@ -32,12 +34,12 @@ namespace Services.Level
         public bool IsInfinity => _isInfinity;
         public LevelScore Score { get; private set; }
 
-        public void Initialize(GameStateService gameStateService, ITravelable travelable, InteractionHandler interactionHandler, Parameter income)
+        public void Initialize(GameStateService gameStateService, ITravelable travelable, InteractionHandler interactionHandler, Parameter income, BoostParameter boost)
         {
             if (_isInitialize == true)
                 throw new System.InvalidOperationException($"{GetType()}: Initialize(ITravelable travelable, Parameter income): Already initialized.");
 
-            Score = new LevelScore(travelable, income);
+            Score = new LevelScore(travelable, income, boost);
             _gameStateService = gameStateService;
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
             _travelable = travelable;
@@ -75,17 +77,19 @@ namespace Services.Level
                 _indexCurrentScene++;
         }
 
+        public void ResetLevelProgress() => _indexCurrentScene = IndexLevelOne;
+
         public void RestartLevel() => SceneManager.LoadScene(_indexCurrentScene);
 
         private bool TryGetLevelInfinity(out LevelInfinity levelInfinity)
         {
             if (TryGetComponent(out LevelInfinity component))
-            {             
+            {
                 levelInfinity = component;
                 _isInfinity = true;
                 return true;
             }
-           
+
             levelInfinity = null;
             return false;
         }

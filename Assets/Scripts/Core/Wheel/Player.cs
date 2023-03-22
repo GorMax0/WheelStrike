@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
+using Boost;
 
 namespace Core.Wheel
 {
@@ -14,6 +16,8 @@ namespace Core.Wheel
     {
         private const int MassCorrector = 10000;
         private const float MaximumSize = 2.5f;
+
+        [SerializeField] private GameObject _blur;
 
         private Rigidbody _rigidbody;
         private Movement _movement;
@@ -46,12 +50,12 @@ namespace Core.Wheel
             _gameStateService.GameStateChanged -= OnGameStateService;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size, BoostParameter boost)
         {
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
 
-            _movement.Initialize(gameStateService, coroutineService, aimDirection, speed, size);
+            _movement.Initialize(gameStateService, coroutineService, aimDirection, speed, size, boost);
             _animation.Initialize(gameStateService, coroutineService);
             _collisionHandler.Initialize(gameStateService);
             _gameStateService = gameStateService;
@@ -84,6 +88,7 @@ namespace Core.Wheel
         {
             SetSize();
             SetMass();
+            _blur.SetActive(true);
         }
     }
 }

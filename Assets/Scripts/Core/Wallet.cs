@@ -38,6 +38,12 @@ namespace Core
             return true;
         }
 
+        public void Reset()
+        {
+            _money = 100;
+            MoneyChanged?.Invoke(_money);
+        }
+
         private void SpendMoney(int price)
         {
             if (price < 0)

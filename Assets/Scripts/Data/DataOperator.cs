@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core;
 using Parameters;
+using Boost;
 using Services;
 using Services.Level;
 using Authorization;
@@ -11,6 +12,7 @@ namespace Data
 {
     public class DataOperator : IDisposable
     {
+        private const string DataVersion = "v0.4b";
         private const int DefaultScene = 1;
 
         private GameData _gameData;
@@ -22,10 +24,11 @@ namespace Data
         private QualityToggle _qualityToggle;
         private Wallet _wallet;
         private Dictionary<ParameterType, Parameter> _parameters;
+        private BoostParameter _boost;
         private YandexAuthorization _yandexAuthorization;
 
         public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, QualityToggle qualityToggle,
-            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, YandexAuthorization yandexAuthorization)
+            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost, YandexAuthorization yandexAuthorization)
         {
             _gamePlayService = gamePlayService;
             _gamePlayService.SetDataOperator(this);
@@ -35,11 +38,12 @@ namespace Data
             _qualityToggle = qualityToggle;
             _wallet = wallet;
             _parameters = parameters;
+            _boost = boost;
             _yandexAuthorization = yandexAuthorization;
 #if UNITY_EDITOR
-            _saveSystem = new PlayerPrefsSystem();
+            _saveSystem = new PlayerPrefsSystem(DataVersion);
 #elif YANDEX_GAMES
-            _saveSystem = PlayerAccount.IsAuthorized == true ? new YandexSaveSystem() : new PlayerPrefsSystem();
+            _saveSystem = PlayerAccount.IsAuthorized == true ? new YandexSaveSystem(DataVersion) : new PlayerPrefsSystem(DataVersion);
 #endif
             Subscribe();
         }
@@ -51,7 +55,7 @@ namespace Data
 
         public void ClearSave()
         {
-            _gameData = new GameData();
+            _gameData = new GameData(DataVersion);
             _saveSystem.Save(_gameData);
             UnityEngine.PlayerPrefs.DeleteAll();
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
@@ -92,6 +96,7 @@ namespace Data
             LoadAllDistanceTraveled();
             LoadMutedState();
             LoadSelectedQuality();
+            LoadBoostLevel();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
@@ -129,6 +134,7 @@ namespace Data
                     throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
         }
+        private void SaveBoostLevel() => _gameData.BoostLevel = _boost.Level;
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
@@ -169,6 +175,8 @@ namespace Data
             }
         }
 
+        private void LoadBoostLevel() => _boost.LoadLevel(_gameData.BoostLevel);
+
         private void Subscribe()
         {
             _wallet.MoneyChanged += SaveMoney;
@@ -181,11 +189,14 @@ namespace Data
             {
                 parameter.Value.LevelChanged += SaveParameter;
             }
+
+            _boost.LevelChanged += SaveBoostLevel;
         }
+
 
         private async void OnAuthorized()
         {
-            _saveSystem = new YandexSaveSystem();
+            _saveSystem = new YandexSaveSystem(DataVersion);
             GameData gameDate = await _saveSystem.Load();
 
             if (gameDate == null || gameDate.IndexScene == DefaultScene)

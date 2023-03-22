@@ -19,6 +19,7 @@ using Authorization;
 using Particles;
 using Lean.Localization;
 using Agava.YandexGames;
+using Boost;
 
 namespace Core
 {
@@ -60,6 +61,7 @@ namespace Core
         [SerializeField] private MoneyViewPresenter _moneyPresenter;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
+        [SerializeField] private BoostView _boostView;
         [SerializeField] private AuthorizationView _authorizationView;
 
         [Header("Other")]
@@ -70,6 +72,7 @@ namespace Core
 
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
+        private BoostParameter _boost;
         private AimDirection _aimDirection;
         private Wallet _wallet = new Wallet();
         private DataOperator _dataOperator;
@@ -81,6 +84,7 @@ namespace Core
 #endif
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
+            _boost = new BoostParameter();
 
             InitializeServices();
             InitializeCore();
@@ -98,7 +102,7 @@ namespace Core
         private void InitializeServices()
         {
             _gameStateService = new GameStateService();
-            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler, _parameters[ParameterType.Income]);
+            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler, _parameters[ParameterType.Income], _boost);
             _yandexAuthorization = new YandexAuthorization();
             _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService, _inputHandler,
                 _interactionHandler, _wheel.Travelable, _levelService, _wallet);
@@ -118,7 +122,7 @@ namespace Core
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _ropeDisconnection.Initialize(_gameStateService);
             _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection,
-                _parameters[ParameterType.Speed], _parameters[ParameterType.Size]);
+                _parameters[ParameterType.Speed], _parameters[ParameterType.Size],_boost);
         }
 
         private void InitializeView()
@@ -131,6 +135,7 @@ namespace Core
             _moneyPresenter.Initialize(_interactionHandler);
             _topPanel.Initialize(_gameStateService, _coroutineService);
             _parametersShop.Initialize(_parameters, _wallet);
+            _boostView.Initialize(_gameStateService, _boost, _parameters);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
             _authorizationView.Initialize(_yandexAuthorization);
         }
@@ -138,7 +143,7 @@ namespace Core
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _yandexAuthorization);
+                _wallet, _parameters, _boost, _yandexAuthorization);
             _dataOperator.Load();
         }
 

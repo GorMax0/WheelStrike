@@ -7,6 +7,14 @@ namespace Data
     {
         private const string DataKey = "GameData";
 
+        private string _dataVersion;
+        private GameData _gameData;
+
+        public PlayerPrefsSystem(string dataVersion)
+        {
+            _dataVersion = dataVersion;
+        }
+
         public void Save(GameData gameData)
         {
             string data = JsonUtility.ToJson(gameData);
@@ -20,12 +28,22 @@ namespace Data
             if (PlayerPrefs.HasKey(DataKey))
             {
                 string data = PlayerPrefs.GetString(DataKey);
-                return JsonUtility.FromJson<GameData>(data);
+                _gameData = JsonUtility.FromJson<GameData>(data);
+                CheckVersion();
+                return _gameData;
             }
 
             await Task.Yield();
 
-            return new GameData();
+            return new GameData(_dataVersion);
+        }
+
+        private void CheckVersion()
+        {
+            if (_gameData.DataVersion == _dataVersion)
+                return;
+
+            _gameData = new GameData(_dataVersion);
         }
     }
 }

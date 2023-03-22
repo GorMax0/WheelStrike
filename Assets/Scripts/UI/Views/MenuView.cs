@@ -6,8 +6,8 @@ namespace UI.Views
     public class MenuView : MonoBehaviour
     {
         [SerializeField] private Wrap _levelLable;
-        [SerializeField] private Wrap _worldButton;
-        [SerializeField] private Wrap _shopButton;
+        [SerializeField] private Wrap _achievementButton;
+        [SerializeField] private Wrap _boostButton;
         [SerializeField] private Wrap _parametersShop;
 
         private GameStateService _gameStateService;
@@ -46,8 +46,8 @@ namespace UI.Views
 
         private void OnGameWaiting()
         {
-            _worldButton.ApplyOffsetTransform();
-        //    _shopButton.ApplyOffsetTransform();
+            _achievementButton.ApplyOffsetTransform();
+            _boostButton.ApplyOffsetTransform();
             _parametersShop.ApplyOffsetTransform();
             _levelLable.ApplyOffsetTransform();
         }

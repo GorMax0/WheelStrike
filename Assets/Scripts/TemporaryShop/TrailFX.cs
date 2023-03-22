@@ -8,10 +8,11 @@ namespace Trail
     public class TrailFX : ParticleLength
     {
         private const float MinForwardVelocity = 2.1f;
+        private const float InitializeSpeed = 80f;
 
         private ParticleSystem.MainModule _main;
         private float _lifetimeCorrector;
-        private bool _isBought;
+       // private bool _isBought;
         private bool _isSelected = true;
 
         public bool IsSelected => _isSelected;
@@ -45,7 +46,10 @@ namespace Trail
         protected override void DecreaseParticleLength()
         {
             base.DecreaseParticleLength();
-            _main.startLifetime = MovementWheel.Speed / InitialWheelSpeed * _lifetimeCorrector;
+            if (MovementWheel.Speed > InitializeSpeed)
+                return;
+
+            _main.startLifetime = MovementWheel.Speed / InitializeSpeed * _lifetimeCorrector;
         }
 
         private void AdjustRotationAngle()

@@ -26,7 +26,9 @@ namespace UI.Manual.Tutorial
         private const int Step3 = 3;
         private const int Step4 = 4;
         private const int Step5 = 5;
+        private const int Step6 = 6;
         private const int Step10 = 10;
+        private const int Step11 = 11;
 
         private GameStateService _gameStateService;
         private TutorialState _currentState;
@@ -78,7 +80,7 @@ namespace UI.Manual.Tutorial
             switch (_currentState)
             {
                 case TutorialState.HalfCompleted:
-                    _indexStep = Step4;
+                    _indexStep = Step5;
                     break;
                 case TutorialState.FullCompleted:
                     return;
@@ -94,7 +96,7 @@ namespace UI.Manual.Tutorial
 
         private void SetCurrentStep()
         {
-            if (_indexStep >= _portraitSteps.Length)
+            if (_indexStep >= _portraitSteps.Length || _portraitSteps[_indexStep] == null)
                 return;
 
             if (_currentStep != null)
@@ -112,7 +114,7 @@ namespace UI.Manual.Tutorial
             if (_indexStep != Step4)
                 _currentStep.Enable();
 
-            if (_indexStep > Step10)
+            if (_indexStep > Step11)
                 FinishTutorial();
         }
 
@@ -133,7 +135,7 @@ namespace UI.Manual.Tutorial
                     _topPanel.gameObject.SetActive(true);
                     _inputHandler.gameObject.SetActive(true);
                     break;
-                case Step5:
+                case Step6:
                     _overlayingSubstrate.gameObject.SetActive(true);
                     _parametersShop.ApplyOffsetTransform();
                     break;
@@ -153,7 +155,7 @@ namespace UI.Manual.Tutorial
 
         private void OnOrientationValidated(bool isPortrait)
         {
-            if (_hasPortraitOrientation == isPortrait)
+            if (_hasPortraitOrientation == isPortrait || _indexStep == Step4)
                 return;
 
             if (_currentStep != null && _currentStep.IsAction == true)
@@ -177,6 +179,7 @@ namespace UI.Manual.Tutorial
 
         private void OnGameRestart()
         {
+            _indexStep++;
             _currentState = TutorialState.HalfCompleted;
             SaveTutorialProgress();
             _gameStateService.GameStateChanged -= OnGameStateChanged;

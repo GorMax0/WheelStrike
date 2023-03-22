@@ -6,6 +6,7 @@ using Core;
 using Core.Wheel;
 using UI.Views;
 using Services;
+using Boost;
 
 namespace Parameters
 {
@@ -14,11 +15,12 @@ namespace Parameters
         [SerializeField] private ParameterView _template;
         [SerializeField] private AnimationWheel _animationWheel;
         [SerializeField] private AdsReward.AdsRewards _adsRewards;
+        [SerializeField] private BoostView _boostView;
 
         private Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
         private Wallet _wallet;
         private Parameter _parameterForRewardAds;
-        private int _adsRewardMultiplier = 3;
+        private int _adsRewardMultiplier = 5;
         private bool _hasOpenVideoAd;
 
         private Action _refreshView;
@@ -75,6 +77,7 @@ namespace Parameters
             _animationWheel.ParameterUp();
             ChangeInteractableLevelUpButtons(_wallet.Money);
             onRefresh();
+            _boostView.HasMaximumLevelParameter(parameter);
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
         }
 
@@ -91,6 +94,7 @@ namespace Parameters
 #if !UNITY_WEBGL || UNITY_EDITOR
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
             _refreshView();
+            _boostView.HasMaximumLevelParameter(_parameterForRewardAds);
 
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
@@ -125,6 +129,7 @@ namespace Parameters
             _hasOpenVideoAd = false;
             _parameterForRewardAds = null;
             _refreshView();
+            _boostView.HasMaximumLevelParameter(_parameterForRewardAds);
         }
 
         private void OnCloseCallback() => PauseOff();

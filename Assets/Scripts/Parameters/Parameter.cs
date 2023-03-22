@@ -5,6 +5,8 @@ namespace Parameters
 {
     public class Parameter
     {
+        private const int MaxLevel = 300;
+
         private float _baseValue;
         private int _baseCost;
 
@@ -24,13 +26,14 @@ namespace Parameters
         public int Level { get; private set; } = 1;
         public float Value => _baseValue * Level;
         public int Cost => _baseCost * Level;
+        public int MaximumLevel => MaxLevel;
 
         public void LoadLevel(int level)
         {
             if (level <= 0)
                 return;
 
-            Level = level;
+            Level = level > MaxLevel ? MaxLevel : level;
             Loaded?.Invoke();
         }
 
@@ -40,6 +43,12 @@ namespace Parameters
                 return;
 
             Level += levelCount;
+            LevelChanged?.Invoke(this);
+        }
+
+        public void Reset()
+        {
+            Level = 1;
             LevelChanged?.Invoke(this);
         }
     }

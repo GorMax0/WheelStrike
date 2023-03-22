@@ -608,7 +608,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -694,6 +694,7 @@ MonoBehaviour:
   _arrowAds: {fileID: 21300000, guid: bfccab79c71478143aca8eab636a761b, type: 3}
   _levelUpButtonImageAds: {fileID: 21300000, guid: 476c8edd1eca93a4282324af1bc70a9b, type: 3}
   _adsMultiplierText: {fileID: 4880622340591890423}
+  _levelUpButtonImageMaximum: {fileID: 21300000, guid: 2eb1a5fbd120f40439410d48046fd5bf, type: 3}
 --- !u!114 &992197144816773465
 MonoBehaviour:
   m_ObjectHideFlags: 0

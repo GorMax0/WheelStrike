@@ -9,6 +9,7 @@
         Finished,
         Restart,
         Save,
+        ApplyBoost,
         TutorialStepZero,
         TutorialStepTwo,
         TutorialStepThree,

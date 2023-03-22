@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AtlasUI
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 3
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 3
+      m_BuildTarget: WebGL
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 52
+      m_TextureCompression: 1
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 29cf3f54125584e4dad807268cc3881f, type: 3}
+    - {fileID: 102900000, guid: 98396031a49df164a85e176e5bc27fe8, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: cac5f040e517c6243a0b83dfdfc6891f, type: 3}
+  - {fileID: 21300000, guid: 6813b94120258af44ad81a8a394e8177, type: 3}
+  - {fileID: 21300000, guid: 67ccfb710fd5a3548bb6080163133036, type: 3}
+  - {fileID: 21300000, guid: f322ac7142635b442898d2262bf71542, type: 3}
+  - {fileID: 21300000, guid: 66643681eb0b32243a0ecb84fa672591, type: 3}
+  - {fileID: 21300000, guid: ae6ebe02b41ac754f89ab850c04a4d0e, type: 3}
+  - {fileID: 21300000, guid: 9f6ca5b28b1e34e2d8d7e51015e1a6f9, type: 3}
+  - {fileID: 21300000, guid: cf143ab242eafa84fae0b9834f9eff24, type: 3}
+  - {fileID: 21300000, guid: 03ddd5f26a6d1e549886b0f0baf59530, type: 3}
+  - {fileID: 21300000, guid: e44dd9f29efb93b4a9fb2dd54a64dab9, type: 3}
+  - {fileID: 21300000, guid: 59807b0324b25ec449a305b75af37d6d, type: 3}
+  - {fileID: 21300000, guid: a30ff9c37985631408d3bc5d77d4f60e, type: 3}
+  - {fileID: 21300000, guid: f34687345542a3b4e83bdf464e3b6307, type: 3}
+  - {fileID: 21300000, guid: 622512446a2443f4da7ba1ca9c089e2c, type: 3}
+  - {fileID: 21300000, guid: 7a06fce40fe01c24893d62fd95190dfe, type: 3}
+  - {fileID: 21300000, guid: a4594cf46cc344df2bc8dbbdfd0847c0, type: 3}
+  - {fileID: 21300000, guid: 51be8206e1c0aad46b45e5d644505c20, type: 3}
+  - {fileID: 21300000, guid: adf250563afe1ce40937b46e3e28f701, type: 3}
+  - {fileID: 21300000, guid: 47dcfff609dd89a4f9fe3db804083472, type: 3}
+  - {fileID: 21300000, guid: 36a9c2680074c2249b25d20e08c08307, type: 3}
+  - {fileID: 21300000, guid: 4b04c1294a9c17646923cd3d980bc9c7, type: 3}
+  - {fileID: 21300000, guid: 5c8f1d6936b5344509ed8a53218cf670, type: 3}
+  - {fileID: 21300000, guid: bfccab79c71478143aca8eab636a761b, type: 3}
+  - {fileID: 21300000, guid: 30454ad971305a348b9b9bd5e57989dc, type: 3}
+  - {fileID: 21300000, guid: 58d7282a31a5eee4a98a7f8cec48f21a, type: 3}
+  - {fileID: 21300000, guid: 36a1724adc3d8a441b3fc9b138c93cb8, type: 3}
+  - {fileID: 21300000, guid: de07458ab1e323b41b136a0abc8d109f, type: 3}
+  - {fileID: 21300000, guid: 7f90ae9a0d4090f4dad68dd9100d004b, type: 3}
+  - {fileID: 21300000, guid: 09bd1aeaf4146c74aa9970bd042af942, type: 3}
+  - {fileID: 21300000, guid: 2eb1a5fbd120f40439410d48046fd5bf, type: 3}
+  - {fileID: 21300000, guid: d307288d4eae3184da3ab208a9205abf, type: 3}
+  - {fileID: 21300000, guid: 476c8edd1eca93a4282324af1bc70a9b, type: 3}
+  - {fileID: 21300000, guid: 7a49923e89186e64d8c4f3e9e36e1494, type: 3}
+  - {fileID: 21300000, guid: fd82e2ceb5550f54ab4a77de6fa64cee, type: 3}
+  - {fileID: 21300000, guid: be3023ce5c569b04f8ba78239f01f536, type: 3}
+  - {fileID: 21300000, guid: 56eb3cfeb07c833419787ba3d8a2970a, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - btn_icon_refresh
+  - SkipAds_button
+  - Play_Ads_button
+  - Orange_Side_button
+  - Arrow_cloud
+  - YandexLogo
+  - common_tab_focus
+  - icon_Ads
+  - Close_x
+  - Icon_Shop_Wheel
+  - language_small_rus
+  - Button_background
+  - Close_x_mini
+  - Trophy
+  - btn_icon_setting
+  - shop_frame_blue
+  - Achivment
+  - CanyonButton
+  - Sound
+  - Icon_Income
+  - Orange_button_white_border
+  - fx_rotate_line_small
+  - Arrow_cloud_green
+  - NextLocationButton
+  - Icon_mountains
+  - language_small_eng
+  - Icon_Boost
+  - Icon_Size
+  - Icon_Speed
+  - Purple_button_white_border
+  - Button_blue
+  - Green_button_white_border
+  - LowFPS
+  - language_small_tur
+  - Icon_Leaderboard
+  - Orange_button2
+  m_RenderDataMap: {}
+  m_Tag: AtlasUI
+  m_IsVariant: 0

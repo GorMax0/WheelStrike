@@ -4,6 +4,7 @@ using UnityEngine;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
+using Boost;
 
 namespace Core.Wheel
 {
@@ -14,6 +15,7 @@ namespace Core.Wheel
         [SerializeField] private float _baseSpeed = 800f;
         [SerializeField] private float _bounceRatio = 0.2f;
 
+        private const int HundredPercent = 1;
         private const float DeviationToSide = 0.135f;
         private const float SpeedDamping = 1.2f;
         private const float DistanceCoefficient = 5f;
@@ -22,9 +24,10 @@ namespace Core.Wheel
         private const float MinForwardVelocity = 2.1f;
         private const float MultiplierBackBounce = 0.3f;
 
+        private GameStateService _gameStateService;
         private Parameter _speedIncrease;
         private Parameter _bounceIncrease;
-        private GameStateService _gameStateService;
+        private BoostParameter _boost;
         private ForceScale _forceScale;
         private Rigidbody _rigidbody;
         private AimDirection _aimDirection;
@@ -66,7 +69,7 @@ namespace Core.Wheel
                 _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, LowUpVelocity, _rigidbody.velocity.z);
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size, BoostParameter boost)
         {
             if (_isInitialized == true)
                 throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): Already initialized.");
@@ -75,6 +78,7 @@ namespace Core.Wheel
             _aimDirection = aimDirection;
             _speedIncrease = speedIncrease;
             _bounceIncrease = size;
+            _boost = boost;
             _moveForward = new CoroutineRunning(coroutineService);
 
             _isInitialized = true;
@@ -86,7 +90,8 @@ namespace Core.Wheel
             float minRandomForceRatio = 0.93f;
             float maxRandomForceRatio = 1.03f;
             float randomForceRatio = UnityEngine.Random.Range(minRandomForceRatio, maxRandomForceRatio);
-            float force = (_baseSpeed + _speedIncrease.Value) * _forceScale.FinalValue;
+            float boost = HundredPercent + _boost.SpeedMultiplier;
+            float force = (_baseSpeed + _speedIncrease.Value * boost) * _forceScale.FinalValue;
 
             _rigidbody.isKinematic = false;
             _rigidbody.AddForce(transform.forward * force * randomForceRatio + _offsetAngles, ForceMode.Acceleration);
