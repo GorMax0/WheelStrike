@@ -15,11 +15,11 @@
       "hash": "b59fe44ce02ee3c36e2285abc7f14e1440cb2bad"
     },
     "com.agava.yandexgames": {
-      "version": "https://github.com/forcepusher/com.agava.yandexgames.git#11.0.0",
+      "version": "https://github.com/forcepusher/com.agava.yandexgames.git#11.2.1",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "51d2698d5aaa609e1679da6546bbb49148c4909c"
+      "hash": "93cd4254e13830886ba1c2b3054481844372140c"
     },
     "com.agava.yandexmetrica": {
       "version": "https://github.com/forcepusher/com.agava.yandexmetrica.git#1.1.0",

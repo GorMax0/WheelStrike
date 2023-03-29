@@ -13,6 +13,7 @@ namespace Data
         public int BoostLevel;
         public int DistanceTraveledOverAllTime;
         public int CountCollisionObstacles;
+        public string DailyDate;
         public int CountDailyEntry;
         public int CountLaunch;
         public float Uptime;

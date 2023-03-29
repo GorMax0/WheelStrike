@@ -42,6 +42,8 @@ namespace Core
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
         private YandexAuthorization _yandexAuthorization;
+        private DateTimeService _dateTimeService;
+        private DailyReward _dailyReward;
 
         [Header("Core")]
         [SerializeField] private CarBuilder _carBuilder;
@@ -63,6 +65,7 @@ namespace Core
         [SerializeField] private ParametersShop _parametersShop;
         [SerializeField] private BoostView _boostView;
         [SerializeField] private AuthorizationView _authorizationView;
+        [SerializeField] private DailyView _dailyView;
 
         [Header("Other")]
         [SerializeField] private ParameterObject[] _parameterObjects;
@@ -109,6 +112,9 @@ namespace Core
             _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService);
+            _dateTimeService = new DateTimeService();
+        //    _dateTimeService.LoadDate("29.03.2023 23:06:24"); //Test
+            _dailyReward = new DailyReward(_gameStateService, _dateTimeService, _wallet, _parameters[ParameterType.Income]);
         }
 
         private void InitializeCore()
@@ -138,12 +144,13 @@ namespace Core
             _boostView.Initialize(_gameStateService, _boost, _parameters);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
             _authorizationView.Initialize(_yandexAuthorization);
+            _dailyView.Initialize(_dailyReward);
         }
 
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _boost, _yandexAuthorization);
+                _wallet, _parameters, _boost, _yandexAuthorization, _dateTimeService);
             _dataOperator.Load();
         }
 

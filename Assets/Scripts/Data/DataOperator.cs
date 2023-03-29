@@ -26,9 +26,10 @@ namespace Data
         private Dictionary<ParameterType, Parameter> _parameters;
         private BoostParameter _boost;
         private YandexAuthorization _yandexAuthorization;
+        private DateTimeService _dateTimeService;
 
         public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, QualityToggle qualityToggle,
-            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost, YandexAuthorization yandexAuthorization)
+            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost, YandexAuthorization yandexAuthorization, DateTimeService dateTimeService)
         {
             _gamePlayService = gamePlayService;
             _gamePlayService.SetDataOperator(this);
@@ -40,6 +41,7 @@ namespace Data
             _parameters = parameters;
             _boost = boost;
             _yandexAuthorization = yandexAuthorization;
+            _dateTimeService = dateTimeService;
 #if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem(DataVersion);
 #elif YANDEX_GAMES
@@ -73,6 +75,7 @@ namespace Data
             SaveTime(_gamePlayService.ElapsedTime);
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
+            SaveDailyDate();
 
             _saveSystem.Save(_gameData);
         }
@@ -97,14 +100,12 @@ namespace Data
             LoadMutedState();
             LoadSelectedQuality();
             LoadBoostLevel();
+            LoadDailyDate();
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
-        private void SaveHighscore(int highscore)
-        {
-            _gameData.Highscore = highscore;
-        }
+        private void SaveHighscore(int highscore) => _gameData.Highscore = highscore;
 
         private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) => _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
 
@@ -135,6 +136,8 @@ namespace Data
             }
         }
         private void SaveBoostLevel() => _gameData.BoostLevel = _boost.Level;
+
+        private void SaveDailyDate() => _gameData.DailyDate = _dateTimeService.PreviousDate.ToShortDateString();
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
@@ -176,6 +179,8 @@ namespace Data
         }
 
         private void LoadBoostLevel() => _boost.LoadLevel(_gameData.BoostLevel);
+
+        private void LoadDailyDate() => _dateTimeService.LoadDate(_gameData.DailyDate);
 
         private void Subscribe()
         {
