@@ -26,9 +26,13 @@ namespace Boost
         private BoostParameter _boost;
         Dictionary<ParameterType, Parameter> _parameters;
         private Dictionary<ParameterType, bool> _maximumParameters;
+        private bool _isInitialized;
 
         private void OnEnable()
         {
+            if (_isInitialized == false)
+                return;
+            
             _button.onClick.AddListener(ApplyBoost);
             _levelToken.SetValue(_boost.Level);
 
@@ -54,7 +58,8 @@ namespace Boost
             _button.onClick.RemoveListener(ApplyBoost);
         }
 
-        public void Initialize(GameStateService gameStateService, BoostParameter boost, Dictionary<ParameterType, Parameter> parameters)
+        public void Initialize(GameStateService gameStateService, BoostParameter boost,
+            Dictionary<ParameterType, Parameter> parameters)
         {
             _gameStateService = gameStateService;
             _boost = boost;
@@ -66,6 +71,9 @@ namespace Boost
                 _maximumParameters.Add(parameter.Key, false);
                 parameter.Value.Loaded += CheckMaximumLevelParameters;
             }
+
+            _isInitialized = true;
+            OnEnable();
         }
 
         public void HasMaximumLevelParameter(Parameter parameter)
@@ -79,7 +87,8 @@ namespace Boost
             if (_boost.Level >= BoostParameter.MaxLevel)
                 return;
 
-            if (_maximumParameters[ParameterType.Speed] == true && _maximumParameters[ParameterType.Size] == true && _maximumParameters[ParameterType.Income])
+            if (_maximumParameters[ParameterType.Speed] == true && _maximumParameters[ParameterType.Size] == true &&
+                _maximumParameters[ParameterType.Income])
             {
                 _buttonDefaultText.alpha = 1;
                 _button.interactable = true;

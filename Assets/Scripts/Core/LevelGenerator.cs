@@ -2,7 +2,7 @@ using System;
 using Core.Wheel;
 using UnityEngine;
 
-public class LevelInfinity : MonoBehaviour
+public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] private Tile[] _tiles;
     [SerializeField] private PoolTiles _pool;

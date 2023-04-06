@@ -7,9 +7,11 @@ using Agava.YandexGames;
 
 public class InitializeSDK : MonoBehaviour
 {
+    private const string DataVersion = "v0.4.11";
     private const string DataKey = "GameData";
 
     private int _levelIndex;
+    private GameData _gameData;
 
     private void Awake()
     {
@@ -32,21 +34,42 @@ public class InitializeSDK : MonoBehaviour
         Services.Localization.SetLanguage();
         yield return GetLevelIndex();
         InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
-        //  YandexGamesSdk.CallbackLogging = true;
+         // YandexGamesSdk.CallbackLogging = true;
 #endif
     }
 
+
     private IEnumerator GetLevelIndex()
     {
-        GameData gameData = null;
+        Debug.Log("Start GetLevelIndex");
+        LoadGameData();
 
+        yield return new WaitForSeconds(1f);
+
+        if (_gameData == null || _gameData.DataVersion != DataVersion)
+        {
+            _gameData = new GameData(DataVersion);
+            PlayerPrefs.DeleteAll();
+        }
+
+        _levelIndex = _gameData.IndexScene;
+
+#if !UNITY_WEBGL || UNITY_EDITOR
+        Save();
+#elif YANDEX_GAMES
+        SaveDataYandex();
+#endif
+    }
+
+    private void LoadGameData()
+    {
 #if !UNITY_WEBGL || UNITY_EDITOR
 #elif YANDEX_GAMES
         if (PlayerAccount.IsAuthorized == true)
         {
             PlayerAccount.GetPlayerData((string data) =>
             {
-                gameData = ConvertJsonToGameData(data);
+                _gameData = ConvertJsonToGameData(data);
             });
         }
         else
@@ -54,22 +77,32 @@ public class InitializeSDK : MonoBehaviour
         if (PlayerPrefs.HasKey(DataKey))
         {
             string data = PlayerPrefs.GetString(DataKey);
-
-            gameData = JsonUtility.FromJson<GameData>(data);
+            _gameData = ConvertJsonToGameData(data);
         }
-
-        yield return new WaitForSeconds(1f);
-
-        _levelIndex = gameData == null ? SceneManager.GetActiveScene().buildIndex + 1 : gameData.IndexScene;
     }
 
-    private GameData ConvertJsonToGameData(string data) => string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
+    private GameData ConvertJsonToGameData(string data) =>
+        string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
+
+    private void SaveDataYandex()
+    {
+        string data = JsonUtility.ToJson(_gameData);
+        PlayerAccount.SetPlayerData(data);
+    }
+
+    private void Save()
+    {
+        string data = JsonUtility.ToJson(_gameData);
+
+        PlayerPrefs.SetString(DataKey, data);
+        PlayerPrefs.Save();
+    }
 
     private void LoadScene() => SceneManager.LoadScene(_levelIndex);
 
     private void OnOpenCallback() => GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:InitializeSDK");
 
-    private void OnCloseCallback(bool isClose) => LoadScene();
+    private void OnCloseCallback(bool _) => LoadScene();
 
     private void OnErrorCallback(string error)
     {

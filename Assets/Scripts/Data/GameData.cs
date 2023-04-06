@@ -16,9 +16,8 @@ namespace Data
         public string DailyDate;
         public int CountDailyEntry;
         public int CountLaunch;
-        public float Uptime;
+        public int Playtime;
         public float ElapsedTime;
-        public string Language;
         public bool IsMuted;
         public bool IsNormalQuality = true;
 

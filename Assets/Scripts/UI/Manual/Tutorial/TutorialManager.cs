@@ -43,6 +43,7 @@ namespace UI.Manual.Tutorial
             if (_isInitialize == true)
                 throw new System.InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, TutorialState state): Already initialized.");
 
+            Localization.SetLanguage();
             _image = GetComponent<Image>();
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;

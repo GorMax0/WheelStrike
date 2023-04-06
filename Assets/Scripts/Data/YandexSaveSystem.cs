@@ -6,7 +6,7 @@ namespace Data
 {
     public class YandexSaveSystem : ISaveSystem
     {
-        private string _dataVersion;
+        private readonly string _dataVersion;
         private GameData _gameData;
         private bool _isSaveDataReceived;
 
@@ -38,9 +38,11 @@ namespace Data
 
         private void CheckVersion()
         {
+            Debug.Log($"void CheckVersion() {_gameData.DataVersion}");
             if (_gameData.DataVersion == _dataVersion)
                 return;
 
+            PlayerPrefs.DeleteAll();
             _gameData = new GameData(_dataVersion);
         }
 

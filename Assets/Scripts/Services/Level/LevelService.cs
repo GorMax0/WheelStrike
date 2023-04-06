@@ -22,14 +22,14 @@ namespace Services.Level
         private const float DistanceCoefficient = 5f;
 
         private GameStateService _gameStateService;
-        private LevelInfinity _levelInfinity;
+        private LevelGenerator _levelGenerator;
         private ITravelable _travelable;
         private int _indexCurrentScene;
         private bool _isInfinity;
         private bool _isInitialize;
 
         public string NameForAnalytic => _nameForAnalytic;
-        public int LengthRoad => (int)(_finishWall.transform.position.z * DistanceCoefficient);
+        public float LengthRoad => _finishWall.transform.position.z * DistanceCoefficient;
         public int IndexNextScene => _indexCurrentScene;
         public bool IsInfinity => _isInfinity;
         public LevelScore Score { get; private set; }
@@ -44,8 +44,8 @@ namespace Services.Level
             _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
             _travelable = travelable;
 
-            if (TryGetLevelInfinity(out _levelInfinity))
-                _levelInfinity.Initialize(interactionHandler);
+            if (TryGetLevelInfinity(out _levelGenerator))
+                _levelGenerator.Initialize(interactionHandler);
 
             _isInitialize = true;
         }
@@ -81,16 +81,16 @@ namespace Services.Level
 
         public void RestartLevel() => SceneManager.LoadScene(_indexCurrentScene);
 
-        private bool TryGetLevelInfinity(out LevelInfinity levelInfinity)
+        private bool TryGetLevelInfinity(out LevelGenerator levelGenerator)
         {
-            if (TryGetComponent(out LevelInfinity component))
+            if (TryGetComponent(out LevelGenerator component))
             {
-                levelInfinity = component;
+                levelGenerator = component;
                 _isInfinity = true;
                 return true;
             }
 
-            levelInfinity = null;
+            levelGenerator = null;
             return false;
         }
     }

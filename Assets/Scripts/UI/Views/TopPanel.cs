@@ -8,7 +8,6 @@ namespace UI.Views
 {
     public class TopPanel : MonoBehaviour
     {
-        [SerializeField] private Button _settingButton;
         [SerializeField] private Wrap _restartButton;
         [SerializeField] private Wrap _leaderboardButton;
         [SerializeField] private Wrap _moneyPanel;
@@ -28,6 +27,7 @@ namespace UI.Views
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _restartButton.GetComponent<Button>().onClick.AddListener(Restart);
+            EnableCurtain();
         }
 
         private void OnDisable()
@@ -82,8 +82,8 @@ namespace UI.Views
 
         private void OnGameInitializing()
         {
-            EnableCurtain();
-
+            _curtain.color = new Color(_curtain.color.r, _curtain.color.g, _curtain.color.b, _notTransparency);
+            
             DOTween.Sequence().
                Append(_curtain.DOFade(_transparency, _delayFade))
                .AppendInterval(_delayFade)

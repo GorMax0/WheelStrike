@@ -78,7 +78,6 @@ namespace UI.Views.Finish
             _travelable = travelable;
             _levelService = levelService;
             _levelScore = _levelService.Score;
-            _isLevelInfinity = _levelService.IsInfinity;
             _rewardScaler = new RewardScaler(gameStateService, coroutineService);
 
             InitializeViews();
@@ -108,7 +107,7 @@ namespace UI.Views.Finish
 
         private void InitializeViews()
         {
-            int sliderLength = _isLevelInfinity == false ? _levelService.LengthRoad : Mathf.RoundToInt(_travelable.DistanceTraveled / 100) * 100 + ValueIfInfinity;
+            int sliderLength = Mathf.RoundToInt(_levelService.LengthRoad);
             _viewPortrait.Initialize(this, _rewardScaler, sliderLength);
             _viewLandscape.Initialize(this, _rewardScaler, sliderLength);
 
@@ -179,7 +178,7 @@ namespace UI.Views.Finish
             InitializeViews();
             _finishEffect.Play();
             _currentFinishView.Enable();
-            _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, _levelService.LengthRoad);
+            _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, (int)_levelService.LengthRoad);
             _currentFinishView.StartAnimation();
             _leaderboardsHandler?.SaveScore();
 

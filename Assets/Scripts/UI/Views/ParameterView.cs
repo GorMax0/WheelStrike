@@ -43,10 +43,10 @@ namespace UI.Views
         private const string RussianLanguage = "Russian";
         private const string EnglishLanguage = "English";
         private const string LevelTurkey = "Seviyesi";
-        private const string LevelRussian = "Уровень";
+        private const string LevelRussian = "РЈСЂРѕРІРµРЅСЊ";
         private const string LevelEnglish = "Level";
         private const string TurkeyMaximum = "Azami";
-        private const string RussianMaximum = "Максимум";
+        private const string RussianMaximum = "РњР°РєСЃРёРјСѓРј";
         private const string EnglishMaximum = "Maximum";
 
         private Parameter _parametr;

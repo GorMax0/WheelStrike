@@ -98,7 +98,7 @@ namespace Parameters
 
 #elif YANDEX_GAMES
             Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
-#endif     
+#endif
         }
 
         private void PauseOn()
@@ -107,7 +107,7 @@ namespace Parameters
             Time.timeScale = 0f;
         }
 
-        private static void PauseOff()
+        private void PauseOff()
         {
             SoundController.ChangeWhenAd(false);
             Time.timeScale = 1f;
@@ -117,7 +117,7 @@ namespace Parameters
         {
             PauseOn();
             _hasOpenVideoAd = true;
-            GameAnalytics.NewDesignEvent("AdClick:ParameterLevelUp");
+            GameAnalytics.NewDesignEvent($"AdClick:ParameterLevelUp:{_parameterForRewardAds.Type}");
         }
 
         private void OnRewardedCallback()

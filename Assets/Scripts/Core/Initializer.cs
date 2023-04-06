@@ -17,7 +17,6 @@ using AdsReward;
 using Leaderboards;
 using Authorization;
 using Particles;
-using Lean.Localization;
 using Agava.YandexGames;
 using Boost;
 
@@ -27,11 +26,11 @@ namespace Core
     {
         private const string TutorialData = "Tutorial";
 
-        [Header("Camera")]
+        [Header("Camera")] 
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
-        [Header("Services")]
+        [Header("Services")] 
         [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
@@ -42,10 +41,9 @@ namespace Core
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
         private YandexAuthorization _yandexAuthorization;
-        private DateTimeService _dateTimeService;
         private DailyReward _dailyReward;
 
-        [Header("Core")]
+        [Header("Core")] 
         [SerializeField] private CarBuilder _carBuilder;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
@@ -53,7 +51,7 @@ namespace Core
         [SerializeField] private Player _wheel;
         [SerializeField] private InteractionHandler _interactionHandler;
 
-        [Header("View")]
+        [Header("View")] 
         [SerializeField] private ControlManual _controlManual;
         [SerializeField] private FinishViewHandler _finishViewHandler;
         [SerializeField] private PrerunView _prerunView;
@@ -67,7 +65,7 @@ namespace Core
         [SerializeField] private AuthorizationView _authorizationView;
         [SerializeField] private DailyView _dailyView;
 
-        [Header("Other")]
+        [Header("Other")] 
         [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
         [SerializeField] private TutorialManager _tutorial;
@@ -82,9 +80,6 @@ namespace Core
 
         private void Start()
         {
-#if !UNITY_EDITOR
-         //   Localization.SetLanguage();
-#endif
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
             _boost = new BoostParameter();
@@ -97,24 +92,28 @@ namespace Core
             InitializeLoad();
             InitializeTutorial();
             ScreenOrientationValidator.Instance.Initialize();
+            }
 
-            if (_tutorial == null)
+        private void OnGameStateChanged(GameState state)
+        { 
+            if (_tutorial == null && state == GameState.Load)
                 _gameStateService.ChangeState(GameState.Initializing);
         }
 
         private void InitializeServices()
         {
             _gameStateService = new GameStateService();
-            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler, _parameters[ParameterType.Income], _boost);
+            _gameStateService.GameStateChanged += OnGameStateChanged;
+            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler,
+                _parameters[ParameterType.Income], _boost);
             _yandexAuthorization = new YandexAuthorization();
-            _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService, _inputHandler,
-                _interactionHandler, _wheel.Travelable, _levelService, _wallet);
+            _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService,
+                _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService);
-            _dateTimeService = new DateTimeService();
-        //    _dateTimeService.LoadDate("29.03.2023 23:06:24"); //Test
-            _dailyReward = new DailyReward(_gameStateService, _dateTimeService, _wallet, _parameters[ParameterType.Income]);
+            _dailyReward = new DailyReward(_gameStateService, _wallet,
+                _parameters[ParameterType.Income]);
         }
 
         private void InitializeCore()
@@ -128,7 +127,7 @@ namespace Core
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _ropeDisconnection.Initialize(_gameStateService);
             _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection,
-                _parameters[ParameterType.Speed], _parameters[ParameterType.Size],_boost);
+                _parameters[ParameterType.Speed], _parameters[ParameterType.Size], _boost);
         }
 
         private void InitializeView()
@@ -144,14 +143,15 @@ namespace Core
             _boostView.Initialize(_gameStateService, _boost, _parameters);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
             _authorizationView.Initialize(_yandexAuthorization);
-            _dailyView.Initialize(_dailyReward);
+            _dailyView.Initialize(_gameStateService, _dailyReward);
         }
 
         private void InitializeLoad()
         {
-            _dataOperator = new DataOperator(_gamePlayService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _boost, _yandexAuthorization, _dateTimeService);
+            _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
+                _wallet, _parameters, _boost, _yandexAuthorization, _dailyReward);
             _dataOperator.Load();
+            Debug.Log($"_dataOperator.Load();");
         }
 
         private void InitializeTutorial()

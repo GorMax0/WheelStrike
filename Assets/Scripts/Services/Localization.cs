@@ -10,6 +10,8 @@ namespace Services
 
         public static void SetLanguage()
         {
+#if !UNITY_WEBGL || UNITY_EDITOR
+#elif YANDEX_GAMES
             switch (GetLanguageEnvironment())
             {
                 case "en":
@@ -27,6 +29,7 @@ namespace Services
             }
 
             GameAnalytics.NewDesignEvent($"Language:{_language}");
+#endif
         }
 
         private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language) ? _language = YandexGamesSdk.Environment.i18n.lang : _language;

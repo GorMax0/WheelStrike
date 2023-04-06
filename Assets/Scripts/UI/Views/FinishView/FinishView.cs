@@ -55,7 +55,7 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
             _viewHandler.DisplayedRewardChanged += OnDisplayedRewardChanged;
             _viewHandler.DisplayedBonusRewardChanged += OnDisplayedBonusRewardChanged;
-            _viewHandler.DisplayedHighscoreChanged += OnDispalyNewHighscoreLable;
+            _viewHandler.DisplayedHighscoreChanged += OnDisplayNewHighscoreLable;
         }
 
         private void OnDisable()
@@ -65,7 +65,7 @@ namespace UI.Views.Finish
             _viewHandler.DisplayedDistanceChanged -= OnDisplayedDistanceChanged;
             _viewHandler.DisplayedRewardChanged -= OnDisplayedRewardChanged;
             _viewHandler.DisplayedBonusRewardChanged -= OnDisplayedBonusRewardChanged;
-            _viewHandler.DisplayedHighscoreChanged -= OnDispalyNewHighscoreLable;
+            _viewHandler.DisplayedHighscoreChanged -= OnDisplayNewHighscoreLable;
         }
 
         public void Initialize(FinishViewHandler viewHandler, RewardScaler rewardScaler, int lengthRoad)
@@ -95,7 +95,7 @@ namespace UI.Views.Finish
                 .AppendInterval(IntervalBetweenTween)
                 .Append(_distanceBar.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
                 .AppendCallback(_viewHandler.DisplayDistance)
-                .AppendCallback(DispalyNewHighscoreLable)
+                .AppendCallback(DisplayNewHighscoreLable)
                 .AppendCallback(_viewHandler.DisplayBonusReward)
                 .AppendInterval(IntervalBetweenTween)
                 .Append(_rewardScalerView.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
@@ -129,7 +129,7 @@ namespace UI.Views.Finish
             _uiMaterial.color = transparentColor;
         }
 
-        private void DispalyNewHighscoreLable()
+        private void DisplayNewHighscoreLable()
         {
             if (_hasNewHighscore == false)
                 return;
@@ -150,7 +150,7 @@ namespace UI.Views.Finish
 
         private void OnDisplayedBonusRewardChanged(int bonusScore) => _bonusScore.text = $"{bonusScore}";
 
-        private void OnDispalyNewHighscoreLable(int newHighscore) => _hasNewHighscore = true;
+        private void OnDisplayNewHighscoreLable(int newHighscore) => _hasNewHighscore = true;
 
         private void OnRewardZoneChanged(string text) => _textRewardValue.text = text;
     }

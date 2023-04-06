@@ -8,6 +8,7 @@
         Running,
         Finished,
         Restart,
+        Load,
         Save,
         ApplyBoost,
         TutorialStepZero,

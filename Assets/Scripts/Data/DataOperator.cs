@@ -7,17 +7,20 @@ using Services;
 using Services.Level;
 using Authorization;
 using Agava.YandexGames;
+using Services.GameStates;
+using UnityEngine;
 
 namespace Data
 {
     public class DataOperator : IDisposable
     {
-        private const string DataVersion = "v0.4b";
+        private const string DataVersion = "v0.4.11";
         private const int DefaultScene = 1;
 
         private GameData _gameData;
         private ISaveSystem _saveSystem;
         private GamePlayService _gamePlayService;
+        private GameStateService _gameStateService;
         private LevelService _levelService;
         private LevelScore _levelScore;
         private SoundController _soundController;
@@ -26,12 +29,15 @@ namespace Data
         private Dictionary<ParameterType, Parameter> _parameters;
         private BoostParameter _boost;
         private YandexAuthorization _yandexAuthorization;
-        private DateTimeService _dateTimeService;
+        private DailyReward _dailyReward;
 
-        public DataOperator(GamePlayService gamePlayService, LevelService levelService, SoundController soundController, QualityToggle qualityToggle,
-            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost, YandexAuthorization yandexAuthorization, DateTimeService dateTimeService)
+        public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
+            QualityToggle qualityToggle,
+            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost,
+            YandexAuthorization yandexAuthorization, DailyReward dailyReward)
         {
             _gamePlayService = gamePlayService;
+            _gameStateService = gameStateService;
             _gamePlayService.SetDataOperator(this);
             _levelService = levelService;
             _levelScore = _levelService.Score;
@@ -41,11 +47,12 @@ namespace Data
             _parameters = parameters;
             _boost = boost;
             _yandexAuthorization = yandexAuthorization;
-            _dateTimeService = dateTimeService;
+            _dailyReward = dailyReward;
 #if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem(DataVersion);
 #elif YANDEX_GAMES
-            _saveSystem = PlayerAccount.IsAuthorized == true ? new YandexSaveSystem(DataVersion) : new PlayerPrefsSystem(DataVersion);
+            _saveSystem =
+ PlayerAccount.IsAuthorized == true ? new YandexSaveSystem(DataVersion) : new PlayerPrefsSystem(DataVersion);
 #endif
             Subscribe();
         }
@@ -59,7 +66,7 @@ namespace Data
         {
             _gameData = new GameData(DataVersion);
             _saveSystem.Save(_gameData);
-            UnityEngine.PlayerPrefs.DeleteAll();
+            PlayerPrefs.DeleteAll();
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
 
@@ -73,20 +80,22 @@ namespace Data
 
             SaveIndexScene();
             SaveTime(_gamePlayService.ElapsedTime);
+            SavePlaytime(_gamePlayService.Playtime);
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
-            SaveDailyDate();
+            SaveDailyInfo();
 
             _saveSystem.Save(_gameData);
         }
-
+  
         public async void Load()
         {
             if (_saveSystem == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _saveSystem is null");
 
             _gameData = await _saveSystem.Load();
-
+            Debug.Log($"async void Load() {_gameData.DataVersion} complete");
+            
             if (_gameData == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _gameData is null");
 
@@ -95,25 +104,31 @@ namespace Data
             LoadMoney();
             LoadHighscore();
             LoadTime();
+            LoadPlaytime();
             LoadCountCollisionObstacles();
             LoadAllDistanceTraveled();
             LoadMutedState();
             LoadSelectedQuality();
             LoadBoostLevel();
             LoadDailyDate();
+            _gameStateService.ChangeState(GameState.Load);
         }
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
         private void SaveHighscore(int highscore) => _gameData.Highscore = highscore;
 
-        private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) => _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
+        private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) =>
+            _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
 
         private void SaveMoney(int money) => _gameData.Money = money;
 
         private void SaveTime(float elapsedTime) => _gameData.ElapsedTime = elapsedTime;
 
-        private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
+        private void SavePlaytime(float playtime) => _gameData.Playtime = (int)playtime;
+
+        private void SaveCountCollisionObstacles(int countCollisionObstacles) =>
+            _gameData.CountCollisionObstacles = countCollisionObstacles;
 
         private void SaveMuted(bool isMuted) => _gameData.IsMuted = isMuted;
         private void SaveSelectedQuality(bool isNormalQuality) => _gameData.IsNormalQuality = isNormalQuality;
@@ -132,19 +147,30 @@ namespace Data
                     _gameData.IncomeParameter = parameter.Level;
                     break;
                 default:
-                    throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
+                    throw new InvalidOperationException(
+                        $"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
         }
+
         private void SaveBoostLevel() => _gameData.BoostLevel = _boost.Level;
 
-        private void SaveDailyDate() => _gameData.DailyDate = _dateTimeService.PreviousDate.ToShortDateString();
+        private void SaveDailyInfo()
+        {
+            _gameData.DailyDate = _dailyReward.GetSavedDate().ToShortDateString();
+            _gameData.CountDailyEntry = _dailyReward.CountDayEntry;
+        }
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
-        private void LoadTime() => _gamePlayService.SetElapsedTime(_gameData.ElapsedTime);
+        private void LoadTime() => _gamePlayService.LoadElapsedTime(_gameData.ElapsedTime);
+        
+        private void LoadPlaytime() => _gamePlayService.LoadPlaytime(_gameData.Playtime);
 
-        private void LoadCountCollisionObstacles() => _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
-        private void LoadAllDistanceTraveled() => _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
+        private void LoadCountCollisionObstacles() =>
+            _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
+
+        private void LoadAllDistanceTraveled() =>
+            _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 
@@ -180,7 +206,7 @@ namespace Data
 
         private void LoadBoostLevel() => _boost.LoadLevel(_gameData.BoostLevel);
 
-        private void LoadDailyDate() => _dateTimeService.LoadDate(_gameData.DailyDate);
+        private void LoadDailyDate() => _dailyReward.LoadDailyData(_gameData.DailyDate, _gameData.CountDailyEntry);
 
         private void Subscribe()
         {
@@ -202,9 +228,9 @@ namespace Data
         private async void OnAuthorized()
         {
             _saveSystem = new YandexSaveSystem(DataVersion);
-            GameData gameDate = await _saveSystem.Load();
+            GameData gameData = await _saveSystem.Load();
 
-            if (gameDate == null || gameDate.IndexScene == DefaultScene)
+            if (gameData == null || gameData.IndexScene == DefaultScene)
                 _saveSystem.Save(_gameData);
         }
 

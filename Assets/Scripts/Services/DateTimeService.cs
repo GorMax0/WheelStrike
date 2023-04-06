@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Services
 {
@@ -12,8 +11,6 @@ namespace Services
 
         public void LoadDate(string loadDate)
         {
-            Debug.Log(loadDate);
-            
             if (string.IsNullOrEmpty(loadDate))
             {
                 PreviousDate = DateTime.Parse(DefaultDate);
@@ -23,10 +20,6 @@ namespace Services
             PreviousDate = DateTime.Parse(loadDate);
         }
 
-        public void SaveDate()
-        {
-            PreviousDate = DateTime.Now;
-           
-        }
+        public void SaveDate() => PreviousDate = DateTime.Now;
     }
 }

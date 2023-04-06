@@ -5,6 +5,7 @@ using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
 using Boost;
+using DeviceType = Agava.YandexGames.DeviceType;
 
 namespace Core.Wheel
 {
@@ -25,6 +26,7 @@ namespace Core.Wheel
         private InteractionHandler _collisionHandler;
         private Parameter _size;
         private GameStateService _gameStateService;
+        private bool _isDesktopDevice;
         private bool _isInitialized = false;
 
         public ITravelable Travelable => _movement;
@@ -50,10 +52,12 @@ namespace Core.Wheel
             _gameStateService.GameStateChanged -= OnGameStateService;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size, BoostParameter boost)
+        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService,
+            AimDirection aimDirection, Parameter speed, Parameter size, BoostParameter boost)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
 
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speed, size, boost);
             _animation.Initialize(gameStateService, coroutineService);
@@ -61,13 +65,21 @@ namespace Core.Wheel
             _gameStateService = gameStateService;
             _size = size;
 
+#if !UNITY_WEBGL || UNITY_EDITOR
+            _isDesktopDevice = true;
+#elif YANDEX_GAMES
+            _isDesktopDevice = Agava.YandexGames.Device.Type == DeviceType.Desktop;
+#endif
+
             _isInitialized = true;
             OnEnable();
         }
 
         private void SetSize()
         {
-            float newScale = transform.localScale.x + _size.Value > MaximumSize ? MaximumSize : transform.localScale.x + _size.Value;
+            float newScale = transform.localScale.x + _size.Value > MaximumSize
+                ? MaximumSize
+                : transform.localScale.x + _size.Value;
 
             transform.localScale = new Vector3(newScale, newScale, newScale);
         }
@@ -88,7 +100,7 @@ namespace Core.Wheel
         {
             SetSize();
             SetMass();
-            _blur.SetActive(true);
+            _blur.SetActive(_isDesktopDevice);
         }
     }
 }

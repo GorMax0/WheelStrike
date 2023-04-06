@@ -1,12 +1,13 @@
+using System;
 using Parameters;
 using Services;
 using Services.GameStates;
-using UnityEngine;
 
 namespace Core
 {
     public class DailyReward
     {
+        private const int TwoWeeks = 14;
         private readonly int _baseReward = 200;
         private readonly float _multipleReward = 1.5f;
 
@@ -19,20 +20,23 @@ namespace Core
         public int Reward => CalculateReward();
         public int CountDayEntry => _countDayEntry;
 
-        public DailyReward(GameStateService gameStateService, DateTimeService dateTimeService, Wallet wallet,
-            Parameter income)
+        public DailyReward(GameStateService gameStateService, Wallet wallet, Parameter income)
         {
+            _dateTimeService = new DateTimeService();
             _gameStateService = gameStateService;
-            _dateTimeService = dateTimeService;
             _wallet = wallet;
             _income = income;
         }
 
-        public bool HasNextDaily()
+        public void LoadDailyData(string loadDate, int countDayEntry)
         {
-            Debug.Log(_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day);
-            return _dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0;
+            _dateTimeService.LoadDate(loadDate);
+            _countDayEntry = countDayEntry;
         }
+
+        public DateTime GetSavedDate() => _dateTimeService.PreviousDate;
+
+        public bool HasNextDaily() => _dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0;
 
         public void EnrollDaily()
         {
@@ -49,6 +53,8 @@ namespace Core
                     _countDayEntry = 1;
                     break;
             }
+
+            _gameStateService.ChangeState(GameState.Save);
         }
 
         private int CalculateReward() =>
@@ -58,7 +64,9 @@ namespace Core
         {
             _wallet.EnrollMoney(Reward);
             _dateTimeService.SaveDate();
-            _gameStateService.ChangeState(GameState.Save);
+
+            if (_countDayEntry >= TwoWeeks)
+                _countDayEntry = 1;
         }
     }
 }

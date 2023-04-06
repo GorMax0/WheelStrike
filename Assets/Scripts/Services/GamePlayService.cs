@@ -15,7 +15,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 90f;
+        private readonly float IntervalBetweenAds = 105f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
@@ -38,7 +38,8 @@ namespace Services
         private float _delayHoldTime;
         private bool _isRunningAds;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization, CoroutineService coroutineService, InputHandler inputHandler,
+        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization,
+            CoroutineService coroutineService, InputHandler inputHandler,
             InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
@@ -79,6 +80,7 @@ namespace Services
 
         public int Highscore => _levelScore.Highscore;
         public float ElapsedTime { get; private set; }
+        public float Playtime { get; private set; }
         public int CountCollisionObstacles { get; private set; }
         public int DistanceTraveledOverAllTime { get; private set; }
 
@@ -98,11 +100,13 @@ namespace Services
 
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
 
-        public void SetElapsedTime(float elapsedTime)
+        public void LoadElapsedTime(float elapsedTime)
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
         }
+
+        public void LoadPlaytime(float playtime) => Playtime = playtime;
 
         public void LoadCountCollisionObstacles(int countCollisionObstacles)
         {
@@ -161,6 +165,7 @@ namespace Services
             while (true)
             {
                 ElapsedTime += Time.deltaTime;
+                Playtime += Time.deltaTime;
                 yield return null;
             }
         }
@@ -192,6 +197,7 @@ namespace Services
             if (_isRunningAds == false)
                 Restart();
         }
+
         private void Restart()
         {
             _levelService.RestartLevel();
