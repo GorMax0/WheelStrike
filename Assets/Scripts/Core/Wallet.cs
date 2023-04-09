@@ -29,7 +29,7 @@ namespace Core
             MoneyChanged?.Invoke(_money);
         }
 
-        public bool TrySpandMoney(int price)
+        public bool TrySpendMoney(int price)
         {
             if (_money < price)
                 return false;

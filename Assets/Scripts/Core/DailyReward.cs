@@ -2,6 +2,7 @@ using System;
 using Parameters;
 using Services;
 using Services.GameStates;
+using UnityEngine;
 
 namespace Core
 {
@@ -32,6 +33,8 @@ namespace Core
         {
             _dateTimeService.LoadDate(loadDate);
             _countDayEntry = countDayEntry;
+            Debug.Log($"Count day entry {_countDayEntry}, Load data {loadDate}, Previous data: {_dateTimeService.PreviousDate}");
+            Debug.Log($"Reward daily {Reward}");
         }
 
         public DateTime GetSavedDate() => _dateTimeService.PreviousDate;

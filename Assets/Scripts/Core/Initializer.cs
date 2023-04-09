@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Achievements;
 using UnityEngine;
 using Core.Wheel;
 using Parameters;
@@ -37,6 +38,7 @@ namespace Core
         [SerializeField] private SoundController _soundController;
         [SerializeField] private QualityToggle _qualityToggle;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
+        [SerializeField] private AchievementSystem _achievementSystem;
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
@@ -114,6 +116,7 @@ namespace Core
             _leaderboardsHandler?.Initialize(_gamePlayService);
             _dailyReward = new DailyReward(_gameStateService, _wallet,
                 _parameters[ParameterType.Income]);
+            _achievementSystem.Initialize();
         }
 
         private void InitializeCore()
@@ -149,7 +152,7 @@ namespace Core
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _boost, _yandexAuthorization, _dailyReward);
+                _wallet, _parameters, _boost, _yandexAuthorization, _dailyReward, _achievementSystem);
             _dataOperator.Load();
             Debug.Log($"_dataOperator.Load();");
         }

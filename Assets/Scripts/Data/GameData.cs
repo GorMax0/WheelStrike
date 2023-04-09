@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
+using Achievements;
+using UnityEngine;
+
 namespace Data
 {
-    [System.Serializable]
+    [Serializable]
     public class GameData
     {
         public string DataVersion;
@@ -20,6 +25,7 @@ namespace Data
         public float ElapsedTime;
         public bool IsMuted;
         public bool IsNormalQuality = true;
+        public List<AchievementData> AchievementsData;
 
         public GameData(string dataVersion)
         {

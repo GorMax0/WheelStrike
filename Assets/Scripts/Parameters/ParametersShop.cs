@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Achievements;
 using UnityEngine;
 using GameAnalyticsSDK;
 using Core;
@@ -63,7 +64,7 @@ namespace Parameters
             }
         }
 
-        private bool TryParameterLevelUp(Parameter parameter) => _wallet.TrySpandMoney(parameter.Cost);
+        private bool TryParameterLevelUp(Parameter parameter) => _wallet.TrySpendMoney(parameter.Cost);
 
         private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
 

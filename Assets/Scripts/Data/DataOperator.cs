@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Achievements;
 using Core;
 using Parameters;
 using Boost;
@@ -14,27 +15,27 @@ namespace Data
 {
     public class DataOperator : IDisposable
     {
-        private const string DataVersion = "v0.4.11";
+        private const string DataVersion = "v0.4.12";
         private const int DefaultScene = 1;
 
         private GameData _gameData;
         private ISaveSystem _saveSystem;
-        private GamePlayService _gamePlayService;
-        private GameStateService _gameStateService;
-        private LevelService _levelService;
-        private LevelScore _levelScore;
-        private SoundController _soundController;
-        private QualityToggle _qualityToggle;
-        private Wallet _wallet;
-        private Dictionary<ParameterType, Parameter> _parameters;
-        private BoostParameter _boost;
-        private YandexAuthorization _yandexAuthorization;
-        private DailyReward _dailyReward;
+        private readonly GamePlayService _gamePlayService;
+        private readonly GameStateService _gameStateService;
+        private readonly LevelService _levelService;
+        private readonly LevelScore _levelScore;
+        private readonly SoundController _soundController;
+        private readonly QualityToggle _qualityToggle;
+        private readonly Wallet _wallet;
+        private readonly Dictionary<ParameterType, Parameter> _parameters;
+        private readonly BoostParameter _boost;
+        private readonly YandexAuthorization _yandexAuthorization;
+        private readonly DailyReward _dailyReward;
+        private readonly AchievementSystem _achievementSystem;
 
         public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
-            QualityToggle qualityToggle,
-            Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost,
-            YandexAuthorization yandexAuthorization, DailyReward dailyReward)
+            QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost,
+            YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem)
         {
             _gamePlayService = gamePlayService;
             _gameStateService = gameStateService;
@@ -48,6 +49,7 @@ namespace Data
             _boost = boost;
             _yandexAuthorization = yandexAuthorization;
             _dailyReward = dailyReward;
+            _achievementSystem = achievementSystem;
 #if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem(DataVersion);
 #elif YANDEX_GAMES
@@ -84,6 +86,7 @@ namespace Data
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
             SaveDailyInfo();
+            SaveAchievements();
 
             _saveSystem.Save(_gameData);
         }
@@ -111,6 +114,7 @@ namespace Data
             LoadSelectedQuality();
             LoadBoostLevel();
             LoadDailyDate();
+            LoadAchievements();
             _gameStateService.ChangeState(GameState.Load);
         }
 
@@ -160,6 +164,11 @@ namespace Data
             _gameData.CountDailyEntry = _dailyReward.CountDayEntry;
         }
 
+        private void SaveAchievements()
+        {
+            _gameData.AchievementsData = _achievementSystem.Save();
+        }
+
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
         private void LoadTime() => _gamePlayService.LoadElapsedTime(_gameData.ElapsedTime);
@@ -207,6 +216,11 @@ namespace Data
         private void LoadBoostLevel() => _boost.LoadLevel(_gameData.BoostLevel);
 
         private void LoadDailyDate() => _dailyReward.LoadDailyData(_gameData.DailyDate, _gameData.CountDailyEntry);
+
+        private void LoadAchievements()
+        {
+            _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
+        }
 
         private void Subscribe()
         {
