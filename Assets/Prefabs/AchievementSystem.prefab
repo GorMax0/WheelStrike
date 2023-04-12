@@ -1,0 +1,396 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7462570393784217180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7462570393784217181}
+  - component: {fileID: 7462570393784217154}
+  m_Layer: 0
+  m_Name: AchievementSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7462570393784217181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7462570393784217180}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7462570393784217154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7462570393784217180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a45ab6bd0a4b2fa734fc56c761dbea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _achievements:
+    _serializedList:
+    - Key: 0
+      Value:
+        _icon: {fileID: 21300000, guid: de07458ab1e323b41b136a0abc8d109f, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 2
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 3
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 4
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 5
+    - Key: 1
+      Value:
+        _icon: {fileID: 21300000, guid: 09bd1aeaf4146c74aa9970bd042af942, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 15
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 50
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 150
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 340
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 600
+    - Key: 2
+      Value:
+        _icon: {fileID: 21300000, guid: 7f90ae9a0d4090f4dad68dd9100d004b, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 15
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 50
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 150
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 340
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 600
+    - Key: 3
+      Value:
+        _icon: {fileID: 21300000, guid: 36a9c2680074c2249b25d20e08c08307, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 15
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 50
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 150
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 340
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 600
+    - Key: 4
+      Value:
+        _icon: {fileID: 21300000, guid: 64db157f6bea8544590a0b6fa8b8d0b8, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 600
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1800
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 3600
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 6600
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 10800
+    - Key: 5
+      Value:
+        _icon: {fileID: 21300000, guid: 8210f0150a6794343ba4b20195e3c6b4, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 2
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 3
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 5
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 7
+    - Key: 6
+      Value:
+        _icon: {fileID: 21300000, guid: 16f58808bdce88c49a2430b3acd150ac, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 400
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1200
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 4500
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 11000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 23500
+    - Key: 7
+      Value:
+        _icon: {fileID: 21300000, guid: d2f056aac5705544eb95482adf0cf967, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 40
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 100
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 230
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 410
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 900
+    - Key: 8
+      Value:
+        _icon: {fileID: 21300000, guid: 0ae6986fd5901db47b873cc80ac038b2, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 5000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 50000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 300000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 705000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1140000
+    - Key: 9
+      Value:
+        _icon: {fileID: 21300000, guid: 17d06e993465fea4bb27accf46dff526, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 15
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 35
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 65
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 115
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 200
+    - Key: 10
+      Value:
+        _icon: {fileID: 21300000, guid: d6bd6f8466ac7d04296c9e6a6f0fed65, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 50000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 250000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 700000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1200000
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 3500000
+    - Key: 11
+      Value:
+        _icon: {fileID: 21300000, guid: 17886d4213f00b44f86969e330c9f5c7, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 10
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 5
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 3
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 2
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1
+    - Key: 12
+      Value:
+        _icon: {fileID: 21300000, guid: 51be8206e1c0aad46b45e5d644505c20, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 5
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 9
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 17
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 27
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 38
+    - Key: 13
+      Value:
+        _icon: {fileID: 21300000, guid: 45aaadb1628779f4a9fef42d884fbcd9, type: 3}
+        _name: {fileID: 0}
+        _description: {fileID: 0}
+        _achievementDatasets:
+        - Type: 0
+          IsAchieved: 0
+          IsDisplayed: 0
+          _value: 1
