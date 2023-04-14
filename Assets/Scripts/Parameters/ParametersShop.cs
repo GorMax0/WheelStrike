@@ -48,7 +48,7 @@ namespace Parameters
                 ParameterView view = Instantiate(_template, transform);
                 view.LevelUpForMoneyButtonClicked += OnLevelUpForMoneyButtonClicked;
                 view.LevelUpForAdsButtonClicked += OnLevelUpForAdsButtonClicked;
-                view.Renger(parameter.Value, AdsRewardMultiplier);
+                view.Render(parameter.Value, AdsRewardMultiplier);
                 view.SubscribeToLevelChange();
                 _views.Add(parameter.Key, view);
             }

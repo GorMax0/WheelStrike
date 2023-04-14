@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
@@ -9,15 +10,19 @@ namespace Achievements
         [SerializedDictionary(nameof(AchievementType), nameof(Achievement))] [SerializeField]
         private SerializedDictionary<AchievementType, Achievement> _achievements;
 
+        private AchievementView _view;
+        
         public int CountAchievement { get; private set; }
         
-        public void Initialize()
+        public void Initialize(AchievementView view)
         {
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 achievement.Value.Initialize(achievement.Key);
                 achievement.Value.Achieved += SumAchieved;
             }
+            
+            view.Initialize(_achievements.Values.ToList());
         }
 
         public void LoadCountAchievement(int count) => CountAchievement = count;

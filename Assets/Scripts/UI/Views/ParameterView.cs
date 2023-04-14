@@ -49,7 +49,7 @@ namespace UI.Views
         private const string RussianMaximum = "Максимум";
         private const string EnglishMaximum = "Maximum";
 
-        private Parameter _parametr;
+        private Parameter _parameter;
         private Vector2 _startScale;
         private Vector2 _scaleIncrease;
         private bool _canBuyingForMoneyState = true;
@@ -57,7 +57,7 @@ namespace UI.Views
         public event Action<Parameter, Action> LevelUpForMoneyButtonClicked;
         public event Action<Parameter, Action> LevelUpForAdsButtonClicked;
 
-        public Parameter Parameter => _parametr;
+        public Parameter Parameter => _parameter;
 
         private void OnEnable()
         {
@@ -74,16 +74,16 @@ namespace UI.Views
 
         private void OnDestroy()
         {
-            _parametr.Loaded -= Refresh;
+            _parameter.Loaded -= Refresh;
         }
 
-        public void Renger(Parameter parametr, int rewardMultiplier)
+        public void Render(Parameter parameter, int rewardMultiplier)
         {
-            _parametr = parametr;
-            _name.text = ParameterName.GetName(parametr.Type);
+            _parameter = parameter;
+            _name.text = ParameterName.GetName(parameter.Type);
             _level.text = GetLevelText();
-            _cost.text = _parametr.Cost.ToString();
-            _icon.sprite = _parametr.Icon;
+            _cost.text = _parameter.Cost.ToString();
+            _icon.sprite = _parameter.Icon;
             _adsMultiplierText.text = $"+{rewardMultiplier}";
             _startScale = _levelUp.transform.localScale;
             _scaleIncrease = _startScale * ScaleRatio;
@@ -92,14 +92,14 @@ namespace UI.Views
             _label.transform.DOLocalMoveY(animationLabelPosition, AnimationMoveYDuration).SetLoops(InfinityLoops, LoopType.Yoyo);
         }
 
-        public void SubscribeToLevelChange() => _parametr.Loaded += Refresh;
+        public void SubscribeToLevelChange() => _parameter.Loaded += Refresh;
 
         public void ChangeStateButton(bool enoughMoney)
         {
             if (_canBuyingForMoneyState == enoughMoney)
                 return;
 
-            if (_parametr.Level < _parametr.MaximumLevel)
+            if (_parameter.Level < _parameter.MaximumLevel)
             {
                 _cost.gameObject.SetActive(enoughMoney);
                 _coin.gameObject.SetActive(enoughMoney);
@@ -118,7 +118,7 @@ namespace UI.Views
         {
             _level.text = GetLevelText();
 
-            if (_parametr.Level >= _parametr.MaximumLevel)
+            if (_parameter.Level >= _parameter.MaximumLevel)
             {
                 _levelUp.interactable = false;
                 _cost.text = "-";
@@ -132,7 +132,7 @@ namespace UI.Views
                 return;
             }
 
-            _cost.text = _parametr.Cost.ToString();
+            _cost.text = _parameter.Cost.ToString();
         }
 
         private void OnButtonClick()
@@ -143,11 +143,11 @@ namespace UI.Views
                     .Append(_levelUp.transform.DOScale(_scaleIncrease, AnimationScaleDuration)).SetEase(Ease.InOutQuad)
                     .Append(_levelUp.transform.DOScale(_startScale, AnimationScaleDuration));
 
-                LevelUpForMoneyButtonClicked?.Invoke(_parametr, Refresh);
+                LevelUpForMoneyButtonClicked?.Invoke(_parameter, Refresh);
             }
             else
             {
-                LevelUpForAdsButtonClicked?.Invoke(_parametr, Refresh);
+                LevelUpForAdsButtonClicked?.Invoke(_parameter, Refresh);
             }
         }
 
@@ -155,7 +155,7 @@ namespace UI.Views
         {
             string language = LeanLocalization.GetFirstCurrentLanguage();
 
-            if (_parametr.Level >= _parametr.MaximumLevel)
+            if (_parameter.Level >= _parameter.MaximumLevel)
             {
                 switch (language)
                 {
@@ -175,14 +175,14 @@ namespace UI.Views
                 switch (language)
                 {
                     case TurkishLanguage:
-                        return $"{LevelTurkey} {_parametr.Level}";
+                        return $"{LevelTurkey} {_parameter.Level}";
 
                     case RussianLanguage:
-                        return $"{LevelRussian} {_parametr.Level}";
+                        return $"{LevelRussian} {_parameter.Level}";
 
                     case EnglishLanguage:
                     default:
-                        return $"{LevelEnglish} {_parametr.Level}";
+                        return $"{LevelEnglish} {_parameter.Level}";
                 }
             }
 
@@ -190,7 +190,7 @@ namespace UI.Views
 
         private void OnLocalizationChanged()
         {
-            _name.text = ParameterName.GetName(_parametr.Type);
+            _name.text = ParameterName.GetName(_parameter.Type);
             _level.text = GetLevelText();
         }
     }
