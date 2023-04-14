@@ -14,6 +14,8 @@ namespace Achievements
 
         public int Value => _value;
 
-        public bool HasAchieved(in int currentValue) => IsAchieved = _value <= currentValue;
+        public bool HasAchieved(int currentValue) => IsAchieved = _value <= currentValue;
+        
+        public bool HasAchievedForTop(int currentValue) => IsAchieved = _value >= currentValue;
     }
 }

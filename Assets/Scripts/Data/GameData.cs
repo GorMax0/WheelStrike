@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Achievements;
-using UnityEngine;
 
 namespace Data
 {
@@ -19,12 +18,17 @@ namespace Data
         public int DistanceTraveledOverAllTime;
         public int CountCollisionObstacles;
         public string DailyDate;
-        public int CountDailyEntry;
-        public int CountLaunch;
+        public int CountDailyEntry = 1;
         public int Playtime;
         public float ElapsedTime;
         public bool IsMuted;
         public bool IsNormalQuality = true;
+        public int SpeedAchievement;
+        public int SizeAchievement;
+        public int IncomeAchievement;
+        public int CountLaunch;
+        public int SpentMoney;
+        public int CountAchievement;
         public List<AchievementData> AchievementsData;
 
         public GameData(string dataVersion)

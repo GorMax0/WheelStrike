@@ -20,6 +20,6 @@ namespace Services
             PreviousDate = DateTime.Parse(loadDate);
         }
 
-        public void SaveDate() => PreviousDate = DateTime.Now;
+        public void SaveDate() => PreviousDate = CurrentDatetime;
     }
 }

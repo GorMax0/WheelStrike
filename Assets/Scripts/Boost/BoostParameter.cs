@@ -10,7 +10,6 @@ namespace Boost
         public const float BaseIncomeValue = 0.2f;
 
         public event Action LevelChanged;
-        public event Action Loaded;
 
         public float SpeedMultiplier => BaseSpeedValue * Level;
         public float IncomeMultiplier => BaseIncomeValue * Level;
@@ -22,7 +21,6 @@ namespace Boost
                 return;
 
             Level = level > MaxLevel ? MaxLevel : level;
-            Loaded?.Invoke();
         }
 
         public void LevelUp()

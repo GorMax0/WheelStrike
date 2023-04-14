@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Achievements;
 using UnityEngine;
 using UnityEngine.UI;
 using Services;
@@ -21,6 +22,8 @@ namespace Leaderboards
         [Header("Authorization request")]
         [SerializeField] private AuthorizationView _authorizationView;
 
+        
+
         private const LeaderboardType DefaultLeaderboard = LeaderboardType.Traveled;
         private const string DistanceTraveledBoard = "DistanceTraveledBoard";
         private const string HighscoreDistanceBoard = "HighscoreDistanceBoard";
@@ -31,6 +34,7 @@ namespace Leaderboards
         private LeaderboardYandex _highscoreDistanceLeaderboard;
         private LeaderboardYandex _collisionsLeaderboard;
         private GamePlayService _gamePlayService;
+        private Achievements.AchievementSystem _achievementSystem;
         private bool _isInitialized;
         private bool _isDistanceTraveledLeaderboardCached;
         private bool _isHighscoreDistanceLeaderboardCached;
@@ -60,12 +64,13 @@ namespace Leaderboards
             _collisionsLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
         }
 
-        public void Initialize(GamePlayService gamePlayService)
+        public void Initialize(GamePlayService gamePlayService, Achievements.AchievementSystem achievementSystem)
         {
             if (_isInitialized == true)
                 return;
 
             _gamePlayService = gamePlayService;
+            _achievementSystem = achievementSystem;
 
             _distanceTraveledLeaderboard = CreateLeaderboard(_distanceTraveledLeaderboardView, DistanceTraveledBoard);
             _highscoreDistanceLeaderboard = CreateLeaderboard(_highscoreDistanceLeaderboardView, HighscoreDistanceBoard);
@@ -188,6 +193,8 @@ namespace Leaderboards
                     _collisionsLeaderboardView.RenderCurrentPlayer(currentPlayer);
                     break;
             }
+            
+            _achievementSystem.PassValueForTop(currentPlayer.Rank);
         }
     }
 }

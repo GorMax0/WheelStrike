@@ -379,11 +379,11 @@ MonoBehaviour:
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 27
+          _value: 29
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 38
+          _value: 45
     - Key: 13
       Value:
         _icon: {fileID: 21300000, guid: 45aaadb1628779f4a9fef42d884fbcd9, type: 3}

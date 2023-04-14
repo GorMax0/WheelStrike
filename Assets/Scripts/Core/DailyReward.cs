@@ -1,4 +1,5 @@
 using System;
+using Achievements;
 using Parameters;
 using Services;
 using Services.GameStates;
@@ -8,7 +9,8 @@ namespace Core
 {
     public class DailyReward
     {
-        private const int TwoWeeks = 14;
+        private const int OneDay = 1;
+        private const int Week = 7;
         private readonly int _baseReward = 200;
         private readonly float _multipleReward = 1.5f;
 
@@ -17,16 +19,18 @@ namespace Core
         private DateTimeService _dateTimeService;
         private Wallet _wallet;
         private Parameter _income;
+        private AchievementSystem _achievementSystem;
 
         public int Reward => CalculateReward();
         public int CountDayEntry => _countDayEntry;
 
-        public DailyReward(GameStateService gameStateService, Wallet wallet, Parameter income)
+        public DailyReward(GameStateService gameStateService, Wallet wallet, Parameter income, AchievementSystem achievementSystem)
         {
             _dateTimeService = new DateTimeService();
             _gameStateService = gameStateService;
             _wallet = wallet;
             _income = income;
+            _achievementSystem = achievementSystem;
         }
 
         public void LoadDailyData(string loadDate, int countDayEntry)
@@ -45,30 +49,24 @@ namespace Core
         {
             int intervalDays = _dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day;
 
-            switch (intervalDays)
-            {
-                case 1:
-                    EnrollReward();
-                    _countDayEntry++;
-                    break;
-                case > 1:
-                    EnrollReward();
-                    _countDayEntry = 1;
-                    break;
-            }
-
+            if (intervalDays < OneDay)
+                return;
+            
+            EnrollReward();
+            _achievementSystem.PassValue(AchievementType.Daily, _countDayEntry);
+            _countDayEntry++;
             _gameStateService.ChangeState(GameState.Save);
         }
 
         private int CalculateReward() =>
-            (int)(_baseReward * _multipleReward * (1 + _countDayEntry) * (1 + _income.Value));
+            (int)(_baseReward * _multipleReward * _countDayEntry * (1 + _income.Value));
 
         private void EnrollReward()
         {
             _wallet.EnrollMoney(Reward);
             _dateTimeService.SaveDate();
 
-            if (_countDayEntry >= TwoWeeks)
+            if (_countDayEntry >= Week)
                 _countDayEntry = 1;
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Achievements;
 using UnityEngine;
 using GameAnalyticsSDK;
 using Core;
@@ -13,15 +12,19 @@ namespace Parameters
 {
     public class ParametersShop : MonoBehaviour
     {
+        
         [SerializeField] private ParameterView _template;
         [SerializeField] private AnimationWheel _animationWheel;
         [SerializeField] private AdsReward.AdsRewards _adsRewards;
         [SerializeField] private BoostView _boostView;
 
-        private Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
+        private const int AdsRewardMultiplier = 5;
+        private readonly Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
+        
         private Wallet _wallet;
+        private CounterParameterLevel _counterParameterLevel;
         private Parameter _parameterForRewardAds;
-        private int _adsRewardMultiplier = 5;
+
         private bool _hasOpenVideoAd;
 
         private Action _refreshView;
@@ -38,21 +41,23 @@ namespace Parameters
             _wallet.MoneyChanged -= ChangeInteractableLevelUpButtons;
         }
 
-        public void Initialize(Dictionary<ParameterType, Parameter> parametrs, Wallet wallet)
+        public void Initialize(Dictionary<ParameterType, Parameter> parameters, Wallet wallet, CounterParameterLevel counterParameterLevel)
         {
-            foreach (KeyValuePair<ParameterType, Parameter> parametr in parametrs)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in parameters)
             {
                 ParameterView view = Instantiate(_template, transform);
                 view.LevelUpForMoneyButtonClicked += OnLevelUpForMoneyButtonClicked;
                 view.LevelUpForAdsButtonClicked += OnLevelUpForAdsButtonClicked;
-                view.Renger(parametr.Value, _adsRewardMultiplier);
+                view.Renger(parameter.Value, AdsRewardMultiplier);
                 view.SubscribeToLevelChange();
-                _views.Add(parametr.Key, view);
+                _views.Add(parameter.Key, view);
             }
 
             _wallet = wallet;
             _wallet.MoneyLoaded += ChangeInteractableLevelUpButtons;
             _wallet.MoneyChanged += ChangeInteractableLevelUpButtons;
+
+            _counterParameterLevel = counterParameterLevel;
         }
 
         private void ChangeInteractableLevelUpButtons(int moneyInWallet)
@@ -68,6 +73,8 @@ namespace Parameters
 
         private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
 
+       
+        
         private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action onRefresh)
         {
             if (TryParameterLevelUp(parameter) == false)
@@ -78,6 +85,7 @@ namespace Parameters
             _animationWheel.ParameterUp();
             ChangeInteractableLevelUpButtons(_wallet.Money);
             onRefresh();
+            _counterParameterLevel.CheckAchievement(parameter.Type);
             _boostView.HasMaximumLevelParameter(parameter);
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
         }
@@ -93,7 +101,8 @@ namespace Parameters
             _parameterForRewardAds = parameter;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-            _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
+            _counterParameterLevel.CheckAchievement(_parameterForRewardAds.Type, AdsRewardMultiplier);
+            _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, AdsRewardMultiplier);
             _refreshView();
             _boostView.HasMaximumLevelParameter(_parameterForRewardAds);
 
@@ -126,7 +135,8 @@ namespace Parameters
             if (_hasOpenVideoAd == false)
                 return;
 
-            _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, _adsRewardMultiplier);
+            _counterParameterLevel.CheckAchievement(_parameterForRewardAds.Type, AdsRewardMultiplier);
+            _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, AdsRewardMultiplier);
             _hasOpenVideoAd = false;
             _parameterForRewardAds = null;
             _refreshView();

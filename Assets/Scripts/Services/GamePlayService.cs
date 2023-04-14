@@ -15,7 +15,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 105f;
+        private readonly float IntervalBetweenAds = 110f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
@@ -83,6 +83,7 @@ namespace Services
         public float Playtime { get; private set; }
         public int CountCollisionObstacles { get; private set; }
         public int DistanceTraveledOverAllTime { get; private set; }
+        public int CountLaunch { get; private set; }
 
         public void Dispose()
         {
@@ -103,6 +104,7 @@ namespace Services
         public void LoadElapsedTime(float elapsedTime)
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
+            Debug.Log($"Time before Interval Ad {ElapsedTime}");
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
         }
 
@@ -123,6 +125,8 @@ namespace Services
 
             DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
         }
+
+        public void LoadCountLaunch(int count) => CountLaunch = count;
 
         private IEnumerator UnlockInputHandler()
         {
@@ -268,6 +272,7 @@ namespace Services
             _levelScore.SetHighscore(_travelable.DistanceTraveled);
             DistanceTraveledOverAllTime += _travelable.DistanceTraveled;
             _levelService.SetNextScene();
+            CountLaunch++;
             _gameStateService.ChangeState(GameState.Save);
 
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");

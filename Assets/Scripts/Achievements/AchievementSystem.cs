@@ -9,13 +9,18 @@ namespace Achievements
         [SerializedDictionary(nameof(AchievementType), nameof(Achievement))] [SerializeField]
         private SerializedDictionary<AchievementType, Achievement> _achievements;
 
+        public int CountAchievement { get; private set; }
+        
         public void Initialize()
         {
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 achievement.Value.Initialize(achievement.Key);
+                achievement.Value.Achieved += SumAchieved;
             }
         }
+
+        public void LoadCountAchievement(int count) => CountAchievement = count;
 
         public void LoadAchievementValue(List<AchievementData> loadDatasets)
         {
@@ -49,6 +54,17 @@ namespace Achievements
             }
 
             return saveDatasets;
+        }
+
+        public void PassValue(AchievementType type, int value) => _achievements[type].CheckAchievementValue(value);
+        
+        public void PassValueForTop(int value) => _achievements[AchievementType.Top].CheckAchievementValueForTop(value);
+
+        private void SumAchieved(int value)
+        {
+            CountAchievement -= --value;
+            CountAchievement += ++value;
+            PassValue(AchievementType.Achieved, CountAchievement);
         }
     }
 }

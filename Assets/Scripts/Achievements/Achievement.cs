@@ -21,7 +21,7 @@ namespace Achievements
         public void Initialize(AchievementType type)
         {
             _type = type;
-            
+
             for (int i = 0; i < _achievementDatasets.Length; i++)
             {
                 _achievementDatasets[i].Type = _type;
@@ -44,6 +44,11 @@ namespace Achievements
                         break;
                     }
                 }
+                
+                if (achievementData.IsAchieved)
+                {
+                    _countAchieved++;
+                }
             }
         }
 
@@ -60,21 +65,42 @@ namespace Achievements
             return saveDatasets;
         }
 
-        public void CheckAchievementValue(in int currentValue)
+        public void CheckAchievementValue(int currentValue)
         {
             foreach (AchievementData achievementData in _achievementDatasets)
             {
                 if (achievementData.IsAchieved)
                     continue;
 
-                if (achievementData.HasAchieved(currentValue))
-                {
-                    Debug.Log($"{_name.Entries[0].Text} - Achieved. Current value {currentValue}");
-                    _countAchieved++;
-                }
-            }
+                Debug.Log($"{_type} - Current value {currentValue}");
 
-            Achieved?.Invoke(_countAchieved);
+                if (achievementData.HasAchieved(currentValue) == false)
+                    return;
+
+                _countAchieved++;
+
+                Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
+                Achieved?.Invoke(_countAchieved);
+            }
+        }
+        
+        public void CheckAchievementValueForTop(int currentValue)
+        {
+            foreach (AchievementData achievementData in _achievementDatasets)
+            {
+                if (achievementData.IsAchieved)
+                    continue;
+
+                Debug.Log($"{_type} - Current value {currentValue}");
+
+                if (achievementData.HasAchievedForTop(currentValue) == false)
+                    return;
+
+                _countAchieved++;
+
+                Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
+                Achieved?.Invoke(_countAchieved);
+            }
         }
     }
 }

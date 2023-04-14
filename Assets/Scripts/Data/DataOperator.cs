@@ -28,13 +28,14 @@ namespace Data
         private readonly QualityToggle _qualityToggle;
         private readonly Wallet _wallet;
         private readonly Dictionary<ParameterType, Parameter> _parameters;
+        private readonly CounterParameterLevel _counterParameterLevel;
         private readonly BoostParameter _boost;
         private readonly YandexAuthorization _yandexAuthorization;
         private readonly DailyReward _dailyReward;
         private readonly AchievementSystem _achievementSystem;
 
         public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
-            QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, BoostParameter boost,
+            QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, CounterParameterLevel counterParameterLevel, BoostParameter boost,
             YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem)
         {
             _gamePlayService = gamePlayService;
@@ -46,6 +47,7 @@ namespace Data
             _qualityToggle = qualityToggle;
             _wallet = wallet;
             _parameters = parameters;
+            _counterParameterLevel = counterParameterLevel;
             _boost = boost;
             _yandexAuthorization = yandexAuthorization;
             _dailyReward = dailyReward;
@@ -85,6 +87,8 @@ namespace Data
             SavePlaytime(_gamePlayService.Playtime);
             SaveCountCollisionObstacles(_gamePlayService.CountCollisionObstacles);
             SaveAllDistanceTraveled(_gamePlayService.DistanceTraveledOverAllTime);
+            SaveCountLaunch(_gamePlayService.CountLaunch);
+            SaveCounterParameterLevels();
             SaveDailyInfo();
             SaveAchievements();
 
@@ -110,10 +114,12 @@ namespace Data
             LoadPlaytime();
             LoadCountCollisionObstacles();
             LoadAllDistanceTraveled();
+            LoadCountLaunch();
+            LoadCounterParameterLevels();
             LoadMutedState();
             LoadSelectedQuality();
             LoadBoostLevel();
-            LoadDailyDate();
+            LoadDailyInfo();
             LoadAchievements();
             _gameStateService.ChangeState(GameState.Load);
         }
@@ -125,16 +131,29 @@ namespace Data
         private void SaveAllDistanceTraveled(int distanceTraveledOverAllTime) =>
             _gameData.DistanceTraveledOverAllTime = distanceTraveledOverAllTime;
 
-        private void SaveMoney(int money) => _gameData.Money = money;
+        private void SaveMoney(int money)
+        {
+            int difference = money - _gameData.Money;
+
+            if (difference < 0)
+            {
+                _gameData.SpentMoney += -difference;
+                _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
+            }
+
+            _gameData.Money = money;
+        }
 
         private void SaveTime(float elapsedTime) => _gameData.ElapsedTime = elapsedTime;
 
         private void SavePlaytime(float playtime) => _gameData.Playtime = (int)playtime;
 
-        private void SaveCountCollisionObstacles(int countCollisionObstacles) =>
-            _gameData.CountCollisionObstacles = countCollisionObstacles;
-
+        private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
+        
+        private void SaveCountLaunch(int countLaunch) => _gameData.CountLaunch = countLaunch;
+        
         private void SaveMuted(bool isMuted) => _gameData.IsMuted = isMuted;
+        
         private void SaveSelectedQuality(bool isNormalQuality) => _gameData.IsNormalQuality = isNormalQuality;
 
         private void SaveParameter(Parameter parameter)
@@ -151,11 +170,17 @@ namespace Data
                     _gameData.IncomeParameter = parameter.Level;
                     break;
                 default:
-                    throw new InvalidOperationException(
-                        $"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
+                    throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
         }
 
+        private void SaveCounterParameterLevels()
+        {
+            _gameData.SpeedAchievement = _counterParameterLevel.CountSpeedLevel;
+            _gameData.SizeAchievement = _counterParameterLevel.CountSizeLevel;
+            _gameData.IncomeAchievement = _counterParameterLevel.CountIncomeLevel;
+        }
+        
         private void SaveBoostLevel() => _gameData.BoostLevel = _boost.Level;
 
         private void SaveDailyInfo()
@@ -167,6 +192,7 @@ namespace Data
         private void SaveAchievements()
         {
             _gameData.AchievementsData = _achievementSystem.Save();
+            _gameData.CountAchievement = _achievementSystem.CountAchievement;
         }
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
@@ -175,11 +201,14 @@ namespace Data
         
         private void LoadPlaytime() => _gamePlayService.LoadPlaytime(_gameData.Playtime);
 
-        private void LoadCountCollisionObstacles() =>
-            _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
+        private void LoadCountCollisionObstacles() => _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
+        
+        private void LoadAllDistanceTraveled() => _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
 
-        private void LoadAllDistanceTraveled() =>
-            _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
+        private void LoadCountLaunch() => _gamePlayService.LoadCountLaunch(_gameData.CountLaunch);
+        
+        private void LoadCounterParameterLevels() => 
+            _counterParameterLevel.Load(_gameData.SpeedAchievement, _gameData.SizeAchievement, _gameData.IncomeAchievement);
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 
@@ -208,18 +237,24 @@ namespace Data
                 if (parameter.Key == ParameterType.Income)
                 {
                     parameter.Value.LoadLevel(_gameData.IncomeParameter);
-                    continue;
                 }
             }
         }
 
         private void LoadBoostLevel() => _boost.LoadLevel(_gameData.BoostLevel);
 
-        private void LoadDailyDate() => _dailyReward.LoadDailyData(_gameData.DailyDate, _gameData.CountDailyEntry);
+        private void LoadDailyInfo() => _dailyReward.LoadDailyData(_gameData.DailyDate, _gameData.CountDailyEntry);
 
         private void LoadAchievements()
         {
             _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
+            _achievementSystem.LoadCountAchievement(_gameData.CountAchievement);
+            _achievementSystem.PassValue(AchievementType.Boost, _boost.Level);
+            _achievementSystem.PassValue(AchievementType.Playtime, _gameData.Playtime);
+            _achievementSystem.PassValue(AchievementType.Highscore, _gameData.Highscore);
+            _achievementSystem.PassValue(AchievementType.Obstacle, _gameData.CountCollisionObstacles);
+            _achievementSystem.PassValue(AchievementType.Travel, _gameData.DistanceTraveledOverAllTime);
+            _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
         }
 
         private void Subscribe()
@@ -260,6 +295,8 @@ namespace Data
             {
                 parameter.Value.LevelChanged -= SaveParameter;
             }
+            
+            _boost.LevelChanged -= SaveBoostLevel;
         }
     }
 }

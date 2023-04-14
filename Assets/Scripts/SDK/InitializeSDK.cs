@@ -23,6 +23,7 @@ public class InitializeSDK : MonoBehaviour
         GameAnalytics.Initialize();
 #if !UNITY_WEBGL || UNITY_EDITOR
         yield return new WaitForSeconds(0.1f);
+        yield return GetLevelIndex();
 
 #elif YANDEX_GAMES
         while (YandexGamesSdk.IsInitialized == false)
@@ -31,9 +32,12 @@ public class InitializeSDK : MonoBehaviour
         }
 
         Services.Localization.SetLanguage();
-        // YandexGamesSdk.CallbackLogging = true;
-#endif
         yield return GetLevelIndex();
+        InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
+
+         YandexGamesSdk.CallbackLogging = true;
+#endif
+
         LoadScene();
     }
 
@@ -98,4 +102,16 @@ public class InitializeSDK : MonoBehaviour
     }
 
     private void LoadScene() => SceneManager.LoadScene(_levelIndex);
+
+    private void OnOpenCallback() => GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:InitializeSDK");
+
+    private void OnCloseCallback(bool _) => LoadScene();
+
+    private void OnErrorCallback(string error)
+    {
+        Debug.LogWarning(error);
+        LoadScene();
+    }
+
+    private void OnOfflineCallback() => LoadScene();
 }

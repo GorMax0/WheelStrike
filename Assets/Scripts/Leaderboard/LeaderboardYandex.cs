@@ -81,12 +81,6 @@ namespace Leaderboards
             if (PlayerAccount.IsAuthorized == false)
                 return;
 
-            //Leaderboard.GetPlayerEntry(_leaderboardName, result =>
-            //{
-
-            //    if (result.score < score)
-            //});
-
             Leaderboard.SetScore(_leaderboardName, score);
 #endif
         }

@@ -27,12 +27,10 @@ namespace Core
     {
         private const string TutorialData = "Tutorial";
 
-        [Header("Camera")] 
-        [SerializeField] private CameraController _cameraController;
+        [Header("Camera")] [SerializeField] private CameraController _cameraController;
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
-        [Header("Services")] 
-        [SerializeField] private CoroutineService _coroutineService;
+        [Header("Services")] [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private SoundController _soundController;
@@ -45,16 +43,14 @@ namespace Core
         private YandexAuthorization _yandexAuthorization;
         private DailyReward _dailyReward;
 
-        [Header("Core")] 
-        [SerializeField] private CarBuilder _carBuilder;
+        [Header("Core")] [SerializeField] private CarBuilder _carBuilder;
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private RopeDisconnection _ropeDisconnection;
         [SerializeField] private Player _wheel;
         [SerializeField] private InteractionHandler _interactionHandler;
 
-        [Header("View")] 
-        [SerializeField] private ControlManual _controlManual;
+        [Header("View")] [SerializeField] private ControlManual _controlManual;
         [SerializeField] private FinishViewHandler _finishViewHandler;
         [SerializeField] private PrerunView _prerunView;
         [SerializeField] private AimDirectionView _aimDirectionLine;
@@ -67,14 +63,14 @@ namespace Core
         [SerializeField] private AuthorizationView _authorizationView;
         [SerializeField] private DailyView _dailyView;
 
-        [Header("Other")] 
-        [SerializeField] private ParameterObject[] _parameterObjects;
+        [Header("Other")] [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
         [SerializeField] private TutorialManager _tutorial;
         [SerializeField] private Fog _fog;
 
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
+        private CounterParameterLevel _counterParameterLevel;
         private BoostParameter _boost;
         private AimDirection _aimDirection;
         private Wallet _wallet = new Wallet();
@@ -84,6 +80,7 @@ namespace Core
         {
             _parameterCreater = new ParameterCreater();
             _parameters = _parameterCreater.CreateParameters(_parameterObjects);
+            _counterParameterLevel = new CounterParameterLevel(_achievementSystem);
             _boost = new BoostParameter();
 
             InitializeServices();
@@ -94,10 +91,10 @@ namespace Core
             InitializeLoad();
             InitializeTutorial();
             ScreenOrientationValidator.Instance.Initialize();
-            }
+        }
 
         private void OnGameStateChanged(GameState state)
-        { 
+        {
             if (_tutorial == null && state == GameState.Load)
                 _gameStateService.ChangeState(GameState.Initializing);
         }
@@ -113,10 +110,9 @@ namespace Core
                 _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
-            _leaderboardsHandler?.Initialize(_gamePlayService);
-            _dailyReward = new DailyReward(_gameStateService, _wallet,
-                _parameters[ParameterType.Income]);
+            _leaderboardsHandler?.Initialize(_gamePlayService, _achievementSystem);
             _achievementSystem.Initialize();
+            _dailyReward = new DailyReward(_gameStateService, _wallet, _parameters[ParameterType.Income], _achievementSystem);
         }
 
         private void InitializeCore()
@@ -142,7 +138,7 @@ namespace Core
             _walletView.Initialize(_wallet);
             _moneyPresenter.Initialize(_interactionHandler);
             _topPanel.Initialize(_gameStateService, _coroutineService);
-            _parametersShop.Initialize(_parameters, _wallet);
+            _parametersShop.Initialize(_parameters, _wallet, _counterParameterLevel);
             _boostView.Initialize(_gameStateService, _boost, _parameters);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
             _authorizationView.Initialize(_yandexAuthorization);
@@ -152,7 +148,7 @@ namespace Core
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _boost, _yandexAuthorization, _dailyReward, _achievementSystem);
+                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem);
             _dataOperator.Load();
             Debug.Log($"_dataOperator.Load();");
         }
@@ -164,7 +160,7 @@ namespace Core
             if (PlayerPrefs.HasKey(TutorialData))
                 tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
 
-            _tutorial?.Initialize(_gameStateService, tutorialState);
+            _tutorial?.Initialize(_gameStateService, tutorialState, _achievementSystem);
         }
     }
 }

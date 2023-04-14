@@ -1,3 +1,4 @@
+using Achievements;
 using UnityEngine;
 using Services;
 using Services.GameStates;
@@ -33,12 +34,13 @@ namespace UI.Manual.Tutorial
         private GameStateService _gameStateService;
         private TutorialState _currentState;
         private StepTutorial _currentStep;
+        private AchievementSystem _achievementSystem;
         private Image _image;
         private int _indexStep;
         private bool _hasPortraitOrientation;
         private bool _isInitialize;
 
-        public void Initialize(GameStateService gameStateService, TutorialState state)
+        public void Initialize(GameStateService gameStateService, TutorialState state, AchievementSystem achievementSystem)
         {
             if (_isInitialize == true)
                 throw new System.InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, TutorialState state): Already initialized.");
@@ -48,6 +50,7 @@ namespace UI.Manual.Tutorial
             _gameStateService = gameStateService;
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _currentState = state;
+            _achievementSystem = achievementSystem;
 
             _inputHandler.gameObject.SetActive(false);
             _topPanel.gameObject.SetActive(false);
@@ -151,6 +154,8 @@ namespace UI.Manual.Tutorial
         private void FinishTutorial()
         {
             GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
+            _achievementSystem.PassValue(AchievementType.Training, 1);
+            _gameStateService.ChangeState(GameState.Save);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
