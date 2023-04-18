@@ -104,7 +104,6 @@ namespace Services
         public void LoadElapsedTime(float elapsedTime)
         {
             ElapsedTime = elapsedTime <= 0 ? 0 : elapsedTime;
-            Debug.Log($"Time before Interval Ad {ElapsedTime}");
             _timerForIntervalBetweenAds.Run(StartTimerForIntervalBetweenAds());
         }
 

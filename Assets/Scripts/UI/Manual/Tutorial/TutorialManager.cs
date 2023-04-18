@@ -37,13 +37,17 @@ namespace UI.Manual.Tutorial
         private AchievementSystem _achievementSystem;
         private Image _image;
         private int _indexStep;
+        private int _tutorialComplete;
         private bool _hasPortraitOrientation;
         private bool _isInitialize;
+
+        public int TutorialComplete => _tutorialComplete;
 
         public void Initialize(GameStateService gameStateService, TutorialState state, AchievementSystem achievementSystem)
         {
             if (_isInitialize == true)
-                throw new System.InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, TutorialState state): Already initialized.");
+                throw new System.InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, TutorialState state): Already initialized.");
 
             Localization.SetLanguage();
             _image = GetComponent<Image>();
@@ -122,9 +126,18 @@ namespace UI.Manual.Tutorial
                 FinishTutorial();
         }
 
+        private void FinishTutorial()
+        {
+            _tutorialComplete = 1;
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
+            _gameStateService.ChangeState(GameState.Save);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
         private void OnStepCompleted()
         {
             _indexStep++;
+
 
             switch (_indexStep)
             {
@@ -151,13 +164,6 @@ namespace UI.Manual.Tutorial
             SwitchCurrentStep();
         }
 
-        private void FinishTutorial()
-        {
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, TutorialData);
-            _achievementSystem.PassValue(AchievementType.Training, 1);
-            _gameStateService.ChangeState(GameState.Save);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
 
         private void OnOrientationValidated(bool isPortrait)
         {

@@ -92,6 +92,7 @@ namespace Core
             InitializeLoad();
             InitializeTutorial();
             ScreenOrientationValidator.Instance.Initialize();
+            Localization.GetCurrentLanguage();
         }
 
         private void OnGameStateChanged(GameState state)
@@ -112,8 +113,8 @@ namespace Core
             _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService, _achievementSystem);
-            _achievementSystem.Initialize(_achievementView);
             _dailyReward = new DailyReward(_gameStateService, _wallet, _parameters[ParameterType.Income], _achievementSystem);
+            _achievementSystem.Initialize(_achievementView);
         }
 
         private void InitializeCore()
@@ -149,7 +150,7 @@ namespace Core
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem);
+                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _tutorial);
             _dataOperator.Load();
             Debug.Log($"_dataOperator.Load();");
         }

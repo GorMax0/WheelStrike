@@ -18,6 +18,16 @@ namespace Achievements
 
         public event Action<int> Achieved;
 
+        public int CountValue { get; private set; }
+        public Sprite Icon => _icon;
+        public LeanPhrase Name => _name;
+        public LeanPhrase Description => _description;
+        public int CountAchieved => _countAchieved;
+
+        
+        public AchievementType Type => _type;
+        
+        
         public void Initialize(AchievementType type)
         {
             _type = type;
@@ -44,7 +54,7 @@ namespace Achievements
                         break;
                     }
                 }
-                
+
                 if (achievementData.IsAchieved)
                 {
                     _countAchieved++;
@@ -65,6 +75,21 @@ namespace Achievements
             return saveDatasets;
         }
 
+        public int GetCountAchievement() => _achievementDatasets.Length;
+
+        public int GetNextValueForAchievement()
+        {
+            foreach (var achievementData in _achievementDatasets)
+            {
+                if (achievementData.IsAchieved)
+                    continue;
+
+                return achievementData.Value;
+            }
+
+            return _achievementDatasets[^1].Value;
+        }
+
         public void CheckAchievementValue(int currentValue)
         {
             foreach (AchievementData achievementData in _achievementDatasets)
@@ -72,18 +97,17 @@ namespace Achievements
                 if (achievementData.IsAchieved)
                     continue;
 
-                Debug.Log($"{_type} - Current value {currentValue}");
-
                 if (achievementData.HasAchieved(currentValue) == false)
-                    return;
+                    break;
 
                 _countAchieved++;
-
-                Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
+                
                 Achieved?.Invoke(_countAchieved);
             }
+
+            CountValue = currentValue;
         }
-        
+
         public void CheckAchievementValueForTop(int currentValue)
         {
             foreach (AchievementData achievementData in _achievementDatasets)
@@ -101,6 +125,8 @@ namespace Achievements
                 Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
                 Achieved?.Invoke(_countAchieved);
             }
+
+            CountValue = currentValue;
         }
     }
 }

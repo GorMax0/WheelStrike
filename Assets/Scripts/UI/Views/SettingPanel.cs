@@ -16,9 +16,6 @@ namespace UI.Views
         [SerializeField] private Button _turkeyLanguage;
         [SerializeField] private Toggle _fps;
 
-        private const string TurkishLanguage = "Turkish";
-        private const string RussianLanguage = "Russian";
-        private const string EnglishLanguage = "English";
 
         private GridLayoutGroup _gridLayoutGroup;
         private Vector2 _sizeItemPortraitOrientation = new Vector2(100f, 100f);
@@ -43,36 +40,18 @@ namespace UI.Views
         {
             ScreenOrientationValidator.Instance.OrientationValidated += OnOrientationValidated;
             _buttonSetting.onClick.AddListener(OnButtonSettingClick);
-            _englishLanguage.onClick.AddListener(SwitchOnEnglish);
-            _russianLanguage.onClick.AddListener(SwitchOnRussian);
-            _turkeyLanguage.onClick.AddListener(SwitchOnTurkish);
+            _englishLanguage.onClick.AddListener(Localization.SwitchOnEnglish);
+            _russianLanguage.onClick.AddListener(Localization.SwitchOnRussian);
+            _turkeyLanguage.onClick.AddListener(Localization.SwitchOnTurkish);
         }
 
         private void OnDisable()
         {
             ScreenOrientationValidator.Instance.OrientationValidated -= OnOrientationValidated;
             _buttonSetting.onClick.RemoveListener(OnButtonSettingClick);
-            _englishLanguage.onClick.RemoveListener(SwitchOnEnglish);
-            _russianLanguage.onClick.RemoveListener(SwitchOnRussian);
-            _turkeyLanguage.onClick.RemoveListener(SwitchOnTurkish);
-        }
-
-        private void SwitchOnEnglish()
-        {
-            LeanLocalization.SetCurrentLanguageAll(EnglishLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:English");
-        }
-
-        private void SwitchOnRussian()
-        {
-            LeanLocalization.SetCurrentLanguageAll(RussianLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:Russian");
-        }
-
-        private void SwitchOnTurkish()
-        {
-            LeanLocalization.SetCurrentLanguageAll(TurkishLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:Turkish");
+            _englishLanguage.onClick.RemoveListener(Localization.SwitchOnEnglish);
+            _russianLanguage.onClick.RemoveListener(Localization.SwitchOnRussian);
+            _turkeyLanguage.onClick.RemoveListener(Localization.SwitchOnTurkish);
         }
 
         private void OnButtonSettingClick()

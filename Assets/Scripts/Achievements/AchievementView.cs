@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using TMPro;
+using Lean.Localization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,34 +9,31 @@ namespace Achievements
     public class AchievementView : MonoBehaviour
     {
         [SerializeField] private AchievementElement _template;
+        [SerializeField] private VerticalLayoutGroup _container;
+        [SerializeField] private LeanToken _countAchievedText;
+        [SerializeField] private LeanToken _sumAchievementText;
         
-        private List<Achievement> _achievements;
+        private int _countAchievement;
+        
+        public int CountAchievement { get; private set; }
+
+        private void OnEnable()
+        {
+            _countAchievedText.Value = SetCountAchieved(CountAchievement).ToString();
+        }
 
         public void Initialize(List<Achievement> achievements)
         {
-            _achievements = achievements;
+            foreach (Achievement achievement in achievements)
+            {
+               AchievementElement viewElement = Instantiate(_template, _container.transform);
+               viewElement.Render(achievement);
+                _countAchievement += achievement.GetCountAchievement();
+            }
+
+            _sumAchievementText.Value = _countAchievement.ToString();
         }
-    }
 
-    public class AchievementElement : MonoBehaviour
-    {
-        [SerializeField] private Image _icon;
-        [SerializeField] private TextMeshProUGUI _name;
-        [SerializeField] private TextMeshProUGUI _description;
-        [SerializeField] private Slider _progress;
-        [SerializeField] private TextMeshProUGUI _textValue;
-
-        [Header("Stars")] 
-        [SerializeField] private Transform _parentStars;
-        [SerializeField] private Image _templateStar;
-        [SerializeField] private Sprite _emptyStar;
-        [SerializeField] private Sprite _fillStar;
-
-        private Achievement _achievement;
-
-        public void Render(Achievement achievement)
-        {
-            
-        }
+        public int SetCountAchieved(int receivedAchievement) => CountAchievement = receivedAchievement;
     }
 }

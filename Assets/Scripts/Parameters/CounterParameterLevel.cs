@@ -1,5 +1,6 @@
 using System;
 using Achievements;
+using UnityEngine;
 
 namespace Parameters
 {
@@ -23,8 +24,11 @@ namespace Parameters
         public void Load(int countSpeedLevel, int countSizeLevel, int countIncomeLevel)
         {
             _countSpeedLevel = countSpeedLevel;
+            _achievementSystem.PassValue(AchievementType.Speed, _countSpeedLevel);
             _countSizeLevel = countSizeLevel;
+            _achievementSystem.PassValue(AchievementType.Size, _countSizeLevel);
             _countIncomeLevel = countIncomeLevel;
+            _achievementSystem.PassValue(AchievementType.Income, _countIncomeLevel);
         }
         
         public void CheckAchievement(ParameterType type, int increase = 1)
