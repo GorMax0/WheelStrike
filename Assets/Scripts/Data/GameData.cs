@@ -23,9 +23,9 @@ namespace Data
         public float ElapsedTime;
         public bool IsMuted;
         public bool IsNormalQuality = true;
-        public int SpeedAchievement;
-        public int SizeAchievement;
-        public int IncomeAchievement;
+        public int SpeedAchievement = 1;
+        public int SizeAchievement = 1;
+        public int IncomeAchievement = 1;
         public int CountLaunch;
         public int SpentMoney;
         public int CountAchievement;

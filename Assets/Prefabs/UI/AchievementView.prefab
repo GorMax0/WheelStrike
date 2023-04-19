@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _template: {fileID: 5353069888468719684, guid: 8165f2fdb42c42c479626b69eea34966, type: 3}
-  _container: {fileID: 4180108662290588360}
+  _scrollRect: {fileID: 4180108661609944753}
   _countAchievedText: {fileID: 0}
   _sumAchievementText: {fileID: 0}
 --- !u!1 &4180108661596758131

@@ -28,11 +28,11 @@ namespace Achievements
             _view.Initialize(_achievements.Values.ToList());
         }
 
-        public void LoadCountAchievement(int count)
-        {
-            CountAchievement = count;
-            PassValue(AchievementType.Achieved, CountAchievement);
-        }
+        // public void LoadCountAchievement(int count)
+        // {
+        //     CountAchievement = count;
+        //     
+        // }
 
         public void LoadAchievementValue(List<AchievementData> loadDatasets)
         {

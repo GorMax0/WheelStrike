@@ -24,10 +24,10 @@ namespace Achievements
         public LeanPhrase Description => _description;
         public int CountAchieved => _countAchieved;
 
-        
+
         public AchievementType Type => _type;
-        
-        
+
+
         public void Initialize(AchievementType type)
         {
             _type = type;
@@ -55,11 +55,13 @@ namespace Achievements
                     }
                 }
 
-                if (achievementData.IsAchieved)
-                {
+                if (achievementData.IsAchieved) 
                     _countAchieved++;
-                }
             }
+            
+            Achieved?.Invoke(_countAchieved);
+            if (_type == AchievementType.Achieved)
+                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
         public AchievementData[] SaveValue()
@@ -72,6 +74,8 @@ namespace Achievements
                 //Debug.Log($"Type {saveDatasets[i].Type}; Value {saveDatasets[i].Value}; IsAchieved {saveDatasets[i].IsAchieved}; IsDisplayed {saveDatasets[i].IsDisplayed}");
             }
 
+            if (_type == AchievementType.Achieved)
+                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
             return saveDatasets;
         }
 
@@ -101,11 +105,13 @@ namespace Achievements
                     break;
 
                 _countAchieved++;
-                
-                Achieved?.Invoke(_countAchieved);
             }
-
+            
+            Achieved?.Invoke(_countAchieved);
             CountValue = currentValue;
+            
+            if (_type == AchievementType.Achieved)
+                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
         public void CheckAchievementValueForTop(int currentValue)

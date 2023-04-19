@@ -263,10 +263,11 @@ namespace Data
         private void LoadAchievements()
         {
             _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
-            _achievementSystem.LoadCountAchievement(_gameData.CountAchievement);
+         //   _achievementSystem.LoadCountAchievement(_gameData.CountAchievement);
             LoadCounterParameterLevels();
             _achievementSystem.PassValue(AchievementType.Boost, _boost.Level);
-            _achievementSystem.PassValue(AchievementType.Playtime, _gameData.Playtime);
+            int playtimePerMinutes = _gameData.Playtime / 60;
+            _achievementSystem.PassValue(AchievementType.Playtime, playtimePerMinutes);
             _achievementSystem.PassValue(AchievementType.Highscore, _gameData.Highscore);
             _achievementSystem.PassValue(AchievementType.Obstacle, _gameData.CountCollisionObstacles);
             _achievementSystem.PassValue(AchievementType.Travel, _gameData.DistanceTraveledOverAllTime);
@@ -274,6 +275,7 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
+            _achievementSystem.PassValue(AchievementType.Achieved, _gameData.CountAchievement);
         }
         
 

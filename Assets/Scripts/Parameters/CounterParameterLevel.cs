@@ -1,14 +1,13 @@
 using System;
 using Achievements;
-using UnityEngine;
 
 namespace Parameters
 {
     public class CounterParameterLevel
     {
-        private int _countSpeedLevel;
-        private int _countSizeLevel;
-        private int _countIncomeLevel;
+        private int _countSpeedLevel = 1;
+        private int _countSizeLevel = 1;
+        private int _countIncomeLevel = 1;
 
         public int CountSpeedLevel => _countSpeedLevel;
         public int CountSizeLevel => _countSizeLevel;

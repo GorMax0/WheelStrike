@@ -77,7 +77,8 @@ namespace Leaderboards
 
         public void SetScore(int score)
         {
-#if YANDEX_GAMES   
+#if !UNITY_WEBGL || UNITY_EDITOR
+#elif YANDEX_GAMES   
             if (PlayerAccount.IsAuthorized == false)
                 return;
 

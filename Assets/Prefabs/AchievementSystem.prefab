@@ -1542,23 +1542,23 @@ MonoBehaviour:
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 600
+          _value: 10
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 1800
+          _value: 30
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 3600
+          _value: 60
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 6600
+          _value: 110
         - Type: 0
           IsAchieved: 0
           IsDisplayed: 0
-          _value: 10800
+          _value: 180
     - Key: 5
       Value:
         _icon: {fileID: 21300000, guid: 8210f0150a6794343ba4b20195e3c6b4, type: 3}

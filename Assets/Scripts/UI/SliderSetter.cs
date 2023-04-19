@@ -19,15 +19,20 @@ namespace UI
 
         private CurveAnimation _curveAnimation;
 
-        private void Awake()
+        private void OnDisable()
         {
             enabled = false;
-            _curveAnimation = new CurveAnimation(_curve, _animationSpeed, () => enabled = false);
         }
 
         private void Update()
         {
             _slider.SetValueWithoutNotify(_curveAnimation.Update(Time.deltaTime));
+        }
+
+        public void Initialize()
+        {
+            enabled = false;
+            _curveAnimation = new CurveAnimation(_curve, _animationSpeed, () => enabled = false);
         }
 
         public void SetNormalizedValue(float value)

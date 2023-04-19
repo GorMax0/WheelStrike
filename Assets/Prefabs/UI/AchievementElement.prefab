@@ -144,7 +144,7 @@ MonoBehaviour:
   _icon: {fileID: 6238499295782548937}
   _name: {fileID: 6861727797256088212}
   _description: {fileID: 1654922615939447202}
-  _progress: {fileID: 4248279850904512522}
+  _progressSlider: {fileID: 4248279850904512522}
   _textValue: {fileID: 2383242583960920415}
   _parentStars: {fileID: 6079368465224709034}
   _templateStar: {fileID: 6722275236481215077, guid: e8ed80d9459e6b14a887b1bddedb48b4, type: 3}
@@ -839,7 +839,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.7
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
