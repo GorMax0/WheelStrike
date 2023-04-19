@@ -40,44 +40,44 @@ namespace Achievements
 
         public void LoadValue(List<AchievementData> loadAchievementDatasets)
         {
-            //   Debug.Log("Load.");
-            foreach (AchievementData achievementData in _achievementDatasets)
-            {
-                foreach (AchievementData loadAchievementData in loadAchievementDatasets)
-                {
-                    //Debug.Log($"Type {loadAchievementData.Type}; Value {loadAchievementData.Value}; IsAchieved {loadAchievementData.IsAchieved}; IsDisplayed {loadAchievementData.IsDisplayed}");
-                    if (achievementData.Value == loadAchievementData.Value)
-                    {
-                        achievementData.IsAchieved = loadAchievementData.IsAchieved;
-                        achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
-                        loadAchievementDatasets.Remove(loadAchievementData);
-                        break;
-                    }
-                }
-
-                if (achievementData.IsAchieved) 
-                    _countAchieved++;
-            }
-            
-            Achieved?.Invoke(_countAchieved);
-            if (_type == AchievementType.Achieved)
-                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
+          //   //   Debug.Log("Load.");
+          //   foreach (AchievementData achievementData in _achievementDatasets)
+          //   {
+          //       foreach (AchievementData loadAchievementData in loadAchievementDatasets)
+          //       {
+          //           //Debug.Log($"Type {loadAchievementData.Type}; Value {loadAchievementData.Value}; IsAchieved {loadAchievementData.IsAchieved}; IsDisplayed {loadAchievementData.IsDisplayed}");
+          //           if (achievementData.Value == loadAchievementData.Value)
+          //           {
+          //               achievementData.IsAchieved = loadAchievementData.IsAchieved;
+          //               achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
+          //               loadAchievementDatasets.Remove(loadAchievementData);
+          //               break;
+          //           }
+          //       }
+          //
+          //       if (achievementData.IsAchieved) 
+          //           _countAchieved++;
+          //   }
+          //   
+          // //  Achieved?.Invoke(_countAchieved);
+          //   if (_type == AchievementType.Achieved)
+          //       Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
-        public AchievementData[] SaveValue()
-        {
-            AchievementData[] saveDatasets = new AchievementData[_achievementDatasets.Length];
-            //   Debug.Log("Save.");
-            for (int i = 0; i < _achievementDatasets.Length; i++)
-            {
-                saveDatasets[i] = _achievementDatasets[i];
-                //Debug.Log($"Type {saveDatasets[i].Type}; Value {saveDatasets[i].Value}; IsAchieved {saveDatasets[i].IsAchieved}; IsDisplayed {saveDatasets[i].IsDisplayed}");
-            }
-
-            if (_type == AchievementType.Achieved)
-                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
-            return saveDatasets;
-        }
+        // public AchievementData[] SaveValue()
+        // {
+        //     AchievementData[] saveDatasets = new AchievementData[_achievementDatasets.Length];
+        //     //   Debug.Log("Save.");
+        //     for (int i = 0; i < _achievementDatasets.Length; i++)
+        //     {
+        //         saveDatasets[i] = _achievementDatasets[i];
+        //         //Debug.Log($"Type {saveDatasets[i].Type}; Value {saveDatasets[i].Value}; IsAchieved {saveDatasets[i].IsAchieved}; IsDisplayed {saveDatasets[i].IsDisplayed}");
+        //     }
+        //
+        //     if (_type == AchievementType.Achieved)
+        //         Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
+        //     return saveDatasets;
+        // }
 
         public int GetCountAchievement() => _achievementDatasets.Length;
 
@@ -98,16 +98,16 @@ namespace Achievements
         {
             foreach (AchievementData achievementData in _achievementDatasets)
             {
-                if (achievementData.IsAchieved)
-                    continue;
+                // if (achievementData.IsAchieved)
+                //     continue;
 
                 if (achievementData.HasAchieved(currentValue) == false)
                     break;
 
                 _countAchieved++;
+                Achieved?.Invoke(_countAchieved);
             }
-            
-            Achieved?.Invoke(_countAchieved);
+
             CountValue = currentValue;
             
             if (_type == AchievementType.Achieved)
@@ -118,8 +118,8 @@ namespace Achievements
         {
             foreach (AchievementData achievementData in _achievementDatasets)
             {
-                if (achievementData.IsAchieved)
-                    continue;
+                // if (achievementData.IsAchieved)
+                //     continue;
 
                 Debug.Log($"{_type} - Current value {currentValue}");
 

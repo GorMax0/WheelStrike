@@ -101,7 +101,6 @@ namespace Data
             _saveSystem.Save(_gameData);
         }
 
-       
 
         public async void Load()
         {
@@ -203,10 +202,10 @@ namespace Data
 
             _gameData.TutorialComplete = _tutorialManager.TutorialComplete;
         }
-        
+
         private void SaveAchievements()
         {
-            _gameData.AchievementsData = _achievementSystem.Save();
+          //  _gameData.AchievementsData = _achievementSystem.Save();
             _gameData.CountAchievement = _achievementSystem.CountAchievement;
         }
 
@@ -262,8 +261,7 @@ namespace Data
 
         private void LoadAchievements()
         {
-            _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
-         //   _achievementSystem.LoadCountAchievement(_gameData.CountAchievement);
+            //   _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
             LoadCounterParameterLevels();
             _achievementSystem.PassValue(AchievementType.Boost, _boost.Level);
             int playtimePerMinutes = _gameData.Playtime / 60;
@@ -271,13 +269,13 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Highscore, _gameData.Highscore);
             _achievementSystem.PassValue(AchievementType.Obstacle, _gameData.CountCollisionObstacles);
             _achievementSystem.PassValue(AchievementType.Travel, _gameData.DistanceTraveledOverAllTime);
-            _achievementSystem.PassValue(AchievementType.Daily, _gameData.CountDailyEntry-1);
+            _achievementSystem.PassValue(AchievementType.Daily, _gameData.CountDailyEntry - 1);
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
             _achievementSystem.PassValue(AchievementType.Achieved, _gameData.CountAchievement);
         }
-        
+
 
         private void Subscribe()
         {

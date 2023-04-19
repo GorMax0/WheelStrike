@@ -11,14 +11,13 @@ namespace Achievements
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private LeanToken _countAchievedText;
         [SerializeField] private LeanToken _sumAchievementText;
-
-        private int _countAchievement;
-
-        public int CountAchievement { get; private set; }
+        
+        private int _countAchieved;
+        private int _sumAchievement;
 
         private void OnEnable()
         {
-            _countAchievedText.Value = SetCountAchieved(CountAchievement).ToString();
+            _countAchievedText.Value = SetCountAchieved(_countAchieved).ToString();
             _scrollRect.content.anchoredPosition = Vector2.zero;
         }
 
@@ -28,12 +27,12 @@ namespace Achievements
             {
                 AchievementElement viewElement = Instantiate(_template, _scrollRect.content);
                 viewElement.Render(achievement);
-                _countAchievement += achievement.GetCountAchievement();
+                _sumAchievement += achievement.GetCountAchievement();
             }
 
-            _sumAchievementText.Value = _countAchievement.ToString();
+            _sumAchievementText.Value = _sumAchievement.ToString();
         }
 
-        public int SetCountAchieved(int receivedAchievement) => CountAchievement = receivedAchievement;
+        public int SetCountAchieved(int receivedAchievement) => _countAchieved = receivedAchievement;
     }
 }
