@@ -63,6 +63,7 @@ namespace Core
         [SerializeField] private AuthorizationView _authorizationView;
         [SerializeField] private DailyView _dailyView;
         [SerializeField] private AchievementView _achievementView;
+        [SerializeField] private AchievementQueue _achievementQueue;
 
         [Header("Other")] [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
@@ -114,7 +115,7 @@ namespace Core
             _soundController.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService, _achievementSystem);
             _dailyReward = new DailyReward(_gameStateService, _wallet, _parameters[ParameterType.Income], _achievementSystem);
-            _achievementSystem.Initialize(_achievementView);
+            _achievementSystem.Initialize(_achievementQueue, _achievementView);
         }
 
         private void InitializeCore()

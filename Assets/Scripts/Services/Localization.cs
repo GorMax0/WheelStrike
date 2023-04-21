@@ -49,7 +49,6 @@ namespace Services
                     break;
             }
 
-
             GameAnalytics.NewDesignEvent($"Language:{_language}");
 #endif
         }

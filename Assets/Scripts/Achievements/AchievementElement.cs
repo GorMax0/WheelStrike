@@ -1,4 +1,3 @@
-using Lean.Localization;
 using Services;
 using TMPro;
 using UI;
@@ -12,25 +11,26 @@ namespace Achievements
         [SerializeField] private Image _icon;
         [SerializeField] private TextMeshProUGUI _name;
         [SerializeField] private TextMeshProUGUI _description;
-        [SerializeField] private SliderSetter _progressSlider;
-        [SerializeField] private TextMeshProUGUI _textValue;
+        [SerializeField] protected SliderSetter ProgressSlider;
+        [SerializeField] protected TextMeshProUGUI TextValue;
 
         [Header("Stars")] [SerializeField] private Transform _parentStars;
         [SerializeField] private Image _templateStar;
         [SerializeField] private Sprite _fillStar;
+        
+        protected int NextValue;
 
         private Achievement _achievement;
         private string _currentName;
         private string _currentDescription;
-        private int _nextValue;
-        private Image[] _stars;
         private int _countStars;
-
-        private void OnEnable()
+        private Image[] _stars;
+        
+        protected virtual void OnEnable()
         {
             GetValues();
             FillStars();
-            _progressSlider.SetNormalizedValue(GetNormalizedBarValue());
+            ProgressSlider.SetNormalizedValue(GetNormalizedBarValue());
         }
 
         private void OnDestroy()
@@ -44,9 +44,18 @@ namespace Achievements
             _achievement = achievement;
             OnLocalizationChanged(Localization.CurrentLanguage);
             _icon.sprite = _achievement.Icon;
-            _progressSlider.Initialize();
+            ProgressSlider.Initialize();
             InstantiateStars();
         }
+
+        protected virtual void GetValues()
+        {
+            NextValue = _achievement.GetNextValueForAchievement();
+            TextValue.SetText($"{_achievement.CountValue}/{NextValue}");
+        }
+    
+        protected virtual float GetNormalizedBarValue() =>
+            _achievement.CountValue / (float)NextValue;
 
         private void InstantiateStars()
         {
@@ -60,7 +69,7 @@ namespace Achievements
             }
         }
 
-        private void FillStars()
+        protected void FillStars()
         {
             for (int i = 0; i < _countStars; i++)
             {
@@ -71,15 +80,6 @@ namespace Achievements
             }
         }
 
-        private void GetValues()
-        {
-            _nextValue = _achievement.GetNextValueForAchievement();
-            _textValue.SetText($"{_achievement.CountValue}/{_nextValue}");
-        }
-    
-        private float GetNormalizedBarValue() =>
-            _achievement.CountValue / (float)_nextValue;
-        
         private void OnLocalizationChanged(string language)
         {
             switch (language)

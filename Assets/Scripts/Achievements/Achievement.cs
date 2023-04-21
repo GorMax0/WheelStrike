@@ -17,6 +17,7 @@ namespace Achievements
         private int _countAchieved;
 
         public event Action<int> ValueAchievedChanged;
+        public event Action<Achievement, int, int, Action> AchievementChanged;
 
         public int CountValue { get; private set; }
         public Sprite Icon => _icon;
@@ -104,36 +105,26 @@ namespace Achievements
 
                 _countAchieved++;
                 ValueAchievedChanged?.Invoke(_countAchieved);
+                
+                if(achievementData.IsDisplayed)
+                    break;
+                
+                AchievementChanged?.Invoke(this, currentValue, achievementData.Value, HasDisplayed);
             }
 
             if (CountValue < currentValue)
                 CountValue = currentValue;
-
-
-            // if (_type == AchievementType.Achieved)
-            //     Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
-        public void CheckAchievementValueForTop(int currentValue)
+        private void HasDisplayed()
         {
             foreach (AchievementData achievementData in _achievementDatasets)
             {
-                // if (achievementData.IsAchieved)
-                //     continue;
-
-                Debug.Log($"{_type} - Current value {currentValue}");
-
-                if (achievementData.HasAchievedForTop(currentValue) == false)
-                    return;
-
-                _countAchieved++;
-
-                Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
-                ValueAchievedChanged?.Invoke(_countAchieved);
+                if (achievementData.IsAchieved && achievementData.IsDisplayed == false)
+                    achievementData.IsDisplayed = true;
             }
-
-            if (CountValue > currentValue)
-                CountValue = currentValue;
+            
+            Debug.Log($"{_type} - IsDisplayed");
         }
     }
 }

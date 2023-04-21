@@ -194,7 +194,7 @@ namespace Leaderboards
                     break;
             }
             
-            _achievementSystem.PassValueForTop(currentPlayer.Rank);
+            _achievementSystem.PassValue(AchievementType.Top, currentPlayer.Rank);
         }
     }
 }

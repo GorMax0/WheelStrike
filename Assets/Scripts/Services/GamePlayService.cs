@@ -15,7 +15,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 110f;
+        private readonly float IntervalBetweenAds = 123f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;

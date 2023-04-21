@@ -49,6 +49,8 @@ namespace UI
 
         private void ApplyValue(float value)
         {
+            _slider.value = 0;
+            
             if (_isAnimated)
             {
                 StartAnimation(value);
@@ -60,8 +62,9 @@ namespace UI
 
         private void StartAnimation(float endValue)
         {
-            _curveAnimation.StartAnimation(_slider.value, endValue);
             enabled = true;
+            _curveAnimation.StartAnimation(_slider.value, endValue);
+            
         }
 
         private void Validate(float value)

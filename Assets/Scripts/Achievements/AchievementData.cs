@@ -6,16 +6,14 @@ namespace Achievements
     [Serializable]
     public class AchievementData
     {
-        [HideInInspector] public AchievementType Type;
         [HideInInspector] public bool IsDisplayed;
 
         [SerializeField] private int _value;
 
+        public AchievementType Type{ get; set; }
         public bool IsAchieved { get; private set; }
         public int Value => _value;
 
-        public bool HasAchieved(int currentValue) => IsAchieved = _value <= currentValue;
-        
-        public bool HasAchievedForTop(int currentValue) => IsAchieved = _value >= currentValue;
+        public bool HasAchieved(int currentValue) => IsAchieved = Type == AchievementType.Top ? _value >= currentValue : _value <= currentValue;
     }
 }

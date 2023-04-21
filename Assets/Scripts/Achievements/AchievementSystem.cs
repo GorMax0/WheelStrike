@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
@@ -11,21 +10,33 @@ namespace Achievements
         [SerializedDictionary(nameof(AchievementType), nameof(Achievement))] [SerializeField]
         private SerializedDictionary<AchievementType, Achievement> _achievements;
 
+        private AchievementQueue _queue;
         private AchievementView _view;
 
         public int CountAchievement { get; private set; }
 
-        public void Initialize(AchievementView view)
+        private void OnDestroy()
         {
-            Debug.Log("AchievementSystem Initialize");
+            foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
+            {
+                achievement.Value.ValueAchievedChanged -= SumValueAchievedChanged;
+            }
+        }
+
+        public void Initialize(AchievementQueue queue, AchievementView view)
+        {
+            _view = view;
+            _queue = queue;
+            
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 achievement.Value.Initialize(achievement.Key);
                 achievement.Value.ValueAchievedChanged += SumValueAchievedChanged;
             }
 
-            _view = view;
-            _view.Initialize(_achievements.Values.ToList());
+            List<Achievement> achievements = _achievements.Values.ToList();
+            _view.Initialize(achievements);
+            _queue.Initialize(achievements);
         }
 
         public void LoadAchievementValue(List<AchievementData> loadDatasets)
@@ -74,12 +85,9 @@ namespace Achievements
         // }
 
         public void PassValue(AchievementType type, int value) => _achievements[type].CheckAchievementValue(value);
-
-        public void PassValueForTop(int value) => _achievements[AchievementType.Top].CheckAchievementValueForTop(value);
-
+        
         private void SumValueAchievedChanged(int value)
         {
-            Debug.Log($"AchievementSystemSumAchieved");
             CountAchievement -= --value;
             CountAchievement += ++value;
             _view.SetCountAchieved(CountAchievement);
