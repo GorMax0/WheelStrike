@@ -28,7 +28,6 @@ namespace Data
         public int IncomeAchievement = 1;
         public int CountLaunch;
         public int SpentMoney;
-        public int CountAchievement;
         public int TutorialComplete;
         public List<AchievementData> AchievementsData;
 

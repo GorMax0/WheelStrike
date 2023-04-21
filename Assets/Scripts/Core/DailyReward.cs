@@ -53,8 +53,8 @@ namespace Core
                 return;
             
             EnrollReward();
+            _achievementSystem.PassValue(AchievementType.Daily, _countDayEntry);
             _countDayEntry++;
-            _achievementSystem.PassValue(AchievementType.Daily, _countDayEntry-1);
             _gameStateService.ChangeState(GameState.Save);
         }
 
@@ -67,7 +67,7 @@ namespace Core
             _dateTimeService.SaveDate();
 
             if (_countDayEntry >= Week)
-                _countDayEntry = 1;
+                _countDayEntry = Week;
         }
     }
 }

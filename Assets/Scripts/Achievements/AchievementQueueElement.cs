@@ -1,12 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Achievements
 {
     public class AchievementQueueElement : AchievementElement
     {
         [SerializeField] private Animator _animator;
-
+        [SerializeField] private Image _starFill;
+        
         private readonly int StartAnimationTrigger = Animator.StringToHash("StartAnimation");
+        private readonly int StarScale = Animator.StringToHash("Scale");
 
         private int _currentValue;
         private bool _isSliderStarted;
@@ -15,7 +18,7 @@ namespace Achievements
 
         protected override void OnEnable()
         {
-            FillStars();
+            
         }
 
         public void StartAnimation()
@@ -29,6 +32,19 @@ namespace Achievements
             _currentValue = currentValue;
             NextValue = endValue;
             GetValues();
+            FillStars();
+        }
+        
+        protected override void FillStars()
+        {
+            for (int i = 0; i < CountStars; i++)
+            {
+                if (i < Achievement.CountAchieved)
+                {
+                  var star =  Instantiate(_starFill, Stars[i].transform);
+                  star.GetComponent<Animator>().SetTrigger(StarScale);
+                }
+            }
         }
 
         protected override void GetValues() =>

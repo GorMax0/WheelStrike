@@ -19,13 +19,13 @@ namespace Achievements
         [SerializeField] private Sprite _fillStar;
         
         protected int NextValue;
-
-        private Achievement _achievement;
+        protected Achievement Achievement;
+        protected int CountStars;
+        protected Image[] Stars;
+        
         private string _currentName;
         private string _currentDescription;
-        private int _countStars;
-        private Image[] _stars;
-        
+
         protected virtual void OnEnable()
         {
             GetValues();
@@ -41,41 +41,41 @@ namespace Achievements
         public void Render(Achievement achievement)
         {
             Localization.LanguageChanged  += OnLocalizationChanged;
-            _achievement = achievement;
+            Achievement = achievement;
             OnLocalizationChanged(Localization.CurrentLanguage);
-            _icon.sprite = _achievement.Icon;
+            _icon.sprite = Achievement.Icon;
             ProgressSlider.Initialize();
             InstantiateStars();
         }
 
         protected virtual void GetValues()
         {
-            NextValue = _achievement.GetNextValueForAchievement();
-            TextValue.SetText($"{_achievement.CountValue}/{NextValue}");
+            NextValue = Achievement.GetNextValueForAchievement();
+            TextValue.SetText($"{Achievement.CountValue}/{NextValue}");
         }
     
-        protected virtual float GetNormalizedBarValue() =>
-            _achievement.CountValue / (float)NextValue;
+        protected virtual float GetNormalizedBarValue() => 
+            Achievement.CountValue / (float)NextValue;
 
         private void InstantiateStars()
         {
-            _countStars = _achievement.GetCountAchievement();
-           _stars = new Image[_countStars];
+            CountStars = Achievement.GetCountAchievement();
+           Stars = new Image[CountStars];
 
-            for (int i = 0; i < _countStars; i++)
+            for (int i = 0; i < CountStars; i++)
             {
                 var star = Instantiate(_templateStar, _parentStars);
-                _stars[i] = star;
+                Stars[i] = star;
             }
         }
 
-        protected void FillStars()
+        protected virtual void FillStars()
         {
-            for (int i = 0; i < _countStars; i++)
+            for (int i = 0; i < CountStars; i++)
             {
-                if (i < _achievement.CountAchieved)
+                if (i < Achievement.CountAchieved)
                 {
-                    _stars[i].sprite = _fillStar;
+                    Stars[i].sprite = _fillStar;
                 }
             }
         }
@@ -101,8 +101,8 @@ namespace Achievements
  
         private void SetLanguage(int index)
         {
-            _currentName = _achievement.Name.Entries[index].Text;
-            _currentDescription = _achievement.Description.Entries[index].Text;
+            _currentName = Achievement.Name.Entries[index].Text;
+            _currentDescription = Achievement.Description.Entries[index].Text;
         }
     }
 }

@@ -6,11 +6,11 @@ namespace Achievements
     [Serializable]
     public class AchievementData
     {
+        [HideInInspector] public AchievementType Type;
         [HideInInspector] public bool IsDisplayed;
 
         [SerializeField] private int _value;
 
-        public AchievementType Type{ get; set; }
         public bool IsAchieved { get; private set; }
         public int Value => _value;
 

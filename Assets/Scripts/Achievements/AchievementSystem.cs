@@ -41,48 +41,43 @@ namespace Achievements
 
         public void LoadAchievementValue(List<AchievementData> loadDatasets)
         {
-            // Debug.Log("AchievementSystem LoadAchievementValue");
-            // if (loadDatasets == null)
-            //     return;
-            //
-            // foreach (AchievementType achievementKey in _achievements.Keys)
-            // {
-            //     List<AchievementData> achievementDatasets = new List<AchievementData>();
-            //
-            //     foreach (AchievementData loadData in loadDatasets)
-            //     {
-            //         if (achievementKey == loadData.Type)
-            //         {
-            //             achievementDatasets.Add(loadData);
-            //
-            //             if (loadData.IsAchieved)
-            //             {
-            //                CountAchievement++;
-            //                Debug.Log($"{achievementKey}: {CountAchievement}");
-            //             }
-            //         }
-            //     }
-            //
-            //     
-            //     _achievements[achievementKey].LoadValue(achievementDatasets);
-            // }
+            Debug.Log("AchievementSystem LoadAchievementValue");
+            if (loadDatasets == null)
+                return;
+            
+            foreach (AchievementType achievementKey in _achievements.Keys)
+            {
+                List<AchievementData> achievementDatasets = new List<AchievementData>();
+            
+                foreach (AchievementData loadData in loadDatasets)
+                {
+                    if (achievementKey == loadData.Type)
+                    {
+                        achievementDatasets.Add(loadData);
+                      //  Debug.Log($"AchievementSystem Load Type {loadData.Type}; Value {loadData.Value}; IsAchieved {loadData.IsAchieved}; IsDisplayed {loadData.IsDisplayed}");
+                    }
+                }
+
+                
+                _achievements[achievementKey].LoadValue(achievementDatasets);
+            }
         }
 
-        // public List<AchievementData> Save()
-        // {
-        //     Debug.Log("AchievementSystem Save");
-        //     List<AchievementData> saveDatasets = new List<AchievementData>();
-        //
-        //     foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
-        //     {
-        //         foreach (AchievementData result in achievement.Value.SaveValue())
-        //         {
-        //             saveDatasets.Add(result);
-        //         }
-        //     }
-        //
-        //     return saveDatasets;
-        // }
+        public List<AchievementData> Save()
+        {
+            Debug.Log("AchievementSystem Save");
+            List<AchievementData> saveDatasets = new List<AchievementData>();
+        
+            foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
+            {
+                foreach (AchievementData result in achievement.Value.SaveValue())
+                {
+                    saveDatasets.Add(result);
+                }
+            }
+
+            return saveDatasets;
+        }
 
         public void PassValue(AchievementType type, int value) => _achievements[type].CheckAchievementValue(value);
         

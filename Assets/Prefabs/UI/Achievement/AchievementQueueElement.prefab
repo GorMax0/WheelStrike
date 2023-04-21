@@ -125,6 +125,7 @@ MonoBehaviour:
   _templateStar: {fileID: 6722275236481215077, guid: e8ed80d9459e6b14a887b1bddedb48b4, type: 3}
   _fillStar: {fileID: 21300000, guid: fd9dff11a5d3d5f4f9e9cf17ce71aa73, type: 3}
   _animator: {fileID: 8228934274638993293}
+  _starFill: {fileID: 6722275236481215077, guid: 99b006e16f76c04489ef93d7b4c06b4b, type: 3}
 --- !u!1 &1514675282143668847
 GameObject:
   m_ObjectHideFlags: 0

@@ -203,11 +203,7 @@ namespace Data
             _gameData.TutorialComplete = _tutorialManager.TutorialComplete;
         }
 
-        private void SaveAchievements()
-        {
-          //  _gameData.AchievementsData = _achievementSystem.Save();
-            _gameData.CountAchievement = _achievementSystem.CountAchievement;
-        }
+        private void SaveAchievements() => _gameData.AchievementsData = _achievementSystem.Save();
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
@@ -261,7 +257,7 @@ namespace Data
 
         private void LoadAchievements()
         {
-            //   _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
+            _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
             LoadCounterParameterLevels();
             _achievementSystem.PassValue(AchievementType.Boost, _boost.Level);
             int playtimePerMinutes = _gameData.Playtime / 60;
@@ -273,6 +269,8 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
+            Debug.LogWarning("Test Top achievement! Remove!");
+            _achievementSystem.PassValue(AchievementType.Top, 11); 
         }
 
 
