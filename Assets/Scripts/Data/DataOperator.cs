@@ -16,7 +16,7 @@ namespace Data
 {
     public class DataOperator : IDisposable
     {
-        private const string DataVersion = "v0.4.12";
+        private const string DataVersion = "v0.4.13";
         private const int DefaultScene = 1;
 
         private GameData _gameData;
@@ -273,7 +273,6 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
-            _achievementSystem.PassValue(AchievementType.Achieved, _gameData.CountAchievement);
         }
 
 

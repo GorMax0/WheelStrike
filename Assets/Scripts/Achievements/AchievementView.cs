@@ -17,7 +17,7 @@ namespace Achievements
 
         private void OnEnable()
         {
-            _countAchievedText.Value = SetCountAchieved(_countAchieved).ToString();
+            _countAchievedText.Value = _countAchieved.ToString();
             _scrollRect.content.anchoredPosition = Vector2.zero;
         }
 
@@ -33,6 +33,6 @@ namespace Achievements
             _sumAchievementText.Value = _sumAchievement.ToString();
         }
 
-        public int SetCountAchieved(int receivedAchievement) => _countAchieved = receivedAchievement;
+        public void SetCountAchieved(int receivedAchievement) => _countAchieved = receivedAchievement;
     }
 }

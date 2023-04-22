@@ -47,13 +47,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Her tekerlek f\u0131rlatma \xF6nemlidir"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041A\u0430\u0436\u0434\u044B\u0439 \u0431\u0440\u043E\u0441\u043E\u043A
+      \u043A\u043E\u043B\u0435\u0441\u0430 \u043D\u0430 \u0441\u0447\u0435\u0442\u0443"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Every wheel launch counts
     Object: {fileID: 0}
 --- !u!1 &1108982931100277221
 GameObject:
@@ -267,13 +268,13 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Liderlerde yer al\u0131n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0417\u0430\u0439\u043C\u0438 \u043C\u0435\u0441\u0442\u043E \u0432 \u0442\u043E\u043F\u0435"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Take the top spot
     Object: {fileID: 0}
 --- !u!1 &2488415864090996031
 GameObject:
@@ -322,13 +323,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Oyunda zaman ge\xE7irin"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u0440\u043E\u0432\u0435\u0434\u0438 \u0432 \u0438\u0433\u0440\u0435
+      \u0432\u0440\u0435\u043C\u044F \u0432 \u043C\u0438\u043D\u0443\u0442\u0430\u0445"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Spend time in minutes in the game
     Object: {fileID: 0}
 --- !u!1 &2561034138877103214
 GameObject:
@@ -432,13 +434,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: Daha fazla engel vurun
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0421\u0431\u0438\u0432\u0430\u0439 \u043F\u043E \u0431\u043E\u043B\u044C\u0448\u0435
+      \u043F\u0440\u0435\u043F\u044F\u0442\u0441\u0442\u0432\u0438\u0439"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Shoot down more obstacles
     Object: {fileID: 0}
 --- !u!1 &3330850053130056321
 GameObject:
@@ -602,13 +605,13 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Ula\u015F\u0131lamayanlara ula\u015Ft\u0131k"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0414\u043E\u0441\u0442\u0438\u0433\u043D\u0438 \u043D\u0435\u0434\u043E\u0441\u0442\u0438\u0436\u0438\u043C\u043E\u0433\u043E"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Achieved the unattainable
     Object: {fileID: 0}
 --- !u!1 &3486027090441953866
 GameObject:
@@ -657,13 +660,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Boyutu b\xFCy\xFCt\xFCn, daha g\xFC\xE7l\xFC olun"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0423\u0432\u0435\u043B\u0438\u0447\u044C \u0440\u0430\u0437\u043C\u0435\u0440,
+      \u0441\u0442\u0430\u043D\u044C \u043C\u043E\u0449\u043D\u0435\u0435"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Increase the size, become stronger
     Object: {fileID: 0}
 --- !u!1 &3501138036761300684
 GameObject:
@@ -822,13 +826,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Daha fazla u\xE7mak i\xE7in h\u0131z\u0131 art\u0131r\u0131n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u0440\u043E\u043A\u0430\u0447\u0430\u0439 \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C,
+      \u0443\u043B\u0435\u0442\u0430\u0439 \u0434\u0430\u043B\u044C\u0448\u0435"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Upgrade the speed to fly further
     Object: {fileID: 0}
 --- !u!1 &4483362451258713107
 GameObject:
@@ -932,13 +937,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Sonu\xE7 art\u0131\u015F\u0131n\u0131 art\u0131r\u0131n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u043E\u0432\u044B\u0441\u044C \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442
+      \u0441\u0434\u0435\u043B\u0430\u0432 \u0431\u0443\u0441\u0442"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Increase the result by boost
     Object: {fileID: 0}
 --- !u!1 &4932949720396121859
 GameObject:
@@ -987,13 +993,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "En uzun mesafeyi u\xE7ur"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u0440\u043E\u043B\u0435\u0442\u0438 \u0440\u0430\u0441\u0441\u0442\u043E\u044F\u043D\u0438\u0435
+      \u0431\u043E\u043B\u044C\u0448\u0435 \u0432\u0441\u0435\u0445"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Fly the longest distance
     Object: {fileID: 0}
 --- !u!1 &5443858023020912975
 GameObject:
@@ -1042,13 +1049,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Gelirinizi art\u0131r\u0131n, daha \xE7ok kazan\u0131n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u043E\u0432\u044B\u0441\u044C \u0434\u043E\u0445\u043E\u0434, \u0437\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0439
+      \u0431\u043E\u043B\u044C\u0448\u0435"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Increase your income, earn more
     Object: {fileID: 0}
 --- !u!1 &5691988560927635061
 GameObject:
@@ -1097,13 +1105,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "\xC7ok fazla bozuk para kullan\u0131n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u041F\u043E\u0442\u0440\u0430\u0442\u044C \u043C\u043D\u043E\u0433\u043E
+      \u043C\u043E\u043D\u0435\u0442"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Spend a lot of coins
     Object: {fileID: 0}
 --- !u!1 &5795175678953298990
 GameObject:
@@ -1374,13 +1383,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: En iyi sonucunuzu belirleyin
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438 \u0441\u0432\u043E\u0439
+      \u043B\u0443\u0447\u0448\u0438\u0439 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Set your best score
     Object: {fileID: 0}
 --- !u!1 &7462570393784217180
 GameObject:
@@ -1436,23 +1446,18 @@ MonoBehaviour:
         _description: {fileID: 704333321531915798}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 1
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 2
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 3
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 4
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 5
     - Key: 1
@@ -1462,25 +1467,20 @@ MonoBehaviour:
         _description: {fileID: 4650415328279482882}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 15
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 50
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 150
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 340
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 600
+          _value: 610
     - Key: 2
       Value:
         _icon: {fileID: 21300000, guid: 7f90ae9a0d4090f4dad68dd9100d004b, type: 3}
@@ -1488,25 +1488,20 @@ MonoBehaviour:
         _description: {fileID: 2159120884134752455}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 15
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 50
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 150
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 340
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 600
+          _value: 610
     - Key: 3
       Value:
         _icon: {fileID: 21300000, guid: 36a9c2680074c2249b25d20e08c08307, type: 3}
@@ -1514,25 +1509,20 @@ MonoBehaviour:
         _description: {fileID: 7750755438516173605}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 15
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 50
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 150
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 340
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 600
+          _value: 610
     - Key: 4
       Value:
         _icon: {fileID: 21300000, guid: 64db157f6bea8544590a0b6fa8b8d0b8, type: 3}
@@ -1540,23 +1530,18 @@ MonoBehaviour:
         _description: {fileID: 7231842098306846067}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 10
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 30
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 60
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 110
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 180
     - Key: 5
@@ -1566,23 +1551,18 @@ MonoBehaviour:
         _description: {fileID: 5419155966319649277}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 1
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 2
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 3
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 5
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 7
     - Key: 6
@@ -1592,23 +1572,18 @@ MonoBehaviour:
         _description: {fileID: 3471556254798816227}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 400
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 1200
+          _value: 1800
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 4500
+          _value: 5900
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 11000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 23500
     - Key: 7
@@ -1618,25 +1593,20 @@ MonoBehaviour:
         _description: {fileID: 1672804630782313485}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 40
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 100
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 230
+          _value: 330
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 410
+          _value: 510
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 900
+          _value: 1230
     - Key: 8
       Value:
         _icon: {fileID: 21300000, guid: 0ae6986fd5901db47b873cc80ac038b2, type: 3}
@@ -1644,25 +1614,20 @@ MonoBehaviour:
         _description: {fileID: 939769006178786963}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 5000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 50000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 300000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 705000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 1140000
+          _value: 1240000
     - Key: 9
       Value:
         _icon: {fileID: 21300000, guid: 17d06e993465fea4bb27accf46dff526, type: 3}
@@ -1670,25 +1635,20 @@ MonoBehaviour:
         _description: {fileID: 4468788090306610663}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 15
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 35
+          _value: 45
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 65
+          _value: 95
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 115
+          _value: 235
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 200
+          _value: 610
     - Key: 10
       Value:
         _icon: {fileID: 21300000, guid: d6bd6f8466ac7d04296c9e6a6f0fed65, type: 3}
@@ -1696,25 +1656,20 @@ MonoBehaviour:
         _description: {fileID: 7717642624641175067}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 50000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 250000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 700000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 1200000
+          _value: 1700000
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
-          _value: 3500000
+          _value: 5100000
     - Key: 11
       Value:
         _icon: {fileID: 21300000, guid: 17886d4213f00b44f86969e330c9f5c7, type: 3}
@@ -1722,59 +1677,27 @@ MonoBehaviour:
         _description: {fileID: 8739562128234708786}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 10
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 5
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 3
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 2
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 1
     - Key: 12
-      Value:
-        _icon: {fileID: 21300000, guid: 51be8206e1c0aad46b45e5d644505c20, type: 3}
-        _name: {fileID: 730606078522631728}
-        _description: {fileID: 4606914088524228472}
-        _achievementDatasets:
-        - Type: 0
-          IsAchieved: 0
-          IsDisplayed: 0
-          _value: 5
-        - Type: 0
-          IsAchieved: 0
-          IsDisplayed: 0
-          _value: 9
-        - Type: 0
-          IsAchieved: 0
-          IsDisplayed: 0
-          _value: 17
-        - Type: 0
-          IsAchieved: 0
-          IsDisplayed: 0
-          _value: 29
-        - Type: 0
-          IsAchieved: 0
-          IsDisplayed: 0
-          _value: 45
-    - Key: 13
       Value:
         _icon: {fileID: 21300000, guid: 45aaadb1628779f4a9fef42d884fbcd9, type: 3}
         _name: {fileID: 1121492083124851881}
         _description: {fileID: 2973163928177020714}
         _achievementDatasets:
         - Type: 0
-          IsAchieved: 0
           IsDisplayed: 0
           _value: 1
 --- !u!1 &8094988829082633986
@@ -1824,13 +1747,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "E\u011Fitim %100 tamamland\u0131"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0422\u0440\u0435\u043D\u0435\u0440\u043E\u0432\u043A\u0430 \u043F\u0440\u043E\u0439\u0434\u0435\u043D\u0430
+      \u043D\u0430 100%"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: The training was completed by 100%
     Object: {fileID: 0}
 --- !u!1 &8545330659675632595
 GameObject:
@@ -1879,13 +1803,14 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: Turkish
-    Text: 
+    Text: "Her g\xFCn oyuna geri d\xF6n"
     Object: {fileID: 0}
   - Language: Russian
-    Text: 
+    Text: "\u0412\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0439\u0441\u044F \u0432
+      \u0438\u0433\u0440\u0443 \u043A\u0430\u0436\u0434\u044B\u0439 \u0434\u043D\u0435\u0439"
     Object: {fileID: 0}
   - Language: English
-    Text: 
+    Text: Come back to the game every day
     Object: {fileID: 0}
 --- !u!1 &9133947278684623156
 GameObject:

@@ -16,15 +16,13 @@ namespace Achievements
         private AchievementType _type;
         private int _countAchieved;
 
-        public event Action<int> Achieved;
+        public event Action<int> ValueAchievedChanged;
 
         public int CountValue { get; private set; }
         public Sprite Icon => _icon;
         public LeanPhrase Name => _name;
         public LeanPhrase Description => _description;
         public int CountAchieved => _countAchieved;
-
-
         public AchievementType Type => _type;
 
 
@@ -40,28 +38,28 @@ namespace Achievements
 
         public void LoadValue(List<AchievementData> loadAchievementDatasets)
         {
-          //   //   Debug.Log("Load.");
-          //   foreach (AchievementData achievementData in _achievementDatasets)
-          //   {
-          //       foreach (AchievementData loadAchievementData in loadAchievementDatasets)
-          //       {
-          //           //Debug.Log($"Type {loadAchievementData.Type}; Value {loadAchievementData.Value}; IsAchieved {loadAchievementData.IsAchieved}; IsDisplayed {loadAchievementData.IsDisplayed}");
-          //           if (achievementData.Value == loadAchievementData.Value)
-          //           {
-          //               achievementData.IsAchieved = loadAchievementData.IsAchieved;
-          //               achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
-          //               loadAchievementDatasets.Remove(loadAchievementData);
-          //               break;
-          //           }
-          //       }
-          //
-          //       if (achievementData.IsAchieved) 
-          //           _countAchieved++;
-          //   }
-          //   
-          // //  Achieved?.Invoke(_countAchieved);
-          //   if (_type == AchievementType.Achieved)
-          //       Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
+            //   //   Debug.Log("Load.");
+            //   foreach (AchievementData achievementData in _achievementDatasets)
+            //   {
+            //       foreach (AchievementData loadAchievementData in loadAchievementDatasets)
+            //       {
+            //           //Debug.Log($"Type {loadAchievementData.Type}; Value {loadAchievementData.Value}; IsAchieved {loadAchievementData.IsAchieved}; IsDisplayed {loadAchievementData.IsDisplayed}");
+            //           if (achievementData.Value == loadAchievementData.Value)
+            //           {
+            //               achievementData.IsAchieved = loadAchievementData.IsAchieved;
+            //               achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
+            //               loadAchievementDatasets.Remove(loadAchievementData);
+            //               break;
+            //           }
+            //       }
+            //
+            //       if (achievementData.IsAchieved) 
+            //           _countAchieved++;
+            //   }
+            //   
+            // //  Achieved?.Invoke(_countAchieved);
+            //   if (_type == AchievementType.Achieved)
+            //       Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
         // public AchievementData[] SaveValue()
@@ -98,20 +96,22 @@ namespace Achievements
         {
             foreach (AchievementData achievementData in _achievementDatasets)
             {
-                // if (achievementData.IsAchieved)
-                //     continue;
+                if (achievementData.IsAchieved)
+                    continue;
 
                 if (achievementData.HasAchieved(currentValue) == false)
                     break;
 
                 _countAchieved++;
-                Achieved?.Invoke(_countAchieved);
+                ValueAchievedChanged?.Invoke(_countAchieved);
             }
 
-            CountValue = currentValue;
-            
-            if (_type == AchievementType.Achieved)
-                Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
+            if (CountValue < currentValue)
+                CountValue = currentValue;
+
+
+            // if (_type == AchievementType.Achieved)
+            //     Debug.Log($"{Type} - CountAchieved {CountAchieved} - CountValue {CountValue}");
         }
 
         public void CheckAchievementValueForTop(int currentValue)
@@ -129,10 +129,11 @@ namespace Achievements
                 _countAchieved++;
 
                 Debug.Log($"{_type} - Achieved. Count achieved {_countAchieved}");
-                Achieved?.Invoke(_countAchieved);
+                ValueAchievedChanged?.Invoke(_countAchieved);
             }
 
-            CountValue = currentValue;
+            if (CountValue > currentValue)
+                CountValue = currentValue;
         }
     }
 }

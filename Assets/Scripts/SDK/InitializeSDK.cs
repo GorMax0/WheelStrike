@@ -7,7 +7,7 @@ using Agava.YandexGames;
 
 public class InitializeSDK : MonoBehaviour
 {
-    private const string DataVersion = "v0.4.12";
+    private const string DataVersion = "v0.4.13";
     private const string DataKey = "GameData";
 
     private int _levelIndex;

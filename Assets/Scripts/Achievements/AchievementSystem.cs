@@ -14,14 +14,14 @@ namespace Achievements
         private AchievementView _view;
 
         public int CountAchievement { get; private set; }
-        
+
         public void Initialize(AchievementView view)
         {
             Debug.Log("AchievementSystem Initialize");
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 achievement.Value.Initialize(achievement.Key);
-                achievement.Value.Achieved += SumAchieved;
+                achievement.Value.ValueAchievedChanged += SumValueAchievedChanged;
             }
 
             _view = view;
@@ -77,12 +77,11 @@ namespace Achievements
 
         public void PassValueForTop(int value) => _achievements[AchievementType.Top].CheckAchievementValueForTop(value);
 
-        private void SumAchieved(int value)
+        private void SumValueAchievedChanged(int value)
         {
-            Debug.Log("AchievementSystem SumAchieved");
+            Debug.Log($"AchievementSystemSumAchieved");
             CountAchievement -= --value;
             CountAchievement += ++value;
-            // PassValue(AchievementType.Achieved, CountAchievement);
             _view.SetCountAchieved(CountAchievement);
         }
     }

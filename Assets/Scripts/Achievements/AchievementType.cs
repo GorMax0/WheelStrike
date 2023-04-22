@@ -14,7 +14,6 @@ namespace Achievements
         Launch,
         SpentMoney,
         Top,
-        Achieved,
         Training
     }
 }
