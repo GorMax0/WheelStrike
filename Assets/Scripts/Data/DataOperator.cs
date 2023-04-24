@@ -31,15 +31,14 @@ namespace Data
         private readonly Dictionary<ParameterType, Parameter> _parameters;
         private readonly CounterParameterLevel _counterParameterLevel;
         private readonly BoostParameter _boost;
-        private readonly YandexAuthorization _yandexAuthorization;
+     //   private readonly YandexAuthorization _yandexAuthorization;
         private readonly DailyReward _dailyReward;
         private readonly AchievementSystem _achievementSystem;
         private readonly TutorialManager _tutorialManager;
 
         public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
             QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, CounterParameterLevel counterParameterLevel,
-            BoostParameter boost,
-            YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem, TutorialManager tutorialManager)
+            BoostParameter boost, DailyReward dailyReward, AchievementSystem achievementSystem, TutorialManager tutorialManager)
         {
             _gamePlayService = gamePlayService;
             _gameStateService = gameStateService;
@@ -52,16 +51,12 @@ namespace Data
             _parameters = parameters;
             _counterParameterLevel = counterParameterLevel;
             _boost = boost;
-            _yandexAuthorization = yandexAuthorization;
+       //     _yandexAuthorization = yandexAuthorization;
             _dailyReward = dailyReward;
             _achievementSystem = achievementSystem;
             _tutorialManager = tutorialManager;
-#if UNITY_EDITOR
+            
             _saveSystem = new PlayerPrefsSystem(DataVersion);
-#elif YANDEX_GAMES
-            _saveSystem =
- PlayerAccount.IsAuthorized == true ? new YandexSaveSystem(DataVersion) : new PlayerPrefsSystem(DataVersion);
-#endif
             Subscribe();
         }
 
@@ -282,7 +277,7 @@ namespace Data
             _levelScore.HighscoreChanged += SaveHighscore;
             _soundController.MutedChanged += SaveMuted;
             _qualityToggle.QualityChanged += SaveSelectedQuality;
-            _yandexAuthorization.Authorized += OnAuthorized;
+            //_yandexAuthorization.Authorized += OnAuthorized;
 
             foreach (var parameter in _parameters)
             {
@@ -308,7 +303,7 @@ namespace Data
             _levelScore.HighscoreChanged -= SaveHighscore;
             _soundController.MutedChanged -= SaveMuted;
             _qualityToggle.QualityChanged -= SaveSelectedQuality;
-            _yandexAuthorization.Authorized -= OnAuthorized;
+            //_yandexAuthorization.Authorized -= OnAuthorized;
 
             foreach (var parameter in _parameters)
             {

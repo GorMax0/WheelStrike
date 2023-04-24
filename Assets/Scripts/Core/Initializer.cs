@@ -40,7 +40,7 @@ namespace Core
 
         private GameStateService _gameStateService;
         private GamePlayService _gamePlayService;
-        private YandexAuthorization _yandexAuthorization;
+       // private YandexAuthorization _yandexAuthorization;
         private DailyReward _dailyReward;
 
         [Header("Core")] [SerializeField] private CarBuilder _carBuilder;
@@ -60,7 +60,7 @@ namespace Core
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private ParametersShop _parametersShop;
         [SerializeField] private BoostView _boostView;
-        [SerializeField] private AuthorizationView _authorizationView;
+      //  [SerializeField] private AuthorizationView _authorizationView;
         [SerializeField] private DailyView _dailyView;
         [SerializeField] private AchievementView _achievementView;
         [SerializeField] private AchievementQueue _achievementQueue;
@@ -108,8 +108,8 @@ namespace Core
             _gameStateService.GameStateChanged += OnGameStateChanged;
             _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler,
                 _parameters[ParameterType.Income], _boost);
-            _yandexAuthorization = new YandexAuthorization();
-            _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService,
+           //_yandexAuthorization = new YandexAuthorization();
+            _gamePlayService = new GamePlayService(_gameStateService, _coroutineService,
                 _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
             _adsRewards.Initialize(_gameStateService, _wallet);
             _soundController.Initialize(_gameStateService);
@@ -144,14 +144,14 @@ namespace Core
             _parametersShop.Initialize(_parameters, _wallet, _counterParameterLevel);
             _boostView.Initialize(_gameStateService, _boost, _parameters);
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
-            _authorizationView.Initialize(_yandexAuthorization);
+            //_authorizationView.Initialize();
             _dailyView.Initialize(_gameStateService, _dailyReward);
         }
 
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _tutorial);
+                _wallet, _parameters, _counterParameterLevel, _boost, _dailyReward, _achievementSystem, _tutorial);
             _dataOperator.Load();
         }
 

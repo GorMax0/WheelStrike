@@ -69,11 +69,7 @@ namespace Core.Wheel
             _gameStateService = gameStateService;
             _size = size;
 
-#if !UNITY_WEBGL || UNITY_EDITOR
             _isDesktopDevice = true;
-#elif YANDEX_GAMES
-            _isDesktopDevice = Agava.YandexGames.Device.Type == DeviceType.Desktop;
-#endif
 
             _isInitialized = true;
             OnEnable();

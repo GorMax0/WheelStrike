@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using Data;
 using GameAnalyticsSDK;
 using Agava.YandexGames;
+using DungeonGames.VKGames;
 
 public class InitializeSDK : MonoBehaviour
 {
@@ -17,30 +18,19 @@ public class InitializeSDK : MonoBehaviour
     {
         StartCoroutine(Init());
     }
-
+    
     private IEnumerator Init()
     {
         GameAnalytics.Initialize();
 #if !UNITY_WEBGL || UNITY_EDITOR
         yield return new WaitForSeconds(0.1f);
         yield return GetLevelIndex();
-#elif YANDEX_GAMES
-        while (YandexGamesSdk.IsInitialized == false)
-        {
-            yield return YandexGamesSdk.Initialize();
-        }
-
-        Services.Localization.SetLanguage();
-        yield return GetLevelIndex();
-  //      InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
-
-       //  YandexGamesSdk.CallbackLogging = true;
+#elif VK_GAMES
+        yield return VKGamesSdk.Initialize();
 #endif
-
         LoadScene();
     }
-
-
+    
     private IEnumerator GetLevelIndex()
     {
         LoadGameData();
@@ -55,26 +45,11 @@ public class InitializeSDK : MonoBehaviour
 
         _levelIndex = _gameData.IndexScene;
 
-#if !UNITY_WEBGL || UNITY_EDITOR
         Save();
-#elif YANDEX_GAMES
-        SaveDataYandex();
-#endif
     }
 
     private void LoadGameData()
     {
-#if !UNITY_WEBGL || UNITY_EDITOR
-#elif YANDEX_GAMES
-        if (PlayerAccount.IsAuthorized == true)
-        {
-            PlayerAccount.GetPlayerData((string data) =>
-            {
-                _gameData = ConvertJsonToGameData(data);
-            });
-        }
-        else
-#endif
         if (PlayerPrefs.HasKey(DataKey))
         {
             string data = PlayerPrefs.GetString(DataKey);
@@ -100,16 +75,4 @@ public class InitializeSDK : MonoBehaviour
     }
 
     private void LoadScene() => SceneManager.LoadScene(_levelIndex);
-
-    private void OnOpenCallback() => GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:InitializeSDK");
-
-    private void OnCloseCallback(bool _) => LoadScene();
-
-    private void OnErrorCallback(string error)
-    {
-        Debug.LogWarning(error);
-        LoadScene();
-    }
-
-    private void OnOfflineCallback() => LoadScene();
 }
