@@ -10,6 +10,7 @@ using Services.GameStates;
 using Services.Level;
 using GameAnalyticsSDK;
 using Authorization;
+using DungeonGames.VKGames;
 
 namespace Services
 {
@@ -21,7 +22,7 @@ namespace Services
         private readonly float TimeScaleDefault = 1f;
 
         private GameStateService _gameStateService;
-        private YandexAuthorization _yandexAuthorization;
+      //  private YandexAuthorization _yandexAuthorization;
         private CoroutineService _coroutineService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
@@ -38,12 +39,12 @@ namespace Services
         private float _delayHoldTime;
         private bool _isRunningAds;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization,
+        public GamePlayService(GameStateService gameStateService,
             CoroutineService coroutineService, InputHandler inputHandler,
             InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
-            _yandexAuthorization = yandexAuthorization;
+        //    _yandexAuthorization = yandexAuthorization;
             _coroutineService = coroutineService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
@@ -57,7 +58,7 @@ namespace Services
             _restartLevel = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _yandexAuthorization.Authorized += OnAuthorized;
+            //_yandexAuthorization.Authorized += OnAuthorized;
 
             if (_inputHandler != null)
             {
@@ -179,8 +180,9 @@ namespace Services
                 return false;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
-#elif YANDEX_GAMES
-            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
+#elif VK_GAMES
+            PauseOn();
+           Interstitial.Show(OnCloseCallback, OnErrorCallback);
 #endif
             ElapsedTime = 0;
 
@@ -213,16 +215,15 @@ namespace Services
             ChangePause(_isRunningAds);
         }
 
-        private void OnCloseCallback(bool isClose)
+        private void OnCloseCallback()
         {
             _isRunningAds = false;
             ChangePause(_isRunningAds);
             CanceledAds?.Invoke();
         }
 
-        private void OnErrorCallback(string error)
+        private void OnErrorCallback()
         {
-            Debug.LogWarning(error);
             OnOfflineCallback();
             CanceledAds?.Invoke();
         }

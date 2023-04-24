@@ -7,6 +7,7 @@ using Core.Wheel;
 using UI.Views;
 using Services;
 using Boost;
+using DungeonGames.VKGames;
 
 namespace Parameters
 {
@@ -106,8 +107,9 @@ namespace Parameters
             _refreshView();
             _boostView.HasMaximumLevelParameter(_parameterForRewardAds);
 
-#elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
+#elif VK_GAMES
+            PauseOn();
+           VideoAd.Show(OnRewardedCallback,OnErrorCallback);
 #endif
         }
 
@@ -145,13 +147,12 @@ namespace Parameters
 
         private void OnCloseCallback() => PauseOff();
 
-        private void OnErrorCallback(string message)
+        private void OnErrorCallback()
         {
             if (_hasOpenVideoAd == true)
                 return;
 
             _adsRewards.ShowErrorAds();
-            Debug.LogWarning(message);
             PauseOff();
         }
     }

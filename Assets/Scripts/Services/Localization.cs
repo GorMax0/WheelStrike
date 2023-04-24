@@ -1,5 +1,5 @@
 using System;
-using Agava.YandexGames;
+//using Agava.YandexGames;
 using GameAnalyticsSDK;
 using Lean.Localization;
 
@@ -25,32 +25,9 @@ namespace Services
         }
 
         public static void SetLanguage()
-        {
-#if !UNITY_WEBGL || UNITY_EDITOR
-            
-#elif YANDEX_GAMES
-            switch (GetLanguageEnvironment())
-            {
-                case "en":
-                    _currentLanguage = EnglishLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-                case "tr":
-                    _currentLanguage = TurkishLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-                case "ru":
-                    _currentLanguage = RussianLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-                default:
-                    _currentLanguage = EnglishLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-            }
-
-            GameAnalytics.NewDesignEvent($"Language:{_language}");
-#endif
+        { 
+            _currentLanguage = RussianLanguage;
+            LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
         }
 
         public static void SwitchOnEnglish()
@@ -77,6 +54,6 @@ namespace Services
             LanguageChanged?.Invoke(_currentLanguage);
         }
 
-        private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language) ? _language = YandexGamesSdk.Environment.i18n.lang : _language;
+        //private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language) ? _language = YandexGamesSdk.Environment.i18n.lang : _language;
     }
 }

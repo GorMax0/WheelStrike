@@ -95,6 +95,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 17d06e993465fea4bb27accf46dff526, type: 3}
   - {fileID: 21300000, guid: 30454ad971305a348b9b9bd5e57989dc, type: 3}
   - {fileID: 21300000, guid: 58d7282a31a5eee4a98a7f8cec48f21a, type: 3}
+  - {fileID: 21300000, guid: 75a0d13a0ba3df247a691c5383b9d195, type: 3}
   - {fileID: 21300000, guid: 36a1724adc3d8a441b3fc9b138c93cb8, type: 3}
   - {fileID: 21300000, guid: de07458ab1e323b41b136a0abc8d109f, type: 3}
   - {fileID: 21300000, guid: 7f90ae9a0d4090f4dad68dd9100d004b, type: 3}
@@ -141,6 +142,7 @@ SpriteAtlas:
   - Icon_Launch_Wheel
   - NextLocationButton
   - Icon_mountains
+  - InvaitFriends
   - language_small_eng
   - Icon_Boost
   - Icon_Size

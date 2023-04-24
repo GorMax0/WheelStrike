@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Data;
 using GameAnalyticsSDK;
-using Agava.YandexGames;
 using DungeonGames.VKGames;
 
 public class InitializeSDK : MonoBehaviour
@@ -59,12 +58,6 @@ public class InitializeSDK : MonoBehaviour
 
     private GameData ConvertJsonToGameData(string data) =>
         string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
-
-    private void SaveDataYandex()
-    {
-        string data = JsonUtility.ToJson(_gameData);
-        PlayerAccount.SetPlayerData(data);
-    }
 
     private void Save()
     {

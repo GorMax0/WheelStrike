@@ -7,6 +7,7 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using AdsReward;
+using DungeonGames.VKGames;
 using Leaderboards;
 using GameAnalyticsSDK;
 
@@ -101,7 +102,8 @@ namespace UI.Views.Finish
 #if !UNITY_WEBGL || UNITY_EDITOR
             Debug.Log("OnAdsButtonClicked");
 #elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
+            PauseOn();
+            VideoAd.Show(OnRewardedCallback,OnErrorCallback);
 #endif
         }
 
@@ -206,13 +208,12 @@ namespace UI.Views.Finish
 
         private void OnCloseCallback() => PauseOff();
 
-        private void OnErrorCallback(string message)
+        private void OnErrorCallback()
         {
             if (_hasOpenVideoAd == true)
                 return;
 
             _adsRewards.ShowErrorAds();
-            Debug.LogWarning(message);
             PauseOff();
         }
     }
