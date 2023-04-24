@@ -997,11 +997,11 @@ MonoBehaviour:
     Text: "En uzun mesafeyi u\xE7ur"
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041F\u0440\u043E\u043B\u0435\u0442\u0438 \u0440\u0430\u0441\u0441\u0442\u043E\u044F\u043D\u0438\u0435
-      \u0431\u043E\u043B\u044C\u0448\u0435 \u0432\u0441\u0435\u0445"
+    Text: "\u041F\u0440\u043E\u043B\u0435\u0442\u0438 \u0431\u043E\u043B\u044C\u043D\u0438\u0435
+      \u0440\u0430\u0441\u0441\u0442\u043E\u044F\u043D\u0438\u044F"
     Object: {fileID: 0}
   - Language: English
-    Text: Fly the longest distance
+    Text: Fly the distance the most
     Object: {fileID: 0}
 --- !u!1 &5443858023020912975
 GameObject:
@@ -1601,13 +1601,13 @@ MonoBehaviour:
           _value: 100
         - Type: 0
           IsDisplayed: 0
-          _value: 330
+          _value: 360
         - Type: 0
           IsDisplayed: 0
-          _value: 510
+          _value: 910
         - Type: 0
           IsDisplayed: 0
-          _value: 1230
+          _value: 2230
     - Key: 8
       Value:
         _icon: {fileID: 21300000, guid: 0ae6986fd5901db47b873cc80ac038b2, type: 3}
@@ -1643,13 +1643,13 @@ MonoBehaviour:
           _value: 45
         - Type: 0
           IsDisplayed: 0
-          _value: 95
+          _value: 105
         - Type: 0
           IsDisplayed: 0
-          _value: 235
+          _value: 270
         - Type: 0
           IsDisplayed: 0
-          _value: 610
+          _value: 810
     - Key: 10
       Value:
         _icon: {fileID: 21300000, guid: d6bd6f8466ac7d04296c9e6a6f0fed65, type: 3}
@@ -1664,13 +1664,13 @@ MonoBehaviour:
           _value: 250000
         - Type: 0
           IsDisplayed: 0
-          _value: 700000
-        - Type: 0
-          IsDisplayed: 0
           _value: 1700000
         - Type: 0
           IsDisplayed: 0
-          _value: 5100000
+          _value: 4050000
+        - Type: 0
+          IsDisplayed: 0
+          _value: 9100000
     - Key: 11
       Value:
         _icon: {fileID: 21300000, guid: 17886d4213f00b44f86969e330c9f5c7, type: 3}

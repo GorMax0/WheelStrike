@@ -16,7 +16,7 @@ namespace Data
 {
     public class DataOperator : IDisposable
     {
-        private const string DataVersion = "v0.4.13";
+        private const string DataVersion = "v0.4.01";
         private const int DefaultScene = 1;
 
         private GameData _gameData;
@@ -108,7 +108,6 @@ namespace Data
                 throw new NullReferenceException($"{GetType()}: Load(): _saveSystem is null");
 
             _gameData = await _saveSystem.Load();
-            Debug.Log($"async void Load() {_gameData.DataVersion} complete");
 
             if (_gameData == null)
                 throw new NullReferenceException($"{GetType()}: Load(): _gameData is null");
@@ -203,7 +202,11 @@ namespace Data
             _gameData.TutorialComplete = _tutorialManager.TutorialComplete;
         }
 
-        private void SaveAchievements() => _gameData.AchievementsData = _achievementSystem.Save();
+        private void SaveAchievements()
+        {
+            _gameData.AchievementsData = _achievementSystem.Save();
+            _gameData.TopAchievement = _achievementSystem.TopRank;
+        }
 
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
@@ -259,7 +262,7 @@ namespace Data
         {
             _achievementSystem.LoadAchievementValue(_gameData.AchievementsData);
             LoadCounterParameterLevels();
-            _achievementSystem.PassValue(AchievementType.Boost, _boost.Level);
+            _achievementSystem.PassValue(AchievementType.Boost, _gameData.BoostLevel);
             int playtimePerMinutes = _gameData.Playtime / 60;
             _achievementSystem.PassValue(AchievementType.Playtime, playtimePerMinutes);
             _achievementSystem.PassValue(AchievementType.Highscore, _gameData.Highscore);
@@ -269,8 +272,7 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
-            Debug.LogWarning("Test Top achievement! Remove!");
-            _achievementSystem.PassValue(AchievementType.Top, 11); 
+            _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
         }
 
 

@@ -29,7 +29,7 @@ namespace Achievements
 
         public void SetNextValue(int currentValue, int endValue)
         {
-            _currentValue = currentValue;
+            _currentValue = currentValue < endValue ? currentValue : endValue;
             NextValue = endValue;
             GetValues();
             FillStars();
@@ -47,8 +47,16 @@ namespace Achievements
             }
         }
 
-        protected override void GetValues() =>
+        protected override void GetValues()
+        {
+            if (Achievement.Type == AchievementType.Top)
+            {
+                TextValue.SetText($"{NextValue}/{NextValue}");
+                return;
+            }
+            
             TextValue.SetText($"{_currentValue}/{NextValue}");
+        }
 
         protected override float GetNormalizedBarValue() =>
             NextValue / (float)NextValue;

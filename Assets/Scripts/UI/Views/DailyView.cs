@@ -36,8 +36,6 @@ namespace UI.Views
             if (state != GameState.Initializing)
                 return;
 
-            Debug.Log($"Invoke Daily!");
-            
             if (_dailyReward.HasNextDaily())
                 Show();
         }
@@ -50,7 +48,6 @@ namespace UI.Views
 
         private void Show()
         {
-            Debug.Log($"Show Daily!");
             gameObject.SetActive(true);
             _amountRewardText.text = _dailyReward.Reward.ToString();
         }

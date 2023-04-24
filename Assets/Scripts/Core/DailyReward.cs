@@ -37,8 +37,6 @@ namespace Core
         {
             _dateTimeService.LoadDate(loadDate);
             _countDayEntry = countDayEntry;
-            Debug.Log($"Count day entry {_countDayEntry}, Load data {loadDate}, Previous data: {_dateTimeService.PreviousDate}");
-            Debug.Log($"Reward daily {Reward}");
         }
 
         public DateTime GetSavedDate() => _dateTimeService.PreviousDate;
@@ -53,7 +51,7 @@ namespace Core
                 return;
             
             EnrollReward();
-            _achievementSystem.PassValue(AchievementType.Daily, _countDayEntry);
+            _achievementSystem. PassValue(AchievementType.Daily, _countDayEntry);
             _countDayEntry++;
             _gameStateService.ChangeState(GameState.Save);
         }

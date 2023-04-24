@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameAnalyticsSDK;
 using Lean.Localization;
 using UnityEngine;
 
@@ -39,12 +40,10 @@ namespace Achievements
 
         public void LoadValue(List<AchievementData> loadAchievementDatasets)
         {
-            Debug.Log("Achievement Load");
             foreach (AchievementData achievementData in _achievementDatasets)
             {
                 foreach (AchievementData loadAchievementData in loadAchievementDatasets)
                 {
-                    //   Debug.Log($"Load Type {loadAchievementData.Type}; Value {loadAchievementData.Value}; IsAchieved {loadAchievementData.IsAchieved}; IsDisplayed {loadAchievementData.IsDisplayed}");
                     if (achievementData.Value == loadAchievementData.Value)
                     {
                         achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
@@ -58,11 +57,10 @@ namespace Achievements
         public AchievementData[] SaveValue()
         {
             AchievementData[] saveDatasets = new AchievementData[_achievementDatasets.Length];
-            //   Debug.Log("Save.");
+
             for (int i = 0; i < _achievementDatasets.Length; i++)
             {
                 saveDatasets[i] = _achievementDatasets[i];
-                //  Debug.Log($"Save Type {saveDatasets[i].Type}; Value {saveDatasets[i].Value}; IsAchieved {saveDatasets[i].IsAchieved}; IsDisplayed {saveDatasets[i].IsDisplayed}");
             }
 
             return saveDatasets;
@@ -76,9 +74,7 @@ namespace Achievements
             {
                 if (achievementData.IsAchieved)
                     continue;
-
-                //   Debug.Log($"CheckAchievementValue Type {Type}; CountValue {CountValue}; currentValue {achievementData.Value};");
-
+                
                 return achievementData.Value;
             }
 
@@ -104,14 +100,13 @@ namespace Achievements
                 AchievementChanged?.Invoke(this, currentValue, achievementData.Value, HasDisplayed);
             }
 
-            if (_achievementDatasets[^1].Value <= currentValue)
+            if (_achievementDatasets[^1].Value <= currentValue && _type != AchievementType.Top)
             {
                 CountValue = _achievementDatasets[^1].Value;
                 return;
             }
 
-            if (CountValue < currentValue)
-                CountValue = currentValue;
+            CountValue = currentValue;
         }
 
         private void HasDisplayed()
@@ -119,10 +114,10 @@ namespace Achievements
             foreach (AchievementData achievementData in _achievementDatasets)
             {
                 if (achievementData.IsAchieved && achievementData.IsDisplayed == false)
+                {
                     achievementData.IsDisplayed = true;
+                }
             }
-
-            Debug.Log($"{_type} - IsDisplayed");
         }
     }
 }

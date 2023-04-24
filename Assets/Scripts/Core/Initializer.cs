@@ -153,7 +153,6 @@ namespace Core
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
                 _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _tutorial);
             _dataOperator.Load();
-            Debug.Log($"_dataOperator.Load();");
         }
 
         private void InitializeTutorial()

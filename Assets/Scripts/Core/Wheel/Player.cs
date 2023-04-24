@@ -5,6 +5,7 @@ using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
 using Boost;
+using Services;
 using DeviceType = Agava.YandexGames.DeviceType;
 
 namespace Core.Wheel
@@ -18,6 +19,7 @@ namespace Core.Wheel
         private const int MassCorrector = 10000;
         private const float MaximumSize = 2.5f;
 
+        [SerializeField] private QualityToggle _qualityToggle;
         [SerializeField] private GameObject _blur;
 
         private Rigidbody _rigidbody;
@@ -27,6 +29,7 @@ namespace Core.Wheel
         private Parameter _size;
         private GameStateService _gameStateService;
         private bool _isDesktopDevice;
+        private bool _isNormalFPS;
         private bool _isInitialized = false;
 
         public ITravelable Travelable => _movement;
@@ -45,6 +48,7 @@ namespace Core.Wheel
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
+            _qualityToggle.QualityChanged += OnQualityChanged;
         }
 
         private void OnDisable()
@@ -100,7 +104,19 @@ namespace Core.Wheel
         {
             SetSize();
             SetMass();
-            _blur.SetActive(_isDesktopDevice);
+            
+            if (_isDesktopDevice == true)
+            {
+                _blur.SetActive(_isNormalFPS);
+                return;
+            }
+
+            _blur.SetActive(false);
+        }
+        
+        private void OnQualityChanged(bool isNormalFPS)
+        {
+            _isNormalFPS = isNormalFPS;
         }
     }
 }

@@ -38,7 +38,6 @@ namespace Data
 
         private void CheckVersion()
         {
-            Debug.Log($"void CheckVersion() {_gameData.DataVersion}");
             if (_gameData.DataVersion == _dataVersion)
                 return;
 

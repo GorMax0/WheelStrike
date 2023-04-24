@@ -54,8 +54,15 @@ namespace Achievements
             TextValue.SetText($"{Achievement.CountValue}/{NextValue}");
         }
     
-        protected virtual float GetNormalizedBarValue() => 
-            Achievement.CountValue / (float)NextValue;
+        protected virtual float GetNormalizedBarValue()
+        {
+            if (Achievement.CountValue > NextValue)
+            {
+                return  NextValue / (float)Achievement.CountValue;
+            }
+            
+            return Achievement.CountValue / (float)NextValue;
+        }
 
         private void InstantiateStars()
         {

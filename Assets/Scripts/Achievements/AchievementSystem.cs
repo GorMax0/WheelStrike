@@ -12,8 +12,9 @@ namespace Achievements
 
         private AchievementQueue _queue;
         private AchievementView _view;
+        private int _countAchievement;
 
-        public int CountAchievement { get; private set; }
+        public int TopRank { get; private set; } = 100000;
 
         private void OnDestroy()
         {
@@ -27,7 +28,7 @@ namespace Achievements
         {
             _view = view;
             _queue = queue;
-            
+
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 achievement.Value.Initialize(achievement.Key);
@@ -41,33 +42,29 @@ namespace Achievements
 
         public void LoadAchievementValue(List<AchievementData> loadDatasets)
         {
-            Debug.Log("AchievementSystem LoadAchievementValue");
             if (loadDatasets == null)
                 return;
-            
+
             foreach (AchievementType achievementKey in _achievements.Keys)
             {
                 List<AchievementData> achievementDatasets = new List<AchievementData>();
-            
+
                 foreach (AchievementData loadData in loadDatasets)
                 {
                     if (achievementKey == loadData.Type)
                     {
                         achievementDatasets.Add(loadData);
-                      //  Debug.Log($"AchievementSystem Load Type {loadData.Type}; Value {loadData.Value}; IsAchieved {loadData.IsAchieved}; IsDisplayed {loadData.IsDisplayed}");
                     }
                 }
 
-                
                 _achievements[achievementKey].LoadValue(achievementDatasets);
             }
         }
 
         public List<AchievementData> Save()
         {
-            Debug.Log("AchievementSystem Save");
             List<AchievementData> saveDatasets = new List<AchievementData>();
-        
+
             foreach (KeyValuePair<AchievementType, Achievement> achievement in _achievements)
             {
                 foreach (AchievementData result in achievement.Value.SaveValue())
@@ -79,13 +76,21 @@ namespace Achievements
             return saveDatasets;
         }
 
-        public void PassValue(AchievementType type, int value) => _achievements[type].CheckAchievementValue(value);
-        
+        public int SetTopRankValue(int topRank)
+        {
+            return TopRank = TopRank > topRank ? topRank : TopRank;
+        }
+
+        public void PassValue(AchievementType type, int value)
+        {
+            _achievements[type].CheckAchievementValue(value);
+        }
+
         private void SumValueAchievedChanged(int value)
         {
-            CountAchievement -= --value;
-            CountAchievement += ++value;
-            _view.SetCountAchieved(CountAchievement);
+            _countAchievement -= --value;
+            _countAchievement += ++value;
+            _view.SetCountAchieved(_countAchievement);
         }
     }
 }

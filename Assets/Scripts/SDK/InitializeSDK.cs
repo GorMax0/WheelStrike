@@ -7,7 +7,7 @@ using Agava.YandexGames;
 
 public class InitializeSDK : MonoBehaviour
 {
-    private const string DataVersion = "v0.4.13";
+    private const string DataVersion = "v0.4.01";
     private const string DataKey = "GameData";
 
     private int _levelIndex;
@@ -24,7 +24,6 @@ public class InitializeSDK : MonoBehaviour
 #if !UNITY_WEBGL || UNITY_EDITOR
         yield return new WaitForSeconds(0.1f);
         yield return GetLevelIndex();
-
 #elif YANDEX_GAMES
         while (YandexGamesSdk.IsInitialized == false)
         {
@@ -33,9 +32,9 @@ public class InitializeSDK : MonoBehaviour
 
         Services.Localization.SetLanguage();
         yield return GetLevelIndex();
-        InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
+  //      InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
 
-         YandexGamesSdk.CallbackLogging = true;
+       //  YandexGamesSdk.CallbackLogging = true;
 #endif
 
         LoadScene();
@@ -44,7 +43,6 @@ public class InitializeSDK : MonoBehaviour
 
     private IEnumerator GetLevelIndex()
     {
-        Debug.Log("Start GetLevelIndex");
         LoadGameData();
 
         yield return new WaitForSeconds(1f);
