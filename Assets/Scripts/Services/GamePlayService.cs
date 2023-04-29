@@ -181,8 +181,9 @@ namespace Services
 
 #if !UNITY_WEBGL || UNITY_EDITOR
 #elif VK_GAMES
-            PauseOn();
-           Interstitial.Show(OnCloseCallback, OnErrorCallback);
+            _isRunningAds = true;
+            ChangePause(_isRunningAds);
+            Interstitial.Show(OnCloseCallback, OnErrorCallback);
 #endif
             ElapsedTime = 0;
 

@@ -267,7 +267,7 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
-            _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
+           // _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
         }
 
 
