@@ -30,7 +30,7 @@ MonoBehaviour:
   secretKey:
   - da46561a1f112280e2d05f3e09e93467d0fc5d16
   Build:
-  - 0.4
+  - 0.4.1
   SelectedPlatformOrganization:
   - KeeperOfGames
   SelectedPlatformStudio:
@@ -90,7 +90,7 @@ MonoBehaviour:
   SubmitErrors: 1
   NativeErrorReporting: 0
   MaxErrorCount: 10
-  SubmitFpsAverage: 0
+  SubmitFpsAverage: 1
   SubmitFpsCritical: 0
   IncludeGooglePlay: 1
   FpsCriticalThreshold: 20

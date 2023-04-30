@@ -97,6 +97,7 @@ namespace Achievements
                 if (achievementData.IsDisplayed)
                     continue;
 
+                GameAnalytics.NewDesignEvent($"Achievement:{_type}");
                 AchievementChanged?.Invoke(this, currentValue, achievementData.Value, HasDisplayed);
             }
 

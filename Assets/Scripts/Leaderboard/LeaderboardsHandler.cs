@@ -16,7 +16,6 @@ namespace Leaderboards
         [SerializeField] private LeaderboardView _distanceTraveledLeaderboardView;
         [SerializeField] private LeaderboardView _highscoreDistanceLeaderboardView;
         [SerializeField] private LeaderboardView _collisionsLeaderboardView;
-       // [SerializeField] private LeaderboardView _achievementLeaderboardView;
         [SerializeField] private int _numberTopPlayers = 10;
         [SerializeField] private Button _close;
 
@@ -27,13 +26,11 @@ namespace Leaderboards
         private const string DistanceTraveledBoard = "DistanceTraveledBoardv04";
         private const string HighscoreDistanceBoard = "HighscoreDistanceBoard04";
         private const string CollisionsBoard = "CollisionsBoard04";
-   //     private const string AchievementBoard = "AchievementBoard";
         private const float WaitBetweenSaveScore = 1.15f;
 
         private LeaderboardYandex _distanceTraveledLeaderboard;
         private LeaderboardYandex _highscoreDistanceLeaderboard;
         private LeaderboardYandex _collisionsLeaderboard;
-      //  private LeaderboardYandex _achievementBoard;
         private GamePlayService _gamePlayService;
         private AchievementSystem _achievementSystem;
         private bool _isInitialized;
@@ -61,8 +58,6 @@ namespace Leaderboards
             _highscoreDistanceLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
             _collisionsLeaderboard.GetEntriesCompleted -= OnGetEntriesCompleted;
             _collisionsLeaderboard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
-            // _achievementBoard.GetEntriesCompleted -= OnGetEntriesCompleted;
-            // _achievementBoard.GetPlayerEntryCompleted -= OnGetPlayerEntryCompleted;
         }
 
         public void Initialize(GamePlayService gamePlayService, AchievementSystem achievementSystem)
@@ -76,7 +71,6 @@ namespace Leaderboards
             _distanceTraveledLeaderboard = CreateLeaderboard(_distanceTraveledLeaderboardView, DistanceTraveledBoard);
             _highscoreDistanceLeaderboard = CreateLeaderboard(_highscoreDistanceLeaderboardView, HighscoreDistanceBoard);
             _collisionsLeaderboard = CreateLeaderboard(_collisionsLeaderboardView, CollisionsBoard);
-           // _achievementBoard = CreateLeaderboard(_achievementLeaderboardView, AchievementBoard);
 
             _isInitialized = true;
         }
@@ -84,7 +78,6 @@ namespace Leaderboards
         public void Enable()
         {
             _container.SetActive(true);
-            GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Open");
 
             if (PlayerAccount.IsAuthorized == true)
             {
@@ -97,6 +90,7 @@ namespace Leaderboards
                 _highscoreDistanceLeaderboardView.gameObject.SetActive(false);
                 _collisionsLeaderboardView.gameObject.SetActive(false);
                 _authorizationView.gameObject.SetActive(true);
+                GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:NotAuthorized");
             }
         }
 
@@ -133,10 +127,6 @@ namespace Leaderboards
             yield return new WaitForSeconds(WaitBetweenSaveScore);
 
             SavePlayerScoreToLeaderboard(_highscoreDistanceLeaderboard, _gamePlayService.Highscore);
-            
-            // yield return new WaitForSeconds(WaitBetweenSaveScore);
-            //
-            // SavePlayerScoreToLeaderboard(_achievementBoard, _achievementSystem.CountAchievement);
         }
 
         private void SavePlayerScoreToLeaderboard(LeaderboardYandex leaderboard, int score) => leaderboard.SetScore(score);
@@ -182,9 +172,6 @@ namespace Leaderboards
                 case CollisionsBoard:
                     _collisionsLeaderboardView.RenderTop(topPlayers);
                     break;
-                // case AchievementBoard:
-                //     _achievementLeaderboardView.RenderTop(topPlayers);
-                //     break;
             }
         }
 
@@ -201,9 +188,6 @@ namespace Leaderboards
                 case CollisionsBoard:
                     _collisionsLeaderboardView.RenderCurrentPlayer(currentPlayer);
                     break;
-                // case AchievementBoard:
-                //     _achievementLeaderboardView.RenderCurrentPlayer(currentPlayer);
-                //     break;
             }
             
             _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(currentPlayer.Rank));

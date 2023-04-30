@@ -36,14 +36,16 @@ namespace Leaderboards
             {
                 case LeaderboardType.Traveled:
                     _selectedTab = _distanceTab;
+                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Traveled");
                     break;
                 case LeaderboardType.Highscore:
                     _selectedTab = _highscoreTab;
+                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Highscore");
                     break;
                 case LeaderboardType.Collisions:
                     _selectedTab = _collisionTab;
+                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Collisions");
                     break;
-            
             }
 
             _selectedTab.Enable(_selectedColor);

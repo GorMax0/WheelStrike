@@ -87,7 +87,7 @@ namespace Parameters
             onRefresh();
             _counterParameterLevel.CheckAchievement(parameter.Type);
             _boostView.HasMaximumLevelParameter(parameter);
-            GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}", parameter.Level);
+            GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}");
         }
 
         private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action onRefresh)

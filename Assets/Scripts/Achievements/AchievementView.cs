@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GameAnalyticsSDK;
 using Lean.Localization;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ namespace Achievements
         {
             _countAchievedText.Value = _countAchieved.ToString();
             _scrollRect.content.anchoredPosition = Vector2.zero;
+            GameAnalytics.NewDesignEvent("guiClick:Achievements");
         }
 
         public void Initialize(List<Achievement> achievements)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Achievements;
+using GameAnalyticsSDK;
 using Lean.Localization;
 using Parameters;
 using Services;
@@ -75,6 +76,12 @@ namespace Boost
 
             _isInitialized = true;
             OnEnable();
+        }
+
+        public void Open()
+        {
+            gameObject.SetActive(true);
+            GameAnalytics.NewDesignEvent("guiClick:Boost");
         }
 
         public void HasMaximumLevelParameter(Parameter parameter)

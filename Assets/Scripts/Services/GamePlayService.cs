@@ -15,7 +15,7 @@ namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 123f;
+        private readonly float IntervalBetweenAds = 103f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
@@ -179,11 +179,11 @@ namespace Services
                 return false;
 
 #if !UNITY_WEBGL || UNITY_EDITOR
+            ElapsedTime = 0;
+            OnGameSave();
 #elif YANDEX_GAMES
             Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
 #endif
-            ElapsedTime = 0;
-
             return true;
         }
 
@@ -208,7 +208,7 @@ namespace Services
 
         private void OnOpenCallback()
         {
-            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:GamePlay");
+            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds");
             _isRunningAds = true;
             ChangePause(_isRunningAds);
         }
@@ -217,6 +217,8 @@ namespace Services
         {
             _isRunningAds = false;
             ChangePause(_isRunningAds);
+            ElapsedTime = 0;
+            OnGameSave();
             CanceledAds?.Invoke();
         }
 
@@ -315,8 +317,7 @@ namespace Services
         {
             if (obstacle.IsCollided == true)
                 return;
-
-            GameAnalytics.NewDesignEvent("Collision:Obstacle");
+            
             _levelScore.AddReward(obstacle.Reward);
             CountCollisionObstacles++;
         }
