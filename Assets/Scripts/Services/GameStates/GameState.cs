@@ -15,6 +15,7 @@
         TutorialStepTwo,
         TutorialStepThree,
         TutorialStepFour,
-        TutorialStepNine
+        TutorialStepNine,
+        ShowAds,
     }
 }

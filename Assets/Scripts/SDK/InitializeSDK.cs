@@ -1,115 +1,75 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using CrazyGames;
 using Data;
 using GameAnalyticsSDK;
-using Agava.YandexGames;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class InitializeSDK : MonoBehaviour
+namespace SDK
 {
-    private const string DataVersion = "v0.4.01";
-    private const string DataKey = "GameData";
-
-    private int _levelIndex;
-    private GameData _gameData;
-
-    private void Awake()
+    public class InitializeSDK : MonoBehaviour
     {
-        StartCoroutine(Init());
-    }
+        private const string DataVersion = "v0.4.01";
+        private const string DataKey = "GameData";
 
-    private IEnumerator Init()
-    {
-        GameAnalytics.Initialize();
-#if !UNITY_WEBGL || UNITY_EDITOR
-        yield return new WaitForSeconds(0.1f);
-        yield return GetLevelIndex();
-#elif YANDEX_GAMES
-        while (YandexGamesSdk.IsInitialized == false)
+        private int _levelIndex;
+        private GameData _gameData;
+
+        private void Awake()
         {
-            yield return YandexGamesSdk.Initialize();
+            StartCoroutine(Init());
         }
 
-        Services.Localization.SetLanguage();
-        yield return GetLevelIndex();
-  //      InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
-
-       //  YandexGamesSdk.CallbackLogging = true;
-#endif
-
-        LoadScene();
-    }
-
-
-    private IEnumerator GetLevelIndex()
-    {
-        LoadGameData();
-
-        yield return new WaitForSeconds(1f);
-
-        if (_gameData == null || _gameData.DataVersion != DataVersion)
+        private IEnumerator Init()
         {
-            _gameData = new GameData(DataVersion);
-            PlayerPrefs.DeleteAll();
-        }
-
-        _levelIndex = _gameData.IndexScene;
-
-#if !UNITY_WEBGL || UNITY_EDITOR
-        Save();
-#elif YANDEX_GAMES
-        SaveDataYandex();
-#endif
-    }
-
-    private void LoadGameData()
-    {
-#if !UNITY_WEBGL || UNITY_EDITOR
-#elif YANDEX_GAMES
-        if (PlayerAccount.IsAuthorized == true)
-        {
-            PlayerAccount.GetPlayerData((string data) =>
+            GameAnalytics.Initialize();
+            yield return new WaitForSeconds(0.1f);
+            yield return GetLevelIndex();
+            CrazySDK.Instance.GetUserInfo(userInfo =>
             {
-                _gameData = ConvertJsonToGameData(data);
+                GameAnalytics.NewDesignEvent($"Browser:{userInfo.browser.name}");
             });
+            LoadScene();
         }
-        else
-#endif
-        if (PlayerPrefs.HasKey(DataKey))
+
+
+        private IEnumerator GetLevelIndex()
         {
-            string data = PlayerPrefs.GetString(DataKey);
-            _gameData = ConvertJsonToGameData(data);
+            LoadGameData();
+
+            yield return new WaitForSeconds(1f);
+
+            if (_gameData == null || _gameData.DataVersion != DataVersion)
+            {
+                _gameData = new GameData(DataVersion);
+                PlayerPrefs.DeleteAll();
+            }
+
+            _levelIndex = _gameData.IndexScene;
+
+            Save();
         }
+
+        private void LoadGameData()
+        {
+            if (PlayerPrefs.HasKey(DataKey))
+            {
+                string data = PlayerPrefs.GetString(DataKey);
+                _gameData = ConvertJsonToGameData(data);
+            }
+        }
+
+        private GameData ConvertJsonToGameData(string data) =>
+            string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
+
+        private void Save()
+        {
+            string data = JsonUtility.ToJson(_gameData);
+
+            PlayerPrefs.SetString(DataKey, data);
+            PlayerPrefs.Save();
+        }
+
+        private void LoadScene() => SceneManager.LoadScene(_levelIndex);
     }
-
-    private GameData ConvertJsonToGameData(string data) =>
-        string.IsNullOrEmpty(data) ? null : JsonUtility.FromJson<GameData>(data);
-
-    private void SaveDataYandex()
-    {
-        string data = JsonUtility.ToJson(_gameData);
-        PlayerAccount.SetPlayerData(data);
-    }
-
-    private void Save()
-    {
-        string data = JsonUtility.ToJson(_gameData);
-
-        PlayerPrefs.SetString(DataKey, data);
-        PlayerPrefs.Save();
-    }
-
-    private void LoadScene() => SceneManager.LoadScene(_levelIndex);
-
-    private void OnOpenCallback() => GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:InitializeSDK");
-
-    private void OnCloseCallback(bool _) => LoadScene();
-
-    private void OnErrorCallback(string error)
-    {
-        Debug.LogWarning(error);
-        LoadScene();
-    }
-
-    private void OnOfflineCallback() => LoadScene();
 }

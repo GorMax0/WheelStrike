@@ -9,19 +9,18 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using GameAnalyticsSDK;
-using Authorization;
+using CrazyGames;
 
 namespace Services
 {
     public class GamePlayService : IDisposable
     {
-        private readonly float IntervalBetweenAds = 103f;
+        private readonly float IntervalBetweenAds = 185f;
         private readonly float StartDelayHoldTime = 3f;
         private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
 
         private GameStateService _gameStateService;
-        private YandexAuthorization _yandexAuthorization;
         private CoroutineService _coroutineService;
         private InputHandler _inputHandler;
         private InteractionHandler _interactionHandler;
@@ -38,12 +37,11 @@ namespace Services
         private float _delayHoldTime;
         private bool _isRunningAds;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization,
+        public GamePlayService(GameStateService gameStateService,
             CoroutineService coroutineService, InputHandler inputHandler,
             InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
         {
             _gameStateService = gameStateService;
-            _yandexAuthorization = yandexAuthorization;
             _coroutineService = coroutineService;
             _inputHandler = inputHandler;
             _interactionHandler = interactionHandler;
@@ -57,8 +55,7 @@ namespace Services
             _restartLevel = new CoroutineRunning(_coroutineService);
 
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _yandexAuthorization.Authorized += OnAuthorized;
-
+            
             if (_inputHandler != null)
             {
                 _inputHandler.PointerDown += OnPointerDown;
@@ -178,12 +175,7 @@ namespace Services
             if (IntervalBetweenAds - ElapsedTime > 0)
                 return false;
 
-#if !UNITY_WEBGL || UNITY_EDITOR
-            ElapsedTime = 0;
-            OnGameSave();
-#elif YANDEX_GAMES
-            Agava.YandexGames.InterstitialAd.Show(OnOpenCallback, OnCloseCallback, OnErrorCallback, OnOfflineCallback);
-#endif
+            CrazyAds.Instance.beginAdBreak(OnCompletedCallback, OnErrorCallback);
             return true;
         }
 
@@ -206,33 +198,17 @@ namespace Services
             _levelService.RestartLevel();
         }
 
-        private void OnOpenCallback()
+        private void OnCompletedCallback()
         {
-            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds");
-            _isRunningAds = true;
-            ChangePause(_isRunningAds);
-        }
-
-        private void OnCloseCallback(bool isClose)
-        {
-            _isRunningAds = false;
-            ChangePause(_isRunningAds);
+            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:Complete");
             ElapsedTime = 0;
             OnGameSave();
             CanceledAds?.Invoke();
         }
 
-        private void OnErrorCallback(string error)
+        private void OnErrorCallback()
         {
-            Debug.LogWarning(error);
-            OnOfflineCallback();
-            CanceledAds?.Invoke();
-        }
-
-        private void OnOfflineCallback()
-        {
-            _isRunningAds = false;
-            ChangePause(_isRunningAds);
+            GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:Error");
             CanceledAds?.Invoke();
         }
 
@@ -255,6 +231,9 @@ namespace Services
                 case GameState.ApplyBoost:
                     OnApplyBoost();
                     break;
+                case GameState.ShowAds:
+                    ElapsedTime -= 12f;
+                    break;
                 case GameState.Save:
                     OnGameSave();
                     break;
@@ -263,7 +242,11 @@ namespace Services
 
         private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
 
-        private void OnGameWaiting() => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, _levelService.NameForAnalytic);
+        private void OnGameWaiting()
+        {
+            CrazyEvents.Instance.GameplayStart();
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, _levelService.NameForAnalytic);
+        }
 
         private void OnGameFinished()
         {
@@ -275,7 +258,7 @@ namespace Services
             _levelService.SetNextScene();
             CountLaunch++;
             _gameStateService.ChangeState(GameState.Save);
-
+            CrazyEvents.Instance.GameplayStop();
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "DistanceTraveled", _travelable.DistanceTraveled, "Traveled", "Finishing");
 

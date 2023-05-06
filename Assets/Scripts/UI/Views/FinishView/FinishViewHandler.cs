@@ -7,7 +7,7 @@ using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
 using AdsReward;
-using Leaderboards;
+using CrazyGames;
 using GameAnalyticsSDK;
 
 namespace UI.Views.Finish
@@ -21,7 +21,6 @@ namespace UI.Views.Finish
         [SerializeField] private float _waitingDelayDisplayValue;
         [SerializeField] private ParticleSystem _finishEffect;
         [SerializeField] private AdsRewards _adsRewards;
-        [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
 
         private const int ValueIfInfinity = 5000;
 
@@ -40,7 +39,6 @@ namespace UI.Views.Finish
         private bool _hasPortraitOrientation = true;
         private bool _isLevelInfinity;
         private bool _isFinished;
-        private bool _hasOpenVideoAd;
 
         public event Action<int> DisplayedDistanceChanged;
         public event Action<int> DisplayedRewardChanged;
@@ -98,11 +96,7 @@ namespace UI.Views.Finish
         public void OnAdsButtonClick()
         {
             _rewardScaler.StopTween();
-#if !UNITY_WEBGL || UNITY_EDITOR
-            Debug.Log("OnAdsButtonClicked");
-#elif YANDEX_GAMES
-            Agava.YandexGames.VideoAd.Show(OnOpenCallback, OnRewardedCallback, OnCloseCallback, OnErrorCallback);
-#endif
+            CrazyAds.Instance.beginAdBreakRewarded(OnCompletedCallback, OnErrorCallback);
         }
 
         private void InitializeViews()
@@ -127,18 +121,6 @@ namespace UI.Views.Finish
                 displayedValueChanged?.Invoke((int)displayedValue);
                 yield return waitForSeconds;
             }
-        }
-
-        private void PauseOn()
-        {
-            SoundController.ChangeWhenAd(true);
-            Time.timeScale = 0f;
-        }
-
-        private static void PauseOff()
-        {
-            SoundController.ChangeWhenAd(false);
-            Time.timeScale = 1f;
         }
 
         private void OnOrientationValidated(bool isPortrait)
@@ -180,40 +162,23 @@ namespace UI.Views.Finish
             _currentFinishView.Enable();
             _topLabelSetter.SelectLabel(_travelable.DistanceTraveled, (int)_levelService.LengthRoad);
             _currentFinishView.StartAnimation();
-            _leaderboardsHandler?.SaveScore();
-
             _isFinished = true;
         }
 
         private void OnGameRestart() => _rewardScaler.StopTween();
 
-        private void OnOpenCallback()
+        private void OnCompletedCallback()
         {
-            PauseOn();
-            _hasOpenVideoAd = true;
-            GameAnalytics.NewDesignEvent("AdClick:RewardMultiplier");
-        }
-
-        private void OnRewardedCallback()
-        {
-            if (_hasOpenVideoAd == false)
-                return;
-
+            GameAnalytics.NewDesignEvent("AdClick:RewardAds:Complete");
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
-            _hasOpenVideoAd = false;
+            _gameStateService.ChangeState(GameState.ShowAds);
         }
 
-        private void OnCloseCallback() => PauseOff();
-
-        private void OnErrorCallback(string message)
+        private void OnErrorCallback()
         {
-            if (_hasOpenVideoAd == true)
-                return;
-
+            GameAnalytics.NewDesignEvent("AdClick:RewardAds:Error");
             _adsRewards.ShowErrorAds();
-            Debug.LogWarning(message);
-            PauseOff();
         }
     }
 }

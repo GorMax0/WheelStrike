@@ -1,12 +1,11 @@
 using System;
-using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using Boost;
+using CrazyGames;
 using Parameters;
+using Services;
 using Services.Coroutines;
 using Services.GameStates;
-using Boost;
-using Services;
-using DeviceType = Agava.YandexGames.DeviceType;
+using UnityEngine;
 
 namespace Core.Wheel
 {
@@ -68,13 +67,13 @@ namespace Core.Wheel
             _collisionHandler.Initialize(gameStateService);
             _gameStateService = gameStateService;
             _size = size;
-
-#if !UNITY_WEBGL || UNITY_EDITOR
-            _isDesktopDevice = true;
-#elif YANDEX_GAMES
-            _isDesktopDevice = Agava.YandexGames.Device.Type == DeviceType.Desktop;
-#endif
-
+            
+            CrazySDK.Instance.GetUserInfo(userInfo =>
+                {
+                    if(userInfo.device.type == "desktop")
+                        _isDesktopDevice = true;
+                });
+            
             _isInitialized = true;
             OnEnable();
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Achievements;
+using CrazyGames;
 using GameAnalyticsSDK;
 using Lean.Localization;
 using Parameters;
@@ -27,7 +28,7 @@ namespace Boost
         private GameStateService _gameStateService;
         private BoostParameter _boost;
         Dictionary<ParameterType, Parameter> _parameters;
-        private Dictionary<ParameterType, bool> _maximumParameters;
+        private Dictionary<ParameterType, bool> _maximumParameters = new Dictionary<ParameterType, bool>();
         private bool _isInitialized;
 
         private void OnEnable()
@@ -122,6 +123,7 @@ namespace Boost
                 parameter.Value.Reset();
             }
 
+            CrazyEvents.Instance.HappyTime();
             _gameStateService.ChangeState(GameState.ApplyBoost);
         }
     }
