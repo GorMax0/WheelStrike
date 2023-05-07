@@ -49,12 +49,6 @@ namespace Achievements
 
         protected override void GetValues()
         {
-            if (Achievement.Type == AchievementType.Top)
-            {
-                TextValue.SetText($"{NextValue}/{NextValue}");
-                return;
-            }
-            
             TextValue.SetText($"{_currentValue}/{NextValue}");
         }
 

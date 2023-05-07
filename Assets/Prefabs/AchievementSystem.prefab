@@ -1673,27 +1673,6 @@ MonoBehaviour:
           _value: 9100000
     - Key: 11
       Value:
-        _icon: {fileID: 21300000, guid: 17886d4213f00b44f86969e330c9f5c7, type: 3}
-        _name: {fileID: 5510072883002395531}
-        _description: {fileID: 8739562128234708786}
-        _achievementDatasets:
-        - Type: 0
-          IsDisplayed: 0
-          _value: 10
-        - Type: 0
-          IsDisplayed: 0
-          _value: 5
-        - Type: 0
-          IsDisplayed: 0
-          _value: 3
-        - Type: 0
-          IsDisplayed: 0
-          _value: 2
-        - Type: 0
-          IsDisplayed: 0
-          _value: 1
-    - Key: 12
-      Value:
         _icon: {fileID: 21300000, guid: 45aaadb1628779f4a9fef42d884fbcd9, type: 3}
         _name: {fileID: 1121492083124851881}
         _description: {fileID: 2973163928177020714}

@@ -101,7 +101,7 @@ namespace Achievements
                 AchievementChanged?.Invoke(this, currentValue, achievementData.Value, HasDisplayed);
             }
 
-            if (_achievementDatasets[^1].Value <= currentValue && _type != AchievementType.Top)
+            if (_achievementDatasets[^1].Value <= currentValue)
             {
                 CountValue = _achievementDatasets[^1].Value;
                 return;

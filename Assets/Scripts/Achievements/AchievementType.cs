@@ -13,7 +13,6 @@ namespace Achievements
         Travel,
         Launch,
         SpentMoney,
-        Top,
         Training
     }
 }
