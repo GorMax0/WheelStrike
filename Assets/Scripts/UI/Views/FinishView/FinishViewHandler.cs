@@ -170,14 +170,15 @@ namespace UI.Views.Finish
         private void OnCompletedCallback()
         {
             GameAnalytics.NewDesignEvent("AdClick:RewardAds:Complete");
+            _gameStateService.ChangeState(GameState.ShowAds);
             _levelScore.SetAdsRewardRate(_rewardScaler.CurrentRate);
             _adsRewards.EnrollReward(RewardType.Money, _levelScore.ResultReward);
-            _gameStateService.ChangeState(GameState.ShowAds);
         }
 
         private void OnErrorCallback()
         {
             GameAnalytics.NewDesignEvent("AdClick:RewardAds:Error");
+            _gameStateService.ChangeState(GameState.ShowAds);
             _adsRewards.ShowErrorAds();
         }
     }

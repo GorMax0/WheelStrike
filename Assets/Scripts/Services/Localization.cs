@@ -31,18 +31,6 @@ namespace Services
                     _currentLanguage = EnglishLanguage;
                     LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
                     break;
-                case "tr":
-                    _currentLanguage = TurkishLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-                case "ru":
-                    _currentLanguage = RussianLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
-                default:
-                    _currentLanguage = EnglishLanguage;
-                    LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-                    break;
             }
 
             GameAnalytics.NewDesignEvent($"Language:{_language}");

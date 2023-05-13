@@ -36,6 +36,7 @@ namespace Services
         private Wall _finishWall;
         private float _delayHoldTime;
         private bool _isRunningAds;
+        private bool _isShowedAds;
 
         public GamePlayService(GameStateService gameStateService,
             CoroutineService coroutineService, InputHandler inputHandler,
@@ -172,7 +173,7 @@ namespace Services
 
         private bool TryShowInterstitialAds()
         {
-            if (IntervalBetweenAds - ElapsedTime > 0)
+            if (IntervalBetweenAds - ElapsedTime > 0 || _isShowedAds == true)
                 return false;
 
             CrazyAds.Instance.beginAdBreak(OnCompletedCallback, OnErrorCallback);
@@ -202,12 +203,14 @@ namespace Services
         {
             GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:Complete");
             ElapsedTime = 0;
+            _isShowedAds = false;
             OnGameSave();
             CanceledAds?.Invoke();
         }
 
         private void OnErrorCallback()
         {
+            _isShowedAds = false;
             GameAnalytics.NewDesignEvent("AdClick:InterstitialAds:Error");
             CanceledAds?.Invoke();
         }
@@ -232,7 +235,8 @@ namespace Services
                     OnApplyBoost();
                     break;
                 case GameState.ShowAds:
-                    ElapsedTime -= 12f;
+                    ElapsedTime -= 17f;
+                    _isShowedAds = true;
                     break;
                 case GameState.Save:
                     OnGameSave();
@@ -293,9 +297,7 @@ namespace Services
         private void OnPointerDown() => _gameStateService.ChangeState(GameState.Waiting);
 
         private void OnPointerUp() => _gameStateService.ChangeState(GameState.Running);
-
-        private void OnAuthorized() => _gameStateService.ChangeState(GameState.Restart);
-
+        
         private void OnCollidedWithObstacle(Obstacle obstacle)
         {
             if (obstacle.IsCollided == true)

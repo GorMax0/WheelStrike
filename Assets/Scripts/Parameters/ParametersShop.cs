@@ -23,10 +23,9 @@ namespace Parameters
         private Wallet _wallet;
         private CounterParameterLevel _counterParameterLevel;
         private Parameter _parameterForRewardAds;
-
         private bool _hasOpenVideoAd;
 
-        private Action _refreshView;
+        private Action<bool> _refreshView;
 
         private void OnDestroy()
         {
@@ -73,7 +72,7 @@ namespace Parameters
         private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
 
 
-        private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action onRefresh)
+        private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action<bool> onRefresh)
         {
             if (TryParameterLevelUp(parameter) == false)
                 return;
@@ -82,16 +81,20 @@ namespace Parameters
             parameter.LevelUp();
             _animationWheel.ParameterUp();
             ChangeInteractableLevelUpButtons(_wallet.Money);
-            onRefresh();
+            onRefresh(false);
             _counterParameterLevel.CheckAchievement(parameter.Type);
             _boostView.HasMaximumLevelParameter(parameter);
             GameAnalytics.NewDesignEvent($"ParameterUp:{parameter.Type}");
         }
 
-        private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action onRefresh)
+        private void OnLevelUpForAdsButtonClicked(Parameter parameter, Action<bool> onRefresh)
         {
+            if(_hasOpenVideoAd == true)
+                return;
+            
             _refreshView = onRefresh;
             ShowAds(parameter);
+            _hasOpenVideoAd = true;
         }
 
         private void ShowAds(Parameter parameter)
@@ -102,18 +105,19 @@ namespace Parameters
 
         private void OnCompletedCallback()
         {
+            _hasOpenVideoAd = false;
             GameAnalytics.NewDesignEvent($"AdClick:ParameterLevelUp:{_parameterForRewardAds.Type}:Complete");
             _counterParameterLevel.CheckAchievement(_parameterForRewardAds.Type, AdsRewardMultiplier);
             _adsRewards.EnrollParameterLevelUpReward(_parameterForRewardAds, AdsRewardMultiplier);
-            _refreshView();
+            _refreshView(true);
             _boostView.HasMaximumLevelParameter(_parameterForRewardAds);
-            _parameterForRewardAds = null;
         }
 
         private void OnErrorCallback()
         {
+            _hasOpenVideoAd = false;
             GameAnalytics.NewDesignEvent($"AdClick:ParameterLevelUp:{_parameterForRewardAds.Type}:Error");
-            _adsRewards.ShowErrorAds();
+            //_adsRewards.ShowErrorAds();
         }
     }
 }

@@ -10,29 +10,30 @@ namespace UI.Views
 {
     public class ParameterView : MonoBehaviour
     {
-        [Header("Common")]
-        [SerializeField] private Image _label;
+        [Header("Common")] [SerializeField] private Image _label;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _level;
         [SerializeField] private Image _icon;
         [SerializeField] private Button _levelUp;
         [SerializeField] private Image _levelUpImage;
 
-        [Header("View for money")]
-        [SerializeField] private TMP_Text _cost;
+        [Header("View for money")] [SerializeField]
+        private TMP_Text _cost;
+
         [SerializeField] private Image _coin;
         [SerializeField] private Sprite _arrowDefault;
         [SerializeField] private Sprite _levelUpButtonImageDefault;
 
-        [Header("View for ads")]
-        [SerializeField] private Image _arrowRight;
+        [Header("View for ads")] [SerializeField]
+        private Image _arrowRight;
+
         [SerializeField] private Image _adsIcon;
         [SerializeField] private Sprite _arrowAds;
         [SerializeField] private Sprite _levelUpButtonImageAds;
         [SerializeField] private TMP_Text _adsMultiplierText;
 
-        [Header("View for maximum")]
-        [SerializeField] private Sprite _levelUpButtonImageMaximum;
+        [Header("View for maximum")] [SerializeField]
+        private Sprite _levelUpButtonImageMaximum;
 
         private const float ScaleRatio = 1.1f;
         private const int InfinityLoops = -1;
@@ -48,14 +49,17 @@ namespace UI.Views
         private const string TurkeyMaximum = "Azami";
         private const string RussianMaximum = "Максимум";
         private const string EnglishMaximum = "Maximum";
+        private const float DelayForAds = 2f;
 
         private Parameter _parameter;
         private Vector2 _startScale;
         private Vector2 _scaleIncrease;
+        private ColorBlock _newColorBlock;
+        private float _currentDelay;
         private bool _canBuyingForMoneyState = true;
 
-        public event Action<Parameter, Action> LevelUpForMoneyButtonClicked;
-        public event Action<Parameter, Action> LevelUpForAdsButtonClicked;
+        public event Action<Parameter, Action<bool>> LevelUpForMoneyButtonClicked;
+        public event Action<Parameter, Action<bool>> LevelUpForAdsButtonClicked;
 
         public Parameter Parameter => _parameter;
 
@@ -77,6 +81,24 @@ namespace UI.Views
             _parameter.Loaded -= Refresh;
         }
 
+        private void Update()
+        {
+            if (_levelUp.interactable == true)
+                return;
+            
+            if(_parameter.Level >= _parameter.MaximumLevel)
+                return;
+
+            if (DelayForAds > _currentDelay)
+            {
+                _currentDelay += Time.deltaTime;
+                return;
+            }
+
+            _levelUp.interactable = true;
+            _currentDelay = 0;
+        }
+
         public void Render(Parameter parameter, int rewardMultiplier)
         {
             _parameter = parameter;
@@ -87,6 +109,7 @@ namespace UI.Views
             _adsMultiplierText.text = $"+{rewardMultiplier}";
             _startScale = _levelUp.transform.localScale;
             _scaleIncrease = _startScale * ScaleRatio;
+            _newColorBlock = _levelUp.colors;
 
             float animationLabelPosition = _label.transform.localPosition.y + LabelOffsetY;
             _label.transform.DOLocalMoveY(animationLabelPosition, AnimationMoveYDuration).SetLoops(InfinityLoops, LoopType.Yoyo);
@@ -110,11 +133,15 @@ namespace UI.Views
                 _adsIcon.gameObject.SetActive(!enoughMoney);
                 _adsMultiplierText.gameObject.SetActive(!enoughMoney);
 
+                _levelUp.interactable = false;
+                _newColorBlock.disabledColor = new Color(1f, 1f, 1f, 0.7f);
+                _levelUp.colors = _newColorBlock;
+                
                 _canBuyingForMoneyState = enoughMoney;
             }
         }
 
-        private void Refresh()
+        private void Refresh(bool isAds)
         {
             _level.text = GetLevelText();
 
@@ -129,7 +156,16 @@ namespace UI.Views
                 _arrowRight.gameObject.SetActive(false);
                 _adsIcon.gameObject.SetActive(false);
                 _adsMultiplierText.gameObject.SetActive(false);
+                _newColorBlock.disabledColor = new Color(1f, 1f, 1f, 1f);
+                _levelUp.colors = _newColorBlock;
                 return;
+            }
+
+            if (isAds == true)
+            {
+                _levelUp.interactable = false;
+                _newColorBlock.disabledColor = new Color(1f, 1f, 1f, 0.7f);
+                _levelUp.colors = _newColorBlock;
             }
 
             _cost.text = _parameter.Cost.ToString();
@@ -185,7 +221,6 @@ namespace UI.Views
                         return $"{LevelEnglish} {_parameter.Level}";
                 }
             }
-
         }
 
         private void OnLocalizationChanged()

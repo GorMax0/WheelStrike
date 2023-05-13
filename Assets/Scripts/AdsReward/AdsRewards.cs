@@ -25,8 +25,6 @@ namespace AdsReward
         {
             _rewardView.SetActive(false);
             _rewardErrorView.SetActive(false);
-            _rewardEnroll.onClick.RemoveAllListeners();
-            _rewardError.onClick.RemoveAllListeners();
         }
 
         public void Initialize(GameStateService gameStateService, Wallet wallet)

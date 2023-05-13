@@ -19,7 +19,7 @@ namespace Parameters
         }
 
         public event Action<Parameter> LevelChanged;
-        public event Action Loaded;
+        public event Action<bool> Loaded;
 
         public ParameterType Type { get; }
         public Sprite Icon { get; }
@@ -34,7 +34,7 @@ namespace Parameters
                 return;
 
             Level = level > MaxLevel ? MaxLevel : level;
-            Loaded?.Invoke();
+            Loaded?.Invoke(false);
         }
 
         public void LevelUp(int levelCount = 1)

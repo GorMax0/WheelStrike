@@ -104,7 +104,7 @@ namespace Boost
             }
         }
 
-        private void CheckMaximumLevelParameters()
+        private void CheckMaximumLevelParameters(bool isAds)
         {
             foreach (var parameter in _parameters)
             {
