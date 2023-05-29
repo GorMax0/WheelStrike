@@ -20,6 +20,7 @@ using Authorization;
 using Particles;
 using Agava.YandexGames;
 using Boost;
+using Skins;
 
 namespace Core
 {
@@ -64,6 +65,8 @@ namespace Core
         [SerializeField] private DailyView _dailyView;
         [SerializeField] private AchievementView _achievementView;
         [SerializeField] private AchievementQueue _achievementQueue;
+        [SerializeField] private SkinView _skinView;
+        [SerializeField] private SkinReward _skinReward;
 
         [Header("Other")] [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
@@ -146,12 +149,14 @@ namespace Core
             _finishViewHandler.Initialize(_gameStateService, _coroutineService, _wheel.Travelable, _levelService);
             _authorizationView.Initialize(_yandexAuthorization);
             _dailyView.Initialize(_gameStateService, _dailyReward);
+            _skinReward.Initialize(_gameStateService);
+            _skinView.Initialize(_gameStateService, _skinReward,_wheel.GetComponent<AnimationWheel>());
         }
 
         private void InitializeLoad()
         {
             _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _tutorial);
+                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _skinView, _skinReward, _tutorial);
             _dataOperator.Load();
         }
 

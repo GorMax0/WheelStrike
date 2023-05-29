@@ -41,15 +41,25 @@ namespace Core
 
         public DateTime GetSavedDate() => _dateTimeService.PreviousDate;
 
-        public bool HasNextDaily() => _dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0;
+        public bool HasNextDaily()
+        {
+            if (_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0 
+                && _dateTimeService.CurrentDatetime.Month - _dateTimeService.PreviousDate.Month >= 0)
+            {
+                return true;
+            }
+            
+            if(_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day <= 0 
+                    && _dateTimeService.CurrentDatetime.Month - _dateTimeService.PreviousDate.Month > 0)
+            {
+                return true;
+            }
+            
+            return false;
+        }
 
         public void EnrollDaily()
         {
-            int intervalDays = _dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day;
-
-            if (intervalDays < OneDay)
-                return;
-            
             EnrollReward();
             _achievementSystem. PassValue(AchievementType.Daily, _countDayEntry);
             _countDayEntry++;

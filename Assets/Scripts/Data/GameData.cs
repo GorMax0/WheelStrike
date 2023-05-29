@@ -31,6 +31,8 @@ namespace Data
         public int TopAchievement = 100000;
         public int TutorialComplete;
         public List<AchievementData> AchievementsData;
+        public int IndexSkin;
+        public bool IsSkinRewarded;
 
         public GameData(string dataVersion)
         {

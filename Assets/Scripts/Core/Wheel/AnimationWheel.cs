@@ -12,7 +12,7 @@ namespace Core.Wheel
     public class AnimationWheel : MonoBehaviour
     {
         [SerializeField] private AnimationCurve _deviationWhenSwinging;
-        [SerializeField] private MeshRenderer _meshWheel;
+        [SerializeField] private GameObject _meshWheel;
         [SerializeField] private float _rotationSpeed;
         [SerializeField] private ParticleSystem _parameterUpEffect;
         [SerializeField] private ParticleSystem _groundCollision;
@@ -75,6 +75,11 @@ namespace Core.Wheel
              .Append(transform.DOScale(_startScale, AnimationDuration));
 
             _parameterUpEffect.gameObject.SetActive(true);
+        }
+
+        public void SetMeshWheel(GameObject skin)
+        {
+            _meshWheel = skin;
         }
 
         private void Swing(float currentForceValue)

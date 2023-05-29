@@ -9,6 +9,7 @@ using Services.Level;
 using Authorization;
 using Agava.YandexGames;
 using Services.GameStates;
+using Skins;
 using UI.Manual.Tutorial;
 using UnityEngine;
 
@@ -34,12 +35,14 @@ namespace Data
         private readonly YandexAuthorization _yandexAuthorization;
         private readonly DailyReward _dailyReward;
         private readonly AchievementSystem _achievementSystem;
+        private readonly SkinView _skinView;
+        private readonly SkinReward _skinReward;
         private readonly TutorialManager _tutorialManager;
 
         public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
             QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, CounterParameterLevel counterParameterLevel,
-            BoostParameter boost,
-            YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem, TutorialManager tutorialManager)
+            BoostParameter boost, YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem, SkinView skinView,
+            SkinReward skinReward, TutorialManager tutorialManager)
         {
             _gamePlayService = gamePlayService;
             _gameStateService = gameStateService;
@@ -55,6 +58,8 @@ namespace Data
             _yandexAuthorization = yandexAuthorization;
             _dailyReward = dailyReward;
             _achievementSystem = achievementSystem;
+            _skinView = skinView;
+            _skinReward = skinReward;
             _tutorialManager = tutorialManager;
 #if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem(DataVersion);
@@ -97,6 +102,8 @@ namespace Data
             SaveTutorialState();
             SaveTutorialState();
             SaveAchievements();
+            SaveSkinIndex();
+            SaveIsSkinRewarded();
 
             _saveSystem.Save(_gameData);
         }
@@ -126,8 +133,12 @@ namespace Data
             LoadBoostLevel();
             LoadDailyInfo();
             LoadAchievements();
+            LoadSkinIndex();
+            LoadIsSkinRewarded();
+
             _gameStateService.ChangeState(GameState.Load);
         }
+
 
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
@@ -208,6 +219,10 @@ namespace Data
             _gameData.TopAchievement = _achievementSystem.TopRank;
         }
 
+        private void SaveSkinIndex() => _gameData.IndexSkin = _skinView.IndexOfActivatedElement;
+
+        private void SaveIsSkinRewarded() => _gameData.IsSkinRewarded = _skinReward.IsRewarded;
+
         private void LoadIndexScene() => _levelService.LoadLevel(_gameData.IndexScene);
 
         private void LoadTime() => _gamePlayService.LoadElapsedTime(_gameData.ElapsedTime);
@@ -275,6 +290,9 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
         }
 
+        private void LoadSkinIndex() => _skinView.LoadIndex(_gameData.IndexSkin);
+
+        private void LoadIsSkinRewarded() => _skinReward.Load(_gameData.IsSkinRewarded);
 
         private void Subscribe()
         {

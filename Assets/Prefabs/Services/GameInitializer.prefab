@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6401324078140876495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6401324078140876488}
+  - component: {fileID: 6401324078140876489}
+  m_Layer: 0
+  m_Name: GameInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6401324078140876488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6401324078140876495}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.6844055, y: -4.0409365, z: 0.42733788}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6401324078140876489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6401324078140876495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdf62bdd643f7a43b9b08454af568e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cameraController: {fileID: 0}
+  _cinemachine: {fileID: 0}
+  _coroutineService: {fileID: 0}
+  _levelService: {fileID: 0}
+  _adsRewards: {fileID: 0}
+  _soundController: {fileID: 0}
+  _qualityToggle: {fileID: 0}
+  _achievementSystem: {fileID: 0}
+  _carBuilder: {fileID: 0}
+  _inputHandler: {fileID: 0}
+  _forceScale: {fileID: 0}
+  _ropeDisconnection: {fileID: 0}
+  _wheel: {fileID: 0}
+  _interactionHandler: {fileID: 0}
+  _controlManual: {fileID: 0}
+  _finishViewHandler: {fileID: 0}
+  _prerunView: {fileID: 0}
+  _aimDirectionLine: {fileID: 0}
+  _menuView: {fileID: 0}
+  _walletView: {fileID: 0}
+  _moneyPresenter: {fileID: 0}
+  _topPanel: {fileID: 0}
+  _parametersShop: {fileID: 0}
+  _boostView: {fileID: 0}
+  _dailyView: {fileID: 0}
+  _achievementView: {fileID: 0}
+  _achievementQueue: {fileID: 0}
+  _parameterObjects:
+  - {fileID: 11400000, guid: 1a2ed75d63e21324d9bc20dd2f1baae4, type: 2}
+  - {fileID: 11400000, guid: d3fc0c59fd985b04c9d63f5dc37e8df0, type: 2}
+  - {fileID: 11400000, guid: 87956cc355f6b454e9b594ad8a0c2235, type: 2}
+  _trailManager: {fileID: 0}
+  _tutorial: {fileID: 0}
+  _fog: {fileID: 0}

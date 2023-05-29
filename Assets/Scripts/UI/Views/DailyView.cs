@@ -1,3 +1,4 @@
+using System;
 using Core;
 using Services.GameStates;
 using TMPro;
@@ -22,6 +23,11 @@ namespace UI.Views
         private void OnDisable()
         {
             _close.onClick.RemoveListener(EnrollReward);
+        }
+
+        private void OnDestroy()
+        {
+            _gameStateService.GameStateChanged -= CheckHasDailyReward;
         }
 
         public void Initialize(GameStateService gameStateService, DailyReward dailyReward)
