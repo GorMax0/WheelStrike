@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.5268953, g: 0.3468137, b: 0.35281438, a: 1}
+  m_IndirectSpecularColor: {r: 0.5281099, g: 0.34765646, b: 0.3537159, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20907,7 +20907,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 5.3
+  m_PixelsPerUnitMultiplier: 2.7
 --- !u!222 &764959390
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -39184,7 +39184,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 5.3
+  m_PixelsPerUnitMultiplier: 2.7
 --- !u!222 &1468543267
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -43619,7 +43619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80, y: -80}
+  m_AnchoredPosition: {x: 79.999985, y: -80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699675001
@@ -44181,7 +44181,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 5.3
+  m_PixelsPerUnitMultiplier: 2.7
 --- !u!222 &1711472502
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -46092,7 +46092,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 3
+  m_PixelsPerUnitMultiplier: 2.9
 --- !u!222 &1848753168
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -46787,7 +46787,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.27672482}
   m_AnchorMax: {x: 1, y: 0.37389925}
-  m_AnchoredPosition: {x: 0, y: -24.001892}
+  m_AnchoredPosition: {x: 0, y: -24.001953}
   m_SizeDelta: {x: 0, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1881711635
@@ -49330,7 +49330,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 5.3
+  m_PixelsPerUnitMultiplier: 2.7
 --- !u!222 &2020740177
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -55845,7 +55845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -55860,7 +55860,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 3
+  m_PixelsPerUnitMultiplier: 2.9
 --- !u!222 &2089903046
 CanvasRenderer:
   m_ObjectHideFlags: 0
