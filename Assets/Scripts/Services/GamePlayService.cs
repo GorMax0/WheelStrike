@@ -38,9 +38,15 @@ namespace Services
         private float _delayHoldTime;
         private bool _isRunningAds;
 
-        public GamePlayService(GameStateService gameStateService, YandexAuthorization yandexAuthorization,
-            CoroutineService coroutineService, InputHandler inputHandler,
-            InteractionHandler interactionHandler, ITravelable travelable, LevelService levelService, Wallet wallet)
+        public GamePlayService(
+            GameStateService gameStateService,
+            YandexAuthorization yandexAuthorization,
+            CoroutineService coroutineService,
+            InputHandler inputHandler,
+            InteractionHandler interactionHandler,
+            ITravelable travelable,
+            LevelService levelService,
+            Wallet wallet)
         {
             _gameStateService = gameStateService;
             _yandexAuthorization = yandexAuthorization;
@@ -75,14 +81,21 @@ namespace Services
         }
 
         public event Action<Car> TriggeredCar;
+
         public event Action TimeChangedToDefault;
+
         public event Action CanceledAds;
 
         public int Highscore => _levelScore.Highscore;
+
         public float ElapsedTime { get; private set; }
+
         public float Playtime { get; private set; }
+
         public int CountCollisionObstacles { get; private set; }
+
         public int DistanceTraveledOverAllTime { get; private set; }
+
         public int CountLaunch { get; private set; }
 
         public void Dispose()
@@ -169,6 +182,7 @@ namespace Services
             {
                 ElapsedTime += Time.deltaTime;
                 Playtime += Time.deltaTime;
+
                 yield return null;
             }
         }
@@ -189,7 +203,7 @@ namespace Services
 
         private void ChangePause(bool isPause)
         {
-            SoundController.ChangeWhenAd(isPause);
+            SoundService.ChangeWhenAd(isPause);
             Time.timeScale = isPause == true ? 0f : TimeScaleDefault;
         }
 
@@ -242,28 +256,36 @@ namespace Services
             {
                 case GameState.Initializing:
                     OnGameInitializing();
+
                     break;
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
                 case GameState.Restart:
                     OnGameRestart();
+
                     break;
                 case GameState.ApplyBoost:
                     OnApplyBoost();
+
                     break;
                 case GameState.Save:
                     OnGameSave();
+
                     break;
             }
         }
 
         private void OnGameInitializing() => _unlockInputHandler.Run(UnlockInputHandler());
 
-        private void OnGameWaiting() => GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, _levelService.NameForAnalytic);
+        private void OnGameWaiting() => GameAnalytics.NewProgressionEvent(
+            GAProgressionStatus.Start,
+            _levelService.NameForAnalytic);
 
         private void OnGameFinished()
         {
@@ -276,13 +298,30 @@ namespace Services
             CountLaunch++;
             _gameStateService.ChangeState(GameState.Save);
 
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Money", _levelScore.ResultReward, "Reward", "Finishing");
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "DistanceTraveled", _travelable.DistanceTraveled, "Traveled", "Finishing");
+            GameAnalytics.NewResourceEvent(
+                GAResourceFlowType.Source,
+                "Money",
+                _levelScore.ResultReward,
+                "Reward",
+                "Finishing");
+
+            GameAnalytics.NewResourceEvent(
+                GAResourceFlowType.Source,
+                "DistanceTraveled",
+                _travelable.DistanceTraveled,
+                "Traveled",
+                "Finishing");
 
             if (_travelable.DistanceTraveled >= _levelService.LengthRoad)
-                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, _levelService.NameForAnalytic, _travelable.DistanceTraveled);
+                GameAnalytics.NewProgressionEvent(
+                    GAProgressionStatus.Complete,
+                    _levelService.NameForAnalytic,
+                    _travelable.DistanceTraveled);
             else
-                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, _levelService.NameForAnalytic, _travelable.DistanceTraveled);
+                GameAnalytics.NewProgressionEvent(
+                    GAProgressionStatus.Fail,
+                    _levelService.NameForAnalytic,
+                    _travelable.DistanceTraveled);
 
             Dispose();
         }
@@ -317,7 +356,7 @@ namespace Services
         {
             if (obstacle.IsCollided == true)
                 return;
-            
+
             _levelScore.AddReward(obstacle.Reward);
             CountCollisionObstacles++;
         }
@@ -344,6 +383,7 @@ namespace Services
 
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
 
-        private void OnInBackgroundChange(bool inBackground) => Time.timeScale = inBackground == true ? 0 : TimeScaleDefault;
+        private void OnInBackgroundChange(bool inBackground) =>
+            Time.timeScale = inBackground == true ? 0 : TimeScaleDefault;
     }
 }

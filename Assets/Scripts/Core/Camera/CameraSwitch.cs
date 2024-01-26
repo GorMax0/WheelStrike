@@ -7,7 +7,7 @@ using Services.GameStates;
 
 namespace Core
 {
-    public class CameraController : MonoBehaviour
+    public class CameraSwitch : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera _menuCamera;
         [SerializeField] private CinemachineVirtualCamera _launchCamera;

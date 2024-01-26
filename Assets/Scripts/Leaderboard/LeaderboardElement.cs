@@ -1,8 +1,9 @@
+using Leaderboards;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace Leaderboards
+namespace Leaderboard
 {
     public class LeaderboardElement : MonoBehaviour
     {
@@ -17,7 +18,8 @@ namespace Leaderboards
         public void Render(PlayerInfoLeaderboard playerInfo, bool isPlayer, Sprite medal = null)
         {
             if (playerInfo == null)
-                throw new System.NullReferenceException($"{GetType()}: Render(PlayerInfoLeaderboard playerInfo, bool isPlayer, Sprite medal = null): playerInfo nullable.");
+                throw new System.NullReferenceException($"{GetType()}: Render(PlayerInfoLeaderboard playerInfo,"
+                    + $" bool isPlayer, Sprite medal = null): playerInfo nullable.");
 
             if (medal != null)
             {

@@ -61,9 +61,9 @@ namespace UI.Views.Finish
             _isSubscribe = true;
         }
 
-        private void ChangeValueSlider(Slider slider, int ValueForNormalization)
+        private void ChangeValueSlider(Slider slider, int valueForNormalization)
         {
-            _normalizedDistance = ValueForNormalization / (_lengthRoad + LenghRoadCorrector * _lengthRoad);
+            _normalizedDistance = valueForNormalization / (_lengthRoad + LenghRoadCorrector * _lengthRoad);
             slider.value = _normalizedDistance;
         }
 

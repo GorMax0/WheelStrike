@@ -56,12 +56,19 @@ namespace Core.Wheel
             _gameStateService.GameStateChanged -= OnGameStateService;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService,
-            AimDirection aimDirection, Parameter speed, Parameter size, BoostParameter boost)
+        public void Initialize(
+            GameStateService gameStateService,
+            CoroutineService coroutineService,
+            AimDirection aimDirection,
+            Parameter speed,
+            Parameter size,
+            BoostParameter boost)
         {
             if (_isInitialized == true)
                 throw new InvalidOperationException(
-                    $"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, Parameter size).");
+                    $"{GetType()}: Initialize(GameStateService gameStateService, "
+                    + $"CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, "
+                    + $"Parameter size).");
 
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speed, size, boost);
             _animation.Initialize(gameStateService, coroutineService);
@@ -96,6 +103,7 @@ namespace Core.Wheel
             {
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
             }
         }
@@ -104,16 +112,17 @@ namespace Core.Wheel
         {
             SetSize();
             SetMass();
-            
+
             if (_isDesktopDevice == true)
             {
                 _blur.SetActive(_isNormalFPS);
+
                 return;
             }
 
             _blur.SetActive(false);
         }
-        
+
         private void OnQualityChanged(bool isNormalFPS)
         {
             _isNormalFPS = isNormalFPS;

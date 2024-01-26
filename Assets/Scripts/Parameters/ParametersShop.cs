@@ -37,8 +37,8 @@ namespace Parameters
                 view.LevelUpForAdsButtonClicked -= OnLevelUpForAdsButtonClicked;
             }
 
-            _wallet.MoneyLoaded -= ChangeInteractableLevelUpButtons;
-            _wallet.MoneyChanged -= ChangeInteractableLevelUpButtons;
+            _wallet.MoneyLoaded -= OnChangeInteractableLevelUpButtons;
+            _wallet.MoneyChanged -= OnChangeInteractableLevelUpButtons;
         }
 
         public void Initialize(Dictionary<ParameterType, Parameter> parameters, Wallet wallet, CounterParameterLevel counterParameterLevel)
@@ -54,13 +54,17 @@ namespace Parameters
             }
 
             _wallet = wallet;
-            _wallet.MoneyLoaded += ChangeInteractableLevelUpButtons;
-            _wallet.MoneyChanged += ChangeInteractableLevelUpButtons;
+            _wallet.MoneyLoaded += OnChangeInteractableLevelUpButtons;
+            _wallet.MoneyChanged += OnChangeInteractableLevelUpButtons;
 
             _counterParameterLevel = counterParameterLevel;
         }
 
-        private void ChangeInteractableLevelUpButtons(int moneyInWallet)
+        private bool TryParameterLevelUp(Parameter parameter) => _wallet.TrySpendMoney(parameter.Cost);
+
+        private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
+
+        private void OnChangeInteractableLevelUpButtons(int moneyInWallet)
         {
             foreach (var view in _views)
             {
@@ -69,12 +73,6 @@ namespace Parameters
             }
         }
 
-        private bool TryParameterLevelUp(Parameter parameter) => _wallet.TrySpendMoney(parameter.Cost);
-
-        private bool HasMoneyToBuy(Parameter parameter, int moneyInWallet) => moneyInWallet >= parameter.Cost;
-
-       
-        
         private void OnLevelUpForMoneyButtonClicked(Parameter parameter, Action onRefresh)
         {
             if (TryParameterLevelUp(parameter) == false)
@@ -83,7 +81,7 @@ namespace Parameters
             GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Money", parameter.Cost, "ParameterShop", $"{parameter.Type}");
             parameter.LevelUp();
             _animationWheel.ParameterUp();
-            ChangeInteractableLevelUpButtons(_wallet.Money);
+            OnChangeInteractableLevelUpButtons(_wallet.Money);
             onRefresh();
             _counterParameterLevel.CheckAchievement(parameter.Type);
             _boostView.HasMaximumLevelParameter(parameter);
@@ -113,13 +111,13 @@ namespace Parameters
 
         private void PauseOn()
         {
-            SoundController.ChangeWhenAd(true);
+            SoundService.ChangeWhenAd(true);
             Time.timeScale = 0f;
         }
 
         private void PauseOff()
         {
-            SoundController.ChangeWhenAd(false);
+            SoundService.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }
 

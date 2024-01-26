@@ -37,6 +37,7 @@ namespace Core.Wheel
         private bool _isInitialized = false;
 
         public int DistanceTraveled => (int)(transform.position.z * DistanceCoefficient);
+
         public float Speed => _rigidbody.velocity.magnitude;
 
         private void Awake()
@@ -52,14 +53,14 @@ namespace Core.Wheel
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
-            _aimDirection.DirectionChanged += RotateInDirection;
+            _aimDirection.DirectionChanged += OnRotateInDirection;
             _collisionHandler.CollidedWithGround += OnCollidedWithGround;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateService;
-            _aimDirection.DirectionChanged -= RotateInDirection;
+            _aimDirection.DirectionChanged -= OnRotateInDirection;
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
@@ -69,10 +70,19 @@ namespace Core.Wheel
                 _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, LowUpVelocity, _rigidbody.velocity.z);
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease, Parameter size, BoostParameter boost)
+        public void Initialize(
+            GameStateService gameStateService,
+            CoroutineService coroutineService,
+            AimDirection aimDirection,
+            Parameter speedIncrease,
+            Parameter size,
+            BoostParameter boost)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): Already initialized.");
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, "
+                    + $"CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): "
+                    + $"Already initialized.");
 
             _gameStateService = gameStateService;
             _aimDirection = aimDirection;
@@ -97,12 +107,6 @@ namespace Core.Wheel
             _rigidbody.AddForce(transform.forward * force * randomForceRatio + _offsetAngles, ForceMode.Acceleration);
         }
 
-        private void RotateInDirection(float directionOffsetX)
-        {
-            _offsetAngles = new Vector3(0, directionOffsetX, 0);
-            transform.eulerAngles = _offsetAngles;
-        }
-
         private IEnumerator HasMoveForward()
         {
             while (true)
@@ -121,7 +125,9 @@ namespace Core.Wheel
         {
             float deviationToSide = UnityEngine.Random.Range(-DeviationToSide, DeviationToSide);
             float increaseCorrector = 20f;
-            float bounceForce = _rigidbody.velocity.magnitude * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
+
+            float bounceForce = _rigidbody.velocity.magnitude
+                * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
 
             _rigidbody.AddForce(new Vector3(deviationToSide, bounceForce), ForceMode.VelocityChange);
         }
@@ -135,7 +141,11 @@ namespace Core.Wheel
 
         private void CalculateSpeedAfterCollidedWithGround()
         {
-            Vector3 speedAfterCollided = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z / SpeedDamping);
+            Vector3 speedAfterCollided = new Vector3(
+                _rigidbody.velocity.x,
+                _rigidbody.velocity.y,
+                _rigidbody.velocity.z / SpeedDamping);
+
             _rigidbody.velocity = speedAfterCollided;
         }
 
@@ -147,9 +157,11 @@ namespace Core.Wheel
             {
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
             }
         }
@@ -168,6 +180,12 @@ namespace Core.Wheel
                 BounceBack();
 
             UnfreezeRotation();
+        }
+
+        private void OnRotateInDirection(float directionOffsetX)
+        {
+            _offsetAngles = new Vector3(0, directionOffsetX, 0);
+            transform.eulerAngles = _offsetAngles;
         }
 
         private void OnCollidedWithGround()

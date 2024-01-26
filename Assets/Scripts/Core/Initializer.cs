@@ -21,6 +21,7 @@ using Particles;
 using Agava.YandexGames;
 using Boost;
 using Skins;
+using UnityEngine.Serialization;
 
 namespace Core
 {
@@ -28,13 +29,16 @@ namespace Core
     {
         private const string TutorialData = "Tutorial";
 
-        [Header("Camera")] [SerializeField] private CameraController _cameraController;
+        [FormerlySerializedAs("_cameraController")] [Header("Camera")]
+        [SerializeField] private CameraSwitch _cameraSwitch;
         [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
 
-        [Header("Services")] [SerializeField] private CoroutineService _coroutineService;
+        [Header("Services")]
+        [SerializeField] private CoroutineService _coroutineService;
         [SerializeField] private LevelService _levelService;
         [SerializeField] private AdsRewards _adsRewards;
-        [SerializeField] private SoundController _soundController;
+        [FormerlySerializedAs("_soundController")]
+        [SerializeField] private SoundService _soundService;
         [SerializeField] private QualityToggle _qualityToggle;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
         [SerializeField] private AchievementSystem _achievementSystem;
@@ -70,7 +74,7 @@ namespace Core
 
         [Header("Other")] [SerializeField] private ParameterObject[] _parameterObjects;
         [SerializeField] private TrailManager _trailManager;
-        [SerializeField] private TutorialManager _tutorial;
+        [SerializeField] private TutorialLevel _tutorial;
         [SerializeField] private Fog _fog;
 
         private ParameterCreater _parameterCreater;
@@ -99,25 +103,40 @@ namespace Core
             Localization.GetCurrentLanguage();
         }
 
-        private void OnGameStateChanged(GameState state)
-        {
-            if (_tutorial == null && state == GameState.Load)
-                _gameStateService.ChangeState(GameState.Initializing);
-        }
-
         private void InitializeServices()
         {
             _gameStateService = new GameStateService();
             _gameStateService.GameStateChanged += OnGameStateChanged;
-            _levelService.Initialize(_gameStateService, _wheel.Travelable, _interactionHandler,
-                _parameters[ParameterType.Income], _boost);
+
+            _levelService.Initialize(
+                _gameStateService,
+                _wheel.Travelable,
+                _interactionHandler,
+                _parameters[ParameterType.Income],
+                _boost);
+
             _yandexAuthorization = new YandexAuthorization();
-            _gamePlayService = new GamePlayService(_gameStateService, _yandexAuthorization, _coroutineService,
-                _inputHandler, _interactionHandler, _wheel.Travelable, _levelService, _wallet);
+
+            _gamePlayService = new GamePlayService(
+                _gameStateService,
+                _yandexAuthorization,
+                _coroutineService,
+                _inputHandler,
+                _interactionHandler,
+                _wheel.Travelable,
+                _levelService,
+                _wallet);
+
             _adsRewards.Initialize(_gameStateService, _wallet);
-            _soundController.Initialize(_gameStateService);
+            _soundService.Initialize(_gameStateService);
             _leaderboardsHandler?.Initialize(_gamePlayService, _achievementSystem);
-            _dailyReward = new DailyReward(_gameStateService, _wallet, _parameters[ParameterType.Income], _achievementSystem);
+
+            _dailyReward = new DailyReward(
+                _gameStateService,
+                _wallet,
+                _parameters[ParameterType.Income],
+                _achievementSystem);
+
             _achievementSystem.Initialize(_achievementQueue, _achievementView);
         }
 
@@ -128,13 +147,41 @@ namespace Core
             _aimDirection = new AimDirection(_gameStateService, _coroutineService, timeCameraBlend);
 
             _carBuilder.CreateCars(_gameStateService);
-            _cameraController.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
+            _cameraSwitch.Initialize(_gameStateService, _gamePlayService, _interactionHandler);
             _forceScale.Initialize(_gameStateService, _coroutineService);
             _ropeDisconnection.Initialize(_gameStateService);
-            _wheel.Initialize(_gameStateService, _coroutineService, _aimDirection,
-                _parameters[ParameterType.Speed], _parameters[ParameterType.Size], _boost);
+
+            _wheel.Initialize(
+                _gameStateService,
+                _coroutineService,
+                _aimDirection,
+                _parameters[ParameterType.Speed],
+                _parameters[ParameterType.Size],
+                _boost);
         }
 
+        private void InitializeLoad()
+        {
+            _dataOperator = new DataOperator(
+                _gamePlayService,
+                _gameStateService,
+                _levelService,
+                _soundService,
+                _qualityToggle,
+                _wallet,
+                _parameters,
+                _counterParameterLevel,
+                _boost,
+                _yandexAuthorization,
+                _dailyReward,
+                _achievementSystem,
+                _skinView,
+                _skinReward,
+                _tutorial);
+
+            _dataOperator.Load();
+        }
+        
         private void InitializeView()
         {
             _controlManual.Initialize(_gameStateService, _coroutineService);
@@ -150,14 +197,7 @@ namespace Core
             _authorizationView.Initialize(_yandexAuthorization);
             _dailyView.Initialize(_gameStateService, _dailyReward);
             _skinReward.Initialize(_gameStateService);
-            _skinView.Initialize(_gameStateService, _skinReward,_wheel.GetComponent<AnimationWheel>());
-        }
-
-        private void InitializeLoad()
-        {
-            _dataOperator = new DataOperator(_gamePlayService, _gameStateService, _levelService, _soundController, _qualityToggle,
-                _wallet, _parameters, _counterParameterLevel, _boost, _yandexAuthorization, _dailyReward, _achievementSystem, _skinView, _skinReward, _tutorial);
-            _dataOperator.Load();
+            _skinView.Initialize(_gameStateService, _skinReward, _wheel.GetComponent<AnimationWheel>());
         }
 
         private void InitializeTutorial()
@@ -168,6 +208,12 @@ namespace Core
                 tutorialState = (TutorialState)PlayerPrefs.GetInt(TutorialData);
 
             _tutorial?.Initialize(_gameStateService, tutorialState, _achievementSystem);
+        }
+        
+        private void OnGameStateChanged(GameState state)
+        {
+            if (_tutorial == null && state == GameState.Load)
+                _gameStateService.ChangeState(GameState.Initializing);
         }
     }
 }

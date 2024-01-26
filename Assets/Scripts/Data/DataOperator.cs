@@ -26,7 +26,7 @@ namespace Data
         private readonly GameStateService _gameStateService;
         private readonly LevelService _levelService;
         private readonly LevelScore _levelScore;
-        private readonly SoundController _soundController;
+        private readonly SoundService _soundService;
         private readonly QualityToggle _qualityToggle;
         private readonly Wallet _wallet;
         private readonly Dictionary<ParameterType, Parameter> _parameters;
@@ -37,19 +37,19 @@ namespace Data
         private readonly AchievementSystem _achievementSystem;
         private readonly SkinView _skinView;
         private readonly SkinReward _skinReward;
-        private readonly TutorialManager _tutorialManager;
+        private readonly TutorialLevel _tutorialLevel;
 
-        public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundController soundController,
+        public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundService soundService,
             QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, CounterParameterLevel counterParameterLevel,
             BoostParameter boost, YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem, SkinView skinView,
-            SkinReward skinReward, TutorialManager tutorialManager)
+            SkinReward skinReward, TutorialLevel tutorialLevel)
         {
             _gamePlayService = gamePlayService;
             _gameStateService = gameStateService;
             _gamePlayService.SetDataOperator(this);
             _levelService = levelService;
             _levelScore = _levelService.Score;
-            _soundController = soundController;
+            _soundService = soundService;
             _qualityToggle = qualityToggle;
             _wallet = wallet;
             _parameters = parameters;
@@ -60,7 +60,7 @@ namespace Data
             _achievementSystem = achievementSystem;
             _skinView = skinView;
             _skinReward = skinReward;
-            _tutorialManager = tutorialManager;
+            _tutorialLevel = tutorialLevel;
 #if UNITY_EDITOR
             _saveSystem = new PlayerPrefsSystem(DataVersion);
 #elif YANDEX_GAMES
@@ -207,10 +207,10 @@ namespace Data
 
         private void SaveTutorialState()
         {
-            if (_tutorialManager == null)
+            if (_tutorialLevel == null)
                 return;
 
-            _gameData.TutorialComplete = _tutorialManager.TutorialComplete;
+            _gameData.TutorialComplete = _tutorialLevel.TutorialComplete;
         }
 
         private void SaveAchievements()
@@ -242,7 +242,7 @@ namespace Data
 
         private void LoadHighscore() => _levelScore.LoadHighscore(_gameData.Highscore);
 
-        private void LoadMutedState() => _soundController.LoadMutedState(_gameData.IsMuted);
+        private void LoadMutedState() => _soundService.LoadMutedState(_gameData.IsMuted);
 
         private void LoadSelectedQuality() => _qualityToggle.LoadSelectedQuality(_gameData.IsNormalQuality);
 
@@ -298,7 +298,7 @@ namespace Data
         {
             _wallet.MoneyChanged += SaveMoney;
             _levelScore.HighscoreChanged += SaveHighscore;
-            _soundController.MutedChanged += SaveMuted;
+            _soundService.MutedChanged += SaveMuted;
             _qualityToggle.QualityChanged += SaveSelectedQuality;
             _yandexAuthorization.Authorized += OnAuthorized;
 
@@ -324,7 +324,7 @@ namespace Data
         {
             _wallet.MoneyChanged -= SaveMoney;
             _levelScore.HighscoreChanged -= SaveHighscore;
-            _soundController.MutedChanged -= SaveMuted;
+            _soundService.MutedChanged -= SaveMuted;
             _qualityToggle.QualityChanged -= SaveSelectedQuality;
             _yandexAuthorization.Authorized -= OnAuthorized;
 

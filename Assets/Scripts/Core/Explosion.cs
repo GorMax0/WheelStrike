@@ -47,10 +47,12 @@ namespace Core
             }
 
             position /= _rigidbodies.Length;
+
             return position;
         }
 
-        private Vector3 CalculateForce(Vector3 epicenter, int partIndex) => (_rigidbodies[partIndex].transform.position - epicenter).normalized * _explosionPower + _additionalVector;
+        private Vector3 CalculateForce(Vector3 epicenter, int partIndex) =>
+            (_rigidbodies[partIndex].transform.position - epicenter).normalized * _explosionPower + _additionalVector;
 
         private void SetForceOfPart(Vector3 epicenter, int partIndex, out Vector3 force)
         {

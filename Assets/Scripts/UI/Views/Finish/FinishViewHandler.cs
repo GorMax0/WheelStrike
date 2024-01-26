@@ -43,9 +43,13 @@ namespace UI.Views.Finish
         private bool _hasOpenVideoAd;
 
         public event Action<int> DisplayedDistanceChanged;
+
         public event Action<int> DisplayedRewardChanged;
+
         public event Action<int> DisplayedBonusRewardChanged;
+
         public event Action<int> DisplayedHighscoreChanged;
+
         public event Action<int> DisplayedHighscoreLoaded;
 
         private void OnEnable()
@@ -67,10 +71,17 @@ namespace UI.Views.Finish
             _levelScore.HighscoreLoaded -= OnHighscoreLoaded;
         }
 
-        public void Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService)
+        public void Initialize(
+            GameStateService gameStateService,
+            CoroutineService coroutineService,
+            ITravelable travelable,
+            LevelService levelService)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService, ITravelable travelable, LevelService levelService): Already initialized.");
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, "
+                    + $"CoroutineService coroutineService, ITravelable travelable, "
+                    + $"LevelService levelService): Already initialized.");
 
             _topLabelSetter = GetComponent<FinishViewTopLabelSetter>();
             _gameStateService = gameStateService;
@@ -89,11 +100,14 @@ namespace UI.Views.Finish
             OnEnable();
         }
 
-        public void DisplayDistance() => _distanceDisplay.Run(DisplayValue(_travelable.DistanceTraveled, DisplayedDistanceChanged));
+        public void DisplayDistance() =>
+            _distanceDisplay.Run(DisplayValue(_travelable.DistanceTraveled, DisplayedDistanceChanged));
 
-        public void DisplayReward() => _scoreDisplay.Run(DisplayValue(_levelScore.Reward, DisplayedRewardChanged));
+        public void DisplayReward() => _scoreDisplay.Run(
+            DisplayValue(_levelScore.Reward, DisplayedRewardChanged));
 
-        public void DisplayBonusReward() => _bonusScoreDisplay.Run(DisplayValue(_levelScore.BonusReward, DisplayedBonusRewardChanged));
+        public void DisplayBonusReward() =>
+            _bonusScoreDisplay.Run(DisplayValue(_levelScore.BonusReward, DisplayedBonusRewardChanged));
 
         public void OnAdsButtonClick()
         {
@@ -125,19 +139,20 @@ namespace UI.Views.Finish
             {
                 displayedValue = Mathf.MoveTowards(displayedValue, endValue, step);
                 displayedValueChanged?.Invoke((int)displayedValue);
+
                 yield return waitForSeconds;
             }
         }
 
         private void PauseOn()
         {
-            SoundController.ChangeWhenAd(true);
+            SoundService.ChangeWhenAd(true);
             Time.timeScale = 0f;
         }
 
         private static void PauseOff()
         {
-            SoundController.ChangeWhenAd(false);
+            SoundService.ChangeWhenAd(false);
             Time.timeScale = 1f;
         }
 
@@ -166,9 +181,11 @@ namespace UI.Views.Finish
             {
                 case GameState.Finished:
                     Invoke(nameof(OnGameFinished), 0.3f);
+
                     break;
                 case GameState.Restart:
                     OnGameRestart();
+
                     break;
             }
         }

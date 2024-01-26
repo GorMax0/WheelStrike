@@ -29,15 +29,25 @@ namespace Services.Level
         private bool _isInitialize;
 
         public string NameForAnalytic => _nameForAnalytic;
+
         public float LengthRoad => _finishWall.transform.position.z * DistanceCoefficient;
+
         public int IndexNextScene => _indexCurrentScene;
+
         public bool IsInfinity => _isInfinity;
+
         public LevelScore Score { get; private set; }
 
-        public void Initialize(GameStateService gameStateService, ITravelable travelable, InteractionHandler interactionHandler, Parameter income, BoostParameter boost)
+        public void Initialize(
+            GameStateService gameStateService,
+            ITravelable travelable,
+            InteractionHandler interactionHandler,
+            Parameter income,
+            BoostParameter boost)
         {
             if (_isInitialize == true)
-                throw new System.InvalidOperationException($"{GetType()}: Initialize(ITravelable travelable, Parameter income): Already initialized.");
+                throw new System.InvalidOperationException(
+                    $"{GetType()}: Initialize(ITravelable travelable, Parameter income): Already initialized.");
 
             Score = new LevelScore(travelable, income, boost);
             _gameStateService = gameStateService;
@@ -65,6 +75,7 @@ namespace Services.Level
                 _worldPanel.gameObject.SetActive(true);
                 _worldPanel.DisplayProgress();
                 _gameStateService.ChangeState(GameState.Save);
+
                 return;
             }
 
@@ -73,7 +84,8 @@ namespace Services.Level
 
         public void SetNextScene()
         {
-            if (_travelable.DistanceTraveled >= LengthRoad && _indexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
+            if (_travelable.DistanceTraveled >= LengthRoad
+                && _indexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
                 _indexCurrentScene++;
         }
 
@@ -87,10 +99,12 @@ namespace Services.Level
             {
                 levelGenerator = component;
                 _isInfinity = true;
+
                 return true;
             }
 
             levelGenerator = null;
+
             return false;
         }
     }

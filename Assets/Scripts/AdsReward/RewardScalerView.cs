@@ -31,14 +31,14 @@ namespace AdsReward
             if (_isInitialized == false)
                 return;
 
-            _rewardScaler.ZoneTransmitted += SetZone;
-            _rewardScaler.CurrentValueChanged += ChangeSliderValue;
+            _rewardScaler.ZoneTransmitted += OnSetZone;
+            _rewardScaler.CurrentValueChanged += OnChangeSliderValue;
         }
 
         private void OnDisable()
         {
-            _rewardScaler.ZoneTransmitted -= SetZone;
-            _rewardScaler.CurrentValueChanged -= ChangeSliderValue;
+            _rewardScaler.ZoneTransmitted -= OnSetZone;
+            _rewardScaler.CurrentValueChanged -= OnChangeSliderValue;
         }
 
         public void Initialize(RewardScaler rewardScaler)
@@ -69,7 +69,7 @@ namespace AdsReward
             return rates;
         }
 
-        private void SetZone(RewardZone currentZone)
+        private void OnSetZone(RewardZone currentZone)
         {
             if (gameObject.activeInHierarchy == false)
                 return;
@@ -91,6 +91,6 @@ namespace AdsReward
                 .Join(currentReward.transform.DOScale(StartScale, DeselectDuration));
         }
 
-        private void ChangeSliderValue(float value) => _slider.value = value;
+        private void OnChangeSliderValue(float value) => _slider.value = value;
     }
 }

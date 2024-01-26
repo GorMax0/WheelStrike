@@ -11,7 +11,7 @@ using GameAnalyticsSDK;
 
 namespace UI.Manual.Tutorial
 {
-    public class TutorialManager : MonoBehaviour, IPointerDownHandler
+    public class TutorialLevel : MonoBehaviour, IPointerDownHandler
     {
         [SerializeField] private StepTutorial[] _portraitSteps;
         [SerializeField] private StepTutorial[] _landscapeSteps;

@@ -25,6 +25,7 @@ namespace Core
             float nextBrickPositionX;
             float nextBrickPositionY;
             bool isEvenRow;
+            Transform parentBrick = transform;
 
             for (int i = 0; i < _height; i++)
             {
@@ -33,10 +34,17 @@ namespace Core
 
                 for (int j = 0; j < _width; j++)
                 {
-                    nextBrickPositionX = isEvenRow ? transform.position.x + halfWidthBrick + widthBrick * j : transform.position.x + widthBrick * j;
-                    Vector3 nextPosition = new Vector3(nextBrickPositionX, nextBrickPositionY, transform.position.z);
+                    nextBrickPositionX = isEvenRow ? transform.position.x + halfWidthBrick + widthBrick * j :
+                        transform.position.x + widthBrick * j;
 
-                    Brick brick = Instantiate(_brickTemplate, nextPosition, _brickTemplate.transform.rotation, transform);
+                    Vector3 nextPosition = new Vector3(nextBrickPositionX, nextBrickPositionY, parentBrick.position.z);
+
+                    Brick brick = Instantiate(
+                        _brickTemplate,
+                        nextPosition,
+                        _brickTemplate.transform.rotation,
+                        parentBrick);
+
                     brick.gameObject.SetActive(false);
                     bricks.Add(brick);
                 }
@@ -50,8 +58,10 @@ namespace Core
         private void GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick)
         {
             if (_brickTemplate.TryGetComponent(out MeshFilter meshFilterBrick) == false)
-                throw new NullReferenceException($"{GetType()}: GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick): " +
-                    $"Brick Template named {_brickTemplate.name} does not have component MeshFilter.");
+                throw new NullReferenceException(
+                    $"{GetType()}: GetSizeBrick(out float widthBrick, out float heightBrick, "
+                    + $"out float lengthBrick): Brick Template named {_brickTemplate.name} "
+                    + $"does not have component MeshFilter.");
 
             widthBrick = meshFilterBrick.sharedMesh.bounds.size.x;
             heightBrick = meshFilterBrick.sharedMesh.bounds.size.z;

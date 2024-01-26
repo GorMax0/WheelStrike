@@ -42,21 +42,23 @@ namespace Core.Wheel
                 return;
 
             _gameStateService.GameStateChanged += OnGameStateService;
-            _forceScale.MultiplierChanged += Swing;
+            _forceScale.MultiplierChanged += OnSwing;
             _collisionHandler.CollidedWithGround += OnCollidedWithGround;
         }
 
         private void OnDisable()
         {
             _gameStateService.GameStateChanged -= OnGameStateService;
-            _forceScale.MultiplierChanged -= Swing;
+            _forceScale.MultiplierChanged -= OnSwing;
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
             if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, CoroutineService coroutineService): Already initialized.");
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, "
+                    + $"CoroutineService coroutineService): Already initialized.");
 
             _gameStateService = gameStateService;
             _rotating = new CoroutineRunning(coroutineService);
@@ -71,8 +73,9 @@ namespace Core.Wheel
         public void ParameterUp()
         {
             DOTween.Sequence()
-             .Append(transform.DOScale(_scaleIncrease, AnimationDuration)).SetEase(Ease.InOutQuad)
-             .Append(transform.DOScale(_startScale, AnimationDuration));
+                .Append(transform.DOScale(_scaleIncrease, AnimationDuration))
+                .SetEase(Ease.InOutQuad)
+                .Append(transform.DOScale(_startScale, AnimationDuration));
 
             _parameterUpEffect.gameObject.SetActive(true);
         }
@@ -82,7 +85,7 @@ namespace Core.Wheel
             _meshWheel = skin;
         }
 
-        private void Swing(float currentForceValue)
+        private void OnSwing(float currentForceValue)
         {
             float swingValue = _deviationWhenSwinging.Evaluate(currentForceValue);
 
@@ -121,7 +124,8 @@ namespace Core.Wheel
             ResetRotationByYZ();
         }
 
-        private void ResetRotationByYZ() => _meshWheel.transform.rotation = new Quaternion(_meshWheel.transform.rotation.x, 0f, 0f, 1f);
+        private void ResetRotationByYZ() =>
+            _meshWheel.transform.rotation = new Quaternion(_meshWheel.transform.rotation.x, 0f, 0f, 1f);
 
         private void OnGameStateService(GameState state)
         {
@@ -129,6 +133,7 @@ namespace Core.Wheel
             {
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
             }
         }

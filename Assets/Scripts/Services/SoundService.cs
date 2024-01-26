@@ -7,8 +7,8 @@ using GameAnalyticsSDK;
 
 namespace Services
 {
-    [RequireComponent(typeof(SoundController))]
-    public class SoundController : MonoBehaviour
+    [RequireComponent(typeof(SoundService))]
+    public class SoundService : MonoBehaviour
     {
         [SerializeField] private AudioClip _music;
         [SerializeField] private AudioClip _wind;

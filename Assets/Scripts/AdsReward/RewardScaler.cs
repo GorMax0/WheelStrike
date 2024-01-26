@@ -65,38 +65,32 @@ namespace AdsReward
 
         private int SetZone()
         {
-            if (_currentValue <= -RedField && _currentZone == RewardZone.LeftX3)
+            switch (_currentValue)
             {
-                _currentZone = RewardZone.LeftX2;
-                ZoneTransmitted?.Invoke(_currentZone);
-                return CurrentRate = RewardRateX2;
-            }
-            else if (-RedField <= _currentValue && _currentValue <= -YellowField && (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.LeftX2))
-            {
-                _currentZone = RewardZone.LeftX3;
-                ZoneTransmitted?.Invoke(_currentZone);
-                return CurrentRate = RewardRateX3;
-            }
-            else if (-YellowField <= _currentValue && _currentValue <= YellowField && (_currentZone == RewardZone.LeftX3 || _currentZone == RewardZone.RightX3))
-            {
-                _currentZone = RewardZone.MiddleX5;
-                ZoneTransmitted?.Invoke(_currentZone);
-                return CurrentRate = RewardRateX5;
-            }
-            else if (YellowField <= _currentValue && _currentValue <= RedField && (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.RightX2))
-            {
-                _currentZone = RewardZone.RightX3;
-                ZoneTransmitted?.Invoke(_currentZone);
-                return CurrentRate = RewardRateX3;
-            }
-            else if (_currentValue >= RedField && _currentZone == RewardZone.RightX3)
-            {
-                _currentZone = RewardZone.RightX2;
-                ZoneTransmitted?.Invoke(_currentZone);
-                return CurrentRate = RewardRateX2;
+                case <= -RedField when _currentZone == RewardZone.LeftX3:
+                    _currentZone = RewardZone.LeftX2;
+                    ZoneTransmitted?.Invoke(_currentZone);
+                    return CurrentRate = RewardRateX2;
+                case >= -RedField and <= -YellowField when (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.LeftX2):
+                    _currentZone = RewardZone.LeftX3;
+                    ZoneTransmitted?.Invoke(_currentZone);
+                    return CurrentRate = RewardRateX3;
+                case >= -YellowField and <= YellowField when (_currentZone == RewardZone.LeftX3 || _currentZone == RewardZone.RightX3):
+                    _currentZone = RewardZone.MiddleX5;
+                    ZoneTransmitted?.Invoke(_currentZone);
+                    return CurrentRate = RewardRateX5;
+                case >= YellowField and <= RedField when (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.RightX2):
+                    _currentZone = RewardZone.RightX3;
+                    ZoneTransmitted?.Invoke(_currentZone);
+                    return CurrentRate = RewardRateX3;
+                case >= RedField when _currentZone == RewardZone.RightX3:
+                    _currentZone = RewardZone.RightX2;
+                    ZoneTransmitted?.Invoke(_currentZone);
+                    return CurrentRate = RewardRateX2;
+                default:
+                    return CurrentRate;
             }
 
-            return CurrentRate;
         }
 
         private void StartTween() => _replayRunning.Run(ChangeMultiplier());
