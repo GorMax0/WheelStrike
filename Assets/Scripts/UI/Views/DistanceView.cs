@@ -1,9 +1,9 @@
 using System;
-using UnityEngine;
-using TMPro;
+using System.Collections;
 using Core.Wheel;
 using Services.Coroutines;
-using System.Collections;
+using TMPro;
+using UnityEngine;
 
 namespace UI.Views
 {
@@ -29,8 +29,9 @@ namespace UI.Views
 
         public void Initialize(CoroutineService coroutineService)
         {
-            if (_isInitialize == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(CoroutineService coroutineService): Already initialized.");
+            if (_isInitialize)
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(CoroutineService coroutineService): Already initialized.");
 
             _showDistance = new CoroutineRunning(coroutineService);
             _isInitialize = true;
@@ -43,9 +44,11 @@ namespace UI.Views
         private IEnumerator ShowDistance()
         {
             WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+
             while (true)
             {
                 _text.text = $"{Travelable.DistanceTraveled}m";
+
                 yield return waitForFixedUpdate;
             }
         }

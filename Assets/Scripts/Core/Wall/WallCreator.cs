@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core
+namespace Core.Wall
 {
     public class WallCreator : MonoBehaviour
     {
+        private const int Half = 2;
         [SerializeField] private Brick _brickTemplate;
         [SerializeField] private int _width = 10;
         [SerializeField] private int _height = 34;
-
-        private const int Half = 2;
 
         private BoxCollider _boxCollider;
 
@@ -34,8 +33,9 @@ namespace Core
 
                 for (int j = 0; j < _width; j++)
                 {
-                    nextBrickPositionX = isEvenRow ? transform.position.x + halfWidthBrick + widthBrick * j :
-                        transform.position.x + widthBrick * j;
+                    nextBrickPositionX = isEvenRow
+                        ? transform.position.x + halfWidthBrick + widthBrick * j
+                        : transform.position.x + widthBrick * j;
 
                     Vector3 nextPosition = new Vector3(nextBrickPositionX, nextBrickPositionY, parentBrick.position.z);
 
@@ -58,10 +58,12 @@ namespace Core
         private void GetSizeBrick(out float widthBrick, out float heightBrick, out float lengthBrick)
         {
             if (_brickTemplate.TryGetComponent(out MeshFilter meshFilterBrick) == false)
+            {
                 throw new NullReferenceException(
                     $"{GetType()}: GetSizeBrick(out float widthBrick, out float heightBrick, "
                     + $"out float lengthBrick): Brick Template named {_brickTemplate.name} "
-                    + $"does not have component MeshFilter.");
+                    + "does not have component MeshFilter.");
+            }
 
             widthBrick = meshFilterBrick.sharedMesh.bounds.size.x;
             heightBrick = meshFilterBrick.sharedMesh.bounds.size.z;

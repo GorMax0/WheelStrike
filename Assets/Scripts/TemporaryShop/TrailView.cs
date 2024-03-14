@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
-using Trail;
 
-public class TrailView : MonoBehaviour
+namespace TemporaryShop
 {
-    private TrailFX _trail;
-    private bool _isSelected;
+    public class TrailView : MonoBehaviour
+    {
+        private TrailFX _trail;
+        private bool _isSelected;
 
-    public event Action<TrailFX> Selected;
+        public event Action<TrailFX> Selected;
+    }
 }

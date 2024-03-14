@@ -1,8 +1,8 @@
+using Core;
 using TMPro;
 using UnityEngine;
-using Core;
 
-namespace UI.Views.Money
+namespace UI.Views.MoneyView
 {
     public class WalletView : MonoBehaviour
     {

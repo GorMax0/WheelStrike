@@ -5,14 +5,6 @@ namespace Parameters
 {
     public class CounterParameterLevel
     {
-        private int _countSpeedLevel = 1;
-        private int _countSizeLevel = 1;
-        private int _countIncomeLevel = 1;
-
-        public int CountSpeedLevel => _countSpeedLevel;
-        public int CountSizeLevel => _countSizeLevel;
-        public int CountIncomeLevel => _countIncomeLevel;
-
         private readonly AchievementSystem _achievementSystem;
 
         public CounterParameterLevel(AchievementSystem achievementSystem)
@@ -20,31 +12,40 @@ namespace Parameters
             _achievementSystem = achievementSystem;
         }
 
+        public int CountSpeedLevel { get; private set; } = 1;
+
+        public int CountSizeLevel { get; private set; } = 1;
+
+        public int CountIncomeLevel { get; private set; } = 1;
+
         public void Load(int countSpeedLevel, int countSizeLevel, int countIncomeLevel)
         {
-            _countSpeedLevel = countSpeedLevel;
-            _achievementSystem.PassValue(AchievementType.Speed, _countSpeedLevel);
-            _countSizeLevel = countSizeLevel;
-            _achievementSystem.PassValue(AchievementType.Size, _countSizeLevel);
-            _countIncomeLevel = countIncomeLevel;
-            _achievementSystem.PassValue(AchievementType.Income, _countIncomeLevel);
+            CountSpeedLevel = countSpeedLevel;
+            _achievementSystem.PassValue(AchievementType.Speed, CountSpeedLevel);
+            CountSizeLevel = countSizeLevel;
+            _achievementSystem.PassValue(AchievementType.Size, CountSizeLevel);
+            CountIncomeLevel = countIncomeLevel;
+            _achievementSystem.PassValue(AchievementType.Income, CountIncomeLevel);
         }
-        
+
         public void CheckAchievement(ParameterType type, int increase = 1)
         {
             switch (type)
             {
                 case ParameterType.Speed:
-                    _countSpeedLevel += increase;
-                    _achievementSystem.PassValue(AchievementType.Speed, _countSpeedLevel);
+                    CountSpeedLevel += increase;
+                    _achievementSystem.PassValue(AchievementType.Speed, CountSpeedLevel);
+
                     break;
                 case ParameterType.Size:
-                    _countSizeLevel += increase;
-                    _achievementSystem.PassValue(AchievementType.Size, _countSizeLevel);
+                    CountSizeLevel += increase;
+                    _achievementSystem.PassValue(AchievementType.Size, CountSizeLevel);
+
                     break;
                 case ParameterType.Income:
-                    _countIncomeLevel += increase;
-                    _achievementSystem.PassValue(AchievementType.Income, _countIncomeLevel);
+                    CountIncomeLevel += increase;
+                    _achievementSystem.PassValue(AchievementType.Income, CountIncomeLevel);
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

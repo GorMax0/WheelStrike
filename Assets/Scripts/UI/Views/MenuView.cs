@@ -1,5 +1,5 @@
-using UnityEngine;
 using Services.GameStates;
+using UnityEngine;
 
 namespace UI.Views
 {
@@ -40,6 +40,7 @@ namespace UI.Views
             {
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
             }
         }

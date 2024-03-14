@@ -4,6 +4,6 @@ namespace UI.Manual.Tutorial
     {
         Start,
         HalfCompleted,
-        FullCompleted
+        FullCompleted,
     }
 }

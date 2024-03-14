@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Achievements;
+using Boost;
 using Core;
 using Parameters;
-using Boost;
+using SDK;
 using Services;
-using Services.Level;
-using Authorization;
-using Agava.YandexGames;
 using Services.GameStates;
+using Services.Level;
 using Skins;
 using UI.Manual.Tutorial;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Data
 {
@@ -19,30 +19,42 @@ namespace Data
     {
         private const string DataVersion = "v0.4.01";
         private const int DefaultScene = 1;
+        private readonly AchievementSystem _achievementSystem;
+        private readonly BoostParameter _boost;
+        private readonly CounterParameterLevel _counterParameterLevel;
+        private readonly DailyReward _dailyReward;
+        private readonly GamePlayService _gamePlayService;
+        private readonly GameStateService _gameStateService;
+        private readonly LevelScore _levelScore;
+        private readonly LevelService _levelService;
+        private readonly Dictionary<ParameterType, Parameter> _parameters;
+        private readonly QualityToggle _qualityToggle;
+        private readonly SkinReward _skinReward;
+        private readonly SkinView _skinView;
+        private readonly SoundService _soundService;
+        private readonly TutorialLevel _tutorialLevel;
+        private readonly Wallet _wallet;
+        private readonly YandexAuthorization _yandexAuthorization;
 
         private GameData _gameData;
         private ISaveSystem _saveSystem;
-        private readonly GamePlayService _gamePlayService;
-        private readonly GameStateService _gameStateService;
-        private readonly LevelService _levelService;
-        private readonly LevelScore _levelScore;
-        private readonly SoundService _soundService;
-        private readonly QualityToggle _qualityToggle;
-        private readonly Wallet _wallet;
-        private readonly Dictionary<ParameterType, Parameter> _parameters;
-        private readonly CounterParameterLevel _counterParameterLevel;
-        private readonly BoostParameter _boost;
-        private readonly YandexAuthorization _yandexAuthorization;
-        private readonly DailyReward _dailyReward;
-        private readonly AchievementSystem _achievementSystem;
-        private readonly SkinView _skinView;
-        private readonly SkinReward _skinReward;
-        private readonly TutorialLevel _tutorialLevel;
 
-        public DataOperator(GamePlayService gamePlayService, GameStateService gameStateService, LevelService levelService, SoundService soundService,
-            QualityToggle qualityToggle, Wallet wallet, Dictionary<ParameterType, Parameter> parameters, CounterParameterLevel counterParameterLevel,
-            BoostParameter boost, YandexAuthorization yandexAuthorization, DailyReward dailyReward, AchievementSystem achievementSystem, SkinView skinView,
-            SkinReward skinReward, TutorialLevel tutorialLevel)
+        public DataOperator(
+            GamePlayService gamePlayService,
+            GameStateService gameStateService,
+            LevelService levelService,
+            SoundService soundService,
+            QualityToggle qualityToggle,
+            Wallet wallet,
+            Dictionary<ParameterType, Parameter> parameters,
+            CounterParameterLevel counterParameterLevel,
+            BoostParameter boost,
+            YandexAuthorization yandexAuthorization,
+            DailyReward dailyReward,
+            AchievementSystem achievementSystem,
+            SkinView skinView,
+            SkinReward skinReward,
+            TutorialLevel tutorialLevel)
         {
             _gamePlayService = gamePlayService;
             _gameStateService = gameStateService;
@@ -80,7 +92,7 @@ namespace Data
             _gameData = new GameData(DataVersion);
             _saveSystem.Save(_gameData);
             PlayerPrefs.DeleteAll();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+            SceneManager.LoadScene(2);
         }
 
         public void Save()
@@ -107,7 +119,6 @@ namespace Data
 
             _saveSystem.Save(_gameData);
         }
-
 
         public async void Load()
         {
@@ -139,7 +150,6 @@ namespace Data
             _gameStateService.ChangeState(GameState.Load);
         }
 
-
         private void SaveIndexScene() => _gameData.IndexScene = _levelService.IndexNextScene;
 
         private void SaveHighscore(int highscore) => _gameData.Highscore = highscore;
@@ -164,7 +174,8 @@ namespace Data
 
         private void SavePlaytime(float playtime) => _gameData.Playtime = (int)playtime;
 
-        private void SaveCountCollisionObstacles(int countCollisionObstacles) => _gameData.CountCollisionObstacles = countCollisionObstacles;
+        private void SaveCountCollisionObstacles(int countCollisionObstacles) =>
+            _gameData.CountCollisionObstacles = countCollisionObstacles;
 
         private void SaveCountLaunch(int countLaunch) => _gameData.CountLaunch = countLaunch;
 
@@ -178,15 +189,19 @@ namespace Data
             {
                 case ParameterType.Speed:
                     _gameData.SpeedParameter = parameter.Level;
+
                     break;
                 case ParameterType.Size:
                     _gameData.SizeParameter = parameter.Level;
+
                     break;
                 case ParameterType.Income:
                     _gameData.IncomeParameter = parameter.Level;
+
                     break;
                 default:
-                    throw new InvalidOperationException($"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
+                    throw new InvalidOperationException(
+                        $"{GetType()}: SaveParameter(Parameter parameter): Invalid parameter");
             }
         }
 
@@ -229,14 +244,19 @@ namespace Data
 
         private void LoadPlaytime() => _gamePlayService.LoadPlaytime(_gameData.Playtime);
 
-        private void LoadCountCollisionObstacles() => _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
+        private void LoadCountCollisionObstacles() =>
+            _gamePlayService.LoadCountCollisionObstacles(_gameData.CountCollisionObstacles);
 
-        private void LoadAllDistanceTraveled() => _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
+        private void LoadAllDistanceTraveled() =>
+            _gamePlayService.LoadDistanceTraveledOverAllTime(_gameData.DistanceTraveledOverAllTime);
 
         private void LoadCountLaunch() => _gamePlayService.LoadCountLaunch(_gameData.CountLaunch);
 
         private void LoadCounterParameterLevels() =>
-            _counterParameterLevel.Load(_gameData.SpeedAchievement, _gameData.SizeAchievement, _gameData.IncomeAchievement);
+            _counterParameterLevel.Load(
+                _gameData.SpeedAchievement,
+                _gameData.SizeAchievement,
+                _gameData.IncomeAchievement);
 
         private void LoadMoney() => _wallet.LoadMoney(_gameData.Money);
 
@@ -253,12 +273,14 @@ namespace Data
                 if (parameter.Key == ParameterType.Speed)
                 {
                     parameter.Value.LoadLevel(_gameData.SpeedParameter);
+
                     continue;
                 }
 
                 if (parameter.Key == ParameterType.Size)
                 {
                     parameter.Value.LoadLevel(_gameData.SizeParameter);
+
                     continue;
                 }
 
@@ -287,7 +309,9 @@ namespace Data
             _achievementSystem.PassValue(AchievementType.Launch, _gameData.CountLaunch);
             _achievementSystem.PassValue(AchievementType.SpentMoney, _gameData.SpentMoney);
             _achievementSystem.PassValue(AchievementType.Training, _gameData.TutorialComplete);
-            _achievementSystem.PassValue(AchievementType.Top, _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
+            _achievementSystem.PassValue(
+                AchievementType.Top,
+                _achievementSystem.SetTopRankValue(_gameData.TopAchievement));
         }
 
         private void LoadSkinIndex() => _skinView.LoadIndex(_gameData.IndexSkin);
@@ -302,14 +326,13 @@ namespace Data
             _qualityToggle.QualityChanged += SaveSelectedQuality;
             _yandexAuthorization.Authorized += OnAuthorized;
 
-            foreach (var parameter in _parameters)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
             {
                 parameter.Value.LevelChanged += SaveParameter;
             }
 
             _boost.LevelChanged += SaveBoostLevel;
         }
-
 
         private async void OnAuthorized()
         {
@@ -328,7 +351,7 @@ namespace Data
             _qualityToggle.QualityChanged -= SaveSelectedQuality;
             _yandexAuthorization.Authorized -= OnAuthorized;
 
-            foreach (var parameter in _parameters)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
             {
                 parameter.Value.LevelChanged -= SaveParameter;
             }

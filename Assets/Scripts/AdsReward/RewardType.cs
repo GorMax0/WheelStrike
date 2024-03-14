@@ -4,6 +4,6 @@ namespace AdsReward
     {
         Money,
         Trail,
-        CarColor
+        CarColor,
     }
 }

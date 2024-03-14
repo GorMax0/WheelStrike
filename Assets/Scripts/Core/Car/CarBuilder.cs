@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Empty;
 using Services.GameStates;
+using UnityEngine;
 
-namespace Core
+namespace Core.Car
 {
     public class CarBuilder : MonoBehaviour
     {
@@ -21,7 +21,12 @@ namespace Core
                 indexCar = Random.Range(0, _prefabs.Count);
                 indexColor = Random.Range(0, _colors.Count);
 
-                Car car = Instantiate(_prefabs[indexCar], _spawnPoints[i].transform.position, _spawnPoints[i].transform.rotation, transform);
+                Car car = Instantiate(
+                    _prefabs[indexCar],
+                    _spawnPoints[i].transform.position,
+                    _spawnPoints[i].transform.rotation,
+                    transform);
+
                 car.Initialize(gameStateService, _colors[indexColor].Material);
 
                 Destroy(_spawnPoints[i].gameObject);

@@ -9,11 +9,13 @@ namespace Boost
         public const float BaseSpeedValue = 0.5f;
         public const float BaseIncomeValue = 0.2f;
 
-        public event Action LevelChanged;
-
         public float SpeedMultiplier => BaseSpeedValue * Level;
+
         public float IncomeMultiplier => BaseIncomeValue * Level;
+
         public int Level { get; private set; }
+
+        public event Action LevelChanged;
 
         public void LoadLevel(int level)
         {

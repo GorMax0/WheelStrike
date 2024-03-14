@@ -4,6 +4,6 @@
     {
         Speed,
         Size,
-        Income
+        Income,
     }
 }

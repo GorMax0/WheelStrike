@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core
+namespace Core.Car
 {
     public class CarWheel : MonoBehaviour
     {
@@ -10,17 +10,17 @@ namespace Core
         private Car _car;
         private bool _isRotate;
 
-        private void OnDestroy()
-        {
-            _car.IsMovable -= OnIsMovable;
-        }
-
         private void Update()
         {
             if (_isRotate == false)
                 return;
 
             transform.Rotate(RotationAxis, RotationSpeed);
+        }
+
+        private void OnDestroy()
+        {
+            _car.IsMovable -= OnIsMovable;
         }
 
         public void Initialize(Car car)

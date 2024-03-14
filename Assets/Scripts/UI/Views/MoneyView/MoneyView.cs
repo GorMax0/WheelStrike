@@ -1,30 +1,29 @@
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
 
-namespace UI.Views.Money
+namespace UI.Views.MoneyView
 {
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(AudioSource))]
     public class MoneyView : MonoBehaviour
     {
-        [SerializeField] private Image _icon;
-        [SerializeField] private TMP_Text _count;
-
         private const float ScaleCorrection = 0.6f;
         private const float PositionXMultiplier = 300;
         private readonly float WidthLimiter = Screen.width / 6;
+        [SerializeField] private Image _icon;
+        [SerializeField] private TMP_Text _count;
 
         private RectTransform _rectTransform;
         private AudioSource _audioEffect;
         private Vector3 _startPosition;
-        private Color _startColor = new Color(1, 1, 1, 1);
-        private float _maxRandomOffset = 80;
+        private readonly Color _startColor = new Color(1, 1, 1, 1);
+        private readonly float _maxRandomOffset = 80;
         private float _movingDistanceY = 250f;
-        private float _tweenMoveDuration = 0.5f;
-        private float _tweenFadeDuration = 0.20f;
-        private float _endTransparency = 0f;
+        private readonly float _tweenMoveDuration = 0.5f;
+        private readonly float _tweenFadeDuration = 0.20f;
+        private readonly float _endTransparency = 0f;
 
         private void Awake()
         {
@@ -37,7 +36,9 @@ namespace UI.Views.Money
             float newPositionX = Mathf.Clamp(position.x * PositionXMultiplier, -WidthLimiter, WidthLimiter);
             _startPosition = new Vector3(newPositionX, position.y);
 
-            _rectTransform.localPosition = Screen.width < Screen.height ? _startPosition : _startPosition * ScaleCorrection;
+            _rectTransform.localPosition =
+                Screen.width < Screen.height ? _startPosition : _startPosition * ScaleCorrection;
+
             _rectTransform.localScale = Screen.width < Screen.height ? Vector3.one : Vector3.one * ScaleCorrection;
         }
 
@@ -80,8 +81,8 @@ namespace UI.Views.Money
             Vector2 endPosition = new Vector2(endPointX, endPointY);
 
             DOTween.Sequence()
-              .Append(_rectTransform.DOAnchorPos(endPosition, durationMove))
-              .AppendCallback(Disable);
+                .Append(_rectTransform.DOAnchorPos(endPosition, durationMove))
+                .AppendCallback(Disable);
         }
 
         private void CleanFade()
@@ -93,7 +94,10 @@ namespace UI.Views.Money
         private void Animation()
         {
             float offsetPositionY = Random.Range(-_maxRandomOffset, _maxRandomOffset);
-            _movingDistanceY = Screen.width < Screen.height ? _movingDistanceY + offsetPositionY : (_movingDistanceY + offsetPositionY) * ScaleCorrection;
+
+            _movingDistanceY = Screen.width < Screen.height
+                ? _movingDistanceY + offsetPositionY
+                : (_movingDistanceY + offsetPositionY) * ScaleCorrection;
 
             DOTween.Sequence()
                 .Append(_rectTransform.DOAnchorPos(new Vector2(0, _movingDistanceY), _tweenMoveDuration))

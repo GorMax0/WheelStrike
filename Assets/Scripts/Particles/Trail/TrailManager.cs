@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Services.GameStates;
-using UnityEngine;
 using Core.Wheel;
+using Services.GameStates;
+using TemporaryShop;
+using UnityEngine;
 
-namespace Trail
+namespace Particles.Trail
 {
     public class TrailManager : MonoBehaviour
     {
+        private const float DelayInvoke = 0.5f;
         [SerializeField] private List<TrailFX> _trails;
         [SerializeField] private Movement _wheel;
 
-        private const float DelayInvoke = 0.5f;
-
         private TrailFX _currentTrail;
         private GameStateService _gameStateService;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         private void OnEnable()
         {
@@ -28,8 +28,9 @@ namespace Trail
 
         public void Initialize(GameStateService gameStateService)
         {
-            if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
+            if (_isInitialized)
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
 
             _gameStateService = gameStateService;
             _isInitialized = true;
@@ -46,9 +47,11 @@ namespace Trail
             {
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.Finished:
                     Invoke(nameof(OnGameFinished), DelayInvoke);
+
                     break;
             }
         }

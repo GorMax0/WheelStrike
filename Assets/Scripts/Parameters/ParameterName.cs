@@ -10,24 +10,27 @@ namespace Parameters
         private const string RussianLanguage = "Russian";
         private const string EnglishLanguage = "English";
 
-        private static Dictionary<ParameterType, string> _parameterNameRu = new Dictionary<ParameterType, string>()
-        {
-            {ParameterType.Speed, "Скорость"},
-            {ParameterType.Size, "Размер"},
-            {ParameterType.Income, "Доход"}
-        };
-        private static Dictionary<ParameterType, string> _parameterNameTr = new Dictionary<ParameterType, string>()
-        {
-            {ParameterType.Speed, "Hız"},
-            {ParameterType.Size, "Boyut"},
-            {ParameterType.Income, "Gelir"}
-        };
-        private static Dictionary<ParameterType, string> _parameterNameEn = new Dictionary<ParameterType, string>()
-        {
-            {ParameterType.Speed, "Speed"},
-            {ParameterType.Size, "Size"},
-            {ParameterType.Income, "Income"}
-        };
+        private static readonly Dictionary<ParameterType, string> _parameterNameRu =
+            new Dictionary<ParameterType, string>
+            {
+                { ParameterType.Speed, "Скорость" },
+                { ParameterType.Size, "Размер" },
+                { ParameterType.Income, "Доход" },
+            };
+        private static readonly Dictionary<ParameterType, string> _parameterNameTr =
+            new Dictionary<ParameterType, string>
+            {
+                { ParameterType.Speed, "Hız" },
+                { ParameterType.Size, "Boyut" },
+                { ParameterType.Income, "Gelir" },
+            };
+        private static readonly Dictionary<ParameterType, string> _parameterNameEn =
+            new Dictionary<ParameterType, string>
+            {
+                { ParameterType.Speed, "Speed" },
+                { ParameterType.Size, "Size" },
+                { ParameterType.Income, "Income" },
+            };
 
         public static string GetName(ParameterType type)
         {
@@ -43,7 +46,8 @@ namespace Parameters
                     return currentLanguageParameterName[ParameterType.Income];
             }
 
-            throw new ArgumentException($"{typeof(ParameterName)}: GetName(ParameterType type): Not available ParameterType {type}.");
+            throw new ArgumentException(
+                $"{typeof(ParameterName)}: GetName(ParameterType type): Not available ParameterType {type}.");
         }
 
         private static Dictionary<ParameterType, string> GetCurrentLanguage()

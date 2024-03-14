@@ -1,4 +1,4 @@
-using Authorization;
+using SDK;
 using UnityEngine;
 using UnityEngine.UI;
 

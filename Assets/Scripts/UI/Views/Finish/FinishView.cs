@@ -1,14 +1,22 @@
+using AdsReward;
+using DG.Tweening;
+using Empty;
+using TMPro;
+using UI.Views.MoneyView;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using TMPro;
-using Empty;
-using AdsReward;
 
 namespace UI.Views.Finish
 {
     public class FinishView : MonoBehaviour
     {
+        private const float EndTransparency = 1f;
+        private const float EndScaleValue = 1f;
+        private const float DurationFade = 0.7f;
+        private const float DurationScale = 0.3f;
+        private const float DurationRotate = 0.12f;
+        private const float IntervalBetweenTween = 0.07f;
+        private const float AdditionalInterval = 0.27f;
         [SerializeField] private TMP_Text _topLabel;
         [SerializeField] private TMP_Text _distance;
         [SerializeField] private TMP_Text _highscoreLable;
@@ -24,17 +32,9 @@ namespace UI.Views.Finish
         [SerializeField] private MoneyViewPresenter _moneyViewPresenter;
         [SerializeField] private SpawnPoint _spawnMoneyPoint;
 
-        private const float EndTransparency = 1f;
-        private const float EndScaleValue = 1f;
-        private const float DurationFade = 0.7f;
-        private const float DurationScale = 0.3f;
-        private const float DurationRotate = 0.12f;
-        private const float IntervalBetweenTween = 0.07f;
-        private const float AdditionalInterval = 0.27f;
-
         private FinishViewHandler _viewHandler;
         private Material _uiMaterial;
-        private Vector3 _angleRotationHighscorLabel = new Vector3(0, 0, 20f);
+        private readonly Vector3 _angleRotationHighscorLabel = new Vector3(0, 0, 20f);
         private bool _isInitialized;
         private bool _hasNewHighscore;
 
@@ -86,23 +86,44 @@ namespace UI.Views.Finish
 
             DOTween.Sequence()
                 .Append(_uiMaterial.DOFade(EndTransparency, DurationFade).SetEase(Ease.InOutSine))
-                .Append(_topLabel.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _topLabel.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)
-                .Append(_distance.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _distance.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)
                 .AppendCallback(_viewHandler.DisplayReward)
-                .Append(_rewardBlock.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _rewardBlock.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)
-                .Append(_distanceBar.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _distanceBar.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendCallback(_viewHandler.DisplayDistance)
                 .AppendCallback(DisplayNewHighscoreLable)
                 .AppendCallback(_viewHandler.DisplayBonusReward)
                 .AppendInterval(IntervalBetweenTween)
-                .Append(_rewardScalerView.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _rewardScalerView.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween)
-                .Append(_playAds.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack))
+                .Append(
+                    _playAds.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack))
                 .AppendInterval(IntervalBetweenTween + AdditionalInterval)
-                .Append(_skipAds.transform.DOScale(EndScaleValue, DurationScale).ChangeStartValue(Vector3.zero).SetEase(Ease.InOutBack));
+                .Append(
+                    _skipAds.transform.DOScale(EndScaleValue, DurationScale)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.InOutBack));
 
             _moneyViewPresenter.RunScatter(_spawnMoneyPoint.transform.localPosition);
         }
@@ -119,9 +140,11 @@ namespace UI.Views.Finish
             _playAds.onClick.RemoveListener(_viewHandler.OnAdsButtonClick);
         }
 
-        private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad) => _distanceBar.Initialize(viewHandler, lengthRoad);
+        private void InitializeDistanceBar(FinishViewHandler viewHandler, int lengthRoad) =>
+            _distanceBar.Initialize(viewHandler, lengthRoad);
 
-        private void InitializeRewardScalerView(RewardScaler rewardScaler) => _rewardScalerView.Initialize(rewardScaler);
+        private void InitializeRewardScalerView(RewardScaler rewardScaler) =>
+            _rewardScalerView.Initialize(rewardScaler);
 
         private void PrepareView()
         {

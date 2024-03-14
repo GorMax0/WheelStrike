@@ -1,5 +1,5 @@
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 
 namespace UI
 {
@@ -12,14 +12,14 @@ namespace UI
         private Vector3 _startPositoin;
         private Canvas _canvas;
 
-        private void OnDisable()
-        {
-            DOTween.Kill(transform);
-        }
-
         private void Start()
         {
             _canvas = GetComponentInParent<Canvas>();
+        }
+
+        private void OnDisable()
+        {
+            DOTween.Kill(transform);
         }
 
         public void ApplyOffsetTransform()
@@ -28,20 +28,20 @@ namespace UI
             _startPositoin = transform.position;
 
             DOTween.Sequence()
-                .Append(transform.DOMove(_startPositoin +  new Vector3(_wrapOffset.x, _wrapOffset.y,0f), _duration))
+                .Append(transform.DOMove(_startPositoin + new Vector3(_wrapOffset.x, _wrapOffset.y, 0f), _duration))
                 .AppendCallback(Disable);
         }
 
         public void CancelOffsetTransform()
         {
-            if (transform.position != (Vector3)_startPositoin)
+            if (transform.position != _startPositoin)
                 transform.DOMove(_startPositoin, _duration);
         }
 
         private void Disable()
         {
-            if (_isDisableAfterApply == true)            
-                gameObject.SetActive(false);   
+            if (_isDisableAfterApply)
+                gameObject.SetActive(false);
         }
     }
 }

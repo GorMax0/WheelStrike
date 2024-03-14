@@ -19,14 +19,14 @@ namespace UI
 
         private CurveAnimation _curveAnimation;
 
-        private void OnDisable()
-        {
-            enabled = false;
-        }
-
         private void Update()
         {
             _slider.SetValueWithoutNotify(_curveAnimation.Update(Time.deltaTime));
+        }
+
+        private void OnDisable()
+        {
+            enabled = false;
         }
 
         public void Initialize()
@@ -50,10 +50,11 @@ namespace UI
         private void ApplyValue(float value)
         {
             _slider.value = 0;
-            
+
             if (_isAnimated)
             {
                 StartAnimation(value);
+
                 return;
             }
 
@@ -64,14 +65,16 @@ namespace UI
         {
             enabled = true;
             _curveAnimation.StartAnimation(_slider.value, endValue);
-            
         }
 
         private void Validate(float value)
         {
             if (value < _slider.minValue || value > _slider.maxValue)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), value, value.ToString(CultureInfo.InvariantCulture));
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),
+                    value,
+                    value.ToString(CultureInfo.InvariantCulture));
             }
         }
     }

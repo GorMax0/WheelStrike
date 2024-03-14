@@ -3,7 +3,6 @@ using Achievements;
 using Parameters;
 using Services;
 using Services.GameStates;
-using UnityEngine;
 
 namespace Core
 {
@@ -13,18 +12,18 @@ namespace Core
         private const int Week = 7;
         private readonly int _baseReward = 200;
         private readonly float _multipleReward = 1.5f;
+        private readonly AchievementSystem _achievementSystem;
 
-        private int _countDayEntry;
-        private GameStateService _gameStateService;
-        private DateTimeService _dateTimeService;
-        private Wallet _wallet;
-        private Parameter _income;
-        private AchievementSystem _achievementSystem;
+        private readonly DateTimeService _dateTimeService;
+        private readonly GameStateService _gameStateService;
+        private readonly Parameter _income;
+        private readonly Wallet _wallet;
 
-        public int Reward => CalculateReward();
-        public int CountDayEntry => _countDayEntry;
-
-        public DailyReward(GameStateService gameStateService, Wallet wallet, Parameter income, AchievementSystem achievementSystem)
+        public DailyReward(
+            GameStateService gameStateService,
+            Wallet wallet,
+            Parameter income,
+            AchievementSystem achievementSystem)
         {
             _dateTimeService = new DateTimeService();
             _gameStateService = gameStateService;
@@ -33,49 +32,53 @@ namespace Core
             _achievementSystem = achievementSystem;
         }
 
+        public int Reward => CalculateReward();
+
+        public int CountDayEntry { get; private set; }
+
         public void LoadDailyData(string loadDate, int countDayEntry)
         {
             _dateTimeService.LoadDate(loadDate);
-            _countDayEntry = countDayEntry;
+            CountDayEntry = countDayEntry;
         }
 
         public DateTime GetSavedDate() => _dateTimeService.PreviousDate;
 
         public bool HasNextDaily()
         {
-            if (_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0 
+            if (_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day > 0
                 && _dateTimeService.CurrentDatetime.Month - _dateTimeService.PreviousDate.Month >= 0)
             {
                 return true;
             }
-            
-            if(_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day <= 0 
-                    && _dateTimeService.CurrentDatetime.Month - _dateTimeService.PreviousDate.Month > 0)
+
+            if (_dateTimeService.CurrentDatetime.Day - _dateTimeService.PreviousDate.Day <= 0
+                && _dateTimeService.CurrentDatetime.Month - _dateTimeService.PreviousDate.Month > 0)
             {
                 return true;
             }
-            
+
             return false;
         }
 
         public void EnrollDaily()
         {
             EnrollReward();
-            _achievementSystem. PassValue(AchievementType.Daily, _countDayEntry);
-            _countDayEntry++;
+            _achievementSystem.PassValue(AchievementType.Daily, CountDayEntry);
+            CountDayEntry++;
             _gameStateService.ChangeState(GameState.Save);
         }
 
         private int CalculateReward() =>
-            (int)(_baseReward * _multipleReward * _countDayEntry * (1 + _income.Value));
+            (int)(_baseReward * _multipleReward * CountDayEntry * (1 + _income.Value));
 
         private void EnrollReward()
         {
             _wallet.EnrollMoney(Reward);
             _dateTimeService.SaveDate();
 
-            if (_countDayEntry >= Week)
-                _countDayEntry = Week;
+            if (CountDayEntry >= Week)
+                CountDayEntry = Week;
         }
     }
 }

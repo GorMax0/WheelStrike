@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
-using UnityEngine;
-using DG.Tweening;
+using Agava.WebUtility;
 using Core;
+using Core.Cameras;
+using Core.Car;
+using Core.Wall;
 using Core.Wheel;
 using Data;
+using DG.Tweening;
+using GameAnalyticsSDK;
+using SDK;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
-using GameAnalyticsSDK;
-using Authorization;
+using UnityEngine;
 
 namespace Services
 {
@@ -17,26 +21,26 @@ namespace Services
     {
         private readonly float IntervalBetweenAds = 103f;
         private readonly float StartDelayHoldTime = 3f;
-        private readonly float TimeScaleSlow = 0.1f;
         private readonly float TimeScaleDefault = 1f;
-
-        private GameStateService _gameStateService;
-        private YandexAuthorization _yandexAuthorization;
-        private CoroutineService _coroutineService;
-        private InputHandler _inputHandler;
-        private InteractionHandler _interactionHandler;
-        private ITravelable _travelable;
-        private LevelService _levelService;
-        private LevelScore _levelScore;
-        private Wallet _wallet;
+        private readonly float TimeScaleSlow = 0.1f;
+        private readonly CoroutineService _coroutineService;
         private DataOperator _dataOperator;
-        private CoroutineRunning _holdTime;
-        private CoroutineRunning _timerForIntervalBetweenAds;
-        private CoroutineRunning _unlockInputHandler;
-        private CoroutineRunning _restartLevel;
-        private Wall _finishWall;
         private float _delayHoldTime;
+        private Wall _finishWall;
+
+        private readonly GameStateService _gameStateService;
+        private readonly CoroutineRunning _holdTime;
+        private readonly InputHandler _inputHandler;
+        private readonly InteractionHandler _interactionHandler;
         private bool _isRunningAds;
+        private readonly LevelScore _levelScore;
+        private readonly LevelService _levelService;
+        private readonly CoroutineRunning _restartLevel;
+        private readonly CoroutineRunning _timerForIntervalBetweenAds;
+        private readonly ITravelable _travelable;
+        private readonly CoroutineRunning _unlockInputHandler;
+        private readonly Wallet _wallet;
+        private readonly YandexAuthorization _yandexAuthorization;
 
         public GamePlayService(
             GameStateService gameStateService,
@@ -76,15 +80,9 @@ namespace Services
             _interactionHandler.TriggeredWithBrick += OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall += OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger += OnTriggeredWithCameraTrigger;
-            Agava.WebUtility.WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
+            WebApplication.InBackgroundChangeEvent += OnInBackgroundChange;
             CanceledAds += Restart;
         }
-
-        public event Action<Car> TriggeredCar;
-
-        public event Action TimeChangedToDefault;
-
-        public event Action CanceledAds;
 
         public int Highscore => _levelScore.Highscore;
 
@@ -108,9 +106,15 @@ namespace Services
             _interactionHandler.TriggeredWithBrick -= OnTriggeredWithBrick;
             _interactionHandler.TriggeredWithWall -= OnTriggeredWithWall;
             _interactionHandler.TriggeredWithCameraTrigger -= OnTriggeredWithCameraTrigger;
-            Agava.WebUtility.WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
+            WebApplication.InBackgroundChangeEvent -= OnInBackgroundChange;
             CanceledAds -= Restart;
         }
+
+        public event Action<Car> TriggeredCar;
+
+        public event Action TimeChangedToDefault;
+
+        public event Action CanceledAds;
 
         public void SetDataOperator(DataOperator dataOperator) => _dataOperator = dataOperator;
 
@@ -204,7 +208,7 @@ namespace Services
         private void ChangePause(bool isPause)
         {
             SoundService.ChangeWhenAd(isPause);
-            Time.timeScale = isPause == true ? 0f : TimeScaleDefault;
+            Time.timeScale = isPause ? 0f : TimeScaleDefault;
         }
 
         private IEnumerator TryRestartLevel()
@@ -313,15 +317,19 @@ namespace Services
                 "Finishing");
 
             if (_travelable.DistanceTraveled >= _levelService.LengthRoad)
+            {
                 GameAnalytics.NewProgressionEvent(
                     GAProgressionStatus.Complete,
                     _levelService.NameForAnalytic,
                     _travelable.DistanceTraveled);
+            }
             else
+            {
                 GameAnalytics.NewProgressionEvent(
                     GAProgressionStatus.Fail,
                     _levelService.NameForAnalytic,
                     _travelable.DistanceTraveled);
+            }
 
             Dispose();
         }
@@ -354,7 +362,7 @@ namespace Services
 
         private void OnCollidedWithObstacle(Obstacle obstacle)
         {
-            if (obstacle.IsCollided == true)
+            if (obstacle.IsCollided)
                 return;
 
             _levelScore.AddReward(obstacle.Reward);
@@ -384,6 +392,6 @@ namespace Services
         private void OnTriggeredWithCameraTrigger(CameraTrigger cameraTrigger) => cameraTrigger.OnTriggerEnterWheel();
 
         private void OnInBackgroundChange(bool inBackground) =>
-            Time.timeScale = inBackground == true ? 0 : TimeScaleDefault;
+            Time.timeScale = inBackground ? 0 : TimeScaleDefault;
     }
 }

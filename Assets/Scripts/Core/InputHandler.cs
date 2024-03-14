@@ -9,17 +9,18 @@ namespace Core
         private bool _handleInput = true;
 
         public event Action PointerDown;
+
         public event Action PointerUp;
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (_handleInput == true)
+            if (_handleInput)
                 PointerDown?.Invoke();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_handleInput == true)
+            if (_handleInput)
                 PointerUp?.Invoke();
 
             _handleInput = false;

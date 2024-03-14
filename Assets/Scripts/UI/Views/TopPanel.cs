@@ -1,8 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using Services.Coroutines;
 using Services.GameStates;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Views
 {
@@ -17,9 +17,9 @@ namespace UI.Views
 
         private GameStateService _gameStateService;
         private DistanceView _distanceView;
-        private float _transparency = 0f;
-        private float _notTransparency = 1f;
-        private float _delayFade = 0.3f;
+        private readonly float _transparency = 0f;
+        private readonly float _notTransparency = 1f;
+        private readonly float _delayFade = 0.3f;
 
         private void OnEnable()
         {
@@ -68,15 +68,19 @@ namespace UI.Views
             {
                 case GameState.Initializing:
                     OnGameInitializing();
+
                     break;
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
             }
         }
@@ -84,19 +88,20 @@ namespace UI.Views
         private void OnGameInitializing()
         {
             _curtain.color = new Color(_curtain.color.r, _curtain.color.g, _curtain.color.b, _notTransparency);
-            
-            DOTween.Sequence().
-               Append(_curtain.DOFade(_transparency, _delayFade))
-               .AppendInterval(_delayFade)
-               .AppendCallback(DisableCurtain);
+
+            DOTween.Sequence()
+                .Append(_curtain.DOFade(_transparency, _delayFade))
+                .AppendInterval(_delayFade)
+                .AppendCallback(DisableCurtain);
         }
 
         private void OnGameWaiting()
         {
             _moneyPanel.ApplyOffsetTransform();
             _leaderboardButton.ApplyOffsetTransform();
-            _SkinButton.ApplyOffsetTransform(); 
+            _SkinButton.ApplyOffsetTransform();
         }
+
         private void OnGameRunning()
         {
             _distanceView.RunShowDistance();

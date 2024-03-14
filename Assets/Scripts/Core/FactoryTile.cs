@@ -1,26 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FactoryTile : MonoBehaviour
+namespace Core
 {
-    [SerializeField] private List<Tile> _prefabTiles;
-
-    public List<Tile> CreateBeginningLevel(out Vector3 nextTilePosition, int stepPositionZ)
+    public class FactoryTile : MonoBehaviour
     {
-        List<Tile> spawnedTiles = new List<Tile>(_prefabTiles.Count);
-        int countSpawned = 1;
-        nextTilePosition = Vector3.zero;
+        [SerializeField] private List<Tile> _prefabTiles;
 
-        for (int i = _prefabTiles.Count; i > 0; i--)
+        public List<Tile> CreateBeginningLevel(out Vector3 nextTilePosition, int stepPositionZ)
         {
-            int indexTile = Random.Range(0, _prefabTiles.Count);
-            nextTilePosition = new Vector3(0, 0, countSpawned++ * stepPositionZ);
+            List<Tile> spawnedTiles = new List<Tile>(_prefabTiles.Count);
+            int countSpawned = 1;
+            nextTilePosition = Vector3.zero;
 
-            Tile tile = Instantiate(_prefabTiles[indexTile], nextTilePosition, Quaternion.identity, transform);
-            _prefabTiles.RemoveAt(indexTile);
-            spawnedTiles.Add(tile);
+            for (int i = _prefabTiles.Count; i > 0; i--)
+            {
+                int indexTile = Random.Range(0, _prefabTiles.Count);
+                nextTilePosition = new Vector3(0, 0, countSpawned++ * stepPositionZ);
+
+                Tile tile = Instantiate(_prefabTiles[indexTile], nextTilePosition, Quaternion.identity, transform);
+                _prefabTiles.RemoveAt(indexTile);
+                spawnedTiles.Add(tile);
+            }
+
+            return spawnedTiles;
         }
-
-        return spawnedTiles;
     }
 }

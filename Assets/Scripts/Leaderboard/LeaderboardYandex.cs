@@ -1,27 +1,27 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Agava.YandexGames;
 
-namespace Leaderboards
+namespace Leaderboard
 {
     public class LeaderboardYandex
     {
         private const int AnonymousRank = 0;
         private const int AnonymousScore = 0;
         private const string AnonymousName = "Anonymous";
+        private readonly string _leaderboardName;
 
-        private int _numberTopPlayers;
-        private string _leaderboardName;
-
-        public event Action<string, List<PlayerInfoLeaderboard>> GetEntriesCompleted;
-        public event Action<string, PlayerInfoLeaderboard> GetPlayerEntryCompleted;
+        private readonly int _numberTopPlayers;
 
         public LeaderboardYandex(string leaderboardName, int countEntries)
         {
             _leaderboardName = leaderboardName;
             _numberTopPlayers = countEntries;
         }
+
+        public event Action<string, List<PlayerInfoLeaderboard>> GetEntriesCompleted;
+
+        public event Action<string, PlayerInfoLeaderboard> GetPlayerEntryCompleted;
 
         public void GetEntries()
         {
@@ -56,13 +56,13 @@ namespace Leaderboards
         }
 
         public void GetCurrentPlayer()
-        {            
+        {
             PlayerInfoLeaderboard player;
 #if !UNITY_WEBGL || UNITY_EDITOR
             player = new PlayerInfoLeaderboard(AnonymousRank, AnonymousName, AnonymousScore);
             GetPlayerEntryCompleted?.Invoke(_leaderboardName, player);
 
-#elif YANDEX_GAMES           
+#elif YANDEX_GAMES
             TryGetPersonalData();
 
             Leaderboard.GetPlayerEntry(_leaderboardName, (result) =>
@@ -78,7 +78,7 @@ namespace Leaderboards
         public void SetScore(int score)
         {
 #if !UNITY_WEBGL || UNITY_EDITOR
-#elif YANDEX_GAMES   
+#elif YANDEX_GAMES
             if (PlayerAccount.IsAuthorized == false)
                 return;
 
@@ -88,7 +88,7 @@ namespace Leaderboards
 
         private void TryGetPersonalData()
         {
-            if (PlayerAccount.IsAuthorized == true && PlayerAccount.HasPersonalProfileDataPermission == false)
+            if (PlayerAccount.IsAuthorized && PlayerAccount.HasPersonalProfileDataPermission == false)
                 PlayerAccount.RequestPersonalProfileDataPermission();
         }
 

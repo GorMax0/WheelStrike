@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core
+namespace Core.Wall
 {
     [RequireComponent(typeof(AudioSource))]
     public class Wall : MonoBehaviour
@@ -22,7 +22,7 @@ namespace Core
 
         private void Start()
         {
-            if (_isCreate == true)
+            if (_isCreate)
                 _bricks = _creator.Create();
         }
 

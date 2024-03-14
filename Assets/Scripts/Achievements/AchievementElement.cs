@@ -17,12 +17,12 @@ namespace Achievements
         [Header("Stars")] [SerializeField] private Transform _parentStars;
         [SerializeField] private Image _templateStar;
         [SerializeField] private Sprite _fillStar;
-        
+
         protected int NextValue;
         protected Achievement Achievement;
         protected int CountStars;
         protected Image[] Stars;
-        
+
         private string _currentName;
         private string _currentDescription;
 
@@ -40,7 +40,7 @@ namespace Achievements
 
         public void Render(Achievement achievement)
         {
-            Localization.LanguageChanged  += OnLocalizationChanged;
+            Localization.LanguageChanged += OnLocalizationChanged;
             Achievement = achievement;
             OnLocalizationChanged(Localization.CurrentLanguage);
             _icon.sprite = Achievement.Icon;
@@ -53,27 +53,15 @@ namespace Achievements
             NextValue = Achievement.GetNextValueForAchievement();
             TextValue.SetText($"{Achievement.CountValue}/{NextValue}");
         }
-    
+
         protected virtual float GetNormalizedBarValue()
         {
             if (Achievement.CountValue > NextValue)
             {
-                return  NextValue / (float)Achievement.CountValue;
+                return NextValue / (float)Achievement.CountValue;
             }
-            
+
             return Achievement.CountValue / (float)NextValue;
-        }
-
-        private void InstantiateStars()
-        {
-            CountStars = Achievement.GetCountAchievement();
-           Stars = new Image[CountStars];
-
-            for (int i = 0; i < CountStars; i++)
-            {
-                var star = Instantiate(_templateStar, _parentStars);
-                Stars[i] = star;
-            }
         }
 
         protected virtual void FillStars()
@@ -87,25 +75,40 @@ namespace Achievements
             }
         }
 
+        private void InstantiateStars()
+        {
+            CountStars = Achievement.GetCountAchievement();
+            Stars = new Image[CountStars];
+
+            for (int i = 0; i < CountStars; i++)
+            {
+                Image star = Instantiate(_templateStar, _parentStars);
+                Stars[i] = star;
+            }
+        }
+
         private void OnLocalizationChanged(string language)
         {
             switch (language)
-            {               
+            {
                 case "Turkish":
                     SetLanguage(0);
+
                     break;
                 case "Russian":
                     SetLanguage(1);
+
                     break;
                 case "English":
                     SetLanguage(2);
+
                     break;
             }
-            
+
             _name.text = _currentName;
             _description.text = _currentDescription;
         }
- 
+
         private void SetLanguage(int index)
         {
             _currentName = Achievement.Name.Entries[index].Text;

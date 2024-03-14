@@ -1,34 +1,36 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(FactoryTile))]
-public class PoolTiles : MonoBehaviour
+namespace Core
 {
-    private List<Tile> _tiles;
-    private List<Tile> _disabledTiles;
-
-    public void Initialize(out Vector3 startTilePosition, int stepPositionZ)
+    [RequireComponent(typeof(FactoryTile))]
+    public class PoolTiles : MonoBehaviour
     {
-        _tiles = GetComponent<FactoryTile>().CreateBeginningLevel(out startTilePosition, stepPositionZ);
-        _disabledTiles = new List<Tile>(_tiles.Count);
-    }
+        private List<Tile> _tiles;
+        private List<Tile> _disabledTiles;
 
-    public Tile EnableRandom()
-    {
-        int index = Random.Range(0, _disabledTiles.Count);
+        public void Initialize(out Vector3 startTilePosition, int stepPositionZ)
+        {
+            _tiles = GetComponent<FactoryTile>().CreateBeginningLevel(out startTilePosition, stepPositionZ);
+            _disabledTiles = new List<Tile>(_tiles.Count);
+        }
 
-        _disabledTiles[index].gameObject.SetActive(true);
-        _tiles.Add(_disabledTiles[index]);
-        _disabledTiles.RemoveAt(index);
+        public Tile EnableRandom()
+        {
+            int index = Random.Range(0, _disabledTiles.Count);
 
-        return _tiles[_tiles.Count - 1];
-    }
+            _disabledTiles[index].gameObject.SetActive(true);
+            _tiles.Add(_disabledTiles[index]);
+            _disabledTiles.RemoveAt(index);
 
-    public void DisableTile(int indexTile)
-    {
-        _tiles[indexTile].gameObject.SetActive(false);
-        _disabledTiles.Add(_tiles[indexTile]);
-        _tiles.RemoveAt(indexTile);
+            return _tiles[_tiles.Count - 1];
+        }
+
+        public void DisableTile(int indexTile)
+        {
+            _tiles[indexTile].gameObject.SetActive(false);
+            _disabledTiles.Add(_tiles[indexTile]);
+            _tiles.RemoveAt(indexTile);
+        }
     }
 }

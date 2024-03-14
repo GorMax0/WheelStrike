@@ -1,6 +1,8 @@
+using System;
+using GameAnalyticsSDK;
 using UnityEngine;
 
-namespace Leaderboards
+namespace Leaderboard
 {
     public class LeaderboardTabMenu : MonoBehaviour
     {
@@ -10,9 +12,9 @@ namespace Leaderboards
         [SerializeField] private Color _unselectedColor;
 
         private LeaderboardTab _selectedTab;
-        private Color _selectedColor = Color.white;
+        private readonly Color _selectedColor = Color.white;
 
-        public event System.Action<LeaderboardType> TabSwitched;
+        public event Action<LeaderboardType> TabSwitched;
 
         private void OnEnable()
         {
@@ -36,15 +38,18 @@ namespace Leaderboards
             {
                 case LeaderboardType.Traveled:
                     _selectedTab = _distanceTab;
-                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Traveled");
+                    GameAnalytics.NewDesignEvent("guiClick:Leaderboard:Traveled");
+
                     break;
                 case LeaderboardType.Highscore:
                     _selectedTab = _highscoreTab;
-                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Highscore");
+                    GameAnalytics.NewDesignEvent("guiClick:Leaderboard:Highscore");
+
                     break;
                 case LeaderboardType.Collisions:
                     _selectedTab = _collisionTab;
-                    GameAnalyticsSDK.GameAnalytics.NewDesignEvent($"guiClick:Leaderboard:Collisions");
+                    GameAnalytics.NewDesignEvent("guiClick:Leaderboard:Collisions");
+
                     break;
             }
 

@@ -1,8 +1,8 @@
 using System;
-using UnityEngine;
 using Agava.YandexGames;
+using UnityEngine;
 
-namespace Authorization
+namespace SDK
 {
     public class YandexAuthorization
     {
@@ -10,10 +10,10 @@ namespace Authorization
 
         public void TryAuthorize()
         {
-            if (PlayerAccount.IsAuthorized == true)
+            if (PlayerAccount.IsAuthorized)
                 return;
 
-            PlayerAccount.Authorize(OnSuccessCallback, (string massage) => Debug.LogWarning(massage));
+            PlayerAccount.Authorize(OnSuccessCallback, massage => Debug.LogWarning(massage));
         }
 
         private void OnSuccessCallback() => Authorized?.Invoke();

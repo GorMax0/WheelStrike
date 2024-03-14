@@ -3,65 +3,70 @@ using RopeMinikit;
 using Services.GameStates;
 using UnityEngine;
 
-[RequireComponent(typeof(RopeConnection))]
-public class RopeDisconnection : MonoBehaviour
+namespace Core
 {
-    [SerializeField] private Transform _connectionPointLeft;
-    [SerializeField] private Transform _connectionPointRight;
-
-    private RopeConnection[] _joints;
-    private GameStateService _gameStateService;
-    private bool _isInitialized = false;
-
-    private void OnEnable()
+    [RequireComponent(typeof(RopeConnection))]
+    public class RopeDisconnection : MonoBehaviour
     {
-        if (_isInitialized == false)
-            return;
+        [SerializeField] private Transform _connectionPointLeft;
+        [SerializeField] private Transform _connectionPointRight;
 
-        _gameStateService.GameStateChanged += OnGameStateChanged;
-    }
+        private RopeConnection[] _joints;
+        private GameStateService _gameStateService;
+        private bool _isInitialized;
 
-    private void OnDisable()
-    {
-        _gameStateService.GameStateChanged -= OnGameStateChanged;
-    }
-
-    public void Initialize(GameStateService gameStateService)
-    {
-        if (_isInitialized == true)
-            throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
-
-        _joints = GetComponents<RopeConnection>();
-        _gameStateService = gameStateService;
-        _isInitialized = true;
-        OnEnable();
-    }
-
-    private void Destroy() => Destroy(gameObject);
-
-    private void OnGameStateChanged(GameState gameState)
-    {
-        switch (gameState)
+        private void OnEnable()
         {
-            case GameState.Running:
-                OnGameRunning();
-                break;
+            if (_isInitialized == false)
+                return;
+
+            _gameStateService.GameStateChanged += OnGameStateChanged;
         }
-    }
 
-    private void OnGameRunning()
-    {
-        float deleyDestroy = 0.8f;
-
-        foreach (RopeConnection joint in _joints)
+        private void OnDisable()
         {
-            if (joint.transformSettings.transform == _connectionPointLeft || joint.transformSettings.transform == _connectionPointRight)
+            _gameStateService.GameStateChanged -= OnGameStateChanged;
+        }
+
+        public void Initialize(GameStateService gameStateService)
+        {
+            if (_isInitialized)
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService): Already initialized.");
+
+            _joints = GetComponents<RopeConnection>();
+            _gameStateService = gameStateService;
+            _isInitialized = true;
+            OnEnable();
+        }
+
+        private void Destroy() => Destroy(gameObject);
+
+        private void OnGameStateChanged(GameState gameState)
+        {
+            switch (gameState)
             {
-                joint.enabled = false;
-                continue;
+                case GameState.Running:
+                    OnGameRunning();
+
+                    break;
             }
         }
 
-        Invoke(nameof(Destroy), deleyDestroy);
+        private void OnGameRunning()
+        {
+            float deleyDestroy = 0.8f;
+
+            foreach (RopeConnection joint in _joints)
+            {
+                if (joint.transformSettings.transform == _connectionPointLeft
+                    || joint.transformSettings.transform == _connectionPointRight)
+                {
+                    joint.enabled = false;
+                }
+            }
+
+            Invoke(nameof(Destroy), deleyDestroy);
+        }
     }
 }

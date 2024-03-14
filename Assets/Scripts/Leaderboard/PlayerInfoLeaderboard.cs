@@ -1,16 +1,18 @@
-﻿namespace Leaderboards
+﻿namespace Leaderboard
 {
     public class PlayerInfoLeaderboard
     {
-        public int Rank { get; private set; }
-        public string Name { get; private set; }
-        public int Score { get; private set; }
-
         public PlayerInfoLeaderboard(int rank, string name, int score)
         {
             Rank = rank;
             Name = name;
             Score = score;
         }
+
+        public int Rank { get; }
+
+        public string Name { get; }
+
+        public int Score { get; }
     }
 }

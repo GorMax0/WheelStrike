@@ -1,7 +1,6 @@
-using UnityEngine;
-using DungeonGames.VKGames;
-using UnityEngine.UI;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace DungeonGames.VKGames.Samples
 {
@@ -9,21 +8,11 @@ namespace DungeonGames.VKGames.Samples
     {
         [SerializeField] private Text _coinsAmountText;
 
-        private int _coinsAmount = 0;
+        private int _coinsAmount;
 
         public void InitializeSdkButton()
         {
             StartCoroutine(InitializeSDK());
-        }
-
-        private IEnumerator InitializeSDK()
-        {
-            yield return VKGamesSdk.Initialize(onSuccessCallback: OnSDKInitilized);
-        }
-
-        private void OnSDKInitilized()
-        {
-            Debug.Log(VKGamesSdk.Initialized);
         }
 
         public void ShowInterstitialButton()
@@ -33,7 +22,7 @@ namespace DungeonGames.VKGames.Samples
 
         public void ShowRewardedAdsButton()
         {
-            VideoAd.Show(onRewardedCallback: OnRewardedCallback);
+            VideoAd.Show(OnRewardedCallback);
         }
 
         public void InviteFriendsButton()
@@ -46,12 +35,6 @@ namespace DungeonGames.VKGames.Samples
             Community.InviteToDungeonGamesGroup(OnRewardedCallback);
         }
 
-        private void OnRewardedCallback()
-        {
-            _coinsAmount += 40;
-            _coinsAmountText.text = $"{_coinsAmount} coins";
-        }
-
         public void ShowLeaderboardButton()
         {
             Leaderboard.ShowLeaderboard(100);
@@ -59,7 +42,23 @@ namespace DungeonGames.VKGames.Samples
 
         public void IapTest()
         {
-            InAppPurchase.BuyItem("item_id_123456", OnRewardedCallback, onErrorCallback: () => Debug.Log("alalala"));
+            InAppPurchase.BuyItem("item_id_123456", OnRewardedCallback, () => Debug.Log("alalala"));
+        }
+
+        private IEnumerator InitializeSDK()
+        {
+            yield return VKGamesSdk.Initialize(OnSDKInitilized);
+        }
+
+        private void OnSDKInitilized()
+        {
+            Debug.Log(VKGamesSdk.Initialized);
+        }
+
+        private void OnRewardedCallback()
+        {
+            _coinsAmount += 40;
+            _coinsAmountText.text = $"{_coinsAmount} coins";
         }
     }
 }

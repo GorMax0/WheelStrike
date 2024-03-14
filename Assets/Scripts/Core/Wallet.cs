@@ -4,53 +4,55 @@ namespace Core
 {
     public class Wallet
     {
-        private int _money;
+        public int Money { get; private set; }
 
         public event Action<int> MoneyChanged;
-        public event Action<int> MoneyLoaded;
 
-        public int Money => _money;
+        public event Action<int> MoneyLoaded;
 
         public void LoadMoney(int money)
         {
             if (money < 0)
                 return;
 
-            _money = money;
-            MoneyLoaded?.Invoke(_money);
+            Money = money;
+            MoneyLoaded?.Invoke(Money);
         }
 
         public void EnrollMoney(int money)
         {
             if (money <= 0)
-                throw new InvalidOperationException($"{GetType()}: EnrollMoney(int money): Amount money {money} is invalid.");
+                throw new InvalidOperationException(
+                    $"{GetType()}: EnrollMoney(int money): Amount money {money} is invalid.");
 
-            _money += money;
-            MoneyChanged?.Invoke(_money);
+            Money += money;
+            MoneyChanged?.Invoke(Money);
         }
 
         public bool TrySpendMoney(int price)
         {
-            if (_money < price)
+            if (Money < price)
                 return false;
 
             SpendMoney(price);
+
             return true;
         }
 
         public void Reset()
         {
-            _money = 100;
-            MoneyChanged?.Invoke(_money);
+            Money = 100;
+            MoneyChanged?.Invoke(Money);
         }
 
         private void SpendMoney(int price)
         {
             if (price < 0)
-                throw new InvalidOperationException($"{GetType()}: SpendMoney(int money): Amount money {price} is invalid.");
+                throw new InvalidOperationException(
+                    $"{GetType()}: SpendMoney(int money): Amount money {price} is invalid.");
 
-            _money -= price;
-            MoneyChanged?.Invoke(_money);
+            Money -= price;
+            MoneyChanged?.Invoke(Money);
         }
     }
 }

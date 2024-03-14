@@ -10,24 +10,23 @@ namespace Services
         private const string TurkishLanguage = "Turkish";
         private const string RussianLanguage = "Russian";
         private const string EnglishLanguage = "English";
-        
+
         private static string _language;
-        private static string _currentLanguage;
+
+        public static string CurrentLanguage { get; private set; }
 
         public static event Action<string> LanguageChanged;
 
-        public static string CurrentLanguage => _currentLanguage;
-
         public static void GetCurrentLanguage()
         {
-            _currentLanguage = LeanLocalization.GetFirstCurrentLanguage();
-            LanguageChanged?.Invoke(_currentLanguage);
+            CurrentLanguage = LeanLocalization.GetFirstCurrentLanguage();
+            LanguageChanged?.Invoke(CurrentLanguage);
         }
 
         public static void SetLanguage()
         {
 #if !UNITY_WEBGL || UNITY_EDITOR
-            
+
 #elif YANDEX_GAMES
             switch (GetLanguageEnvironment())
             {
@@ -55,28 +54,30 @@ namespace Services
 
         public static void SwitchOnEnglish()
         {
-            _currentLanguage = EnglishLanguage;
-            LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:{_currentLanguage}");
-            LanguageChanged?.Invoke(_currentLanguage);
+            CurrentLanguage = EnglishLanguage;
+            LeanLocalization.SetCurrentLanguageAll(CurrentLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:{CurrentLanguage}");
+            LanguageChanged?.Invoke(CurrentLanguage);
         }
 
         public static void SwitchOnRussian()
         {
-            _currentLanguage = RussianLanguage;
-            LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:{_currentLanguage}");
-            LanguageChanged?.Invoke(_currentLanguage);
+            CurrentLanguage = RussianLanguage;
+            LeanLocalization.SetCurrentLanguageAll(CurrentLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:{CurrentLanguage}");
+            LanguageChanged?.Invoke(CurrentLanguage);
         }
 
         public static void SwitchOnTurkish()
         {
-            _currentLanguage = TurkishLanguage;
-            LeanLocalization.SetCurrentLanguageAll(_currentLanguage);
-            GameAnalytics.NewDesignEvent($"guiClick:Language:{_currentLanguage}");
-            LanguageChanged?.Invoke(_currentLanguage);
+            CurrentLanguage = TurkishLanguage;
+            LeanLocalization.SetCurrentLanguageAll(CurrentLanguage);
+            GameAnalytics.NewDesignEvent($"guiClick:Language:{CurrentLanguage}");
+            LanguageChanged?.Invoke(CurrentLanguage);
         }
 
-        private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language) ? _language = YandexGamesSdk.Environment.i18n.lang : _language;
+        private static string GetLanguageEnvironment() => string.IsNullOrEmpty(_language)
+            ? _language = YandexGamesSdk.Environment.i18n.lang
+            : _language;
     }
 }

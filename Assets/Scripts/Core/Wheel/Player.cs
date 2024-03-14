@@ -1,12 +1,10 @@
 using System;
-using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using Boost;
 using Parameters;
+using Services;
 using Services.Coroutines;
 using Services.GameStates;
-using Boost;
-using Services;
-using DeviceType = Agava.YandexGames.DeviceType;
+using UnityEngine;
 
 namespace Core.Wheel
 {
@@ -30,7 +28,7 @@ namespace Core.Wheel
         private GameStateService _gameStateService;
         private bool _isDesktopDevice;
         private bool _isNormalFPS;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         public ITravelable Travelable => _movement;
 
@@ -64,11 +62,13 @@ namespace Core.Wheel
             Parameter size,
             BoostParameter boost)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
+            {
                 throw new InvalidOperationException(
                     $"{GetType()}: Initialize(GameStateService gameStateService, "
-                    + $"CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, "
-                    + $"Parameter size).");
+                    + "CoroutineService coroutineService, AimDirection aimDirection, Parameter speed, "
+                    + "Parameter size).");
+            }
 
             _movement.Initialize(gameStateService, coroutineService, aimDirection, speed, size, boost);
             _animation.Initialize(gameStateService, coroutineService);
@@ -113,7 +113,7 @@ namespace Core.Wheel
             SetSize();
             SetMass();
 
-            if (_isDesktopDevice == true)
+            if (_isDesktopDevice)
             {
                 _blur.SetActive(_isNormalFPS);
 

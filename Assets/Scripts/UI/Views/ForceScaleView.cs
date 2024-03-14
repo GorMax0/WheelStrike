@@ -1,26 +1,25 @@
+using Core;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using Core;
-using TMPro;
 
 namespace UI.Views
 {
     [RequireComponent(typeof(Slider))]
     public class ForceScaleView : MonoBehaviour
     {
+        private const float DurationForTween = 0.4f;
+        private const float MaxScaleText = 1f;
+        private const float IntervalForTween = 0.2f;
+        private const float OffsetMoveY = 170f;
+        private const float FadeEndValue = 0f;
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderHandler;
         [SerializeField] private float _fadeTime;
         [SerializeField] private ForceScale _forceScale;
         [SerializeField] private ParticleSystem _greenZoneParticle;
         [SerializeField] private TMP_Text _greenZoneText;
-
-        private const float DurationForTween = 0.4f;
-        private const float MaxScaleText = 1f;
-        private const float IntervalForTween = 0.2f;
-        private const float OffsetMoveY = 170f;
-        private const float FadeEndValue = 0f;
 
         private Slider _slider;
         private RectTransform _greenZoneTransform;
@@ -68,10 +67,13 @@ namespace UI.Views
             _greenZoneText.gameObject.SetActive(true);
 
             _doTween = DOTween.Sequence()
-                             .Append(_greenZoneText.transform.DOScale(MaxScaleText, DurationForTween).ChangeStartValue(Vector3.zero).SetEase(Ease.Flash))
-                             .AppendInterval(IntervalForTween)
-                             .Append(_greenZoneTransform.DOAnchorPosY(OffsetMoveY, DurationForTween))
-                             .Join(_greenZoneText.DOFade(FadeEndValue, DurationForTween));
+                .Append(
+                    _greenZoneText.transform.DOScale(MaxScaleText, DurationForTween)
+                        .ChangeStartValue(Vector3.zero)
+                        .SetEase(Ease.Flash))
+                .AppendInterval(IntervalForTween)
+                .Append(_greenZoneTransform.DOAnchorPosY(OffsetMoveY, DurationForTween))
+                .Join(_greenZoneText.DOFade(FadeEndValue, DurationForTween));
         }
 
         private void OnRangeChanged(float minValue, float maxValue)

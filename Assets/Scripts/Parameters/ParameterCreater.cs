@@ -1,19 +1,21 @@
 using System.Collections.Generic;
-using Parameters;
 
-public class ParameterCreater 
+namespace Parameters
 {
-    private Dictionary<ParameterType, Parameter> _parameters;
-
-    public Dictionary<ParameterType, Parameter> CreateParameters(ParameterObject[] _parameterObject)
+    public class ParameterCreater
     {
-        _parameters = new Dictionary<ParameterType, Parameter>();
+        private Dictionary<ParameterType, Parameter> _parameters;
 
-        for (int i = 0; i < _parameterObject.Length; i++)
+        public Dictionary<ParameterType, Parameter> CreateParameters(ParameterObject[] _parameterObject)
         {
-            _parameters.Add(_parameterObject[i].Type, new Parameter(_parameterObject[i]));
-        }
+            _parameters = new Dictionary<ParameterType, Parameter>();
 
-        return _parameters;
+            for (int i = 0; i < _parameterObject.Length; i++)
+            {
+                _parameters.Add(_parameterObject[i].Type, new Parameter(_parameterObject[i]));
+            }
+
+            return _parameters;
+        }
     }
 }

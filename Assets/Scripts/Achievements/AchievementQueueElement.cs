@@ -5,11 +5,10 @@ namespace Achievements
 {
     public class AchievementQueueElement : AchievementElement
     {
-        [SerializeField] private Animator _animator;
-        [SerializeField] private Image _starFill;
-        
         private readonly int StartAnimationTrigger = Animator.StringToHash("StartAnimation");
         private readonly int StarScale = Animator.StringToHash("Scale");
+        [SerializeField] private Animator _animator;
+        [SerializeField] private Image _starFill;
 
         private int _currentValue;
         private bool _isSliderStarted;
@@ -18,7 +17,6 @@ namespace Achievements
 
         protected override void OnEnable()
         {
-            
         }
 
         public void StartAnimation()
@@ -34,15 +32,15 @@ namespace Achievements
             GetValues();
             FillStars();
         }
-        
+
         protected override void FillStars()
         {
             for (int i = 0; i < CountStars; i++)
             {
                 if (i < Achievement.CountAchieved)
                 {
-                  var star =  Instantiate(_starFill, Stars[i].transform);
-                  star.GetComponent<Animator>().SetTrigger(StarScale);
+                    Image star = Instantiate(_starFill, Stars[i].transform);
+                    star.GetComponent<Animator>().SetTrigger(StarScale);
                 }
             }
         }
@@ -52,9 +50,10 @@ namespace Achievements
             if (Achievement.Type == AchievementType.Top)
             {
                 TextValue.SetText($"{NextValue}/{NextValue}");
+
                 return;
             }
-            
+
             TextValue.SetText($"{_currentValue}/{NextValue}");
         }
 

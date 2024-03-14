@@ -1,8 +1,9 @@
 using System;
-using UnityEngine;
 using Core.Wheel;
+using Particles.Trail;
+using UnityEngine;
 
-namespace Trail
+namespace TemporaryShop
 {
     [RequireComponent(typeof(ParticleSystem))]
     public class TrailFX : ParticleLength
@@ -12,10 +13,9 @@ namespace Trail
 
         private ParticleSystem.MainModule _main;
         private float _lifetimeCorrector;
-       // private bool _isBought;
-        private bool _isSelected = true;
+        // private bool _isBought;
 
-        public bool IsSelected => _isSelected;
+        public bool IsSelected { get; } = true;
 
         protected override void Update()
         {
@@ -46,6 +46,7 @@ namespace Trail
         protected override void DecreaseParticleLength()
         {
             base.DecreaseParticleLength();
+
             if (MovementWheel.Speed > InitializeSpeed)
                 return;
 

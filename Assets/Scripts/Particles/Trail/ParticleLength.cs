@@ -1,47 +1,52 @@
-using UnityEngine;
 using Core.Wheel;
+using UnityEngine;
 
-public class ParticleLength : MonoBehaviour
+namespace Particles.Trail
 {
-    [SerializeField] protected Movement MovementWheel;
-
-    protected ParticleSystem Particle;
-    protected ParticleSystem.VelocityOverLifetimeModule VelocityOverLifetime;
-    protected float InitialWheelSpeed;
-    protected float SpeedZCorrector;
-
-    private void Awake()
+    public class ParticleLength : MonoBehaviour
     {
-        Particle = GetComponent<ParticleSystem>();
-        SetParticleSystemModules();
-        SetCorrectionValues();
-    }
+        [SerializeField] protected Movement MovementWheel;
 
-    protected virtual void Update()
-    {
-        if (MovementWheel == null)
-            return;
+        protected ParticleSystem Particle;
+        protected ParticleSystem.VelocityOverLifetimeModule VelocityOverLifetime;
+        protected float InitialWheelSpeed;
+        protected float SpeedZCorrector;
 
-        if (HasInitialWheelSpeedNotZero() == false)
-            return;
-
-        DecreaseParticleLength();
-    }
-
-    protected virtual void SetParticleSystemModules() => VelocityOverLifetime = Particle.velocityOverLifetime;
-
-    protected virtual void SetCorrectionValues() => SpeedZCorrector = VelocityOverLifetime.z.constant;
-
-    protected virtual void DecreaseParticleLength() => VelocityOverLifetime.z = MovementWheel.Speed / InitialWheelSpeed * SpeedZCorrector;
-
-    private bool HasInitialWheelSpeedNotZero()
-    {
-        if (InitialWheelSpeed == 0)
+        protected virtual void Update()
         {
-            InitialWheelSpeed = MovementWheel.Speed;
-            return false;
+            if (MovementWheel == null)
+                return;
+
+            if (HasInitialWheelSpeedNotZero() == false)
+                return;
+
+            DecreaseParticleLength();
         }
 
-        return true;
+        private void Awake()
+        {
+            Particle = GetComponent<ParticleSystem>();
+            SetParticleSystemModules();
+            SetCorrectionValues();
+        }
+
+        protected virtual void SetParticleSystemModules() => VelocityOverLifetime = Particle.velocityOverLifetime;
+
+        protected virtual void SetCorrectionValues() => SpeedZCorrector = VelocityOverLifetime.z.constant;
+
+        protected virtual void DecreaseParticleLength() =>
+            VelocityOverLifetime.z = MovementWheel.Speed / InitialWheelSpeed * SpeedZCorrector;
+
+        private bool HasInitialWheelSpeedNotZero()
+        {
+            if (InitialWheelSpeed == 0)
+            {
+                InitialWheelSpeed = MovementWheel.Speed;
+
+                return false;
+            }
+
+            return true;
+        }
     }
 }

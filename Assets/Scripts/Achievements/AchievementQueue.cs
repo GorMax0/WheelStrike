@@ -9,10 +9,15 @@ namespace Achievements
         [SerializeField] private AchievementQueueElement _template;
 
         private List<Achievement> _achievements;
-        private Queue<Action> _setsIsDisabled = new Queue<Action>();
-        private Queue<AchievementQueueElement> _elements = new Queue<AchievementQueueElement>();
+        private readonly Queue<Action> _setsIsDisabled = new Queue<Action>();
+        private readonly Queue<AchievementQueueElement> _elements = new Queue<AchievementQueueElement>();
 
         private AchievementQueueElement _element;
+
+        private void Update()
+        {
+            DisplayAchievement();
+        }
 
         private void OnDestroy()
         {
@@ -20,11 +25,6 @@ namespace Achievements
             {
                 achievement.AchievementChanged -= OnAchievementChanged;
             }
-        }
-
-        private void Update()
-        {
-            DisplayAchievement();
         }
 
         public void Initialize(List<Achievement> achievements)
@@ -39,14 +39,14 @@ namespace Achievements
 
         private void DisplayAchievement()
         {
-            if (_element == null || _element.IsPlayAnimation == true)
+            if (_element == null || _element.IsPlayAnimation)
                 return;
 
             if (_elements.TryDequeue(out _element))
             {
                 _element.StartAnimation();
-               Action callback = _setsIsDisabled.Dequeue();
-               callback();
+                Action callback = _setsIsDisabled.Dequeue();
+                callback();
             }
         }
 
@@ -59,9 +59,13 @@ namespace Achievements
             _elements.Enqueue(_element);
         }
 
-        private void OnAchievementChanged(Achievement achievement, int currentValue, int targetValue, Action setIsDisabled)
+        private void OnAchievementChanged(
+            Achievement achievement,
+            int currentValue,
+            int targetValue,
+            Action setIsDisabled)
         {
-            RenderElement(achievement, currentValue, targetValue);            
+            RenderElement(achievement, currentValue, targetValue);
             _setsIsDisabled.Enqueue(setIsDisabled);
         }
     }

@@ -12,8 +12,10 @@ namespace Achievements
         [SerializeField] private int _value;
 
         public bool IsAchieved { get; private set; }
+
         public int Value => _value;
 
-        public bool HasAchieved(int currentValue) => IsAchieved = Type == AchievementType.Top ? _value >= currentValue : _value <= currentValue;
+        public bool HasAchieved(int currentValue) =>
+            IsAchieved = Type == AchievementType.Top ? _value >= currentValue : _value <= currentValue;
     }
 }

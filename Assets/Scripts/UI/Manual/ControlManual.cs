@@ -1,7 +1,7 @@
-using UnityEngine;
-using Services.GameStates;
-using Services.Coroutines;
 using Services;
+using Services.Coroutines;
+using Services.GameStates;
+using UnityEngine;
 
 namespace UI.Manual
 {
@@ -55,18 +55,23 @@ namespace UI.Manual
             {
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.TutorialStepTwo:
                     OnGameTutorialStepTwo();
+
                     break;
                 case GameState.TutorialStepThree:
                     OnGameTutorialStepThree();
+
                     break;
                 case GameState.TutorialStepFour:
                     OnGameTutorialStepFour();
+
                     break;
             }
         }

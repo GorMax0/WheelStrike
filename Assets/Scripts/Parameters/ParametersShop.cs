@@ -1,26 +1,27 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using GameAnalyticsSDK;
+using AdsReward;
+using Boost;
 using Core;
 using Core.Wheel;
-using UI.Views;
+using GameAnalyticsSDK;
 using Services;
-using Boost;
+using UI.Views;
+using UnityEngine;
 
 namespace Parameters
 {
     public class ParametersShop : MonoBehaviour
     {
-        
+        private const int AdsRewardMultiplier = 5;
+        private readonly Dictionary<ParameterType, ParameterView> _views =
+            new Dictionary<ParameterType, ParameterView>();
+
         [SerializeField] private ParameterView _template;
         [SerializeField] private AnimationWheel _animationWheel;
-        [SerializeField] private AdsReward.AdsRewards _adsRewards;
+        [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private BoostView _boostView;
 
-        private const int AdsRewardMultiplier = 5;
-        private readonly Dictionary<ParameterType, ParameterView> _views = new Dictionary<ParameterType, ParameterView>();
-        
         private Wallet _wallet;
         private CounterParameterLevel _counterParameterLevel;
         private Parameter _parameterForRewardAds;
@@ -31,7 +32,7 @@ namespace Parameters
 
         private void OnDestroy()
         {
-            foreach (var view in _views.Values)
+            foreach (ParameterView view in _views.Values)
             {
                 view.LevelUpForMoneyButtonClicked -= OnLevelUpForMoneyButtonClicked;
                 view.LevelUpForAdsButtonClicked -= OnLevelUpForAdsButtonClicked;
@@ -41,7 +42,10 @@ namespace Parameters
             _wallet.MoneyChanged -= OnChangeInteractableLevelUpButtons;
         }
 
-        public void Initialize(Dictionary<ParameterType, Parameter> parameters, Wallet wallet, CounterParameterLevel counterParameterLevel)
+        public void Initialize(
+            Dictionary<ParameterType, Parameter> parameters,
+            Wallet wallet,
+            CounterParameterLevel counterParameterLevel)
         {
             foreach (KeyValuePair<ParameterType, Parameter> parameter in parameters)
             {
@@ -66,9 +70,9 @@ namespace Parameters
 
         private void OnChangeInteractableLevelUpButtons(int moneyInWallet)
         {
-            foreach (var view in _views)
+            foreach (KeyValuePair<ParameterType, ParameterView> view in _views)
             {
-                var moneyToBuy = HasMoneyToBuy(view.Value.Parameter, moneyInWallet);
+                bool moneyToBuy = HasMoneyToBuy(view.Value.Parameter, moneyInWallet);
                 view.Value.ChangeStateButton(moneyToBuy);
             }
         }
@@ -78,7 +82,13 @@ namespace Parameters
             if (TryParameterLevelUp(parameter) == false)
                 return;
 
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "Money", parameter.Cost, "ParameterShop", $"{parameter.Type}");
+            GameAnalytics.NewResourceEvent(
+                GAResourceFlowType.Sink,
+                "Money",
+                parameter.Cost,
+                "ParameterShop",
+                $"{parameter.Type}");
+
             parameter.LevelUp();
             _animationWheel.ParameterUp();
             OnChangeInteractableLevelUpButtons(_wallet.Money);
@@ -145,7 +155,7 @@ namespace Parameters
 
         private void OnErrorCallback(string message)
         {
-            if (_hasOpenVideoAd == true)
+            if (_hasOpenVideoAd)
                 return;
 
             _adsRewards.ShowErrorAds();

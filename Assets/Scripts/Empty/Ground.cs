@@ -1,5 +1,8 @@
 using UnityEngine;
+
 namespace Empty
 {
-    public class Ground : MonoBehaviour { }
+    public class Ground : MonoBehaviour
+    {
+    }
 }

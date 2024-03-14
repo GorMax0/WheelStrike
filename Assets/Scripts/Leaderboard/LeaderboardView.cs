@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Leaderboard;
 using UnityEngine;
 
-namespace Leaderboards
+namespace Leaderboard
 {
     public class LeaderboardView : MonoBehaviour
     {
@@ -11,13 +10,13 @@ namespace Leaderboards
         [SerializeField] private LeaderboardElement _playerElement;
         [SerializeField] private Sprite[] _medals;
 
-        private List<LeaderboardElement> _createdElements = new List<LeaderboardElement>();
+        private readonly List<LeaderboardElement> _createdElements = new List<LeaderboardElement>();
         private PlayerInfoLeaderboard _currentPlayer;
         private bool _isCreated;
 
         public void InstantiateLeaderboardElements(int numberTopPlayers)
         {
-            if (_isCreated == true)
+            if (_isCreated)
                 return;
 
             for (int i = 0; i < numberTopPlayers; i++)
@@ -33,8 +32,11 @@ namespace Leaderboards
         {
             for (int i = 0; i < topPlayers.Count; i++)
             {
-                _createdElements[i].Render(topPlayers[i], topPlayers[i].Rank == _currentPlayer?.Rank ? true : false,
-                   i < _medals.Length ? _medals[i] : null);
+                _createdElements[i]
+                    .Render(
+                        topPlayers[i],
+                        topPlayers[i].Rank == _currentPlayer?.Rank ? true : false,
+                        i < _medals.Length ? _medals[i] : null);
             }
         }
 

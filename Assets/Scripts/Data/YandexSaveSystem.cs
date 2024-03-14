@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using UnityEngine;
 using Agava.YandexGames;
+using UnityEngine;
 
 namespace Data
 {
@@ -34,7 +34,9 @@ namespace Data
             return _gameData;
         }
 
-        private GameData ConvertJsonToGameData(string data) => string.IsNullOrEmpty(data) ? new GameData(_dataVersion) : JsonUtility.FromJson<GameData>(data);
+        private GameData ConvertJsonToGameData(string data) => string.IsNullOrEmpty(data)
+            ? new GameData(_dataVersion)
+            : JsonUtility.FromJson<GameData>(data);
 
         private void CheckVersion()
         {

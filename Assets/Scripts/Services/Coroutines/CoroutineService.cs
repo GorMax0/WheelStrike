@@ -6,8 +6,8 @@ namespace Services.Coroutines
 {
     public class CoroutineService : MonoBehaviour
     {
-        private int _ids = 0;
-        private Dictionary<int, Coroutine> _coroutines = new Dictionary<int, Coroutine>();
+        private int _ids;
+        private readonly Dictionary<int, Coroutine> _coroutines = new Dictionary<int, Coroutine>();
 
         public int GetId() => ++_ids;
 

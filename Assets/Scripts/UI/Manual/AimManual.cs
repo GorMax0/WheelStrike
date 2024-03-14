@@ -1,21 +1,20 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using Services.Coroutines;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Manual
 {
     [RequireComponent(typeof(Slider))]
     public class AimManual : MonoBehaviour
     {
+        private const int EndValueForTween = 0;
         [SerializeField] private Image _sliderBackground;
         [SerializeField] private Image _sliderHandler;
         [SerializeField] private TextEffect _manualText;
         [SerializeField] private float _fadeTime;
         [SerializeField] private float _duration;
-
-        private const int EndValueForTween = 0;
 
         private Slider _slider;
         private CoroutineRunning _replayRunning;

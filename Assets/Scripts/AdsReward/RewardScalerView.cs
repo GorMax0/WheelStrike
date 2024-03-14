@@ -1,28 +1,27 @@
 using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
-using System.Collections.Generic;
 
 namespace AdsReward
 {
     [RequireComponent(typeof(Slider))]
     public class RewardScalerView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text[] _texts;
-        [SerializeField] private Color _rewardSelect;
-        [SerializeField] private Color _rewardDeselect = Color.white;
-
         private const float SelectDuration = 0.15f;
         private const float DeselectDuration = 0.65f;
         private const float StartScale = 1f;
         private const float EndScale = 1.3f;
+        [SerializeField] private TMP_Text[] _texts;
+        [SerializeField] private Color _rewardSelect;
+        [SerializeField] private Color _rewardDeselect = Color.white;
 
         private Slider _slider;
         private RewardScaler _rewardScaler;
         private Dictionary<RewardZone, TMP_Text> _rates;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         public event Action<string> RewardZoneChanged;
 
@@ -43,7 +42,7 @@ namespace AdsReward
 
         public void Initialize(RewardScaler rewardScaler)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
                 return;
 
             _slider = GetComponent<Slider>();
@@ -59,7 +58,8 @@ namespace AdsReward
             Dictionary<RewardZone, TMP_Text> rates = new Dictionary<RewardZone, TMP_Text>();
 
             if (_texts.Length == 0)
-                throw new ArgumentOutOfRangeException($"{GetType()}: Dictionary<RewardZone, TMP_Text> FillInRates(): _texts does not contain elements.");
+                throw new ArgumentOutOfRangeException(
+                    $"{GetType()}: Dictionary<RewardZone, TMP_Text> FillInRates(): _texts does not contain elements.");
 
             for (int i = 0; i < _texts.Length; i++)
             {

@@ -1,22 +1,22 @@
 using System;
-using UnityEngine;
 using DG.Tweening;
 using Services.GameStates;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace Core
+namespace Core.Car
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Explosion))]
     [RequireComponent(typeof(AudioSource))]
     public class Car : MonoBehaviour
     {
-        [SerializeField] private int _minRandomReward;
-        [SerializeField] private int _maxRandomReward;
-
         private const int FullPercent = 100;
         private const float Speed = 3.5f;
         private const float DurationColorChange = 0.3f;
         private const string Emission = "_EMISSION";
+        [SerializeField] private int _minRandomReward;
+        [SerializeField] private int _maxRandomReward;
 
         private Rigidbody _rigidbody;
         private MeshRenderer[] _meshRenders;
@@ -24,7 +24,7 @@ namespace Core
         private CarWheel[] _carWheels;
         private AudioSource _audioSource;
         private GameStateService _gameStateService;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         public event Action<bool> IsMovable;
 
@@ -43,10 +43,17 @@ namespace Core
             _gameStateService.GameStateChanged -= OnGameStateChanged;
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out Obstacle obstacle))
+                StopMove();
+        }
+
         public void Initialize(GameStateService gameStateService, Material colorMaterial)
         {
-            if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
+            if (_isInitialized)
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService, Material colorMaterial): Already initialized.");
 
             _gameStateService = gameStateService;
             _rigidbody = GetComponent<Rigidbody>();
@@ -94,7 +101,8 @@ namespace Core
         private void SetColorMaterial(Material colorMaterial)
         {
             if (_meshRenders.Length <= 0)
-                throw new InvalidOperationException($"{gameObject.name}: SetColorMaterial(Material colorMaterial): {nameof(_meshRenders)} does not contain values.");
+                throw new InvalidOperationException(
+                    $"{gameObject.name}: SetColorMaterial(Material colorMaterial): {nameof(_meshRenders)} does not contain values.");
 
             foreach (MeshRenderer meshRender in _meshRenders)
             {
@@ -102,7 +110,8 @@ namespace Core
             }
         }
 
-        private void RandomizeRewardIncrease() => Reward += (Reward * UnityEngine.Random.Range(_minRandomReward, _maxRandomReward)) / FullPercent;
+        private void RandomizeRewardIncrease() =>
+            Reward += Reward * Random.Range(_minRandomReward, _maxRandomReward) / FullPercent;
 
         private void Move()
         {
@@ -116,9 +125,11 @@ namespace Core
             {
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
             }
         }
@@ -131,12 +142,6 @@ namespace Core
         private void OnGameFinished()
         {
             StopMove();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.TryGetComponent(out Obstacle obstacle))
-                StopMove();
         }
     }
 }

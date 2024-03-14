@@ -4,8 +4,8 @@ namespace Services.Coroutines
 {
     public class CoroutineRunning
     {
-        private int _id;
-        private CoroutineService _coroutineService;
+        private readonly CoroutineService _coroutineService;
+        private readonly int _id;
 
         public CoroutineRunning(CoroutineService coroutineService)
         {

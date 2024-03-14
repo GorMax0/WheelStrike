@@ -8,9 +8,9 @@ namespace Core
 
         private Rigidbody[] _rigidbodies;
         private MeshCollider[] _colliders;
-        private Vector3 _additionalVector = new Vector3(0f, 0.7f, 0.4f);
-        private int _firstIndex = 1;
-        private float _rotationRatio = 1f;
+        private readonly Vector3 _additionalVector = new Vector3(0f, 0.7f, 0.4f);
+        private readonly int _firstIndex = 1;
+        private readonly float _rotationRatio = 1f;
         private bool _isExploded;
 
         private void Awake()
@@ -41,7 +41,7 @@ namespace Core
         {
             Vector3 position = Vector3.zero;
 
-            foreach (var rigidbody in _rigidbodies)
+            foreach (Rigidbody rigidbody in _rigidbodies)
             {
                 position += rigidbody.transform.position;
             }

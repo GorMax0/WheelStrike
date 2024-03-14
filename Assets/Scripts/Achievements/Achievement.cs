@@ -14,27 +14,29 @@ namespace Achievements
         [SerializeField] private LeanPhrase _description;
         [SerializeField] private AchievementData[] _achievementDatasets;
 
-        private AchievementType _type;
-        private int _countAchieved;
-
         public event Action<int> ValueAchievedChanged;
+
         public event Action<Achievement, int, int, Action> AchievementChanged;
 
         public int CountValue { get; private set; }
-        public Sprite Icon => _icon;
-        public LeanPhrase Name => _name;
-        public LeanPhrase Description => _description;
-        public int CountAchieved => _countAchieved;
-        public AchievementType Type => _type;
 
+        public Sprite Icon => _icon;
+
+        public LeanPhrase Name => _name;
+
+        public LeanPhrase Description => _description;
+
+        public int CountAchieved { get; private set; }
+
+        public AchievementType Type { get; private set; }
 
         public void Initialize(AchievementType type)
         {
-            _type = type;
+            Type = type;
 
             for (int i = 0; i < _achievementDatasets.Length; i++)
             {
-                _achievementDatasets[i].Type = _type;
+                _achievementDatasets[i].Type = Type;
             }
         }
 
@@ -48,6 +50,7 @@ namespace Achievements
                     {
                         achievementData.IsDisplayed = loadAchievementData.IsDisplayed;
                         loadAchievementDatasets.Remove(loadAchievementData);
+
                         break;
                     }
                 }
@@ -70,11 +73,11 @@ namespace Achievements
 
         public int GetNextValueForAchievement()
         {
-            foreach (var achievementData in _achievementDatasets)
+            foreach (AchievementData achievementData in _achievementDatasets)
             {
                 if (achievementData.IsAchieved)
                     continue;
-                
+
                 return achievementData.Value;
             }
 
@@ -91,19 +94,20 @@ namespace Achievements
                 if (achievementData.HasAchieved(currentValue) == false)
                     break;
 
-                _countAchieved++;
-                ValueAchievedChanged?.Invoke(_countAchieved);
+                CountAchieved++;
+                ValueAchievedChanged?.Invoke(CountAchieved);
 
                 if (achievementData.IsDisplayed)
                     continue;
 
-                GameAnalytics.NewDesignEvent($"Achievement:{_type}");
+                GameAnalytics.NewDesignEvent($"Achievement:{Type}");
                 AchievementChanged?.Invoke(this, currentValue, achievementData.Value, HasDisplayed);
             }
 
-            if (_achievementDatasets[^1].Value <= currentValue && _type != AchievementType.Top)
+            if (_achievementDatasets[^1].Value <= currentValue && Type != AchievementType.Top)
             {
                 CountValue = _achievementDatasets[^1].Value;
+
                 return;
             }
 

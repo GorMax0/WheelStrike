@@ -1,14 +1,10 @@
-﻿using UnityEngine;
-using Lean.Localization;
+﻿using Lean.Localization;
+using UnityEngine;
 
 namespace UI.Views.Finish
 {
     public class FinishViewTopLabelSetter : MonoBehaviour
     {
-        [SerializeField] private LeanToken _topLabelEn;
-        [SerializeField] private LeanToken _topLabelRu;
-        [SerializeField] private LeanToken _topLabelTr;
-
         private const string GoodStartEn = "Good start!";
         private const string AlreadyHalfwayThereEn = "Already halfway there!";
         private const string AlmostThereEn = "Almost there!";
@@ -23,6 +19,9 @@ namespace UI.Views.Finish
         private const string AlreadyHalfwayThereTr = "Yolun yarısına geldik!";
         private const string AlmostThereTr = "Neredeyse geldik!";
         private const string NextLevelIsOpenTr = "Bir sonraki seviye açık!";
+        [SerializeField] private LeanToken _topLabelEn;
+        [SerializeField] private LeanToken _topLabelRu;
+        [SerializeField] private LeanToken _topLabelTr;
 
         public void SelectLabel(int distanceTraveled, int lengthRoad)
         {

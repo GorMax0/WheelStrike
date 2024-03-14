@@ -1,40 +1,39 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using TMPro;
+using System;
+using Boost;
 using Core;
+using Core.Wall;
 using Core.Wheel;
 using Parameters;
-using Boost;
-using UI.Views;
 using Services.GameStates;
+using TMPro;
+using UI.Views;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Services.Level
 {
     public class LevelService : MonoBehaviour
     {
+        private const int IndexLevelOne = 2;
+        private const float DistanceCoefficient = 5f;
         [SerializeField] private string _nameForAnalytic;
         [SerializeField] private TMP_Text _nameView;
         [SerializeField] private Wall _finishWall;
         [SerializeField] private TopPanel _topPanel;
         [SerializeField] private WorldPanel _worldPanel;
 
-        private const int IndexLevelOne = 2;
-        private const float DistanceCoefficient = 5f;
-
         private GameStateService _gameStateService;
         private LevelGenerator _levelGenerator;
         private ITravelable _travelable;
-        private int _indexCurrentScene;
-        private bool _isInfinity;
         private bool _isInitialize;
 
         public string NameForAnalytic => _nameForAnalytic;
 
         public float LengthRoad => _finishWall.transform.position.z * DistanceCoefficient;
 
-        public int IndexNextScene => _indexCurrentScene;
+        public int IndexNextScene { get; private set; }
 
-        public bool IsInfinity => _isInfinity;
+        public bool IsInfinity { get; private set; }
 
         public LevelScore Score { get; private set; }
 
@@ -45,13 +44,15 @@ namespace Services.Level
             Parameter income,
             BoostParameter boost)
         {
-            if (_isInitialize == true)
-                throw new System.InvalidOperationException(
+            if (_isInitialize)
+            {
+                throw new InvalidOperationException(
                     $"{GetType()}: Initialize(ITravelable travelable, Parameter income): Already initialized.");
+            }
 
             Score = new LevelScore(travelable, income, boost);
             _gameStateService = gameStateService;
-            _indexCurrentScene = SceneManager.GetActiveScene().buildIndex;
+            IndexNextScene = SceneManager.GetActiveScene().buildIndex;
             _travelable = travelable;
 
             if (TryGetLevelInfinity(out _levelGenerator))
@@ -62,7 +63,7 @@ namespace Services.Level
 
         public void LoadLevel(int indexScene)
         {
-            if (indexScene <= _indexCurrentScene)
+            if (indexScene <= IndexNextScene)
                 return;
 
             SceneManager.LoadScene(indexScene);
@@ -70,7 +71,7 @@ namespace Services.Level
 
         public void ShowWorldPanel()
         {
-            if (_indexCurrentScene != SceneManager.GetActiveScene().buildIndex)
+            if (IndexNextScene != SceneManager.GetActiveScene().buildIndex)
             {
                 _worldPanel.gameObject.SetActive(true);
                 _worldPanel.DisplayProgress();
@@ -85,20 +86,20 @@ namespace Services.Level
         public void SetNextScene()
         {
             if (_travelable.DistanceTraveled >= LengthRoad
-                && _indexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
-                _indexCurrentScene++;
+                && IndexNextScene < SceneManager.sceneCountInBuildSettings - 1)
+                IndexNextScene++;
         }
 
-        public void ResetLevelProgress() => _indexCurrentScene = IndexLevelOne;
+        public void ResetLevelProgress() => IndexNextScene = IndexLevelOne;
 
-        public void RestartLevel() => SceneManager.LoadScene(_indexCurrentScene);
+        public void RestartLevel() => SceneManager.LoadScene(IndexNextScene);
 
         private bool TryGetLevelInfinity(out LevelGenerator levelGenerator)
         {
             if (TryGetComponent(out LevelGenerator component))
             {
                 levelGenerator = component;
-                _isInfinity = true;
+                IsInfinity = true;
 
                 return true;
             }

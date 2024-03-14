@@ -15,12 +15,12 @@ namespace Skins
         public event Action<SkinElement> OnActivated;
 
         public GameObject Skin => _skin;
-        
+
         private void OnEnable()
         {
             _button.onClick.AddListener(Activate);
         }
-        
+
         private void OnDisable()
         {
             _button.onClick.RemoveListener(Activate);
@@ -33,7 +33,7 @@ namespace Skins
             _skin.SetActive(true);
             OnActivated?.Invoke(this);
         }
-        
+
         public void Deactivate()
         {
             _board.sprite = _spriteOff;

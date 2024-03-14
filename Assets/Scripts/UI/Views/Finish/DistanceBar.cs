@@ -1,18 +1,17 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace UI.Views.Finish
 {
     public class DistanceBar : MonoBehaviour
     {
-        [SerializeField] private Slider _distanceTraveled;
-        [SerializeField] private Slider _highscore;
-        [SerializeField] private TMP_Text[] _serifs;
-
         private const float StartSliderValue = 0f;
         private const int NumberOfSerifs = 5;
         private const float LenghRoadCorrector = 0.16f;
+        [SerializeField] private Slider _distanceTraveled;
+        [SerializeField] private Slider _highscore;
+        [SerializeField] private TMP_Text[] _serifs;
 
         private FinishViewHandler _viewHandler;
         private int _highscoreValue;
@@ -52,7 +51,7 @@ namespace UI.Views.Finish
 
         private void Subscribe()
         {
-            if (_isSubscribe == true)
+            if (_isSubscribe)
                 return;
 
             _viewHandler.DisplayedDistanceChanged += OnDisplayedDistanceChanged;
@@ -67,7 +66,8 @@ namespace UI.Views.Finish
             slider.value = _normalizedDistance;
         }
 
-        private void OnDisplayedDistanceChanged(int distanceTraveled) => ChangeValueSlider(_distanceTraveled, distanceTraveled);
+        private void OnDisplayedDistanceChanged(int distanceTraveled) =>
+            ChangeValueSlider(_distanceTraveled, distanceTraveled);
 
         private void OnDisplayedNewHighscoreLable(int newHighscore) => _highscoreValue = newHighscore;
     }

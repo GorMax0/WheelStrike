@@ -23,18 +23,7 @@ namespace Services
             else
             {
                 Destroy(gameObject);
-                return;
             }
-        }
-
-        public void Initialize()
-        {
-            if (_isInitialize == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(): Already initialized.");
-
-            OrientationValidation();
-            CacheScreeSizes();
-            _isInitialize = true;
         }
 
         private void LateUpdate()
@@ -44,6 +33,16 @@ namespace Services
 
             OrientationValidation();
             CacheScreeSizes();
+        }
+
+        public void Initialize()
+        {
+            if (_isInitialize)
+                throw new InvalidOperationException($"{GetType()}: Initialize(): Already initialized.");
+
+            OrientationValidation();
+            CacheScreeSizes();
+            _isInitialize = true;
         }
 
         private void OrientationValidation()

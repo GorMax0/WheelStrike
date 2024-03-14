@@ -6,9 +6,9 @@ namespace Parameters
     public class Parameter
     {
         private const int MaxLevel = 300;
+        private readonly int _baseCost;
 
-        private float _baseValue;
-        private int _baseCost;
+        private readonly float _baseValue;
 
         public Parameter(ParameterObject creater)
         {
@@ -18,15 +18,21 @@ namespace Parameters
             Icon = creater.Icon;
         }
 
-        public event Action<Parameter> LevelChanged;
-        public event Action Loaded;
-
         public ParameterType Type { get; }
+
         public Sprite Icon { get; }
+
         public int Level { get; private set; } = 1;
+
         public float Value => _baseValue * Level;
+
         public int Cost => _baseCost * Level;
+
         public int MaximumLevel => MaxLevel;
+
+        public event Action<Parameter> LevelChanged;
+
+        public event Action Loaded;
 
         public void LoadLevel(int level)
         {

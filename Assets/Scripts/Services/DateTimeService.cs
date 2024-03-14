@@ -7,6 +7,7 @@ namespace Services
         private const string DefaultDate = "01.01.1990 13:00:00";
 
         public DateTime PreviousDate { get; private set; }
+
         public DateTime CurrentDatetime => DateTime.Now;
 
         public void LoadDate(string loadDate)
@@ -14,6 +15,7 @@ namespace Services
             if (string.IsNullOrEmpty(loadDate))
             {
                 PreviousDate = DateTime.Parse(DefaultDate);
+
                 return;
             }
 

@@ -1,9 +1,9 @@
-using UnityEngine;
+using System;
+using System.Collections;
+using DG.Tweening;
 using Services.Coroutines;
 using Services.GameStates;
-using System.Collections;
-using System;
-using DG.Tweening;
+using UnityEngine;
 
 namespace Core.Wheel
 {
@@ -11,14 +11,13 @@ namespace Core.Wheel
     [RequireComponent(typeof(InteractionHandler))]
     public class AnimationWheel : MonoBehaviour
     {
+        private const float ScaleRatio = 1.1f;
+        private const float AnimationDuration = 0.07f;
         [SerializeField] private AnimationCurve _deviationWhenSwinging;
         [SerializeField] private GameObject _meshWheel;
         [SerializeField] private float _rotationSpeed;
         [SerializeField] private ParticleSystem _parameterUpEffect;
         [SerializeField] private ParticleSystem _groundCollision;
-
-        private const float ScaleRatio = 1.1f;
-        private const float AnimationDuration = 0.07f;
 
         private GameStateService _gameStateService;
         private ForceScale _forceScale;
@@ -28,7 +27,7 @@ namespace Core.Wheel
         private Vector3 _startScale;
         private Vector3 _scaleIncrease;
         private bool _isRotate;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         private void Awake()
         {
@@ -55,10 +54,12 @@ namespace Core.Wheel
 
         public void Initialize(GameStateService gameStateService, CoroutineService coroutineService)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
+            {
                 throw new InvalidOperationException(
                     $"{GetType()}: Initialize(GameStateService gameStateService, "
-                    + $"CoroutineService coroutineService): Already initialized.");
+                    + "CoroutineService coroutineService): Already initialized.");
+            }
 
             _gameStateService = gameStateService;
             _rotating = new CoroutineRunning(coroutineService);

@@ -20,12 +20,15 @@ namespace AdsReward
             {
                 case ParameterType.Speed:
                     Display(_speed, count);
+
                     break;
                 case ParameterType.Size:
                     Display(_size, count);
+
                     break;
                 case ParameterType.Income:
                     Display(_income, count);
+
                     break;
             }
 
@@ -45,6 +48,6 @@ namespace AdsReward
         {
             icon.gameObject.SetActive(true);
             _multiplierReward.text = $"+{count}";
-        }    
+        }
     }
 }

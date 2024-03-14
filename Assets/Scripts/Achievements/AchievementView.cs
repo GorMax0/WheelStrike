@@ -12,7 +12,7 @@ namespace Achievements
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private LeanToken _countAchievedText;
         [SerializeField] private LeanToken _sumAchievementText;
-        
+
         private int _countAchieved;
         private int _sumAchievement;
 

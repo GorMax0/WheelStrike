@@ -1,20 +1,21 @@
 using System;
 using System.Collections;
-using UnityEngine;
+using AdsReward;
 using Core.Wheel;
+using GameAnalyticsSDK;
+using Leaderboard;
 using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
-using AdsReward;
-using Leaderboards;
-using GameAnalyticsSDK;
+using UnityEngine;
 
 namespace UI.Views.Finish
 {
     [RequireComponent(typeof(FinishViewTopLabelSetter))]
     public class FinishViewHandler : MonoBehaviour
     {
+        private const int ValueIfInfinity = 5000;
         [SerializeField] private FinishView _viewPortrait;
         [SerializeField] private FinishView _viewLandscape;
         [Range(0.001f, 0.05f)]
@@ -22,8 +23,6 @@ namespace UI.Views.Finish
         [SerializeField] private ParticleSystem _finishEffect;
         [SerializeField] private AdsRewards _adsRewards;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
-
-        private const int ValueIfInfinity = 5000;
 
         private GameStateService _gameStateService;
         private CoroutineService _coroutineService;
@@ -77,11 +76,13 @@ namespace UI.Views.Finish
             ITravelable travelable,
             LevelService levelService)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
+            {
                 throw new InvalidOperationException(
                     $"{GetType()}: Initialize(GameStateService gameStateService, "
-                    + $"CoroutineService coroutineService, ITravelable travelable, "
-                    + $"LevelService levelService): Already initialized.");
+                    + "CoroutineService coroutineService, ITravelable travelable, "
+                    + "LevelService levelService): Already initialized.");
+            }
 
             _topLabelSetter = GetComponent<FinishViewTopLabelSetter>();
             _gameStateService = gameStateService;
@@ -125,7 +126,7 @@ namespace UI.Views.Finish
             _viewPortrait.Initialize(this, _rewardScaler, sliderLength);
             _viewLandscape.Initialize(this, _rewardScaler, sliderLength);
 
-            _currentFinishView = _hasPortraitOrientation == true ? _viewPortrait : _viewLandscape;
+            _currentFinishView = _hasPortraitOrientation ? _viewPortrait : _viewLandscape;
         }
 
         private IEnumerator DisplayValue(float endValue, Action<int> displayedValueChanged)
@@ -161,13 +162,13 @@ namespace UI.Views.Finish
             if (_hasPortraitOrientation == isPortrait)
                 return;
 
-            if (_currentFinishView != null && _currentFinishView.IsAction == true)
+            if (_currentFinishView != null && _currentFinishView.IsAction)
                 _currentFinishView.Disable();
 
             _hasPortraitOrientation = isPortrait;
-            _currentFinishView = _hasPortraitOrientation == true ? _viewPortrait : _viewLandscape;
+            _currentFinishView = _hasPortraitOrientation ? _viewPortrait : _viewLandscape;
 
-            if (_isFinished == true)
+            if (_isFinished)
                 _currentFinishView.Enable();
         }
 
@@ -225,7 +226,7 @@ namespace UI.Views.Finish
 
         private void OnErrorCallback(string message)
         {
-            if (_hasOpenVideoAd == true)
+            if (_hasOpenVideoAd)
                 return;
 
             _adsRewards.ShowErrorAds();

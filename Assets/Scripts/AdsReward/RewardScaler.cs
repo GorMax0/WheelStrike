@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
-using UnityEngine;
 using Services.Coroutines;
 using Services.GameStates;
+using UnityEngine;
 
 namespace AdsReward
 {
-    public partial class RewardScaler
+    public class RewardScaler
     {
         private const int RewardRateX2 = 2;
         private const int RewardRateX3 = 3;
@@ -15,13 +15,13 @@ namespace AdsReward
         private const float Duration = 0.9f;
         private const float RedField = 0.7f;
         private const float YellowField = 0.27f;
-
-        private GameStateService _gameStateService;
-        private CoroutineRunning _replayRunning;
-        private RewardZone _currentZone = RewardZone.MiddleX5;
-        private float _minValue = -1;
-        private float _maxValue = 1;
         private float _currentValue;
+        private RewardZone _currentZone = RewardZone.MiddleX5;
+
+        private readonly GameStateService _gameStateService;
+        private float _maxValue = 1;
+        private float _minValue = -1;
+        private readonly CoroutineRunning _replayRunning;
 
         public RewardScaler(GameStateService gameStateService, CoroutineService coroutineService)
         {
@@ -31,10 +31,11 @@ namespace AdsReward
             _replayRunning = new CoroutineRunning(coroutineService);
         }
 
-        public event Action<RewardZone> ZoneTransmitted;
-        public event Action<float> CurrentValueChanged;
-
         public int CurrentRate { get; private set; }
+
+        public event Action<RewardZone> ZoneTransmitted;
+
+        public event Action<float> CurrentValueChanged;
 
         public void StopTween() => _replayRunning.Stop();
 
@@ -70,27 +71,34 @@ namespace AdsReward
                 case <= -RedField when _currentZone == RewardZone.LeftX3:
                     _currentZone = RewardZone.LeftX2;
                     ZoneTransmitted?.Invoke(_currentZone);
+
                     return CurrentRate = RewardRateX2;
-                case >= -RedField and <= -YellowField when (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.LeftX2):
+                case >= -RedField and <= -YellowField
+                    when _currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.LeftX2:
                     _currentZone = RewardZone.LeftX3;
                     ZoneTransmitted?.Invoke(_currentZone);
+
                     return CurrentRate = RewardRateX3;
-                case >= -YellowField and <= YellowField when (_currentZone == RewardZone.LeftX3 || _currentZone == RewardZone.RightX3):
+                case >= -YellowField and <= YellowField
+                    when _currentZone == RewardZone.LeftX3 || _currentZone == RewardZone.RightX3:
                     _currentZone = RewardZone.MiddleX5;
                     ZoneTransmitted?.Invoke(_currentZone);
+
                     return CurrentRate = RewardRateX5;
-                case >= YellowField and <= RedField when (_currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.RightX2):
+                case >= YellowField and <= RedField
+                    when _currentZone == RewardZone.MiddleX5 || _currentZone == RewardZone.RightX2:
                     _currentZone = RewardZone.RightX3;
                     ZoneTransmitted?.Invoke(_currentZone);
+
                     return CurrentRate = RewardRateX3;
                 case >= RedField when _currentZone == RewardZone.RightX3:
                     _currentZone = RewardZone.RightX2;
                     ZoneTransmitted?.Invoke(_currentZone);
+
                     return CurrentRate = RewardRateX2;
                 default:
                     return CurrentRate;
             }
-
         }
 
         private void StartTween() => _replayRunning.Run(ChangeMultiplier());

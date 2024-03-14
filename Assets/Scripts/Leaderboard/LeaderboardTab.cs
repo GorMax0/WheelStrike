@@ -1,8 +1,9 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-namespace Leaderboards
+namespace Leaderboard
 {
     [RequireComponent(typeof(Button))]
     public class LeaderboardTab : MonoBehaviour
@@ -14,7 +15,7 @@ namespace Leaderboards
 
         private Button _button;
 
-        public event System.Action<LeaderboardType> ButtonClicked;
+        public event Action<LeaderboardType> ButtonClicked;
 
         private void Awake()
         {

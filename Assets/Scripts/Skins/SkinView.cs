@@ -10,20 +10,20 @@ namespace Skins
     {
         [SerializeField] private SkinElement[] _elements;
         [SerializeField] private Button _closeButton;
-        
+
+        public int IndexOfActivatedElement;
+
         private GameStateService _stateService;
         private AnimationWheel _animationWheel;
         private SkinReward _skinReward;
         private SkinElement _currentSkinElement;
-        
-        public int IndexOfActivatedElement;
 
         private void OnDestroy()
         {
             _closeButton.onClick.RemoveListener(Disable);
             _skinReward.OnRewarded -= SetActivatedIndex;
 
-            for (int i = 0; i < _elements.Length-1; i++)
+            for (int i = 0; i < _elements.Length - 1; i++)
             {
                 _elements[i].OnActivated -= SetActivatedElement;
             }
@@ -37,7 +37,7 @@ namespace Skins
 
             _closeButton.onClick.AddListener(Disable);
             _skinReward.OnRewarded += SetActivatedIndex;
-            
+
             for (int i = 0; i < _elements.Length; i++)
             {
                 _elements[i].OnActivated += SetActivatedElement;
@@ -64,7 +64,7 @@ namespace Skins
         private void Disable()
         {
             _stateService.ChangeState(GameState.Save);
-            GameAnalytics.NewDesignEvent($"SelectSkin:{_currentSkinElement.Skin.name}"); 
+            GameAnalytics.NewDesignEvent($"SelectSkin:{_currentSkinElement.Skin.name}");
             gameObject.SetActive(false);
         }
 
@@ -84,7 +84,7 @@ namespace Skins
                 }
             }
         }
-        
+
         private void SetActivatedIndex(int index)
         {
             _elements[index].Activate();

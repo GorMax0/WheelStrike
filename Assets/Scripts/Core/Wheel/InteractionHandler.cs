@@ -1,21 +1,29 @@
 using System;
-using UnityEngine;
+using Core.Cameras;
+using Core.Wall;
 using Empty;
 using Services.GameStates;
+using UnityEngine;
 
 namespace Core.Wheel
 {
     public class InteractionHandler : MonoBehaviour
     {
         private GameStateService _gameStateService;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         public event Action CollidedWithGround;
+
         public event Action<Obstacle> CollidedWithObstacle;
-        public event Action<Car> TriggeredEnterWithCar;
-        public event Action<Wall> TriggeredWithWall;
+
+        public event Action<Car.Car> TriggeredEnterWithCar;
+
+        public event Action<Wall.Wall> TriggeredWithWall;
+
         public event Action<Brick> TriggeredWithBrick;
+
         public event Action<CameraTrigger> TriggeredWithCameraTrigger;
+
         public event Action TriggeredNextTile;
 
         private void OnEnable()
@@ -31,10 +39,32 @@ namespace Core.Wheel
             _gameStateService.GameStateChanged -= OnGameStateService;
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (enabled == false)
+                return;
+
+            OnCollisionGround(collision);
+            OnCollisionObstacle(collision);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (enabled == false)
+                return;
+
+            OnTriggerEnterCar(other);
+            OnTriggerEnterBirck(other);
+            OnTriggerEnterWall(other);
+            OnTriggerEnterCameraTrigger(other);
+            OnTriggerEnterNextTile(other);
+        }
+
         public void Initialize(GameStateService gameStateService)
         {
-            if (_isInitialized == true)
-                throw new InvalidOperationException($"{GetType()}: Initialize(GameStateService gameStateService) : Already initialized.");
+            if (_isInitialized)
+                throw new InvalidOperationException(
+                    $"{GetType()}: Initialize(GameStateService gameStateService) : Already initialized.");
 
             _gameStateService = gameStateService;
 
@@ -48,6 +78,7 @@ namespace Core.Wheel
             {
                 case GameState.Finished:
                     OnGameFinished();
+
                     break;
             }
         }
@@ -66,18 +97,9 @@ namespace Core.Wheel
                 CollidedWithObstacle?.Invoke(obstacle);
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (enabled == false)
-                return;
-
-            OnCollisionGround(collision);
-            OnCollisionObstacle(collision);
-        }
-
         private void OnTriggerEnterCar(Collider other)
         {
-            if (other.TryGetComponent(out Car car))
+            if (other.TryGetComponent(out Car.Car car))
                 TriggeredEnterWithCar?.Invoke(car);
         }
 
@@ -89,7 +111,7 @@ namespace Core.Wheel
 
         private void OnTriggerEnterWall(Collider other)
         {
-            if (other.TryGetComponent(out Wall wall))
+            if (other.TryGetComponent(out Wall.Wall wall))
                 TriggeredWithWall?.Invoke(wall);
         }
 
@@ -103,18 +125,6 @@ namespace Core.Wheel
         {
             if (other.TryGetComponent(out TriggerNextTile _))
                 TriggeredNextTile?.Invoke();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (enabled == false)
-                return;
-
-            OnTriggerEnterCar(other);
-            OnTriggerEnterBirck(other);
-            OnTriggerEnterWall(other);
-            OnTriggerEnterCameraTrigger(other);
-            OnTriggerEnterNextTile(other);
         }
     }
 }

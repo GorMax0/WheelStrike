@@ -16,6 +16,17 @@ namespace Particles
         private bool _isRun;
         private bool _isInitialized;
 
+        private void FixedUpdate()
+        {
+            if (_isRun == false)
+                return;
+
+            transform.position = new Vector3(
+                transform.position.x,
+                transform.position.y,
+                _wheel.transform.position.z + _distanceToWheel);
+        }
+
         private void OnEnable()
         {
             if (_isInitialized == false)
@@ -31,17 +42,9 @@ namespace Particles
             _qualityToggle.QualityChanged -= OnQualityChanged;
         }
 
-        private void FixedUpdate()
-        {
-            if (_isRun == false)
-                return;
-
-            transform.position = new Vector3(transform.position.x, transform.position.y, _wheel.transform.position.z + _distanceToWheel);
-        }
-
         public void Initialize(GameStateService gameStateService)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
                 return;
 
             _gameStateService = gameStateService;

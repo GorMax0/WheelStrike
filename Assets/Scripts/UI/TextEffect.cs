@@ -1,7 +1,6 @@
-using UnityEngine;
-using TMPro;
 using DG.Tweening;
-using System.Collections;
+using TMPro;
+using UnityEngine;
 
 namespace UI
 {
@@ -9,16 +8,15 @@ namespace UI
     [RequireComponent(typeof(TMP_Text))]
     public class TextEffect : MonoBehaviour
     {
+        private const int InfinityLoops = int.MaxValue;
         [SerializeField] private float _offsetY = 45f;
         [SerializeField] private bool _isInfinityLooping;
 
-        private const int InfinityLoops = int.MaxValue;
-
         private RectTransform _transform;
         private Vector3 _startPosition;
-        private float _alphaZero = 0f;
-        private float _duration = 0.5f;
-        private int _countLoops = 0;
+        private readonly float _alphaZero = 0f;
+        private readonly float _duration = 0.5f;
+        private int _countLoops;
         private TMP_Text _text;
 
         private void Awake()
@@ -52,7 +50,7 @@ namespace UI
 
         private void PlayEffect()
         {
-            if (_isInfinityLooping == true)
+            if (_isInfinityLooping)
                 _countLoops = InfinityLoops;
 
             _transform.DOAnchorPosY(_offsetY, _duration).SetLoops(_countLoops, LoopType.Yoyo);

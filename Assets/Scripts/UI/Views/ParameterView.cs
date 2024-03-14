@@ -1,15 +1,29 @@
 using System;
+using DG.Tweening;
+using Lean.Localization;
+using Parameters;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Parameters;
-using DG.Tweening;
-using Lean.Localization;
 
 namespace UI.Views
 {
     public class ParameterView : MonoBehaviour
     {
+        private const float ScaleRatio = 1.1f;
+        private const int InfinityLoops = -1;
+        private const float AnimationMoveYDuration = 0.7f;
+        private const float AnimationScaleDuration = 0.07f;
+        private const float LabelOffsetY = 20f;
+        private const string TurkishLanguage = "Turkish";
+        private const string RussianLanguage = "Russian";
+        private const string EnglishLanguage = "English";
+        private const string LevelTurkey = "Seviyesi";
+        private const string LevelRussian = "Уровень";
+        private const string LevelEnglish = "Level";
+        private const string TurkeyMaximum = "Azami";
+        private const string RussianMaximum = "Максимум";
+        private const string EnglishMaximum = "Maximum";
         [Header("Common")]
         [SerializeField] private Image _label;
         [SerializeField] private TMP_Text _name;
@@ -34,30 +48,15 @@ namespace UI.Views
         [Header("View for maximum")]
         [SerializeField] private Sprite _levelUpButtonImageMaximum;
 
-        private const float ScaleRatio = 1.1f;
-        private const int InfinityLoops = -1;
-        private const float AnimationMoveYDuration = 0.7f;
-        private const float AnimationScaleDuration = 0.07f;
-        private const float LabelOffsetY = 20f;
-        private const string TurkishLanguage = "Turkish";
-        private const string RussianLanguage = "Russian";
-        private const string EnglishLanguage = "English";
-        private const string LevelTurkey = "Seviyesi";
-        private const string LevelRussian = "Уровень";
-        private const string LevelEnglish = "Level";
-        private const string TurkeyMaximum = "Azami";
-        private const string RussianMaximum = "Максимум";
-        private const string EnglishMaximum = "Maximum";
-
-        private Parameter _parameter;
         private Vector2 _startScale;
         private Vector2 _scaleIncrease;
         private bool _canBuyingForMoneyState = true;
 
         public event Action<Parameter, Action> LevelUpForMoneyButtonClicked;
+
         public event Action<Parameter, Action> LevelUpForAdsButtonClicked;
 
-        public Parameter Parameter => _parameter;
+        public Parameter Parameter { get; private set; }
 
         private void OnEnable()
         {
@@ -74,37 +73,39 @@ namespace UI.Views
 
         private void OnDestroy()
         {
-            _parameter.Loaded -= Refresh;
+            Parameter.Loaded -= Refresh;
         }
 
         public void Render(Parameter parameter, int rewardMultiplier)
         {
-            _parameter = parameter;
+            Parameter = parameter;
             _name.text = ParameterName.GetName(parameter.Type);
             _level.text = GetLevelText();
-            _cost.text = _parameter.Cost.ToString();
-            _icon.sprite = _parameter.Icon;
+            _cost.text = Parameter.Cost.ToString();
+            _icon.sprite = Parameter.Icon;
             _adsMultiplierText.text = $"+{rewardMultiplier}";
             _startScale = _levelUp.transform.localScale;
             _scaleIncrease = _startScale * ScaleRatio;
 
             float animationLabelPosition = _label.transform.localPosition.y + LabelOffsetY;
-            _label.transform.DOLocalMoveY(animationLabelPosition, AnimationMoveYDuration).SetLoops(InfinityLoops, LoopType.Yoyo);
+
+            _label.transform.DOLocalMoveY(animationLabelPosition, AnimationMoveYDuration)
+                .SetLoops(InfinityLoops, LoopType.Yoyo);
         }
 
-        public void SubscribeToLevelChange() => _parameter.Loaded += Refresh;
+        public void SubscribeToLevelChange() => Parameter.Loaded += Refresh;
 
         public void ChangeStateButton(bool enoughMoney)
         {
             if (_canBuyingForMoneyState == enoughMoney)
                 return;
 
-            if (_parameter.Level < _parameter.MaximumLevel)
+            if (Parameter.Level < Parameter.MaximumLevel)
             {
                 _cost.gameObject.SetActive(enoughMoney);
                 _coin.gameObject.SetActive(enoughMoney);
-                _label.sprite = enoughMoney == true ? _arrowDefault : _arrowAds;
-                _levelUpImage.sprite = enoughMoney == true ? _levelUpButtonImageDefault : _levelUpButtonImageAds;
+                _label.sprite = enoughMoney ? _arrowDefault : _arrowAds;
+                _levelUpImage.sprite = enoughMoney ? _levelUpButtonImageDefault : _levelUpButtonImageAds;
 
                 _arrowRight.gameObject.SetActive(!enoughMoney);
                 _adsIcon.gameObject.SetActive(!enoughMoney);
@@ -118,7 +119,7 @@ namespace UI.Views
         {
             _level.text = GetLevelText();
 
-            if (_parameter.Level >= _parameter.MaximumLevel)
+            if (Parameter.Level >= Parameter.MaximumLevel)
             {
                 _levelUp.interactable = false;
                 _cost.text = "-";
@@ -129,25 +130,27 @@ namespace UI.Views
                 _arrowRight.gameObject.SetActive(false);
                 _adsIcon.gameObject.SetActive(false);
                 _adsMultiplierText.gameObject.SetActive(false);
+
                 return;
             }
 
-            _cost.text = _parameter.Cost.ToString();
+            _cost.text = Parameter.Cost.ToString();
         }
 
         private void OnButtonClick()
         {
-            if (_canBuyingForMoneyState == true)
+            if (_canBuyingForMoneyState)
             {
                 DOTween.Sequence()
-                    .Append(_levelUp.transform.DOScale(_scaleIncrease, AnimationScaleDuration)).SetEase(Ease.InOutQuad)
+                    .Append(_levelUp.transform.DOScale(_scaleIncrease, AnimationScaleDuration))
+                    .SetEase(Ease.InOutQuad)
                     .Append(_levelUp.transform.DOScale(_startScale, AnimationScaleDuration));
 
-                LevelUpForMoneyButtonClicked?.Invoke(_parameter, Refresh);
+                LevelUpForMoneyButtonClicked?.Invoke(Parameter, Refresh);
             }
             else
             {
-                LevelUpForAdsButtonClicked?.Invoke(_parameter, Refresh);
+                LevelUpForAdsButtonClicked?.Invoke(Parameter, Refresh);
             }
         }
 
@@ -155,7 +158,7 @@ namespace UI.Views
         {
             string language = LeanLocalization.GetFirstCurrentLanguage();
 
-            if (_parameter.Level >= _parameter.MaximumLevel)
+            if (Parameter.Level >= Parameter.MaximumLevel)
             {
                 switch (language)
                 {
@@ -170,27 +173,24 @@ namespace UI.Views
                         return $"{EnglishMaximum}";
                 }
             }
-            else
+
+            switch (language)
             {
-                switch (language)
-                {
-                    case TurkishLanguage:
-                        return $"{LevelTurkey} {_parameter.Level}";
+                case TurkishLanguage:
+                    return $"{LevelTurkey} {Parameter.Level}";
 
-                    case RussianLanguage:
-                        return $"{LevelRussian} {_parameter.Level}";
+                case RussianLanguage:
+                    return $"{LevelRussian} {Parameter.Level}";
 
-                    case EnglishLanguage:
-                    default:
-                        return $"{LevelEnglish} {_parameter.Level}";
-                }
+                case EnglishLanguage:
+                default:
+                    return $"{LevelEnglish} {Parameter.Level}";
             }
-
         }
 
         private void OnLocalizationChanged()
         {
-            _name.text = ParameterName.GetName(_parameter.Type);
+            _name.text = ParameterName.GetName(Parameter.Type);
             _level.text = GetLevelText();
         }
     }

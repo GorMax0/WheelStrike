@@ -1,26 +1,28 @@
 using System.Collections.Generic;
 using Achievements;
-using UnityEngine;
+using AdsReward;
+using Boost;
+using Cinemachine;
+using Core.Cameras;
+using Core.Car;
 using Core.Wheel;
+using Data;
+using Leaderboard;
 using Parameters;
+using Particles;
+using Particles.Trail;
+using SDK;
 using Services;
 using Services.Coroutines;
 using Services.GameStates;
 using Services.Level;
+using Skins;
 using UI.Manual;
 using UI.Manual.Tutorial;
 using UI.Views;
-using UI.Views.Money;
 using UI.Views.Finish;
-using Data;
-using Trail;
-using AdsReward;
-using Leaderboards;
-using Authorization;
-using Particles;
-using Agava.YandexGames;
-using Boost;
-using Skins;
+using UI.Views.MoneyView;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Core
@@ -31,7 +33,7 @@ namespace Core
 
         [FormerlySerializedAs("_cameraController")] [Header("Camera")]
         [SerializeField] private CameraSwitch _cameraSwitch;
-        [SerializeField] private Cinemachine.CinemachineBrain _cinemachine;
+        [SerializeField] private CinemachineBrain _cinemachine;
 
         [Header("Services")]
         [SerializeField] private CoroutineService _coroutineService;
@@ -42,11 +44,6 @@ namespace Core
         [SerializeField] private QualityToggle _qualityToggle;
         [SerializeField] private LeaderboardsHandler _leaderboardsHandler;
         [SerializeField] private AchievementSystem _achievementSystem;
-
-        private GameStateService _gameStateService;
-        private GamePlayService _gamePlayService;
-        private YandexAuthorization _yandexAuthorization;
-        private DailyReward _dailyReward;
 
         [Header("Core")] [SerializeField] private CarBuilder _carBuilder;
         [SerializeField] private InputHandler _inputHandler;
@@ -77,12 +74,17 @@ namespace Core
         [SerializeField] private TutorialLevel _tutorial;
         [SerializeField] private Fog _fog;
 
+        private GameStateService _gameStateService;
+        private GamePlayService _gamePlayService;
+        private YandexAuthorization _yandexAuthorization;
+        private DailyReward _dailyReward;
+
         private ParameterCreater _parameterCreater;
         private Dictionary<ParameterType, Parameter> _parameters;
         private CounterParameterLevel _counterParameterLevel;
         private BoostParameter _boost;
         private AimDirection _aimDirection;
-        private Wallet _wallet = new Wallet();
+        private readonly Wallet _wallet = new Wallet();
         private DataOperator _dataOperator;
 
         private void Start()
@@ -181,7 +183,7 @@ namespace Core
 
             _dataOperator.Load();
         }
-        
+
         private void InitializeView()
         {
             _controlManual.Initialize(_gameStateService, _coroutineService);
@@ -209,7 +211,7 @@ namespace Core
 
             _tutorial?.Initialize(_gameStateService, tutorialState, _achievementSystem);
         }
-        
+
         private void OnGameStateChanged(GameState state)
         {
             if (_tutorial == null && state == GameState.Load)

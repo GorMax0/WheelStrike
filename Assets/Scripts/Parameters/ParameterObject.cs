@@ -11,8 +11,11 @@ namespace Parameters
         [SerializeField] private Sprite _icon;
 
         public ParameterType Type => _type;
+
         public float BaseValue => _baseValue;
+
         public int BaseCost => _baseCost;
+
         public Sprite Icon => _icon;
     }
 }

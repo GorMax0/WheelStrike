@@ -1,22 +1,20 @@
 using System;
 using System.Collections;
-using UnityEngine;
 using Services.Coroutines;
 using Services.GameStates;
+using UnityEngine;
 
 namespace Core
 {
     public class AimDirection
     {
-        private readonly float SwipeSensitivity = 10f;
         private readonly float ClampValue = 1.5f;
+        private readonly float SwipeSensitivity = 10f;
         private readonly float TimeCameraBlend;
+        private readonly CoroutineRunning _aimRunning;
+        private readonly GameStateService _gameStateService;
 
-        private Camera _mainCamera;
-        private GameStateService _gameStateService;
-        private CoroutineRunning _aimRunning;
-
-        public event Action<float> DirectionChanged;
+        private readonly Camera _mainCamera;
 
         public AimDirection(GameStateService gameStateService, CoroutineService coroutineService, float timeCameraBlend)
         {
@@ -26,6 +24,8 @@ namespace Core
             TimeCameraBlend = timeCameraBlend;
             _aimRunning = new CoroutineRunning(coroutineService);
         }
+
+        public event Action<float> DirectionChanged;
 
         private void Dispose() => _gameStateService.GameStateChanged -= OnGameStateChanged;
 
@@ -55,9 +55,11 @@ namespace Core
             {
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
             }
         }

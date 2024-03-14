@@ -1,5 +1,5 @@
-using UnityEngine;
 using Core;
+using UnityEngine;
 
 namespace UI.Views
 {
@@ -8,7 +8,7 @@ namespace UI.Views
     {
         private ParticleSystem _aimView;
         private AimDirection _aimDirection;
-        private bool _isInitialize = false;
+        private bool _isInitialize;
 
         private void OnEnable()
         {
@@ -27,7 +27,7 @@ namespace UI.Views
 
         public void Initialize(AimDirection aimDirection)
         {
-            if (_isInitialize == true)
+            if (_isInitialize)
                 return;
 
             _aimView = GetComponent<ParticleSystem>();

@@ -15,6 +15,6 @@
         TutorialStepTwo,
         TutorialStepThree,
         TutorialStepFour,
-        TutorialStepNine
+        TutorialStepNine,
     }
 }

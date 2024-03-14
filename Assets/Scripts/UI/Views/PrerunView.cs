@@ -1,5 +1,5 @@
-using UnityEngine;
 using Services.GameStates;
+using UnityEngine;
 
 namespace UI.Views
 {
@@ -38,25 +38,30 @@ namespace UI.Views
             {
                 case GameState.Initializing:
                     OnGameInitializing();
+
                     break;
                 case GameState.Waiting:
                     OnGameWaiting();
+
                     break;
                 case GameState.Running:
                     OnGameRunning();
+
                     break;
                 case GameState.TutorialStepZero:
                     OnGameTutorialStepZero();
+
                     break;
                 case GameState.TutorialStepTwo:
                     OnGameTutorialStepTwo();
+
                     break;
                 case GameState.TutorialStepThree:
                     OnGameTutorialStepThree();
-                    break;
 
+                    break;
             }
-        } 
+        }
 
         private void OnGameInitializing()
         {

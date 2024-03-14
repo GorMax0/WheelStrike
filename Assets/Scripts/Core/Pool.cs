@@ -6,11 +6,11 @@ namespace Core
 {
     public class Pool<T> where T : MonoBehaviour
     {
-        private T _prefab;
-        private Vector3 _position = Vector3.zero;
-        private Quaternion _rotation;
-        private Transform _container;
+        private readonly Transform _container;
         private List<T> _pool;
+        private readonly Vector3 _position = Vector3.zero;
+        private readonly T _prefab;
+        private readonly Quaternion _rotation;
 
         public Pool(int countCreateObject, T prefab, Transform container)
         {
@@ -30,15 +30,17 @@ namespace Core
             CreatePool(countCreateObject);
         }
 
-        public T GetObject() => HasFreeElement(out T element) == true ? element : CreateObject();
+        public T GetObject() => HasFreeElement(out T element) ? element : CreateObject();
 
-        private bool HasFreeElement(out T element) => (element = _pool.Where(T => T.gameObject.activeInHierarchy == false).FirstOrDefault()) != null;
+        private bool HasFreeElement(out T element) =>
+            (element = _pool.Where(T => T.gameObject.activeInHierarchy == false).FirstOrDefault()) != null;
 
         private T CreateObject()
         {
             T createdObject = Object.Instantiate(_prefab, _position, _rotation, _container);
             createdObject.gameObject.SetActive(false);
             _pool.Add(createdObject);
+
             return createdObject;
         }
 

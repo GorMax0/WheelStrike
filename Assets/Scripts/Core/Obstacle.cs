@@ -1,15 +1,19 @@
-using UnityEngine;
 using Core.Wheel;
+using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Obstacle : MonoBehaviour
+namespace Core
 {
-    [field: SerializeField] public int Reward { get; private set; }
-    public bool IsCollided { get; private set; }
-
-    private void OnCollisionEnter(Collision collision)
+    [RequireComponent(typeof(Rigidbody))]
+    public class Obstacle : MonoBehaviour
     {
-        if (collision.collider.TryGetComponent(out Player wheel))
-            IsCollided = true;
+        [field: SerializeField] public int Reward { get; private set; }
+
+        public bool IsCollided { get; private set; }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.TryGetComponent(out Player wheel))
+                IsCollided = true;
+        }
     }
 }

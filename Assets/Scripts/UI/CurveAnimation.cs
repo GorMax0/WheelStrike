@@ -5,16 +5,16 @@ namespace UI
 {
     public class CurveAnimation
     {
-        private readonly float _endAnimationTime;
-        private readonly AnimationCurve _curve;
         private readonly float _animationSpeed;
-
-        private Action _onEndCallback;
+        private readonly AnimationCurve _curve;
+        private readonly float _endAnimationTime;
+        private float _animatedValue;
 
         private float _deltaAnimation;
-        private float _startAnimationValue;
         private float _endAnimationValue;
-        private float _animatedValue;
+
+        private readonly Action _onEndCallback;
+        private float _startAnimationValue;
         private float _valueRange;
 
         public CurveAnimation(AnimationCurve curve, float animationSpeed, Action onEndCallback)
@@ -36,12 +36,14 @@ namespace UI
         public float Update(float deltaTime)
         {
             UpdateDelta(deltaTime);
+
             return Translate();
         }
 
         private float Translate()
         {
             float animatedDelta = _curve.Evaluate(_deltaAnimation);
+
             return Mathf.Lerp(_startAnimationValue, _endAnimationValue, animatedDelta);
         }
 

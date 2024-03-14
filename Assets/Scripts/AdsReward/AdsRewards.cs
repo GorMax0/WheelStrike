@@ -41,6 +41,7 @@ namespace AdsReward
             {
                 case RewardType.Money:
                     EnrollMoney(count);
+
                     break;
             }
         }

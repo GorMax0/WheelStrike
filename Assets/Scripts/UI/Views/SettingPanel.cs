@@ -1,9 +1,6 @@
-using Achievements;
+using Services;
 using UnityEngine;
 using UnityEngine.UI;
-using Services;
-using Lean.Localization;
-using GameAnalyticsSDK;
 
 namespace UI.Views
 {
@@ -17,11 +14,10 @@ namespace UI.Views
         [SerializeField] private Button _turkeyLanguage;
         [SerializeField] private Toggle _fps;
 
-
         private GridLayoutGroup _gridLayoutGroup;
-        private Vector2 _sizeItemPortraitOrientation = new Vector2(100f, 100f);
-        private Vector2 _sizeItemLandscapeOrientation = new Vector2(80f, 80f);
-        private bool _enabled = false;
+        private readonly Vector2 _sizeItemPortraitOrientation = new Vector2(100f, 100f);
+        private readonly Vector2 _sizeItemLandscapeOrientation = new Vector2(80f, 80f);
+        private bool _enabled;
 
         private void Awake()
         {
@@ -70,8 +66,11 @@ namespace UI.Views
 
         private void OnOrientationValidated(bool isPortraitOrientation)
         {
-            _gridLayoutGroup.cellSize = isPortraitOrientation ? _sizeItemPortraitOrientation : _sizeItemLandscapeOrientation;
-            _gridLayoutGroup.startAxis = isPortraitOrientation ? GridLayoutGroup.Axis.Vertical : GridLayoutGroup.Axis.Horizontal;
+            _gridLayoutGroup.cellSize =
+                isPortraitOrientation ? _sizeItemPortraitOrientation : _sizeItemLandscapeOrientation;
+
+            _gridLayoutGroup.startAxis =
+                isPortraitOrientation ? GridLayoutGroup.Axis.Vertical : GridLayoutGroup.Axis.Horizontal;
         }
     }
 }

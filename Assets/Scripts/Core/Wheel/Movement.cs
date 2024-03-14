@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
-using UnityEngine;
+using Boost;
 using Parameters;
 using Services.Coroutines;
 using Services.GameStates;
-using Boost;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core.Wheel
 {
@@ -12,9 +13,6 @@ namespace Core.Wheel
     [RequireComponent(typeof(ForceScale))]
     public class Movement : MonoBehaviour, ITravelable
     {
-        [SerializeField] private float _baseSpeed = 800f;
-        [SerializeField] private float _bounceRatio = 0.2f;
-
         private const int HundredPercent = 1;
         private const float DeviationToSide = 0.135f;
         private const float SpeedDamping = 1.2f;
@@ -23,6 +21,8 @@ namespace Core.Wheel
         private const float LowUpVelocity = 8f;
         private const float MinForwardVelocity = 2.1f;
         private const float MultiplierBackBounce = 0.3f;
+        [SerializeField] private float _baseSpeed = 800f;
+        [SerializeField] private float _bounceRatio = 0.2f;
 
         private GameStateService _gameStateService;
         private Parameter _speedIncrease;
@@ -34,7 +34,7 @@ namespace Core.Wheel
         private InteractionHandler _collisionHandler;
         private Vector3 _offsetAngles;
         private CoroutineRunning _moveForward;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
 
         public int DistanceTraveled => (int)(transform.position.z * DistanceCoefficient);
 
@@ -45,6 +45,12 @@ namespace Core.Wheel
             _rigidbody = GetComponent<Rigidbody>();
             _forceScale = GetComponent<ForceScale>();
             _collisionHandler = GetComponent<InteractionHandler>();
+        }
+
+        private void FixedUpdate()
+        {
+            if (_rigidbody.velocity.y >= MaximumUpVelocity)
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, LowUpVelocity, _rigidbody.velocity.z);
         }
 
         private void OnEnable()
@@ -64,12 +70,6 @@ namespace Core.Wheel
             _collisionHandler.CollidedWithGround -= OnCollidedWithGround;
         }
 
-        private void FixedUpdate()
-        {
-            if (_rigidbody.velocity.y >= MaximumUpVelocity)
-                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, LowUpVelocity, _rigidbody.velocity.z);
-        }
-
         public void Initialize(
             GameStateService gameStateService,
             CoroutineService coroutineService,
@@ -78,11 +78,13 @@ namespace Core.Wheel
             Parameter size,
             BoostParameter boost)
         {
-            if (_isInitialized == true)
+            if (_isInitialized)
+            {
                 throw new InvalidOperationException(
                     $"{GetType()}: Initialize(GameStateService gameStateService, "
-                    + $"CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): "
-                    + $"Already initialized.");
+                    + "CoroutineService coroutineService, AimDirection aimDirection, Parameter speedIncrease): "
+                    + "Already initialized.");
+            }
 
             _gameStateService = gameStateService;
             _aimDirection = aimDirection;
@@ -99,7 +101,7 @@ namespace Core.Wheel
         {
             float minRandomForceRatio = 0.93f;
             float maxRandomForceRatio = 1.03f;
-            float randomForceRatio = UnityEngine.Random.Range(minRandomForceRatio, maxRandomForceRatio);
+            float randomForceRatio = Random.Range(minRandomForceRatio, maxRandomForceRatio);
             float boost = HundredPercent + _boost.SpeedMultiplier;
             float force = (_baseSpeed + _speedIncrease.Value * boost) * _forceScale.FinalValue;
 
@@ -123,11 +125,11 @@ namespace Core.Wheel
 
         private void Bounce()
         {
-            float deviationToSide = UnityEngine.Random.Range(-DeviationToSide, DeviationToSide);
+            float deviationToSide = Random.Range(-DeviationToSide, DeviationToSide);
             float increaseCorrector = 20f;
 
             float bounceForce = _rigidbody.velocity.magnitude
-                * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
+                                * (_bounceRatio + _bounceIncrease.Value / increaseCorrector);
 
             _rigidbody.AddForce(new Vector3(deviationToSide, bounceForce), ForceMode.VelocityChange);
         }

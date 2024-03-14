@@ -4,9 +4,9 @@ namespace Services.GameStates
 {
     public class GameStateService
     {
-        public event Action<GameState> GameStateChanged;
+        private GameState _state;
 
-        private GameState _state;        
+        public event Action<GameState> GameStateChanged;
 
         public void ChangeState(GameState gameState)
         {

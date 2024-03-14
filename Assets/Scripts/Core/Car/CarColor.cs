@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core
+namespace Core.Car
 {
     [CreateAssetMenu(fileName = "NewCarColor", menuName = "Gameplay/Car Color", order = 52)]
     public class CarColor : ScriptableObject
@@ -11,8 +11,11 @@ namespace Core
         [SerializeField] private bool _isSelected;
 
         public Color Color => _color;
+
         public Material Material => _material;
+
         public bool IsBought => _isBought;
+
         public bool IsSelected => _isSelected;
     }
 }

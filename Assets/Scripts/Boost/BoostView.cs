@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Achievements;
 using GameAnalyticsSDK;
 using Lean.Localization;
 using Parameters;
-using Services;
 using Services.GameStates;
 using TMPro;
 using UnityEngine;
@@ -26,7 +24,7 @@ namespace Boost
 
         private GameStateService _gameStateService;
         private BoostParameter _boost;
-        Dictionary<ParameterType, Parameter> _parameters;
+        private Dictionary<ParameterType, Parameter> _parameters;
         private Dictionary<ParameterType, bool> _maximumParameters;
         private bool _isInitialized;
 
@@ -34,7 +32,7 @@ namespace Boost
         {
             if (_isInitialized == false)
                 return;
-            
+
             _button.onClick.AddListener(ApplyBoost);
             _levelToken.SetValue(_boost.Level);
 
@@ -60,7 +58,9 @@ namespace Boost
             _button.onClick.RemoveListener(ApplyBoost);
         }
 
-        public void Initialize(GameStateService gameStateService, BoostParameter boost,
+        public void Initialize(
+            GameStateService gameStateService,
+            BoostParameter boost,
             Dictionary<ParameterType, Parameter> parameters)
         {
             _gameStateService = gameStateService;
@@ -68,7 +68,7 @@ namespace Boost
             _parameters = parameters;
             _maximumParameters = new Dictionary<ParameterType, bool>(_parameters.Count);
 
-            foreach (var parameter in _parameters)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
             {
                 _maximumParameters.Add(parameter.Key, false);
                 parameter.Value.Loaded += CheckMaximumLevelParameters;
@@ -95,7 +95,7 @@ namespace Boost
             if (_boost.Level >= BoostParameter.MaxLevel)
                 return;
 
-            if (_maximumParameters[ParameterType.Speed] == true && _maximumParameters[ParameterType.Size] == true &&
+            if (_maximumParameters[ParameterType.Speed] && _maximumParameters[ParameterType.Size] &&
                 _maximumParameters[ParameterType.Income])
             {
                 _buttonDefaultText.alpha = 1;
@@ -105,7 +105,7 @@ namespace Boost
 
         private void CheckMaximumLevelParameters()
         {
-            foreach (var parameter in _parameters)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
             {
                 _maximumParameters[parameter.Value.Type] = parameter.Value.Level >= parameter.Value.MaximumLevel;
             }
@@ -117,7 +117,7 @@ namespace Boost
         {
             _boost.LevelUp();
 
-            foreach (var parameter in _parameters)
+            foreach (KeyValuePair<ParameterType, Parameter> parameter in _parameters)
             {
                 parameter.Value.Reset();
             }

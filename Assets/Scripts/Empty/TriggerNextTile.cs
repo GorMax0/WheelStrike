@@ -1,2 +1,8 @@
 using UnityEngine;
-public class TriggerNextTile : MonoBehaviour { }
+
+namespace Empty
+{
+    public class TriggerNextTile : MonoBehaviour
+    {
+    }
+}

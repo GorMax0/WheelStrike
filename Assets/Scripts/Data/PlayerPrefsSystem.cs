@@ -30,6 +30,7 @@ namespace Data
                 string data = PlayerPrefs.GetString(DataKey);
                 _gameData = JsonUtility.FromJson<GameData>(data);
                 CheckVersion();
+
                 return _gameData;
             }
 
@@ -42,7 +43,7 @@ namespace Data
         {
             if (_gameData.DataVersion == _dataVersion)
                 return;
-            
+
             PlayerPrefs.DeleteAll();
             _gameData = new GameData(_dataVersion);
         }

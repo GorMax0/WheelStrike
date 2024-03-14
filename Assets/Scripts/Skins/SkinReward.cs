@@ -10,12 +10,11 @@ namespace Skins
         [SerializeField] private Button _takeButton;
 
         private GameStateService _stateService;
-        private bool _isRewarded;
-        
+
         public event Action<int> OnRewarded;
 
-        public bool IsRewarded => _isRewarded;
-        
+        public bool IsRewarded { get; private set; }
+
         private void OnEnable()
         {
             _takeButton.onClick.AddListener(Take);
@@ -32,22 +31,22 @@ namespace Skins
             _stateService.GameStateChanged += CheckReward;
         }
 
+        public void Load(bool isRewarded)
+        {
+            IsRewarded = isRewarded;
+        }
+
         private void CheckReward(GameState state)
         {
             if (state != GameState.Initializing)
                 return;
-            
-            gameObject.SetActive(!_isRewarded);
-        }
 
-        public void Load(bool isRewarded)
-        {
-            _isRewarded = isRewarded;
+            gameObject.SetActive(!IsRewarded);
         }
 
         private void Take()
         {
-            _isRewarded = true;
+            IsRewarded = true;
             OnRewarded?.Invoke(1);
             _stateService.ChangeState(GameState.Save);
             gameObject.SetActive(false);
